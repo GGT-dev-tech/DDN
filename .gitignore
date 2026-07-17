@@ -1,7 +1,6 @@
-
 # Env Files
 .env
 .env.*
 !.env.example
-.env.development
-.env.test
+!.env.development
+!.env.test
