@@ -1,0 +1,17 @@
+[project]
+name = "stitch-ddn-waste-management-interface-google-stitch"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "alembic>=1.18.5",
+    "celery>=5.6.3",
+    "fastapi>=0.139.2",
+    "opentelemetry-api>=1.44.0",
+    "pydantic-settings>=2.14.2",
+    "redis>=8.0.1",
+    "sqlalchemy>=2.0.51",
+    "structlog>=26.1.0",
+    "uvicorn>=0.51.0",
+]
