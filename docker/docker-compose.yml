@@ -15,6 +15,8 @@ services:
       - "${DATABASE_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - stitch_network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER:-stitch_admin} -d ${DATABASE_NAME:-stitch_db}"]
       interval: 10s
@@ -29,6 +31,8 @@ services:
       - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
+    networks:
+      - stitch_network
     command: redis-server --appendonly yes
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -39,3 +43,7 @@ services:
 volumes:
   postgres_data:
   redis_data:
+
+networks:
+  stitch_network:
+    driver: bridge
