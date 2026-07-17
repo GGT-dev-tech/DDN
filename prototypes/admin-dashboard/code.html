@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DDN Admin - Visão Geral da Operação</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f9f9f9",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#00504a",
+                        "on-secondary-fixed-variant": "#3c494f",
+                        "on-primary-container": "#cbffc2",
+                        "on-background": "#1a1c1c",
+                        "primary-fixed": "#a3f69c",
+                        "outline-variant": "#bfcaba",
+                        "on-surface-variant": "#40493d",
+                        "primary": "#0d631b",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f3f3f3",
+                        "tertiary-fixed-dim": "#5cdacc",
+                        "on-tertiary-container": "#b3fff5",
+                        "on-surface": "#1a1c1c",
+                        "surface-tint": "#1b6d24",
+                        "secondary-fixed": "#d7e4ec",
+                        "primary-container": "#2e7d32",
+                        "inverse-primary": "#88d982",
+                        "tertiary-container": "#007b72",
+                        "surface-container": "#eeeeee",
+                        "tertiary": "#006059",
+                        "secondary": "#546067",
+                        "on-tertiary-fixed": "#00201d",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2f3131",
+                        "surface-variant": "#e2e2e2",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-secondary-fixed": "#111d23",
+                        "on-primary-fixed": "#002204",
+                        "primary-fixed-dim": "#88d982",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#7bf7e9",
+                        "surface-white": "#FFFFFF",
+                        "data-blue": "#1578F7",
+                        "secondary-fixed-dim": "#bbc8d0",
+                        "secondary-container": "#d7e4ec",
+                        "waste-green": "#1C8200",
+                        "surface": "#f9f9f9",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-primary-fixed-variant": "#005312",
+                        "surface-dim": "#dadada",
+                        "on-secondary-container": "#5a666d",
+                        "outline": "#707a6c",
+                        "surface-container-high": "#e8e8e8",
+                        "error": "#ba1a1a",
+                        "background": "#f9f9f9",
+                        "on-primary": "#ffffff",
+                        "alert-lime": "#E8F733",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "8px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "64px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "headline-sm": ["Hanken Grotesk"],
+                        "body-sm": ["Inter"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "button-text": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "button-text": ["16px", { "lineHeight": "16px", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex flex-col h-screen p-base fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant w-64 z-50">
+<!-- Header/Brand -->
+<div class="px-4 py-6 mb-8 border-b border-outline-variant/30 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined" data-icon="recycling" data-weight="fill">recycling</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">DDN Admin</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Gestão de Resíduos</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<ul class="flex-1 space-y-2">
+<!-- Active: Dashboard -->
+<li>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-lg font-bold scale-95 active:scale-100 transition-transform" href="#">
+<span class="material-symbols-outlined icon-fill" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+</li>
+<!-- Inactive -->
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-secondary-fixed-variant hover:bg-surface-container-highest rounded-lg transition-all scale-95 active:scale-100" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body-md text-body-md">Clientes</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-secondary-fixed-variant hover:bg-surface-container-highest rounded-lg transition-all scale-95 active:scale-100" href="#">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+<span class="font-body-md text-body-md">Coletas</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-secondary-fixed-variant hover:bg-surface-container-highest rounded-lg transition-all scale-95 active:scale-100" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md text-body-md">Relatórios</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 text-on-secondary-fixed-variant hover:bg-surface-container-highest rounded-lg transition-all scale-95 active:scale-100" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Configurações</span>
+</a>
+</li>
+</ul>
+<!-- CTA & Profile -->
+<div class="mt-auto pt-6 border-t border-outline-variant/30 space-y-4">
+<button class="w-full bg-primary hover:bg-waste-green text-on-primary font-button-text text-button-text py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors min-h-[48px]">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                Nova Coleta
+            </button>
+<div class="flex items-center gap-3 px-2 py-2">
+<img alt="Admin Profile" class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of an administrator in a well-lit office setting. Corporate, clean, high-tech background. Professional attire." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPgZGEMKRX0lR68jM2ff5Kym29xjpmRzHxc3stHNHVGaFppwTAxuvZJuGTgxYaannlzUf1V_2TSb260TQk4uNVmol5vh9cYjnQbh0Tjt4twWPSBK8t5CAUdrE1HKragDqU-TbL_87rNSqdCJ7hnw9bcDk7xCXyJTN2BCKo4gfZuWALmFPoOOV4ITqv6iz9DVcmQi_A3whdGbPo0QAAHckgxVtnVAQ9BA4dWgfq4P5lWL4i9JzGkOryW4CSCQFBvQS-oQtfXg8JMyE"/>
+<div>
+<p class="font-body-sm text-body-sm font-semibold text-on-surface">Carlos S.</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Admin Nível 1</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 p-margin-mobile md:p-margin-desktop min-h-screen">
+<!-- Header -->
+<header class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+<div>
+<p class="font-label-caps text-label-caps text-primary tracking-widest uppercase mb-2">Painel de Controle</p>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Visão Geral da Operação</h2>
+</div>
+<!-- Quick Actions/Filter -->
+<div class="flex items-center gap-4 bg-surface-white p-2 rounded-lg shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-surface-variant">
+<button class="px-4 py-2 text-sm font-semibold text-primary bg-primary-container/20 rounded-md">Hoje</button>
+<button class="px-4 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-container rounded-md transition-colors">7 Dias</button>
+<button class="px-4 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-container rounded-md transition-colors">30 Dias</button>
+<div class="h-6 w-px bg-outline-variant mx-1"></div>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+</div>
+</header>
+<!-- Bento Grid Dashboard -->
+<div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 gap-gutter mb-12">
+<!-- KPI 1 -->
+<div class="lg:col-span-3 bg-surface-white rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-surface-variant/50 relative overflow-hidden group">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/5 rounded-full blur-xl group-hover:bg-primary/10 transition-colors"></div>
+<div class="flex justify-between items-start mb-4">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Total Mensal (Ton)</p>
+<span class="material-symbols-outlined text-primary" data-icon="scale">scale</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">1,245.8</h3>
+<div class="flex items-center gap-1 text-waste-green font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span>+12.5% vs mês ant.</span>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="lg:col-span-3 bg-surface-white rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-surface-variant/50 relative overflow-hidden group">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-tertiary/5 rounded-full blur-xl group-hover:bg-tertiary/10 transition-colors"></div>
+<div class="flex justify-between items-start mb-4">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Taxa de Reciclagem</p>
+<span class="material-symbols-outlined text-tertiary" data-icon="autorenew">autorenew</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">68.2%</h3>
+<div class="w-full bg-surface-container-high h-2 rounded-full mt-2 mb-1 overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 68.2%"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Meta: 75%</p>
+</div>
+<!-- KPI 3 -->
+<div class="lg:col-span-3 bg-surface-white rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-surface-variant/50 relative overflow-hidden group">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-alert-lime/10 rounded-full blur-xl group-hover:bg-alert-lime/20 transition-colors"></div>
+<div class="flex justify-between items-start mb-4">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Coletas Hoje</p>
+<span class="material-symbols-outlined text-on-surface" data-icon="local_shipping">local_shipping</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">42</h3>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm">
+<span>18 concluídas</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant mx-1"></span>
+<span class="text-data-blue">24 em rota</span>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="lg:col-span-3 bg-surface-white rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-surface-variant/50 relative overflow-hidden group">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-secondary-fixed/50 rounded-full blur-xl group-hover:bg-secondary-fixed transition-colors"></div>
+<div class="flex justify-between items-start mb-4">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Faturamento Ativo</p>
+<span class="material-symbols-outlined text-secondary" data-icon="payments">payments</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">R$ 284k</h3>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm">
+<span>Ciclo atual (01 - 30 Nov)</span>
+</div>
+</div>
+<!-- Main Chart Area -->
+<div class="lg:col-span-8 bg-surface-white rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-surface-variant/50">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Evolução Mensal da Destinação</h3>
+<button class="text-primary hover:bg-primary/5 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+<!-- Chart Visual Representation (CSS based) -->
+<div class="relative h-64 w-full flex items-end justify-between gap-2 pt-8">
+<!-- Y Axis Labels -->
+<div class="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-on-surface-variant font-label-caps text-[10px]">
+<span>400t</span>
+<span>300t</span>
+<span>200t</span>
+<span>100t</span>
+<span>0</span>
+</div>
+<!-- Grid Lines -->
+<div class="absolute left-8 right-0 top-0 bottom-6 flex flex-col justify-between pointer-events-none">
+<div class="w-full h-px bg-surface-variant/50"></div>
+<div class="w-full h-px bg-surface-variant/50"></div>
+<div class="w-full h-px bg-surface-variant/50"></div>
+<div class="w-full h-px bg-surface-variant/50"></div>
+<div class="w-full h-px bg-surface-variant"></div>
+</div>
+<!-- Bars (Jan to Jun) -->
+<div class="w-full pl-8 flex justify-between items-end h-[calc(100%-24px)] mb-6 z-10 relative">
+<!-- Jan -->
+<div class="w-[12%] flex flex-col justify-end group">
+<div class="w-full bg-waste-green h-[40%] rounded-t-sm hover:opacity-80 transition-opacity"></div>
+<div class="w-full bg-tertiary h-[30%] rounded-t-sm -mt-1 hover:opacity-80 transition-opacity"></div>
+<div class="w-full bg-secondary-fixed-dim h-[10%] rounded-t-sm -mt-1 hover:opacity-80 transition-opacity"></div>
+</div>
+<!-- Feb -->
+<div class="w-[12%] flex flex-col justify-end group">
+<div class="w-full bg-waste-green h-[45%] rounded-t-sm hover:opacity-80 transition-opacity"></div>
+<div class="w-full bg-tertiary h-[25%] rounded-t-sm -mt-1 hover:opacity-80 transition-opacity"></div>
+<div class="w-full bg-secondary-fixed-dim h-[12%] rounded-t-sm -mt-1 hover:opacity-80 transition-opacity"></div>
+</div>
+<!-- Mar -->
+<div class="w-[12%] flex flex-col justify-end group">
+<div class="w-full bg-waste-green h-[50%] rounded-t-sm hover:opacity-80 transition-opacity"></div>
+<div class="w-full bg-tertiary h-[35%] rounded-t-sm -mt-1 hover:opacity-80 transition-opacity"></div>
+<div class="w-full bg-secondary-fixed-dim h-[8%] rounded-t-sm -mt-1 hover:opacity-80 transition-opacity"></div>
+</div>
+<!-- Apr -->
+<div class="w-[12%] flex flex-col justify-end group">
+<div class="w-full bg-waste-green h-[60%] rounded-t-sm hover:opacity-80 transition-opacity"></div>
+<div class="w-full bg-tertiary h-[30%] rounded-t-sm -mt-1 hover:opacity-80 transition-opacity"></div>
+<div class="w-full bg-secondary-fixed-dim h-[15%] rounded-t-sm -mt-1 hover:opacity-80 transition-opacity"></div>
+</div>
+<!-- May -->
+<div class="w-[12%] flex flex-col justify-end group">
+<div class="w-full bg-waste-green h-[55%] rounded-t-sm hover:opacity-80 transition-opacity"></div>
+<div class="w-full bg-tertiary h-[40%] rounded-t-sm -mt-1 hover:opacity-80 transition-opacity"></div>
+<div class="w-full bg-secondary-fixed-dim h-[10%] rounded-t-sm -mt-1 hover:opacity-80 transition-opacity"></div>
+</div>
+<!-- Jun -->
+<div class="w-[12%] flex flex-col justify-end group">
+<div class="w-full bg-waste-green h-[70%] rounded-t-sm hover:opacity-80 transition-opacity"></div>
+<div class="w-full bg-tertiary h-[20%] rounded-t-sm -mt-1 hover:opacity-80 transition-opacity"></div>
+<div class="w-full bg-secondary-fixed-dim h-[5%] rounded-t-sm -mt-1 hover:opacity-80 transition-opacity"></div>
+</div>
+</div>
+<!-- X Axis Labels -->
+<div class="absolute bottom-0 left-8 right-0 flex justify-between text-on-surface-variant font-label-caps text-[10px]">
+<span class="w-[12%] text-center">JAN</span>
+<span class="w-[12%] text-center">FEV</span>
+<span class="w-[12%] text-center">MAR</span>
+<span class="w-[12%] text-center">ABR</span>
+<span class="w-[12%] text-center">MAI</span>
+<span class="w-[12%] text-center">JUN</span>
+</div>
+</div>
+<!-- Legend -->
+<div class="flex gap-6 mt-6 justify-center">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-sm bg-waste-green"></div>
+<span class="font-label-caps text-label-caps text-on-surface">RECICLÁVEL</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-sm bg-tertiary"></div>
+<span class="font-label-caps text-label-caps text-on-surface">ORGÂNICO</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-sm bg-secondary-fixed-dim"></div>
+<span class="font-label-caps text-label-caps text-on-surface">REJEITO</span>
+</div>
+</div>
+</div>
+<!-- Recent Activity / Map Summary -->
+<div class="lg:col-span-4 bg-surface-white rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-surface-variant/50 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Status em Tempo Real</h3>
+</div>
+<div class="flex-1 rounded-lg overflow-hidden bg-surface-container-lowest border border-outline-variant/30 mb-4 relative min-h-[150px]">
+<img class="w-full h-full object-cover absolute inset-0 opacity-50 grayscale" data-alt="A stylized, modern, high-tech map view showing delivery or collection routes. Minimalist aesthetic, grey and white background with glowing green and blue route lines." data-location="São Paulo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoPQamZIdEk6rjlqV61T3L77ojFaTUrahe0UXlhlrPK6pYgl01mwTycvmhovqpyi_WB0Zgv88N2iMsyHo3kUq-DJQ49DelniCrrYYvj5lT_AJRENuyJ0Vv3EzRY9bcLKHVIHFHFinzYEnpgR4HytwtsjmzjDt-CC5c7uokR8jzmkH52LI70l6Ji4EdKo0yzJ6NkstoJy_ealhqdNmb2q8rzG1egGNTzzKSg_tpJ6nL49fkFQ1s8SKbNTQPK72xID-EsGkpXVWXCPg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-white via-surface-white/20 to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4 flex justify-between">
+<div class="bg-surface-white/90 backdrop-blur-sm px-3 py-2 rounded-md shadow-sm border border-outline-variant/20 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-data-blue animate-pulse"></span>
+<span class="font-label-caps text-label-caps font-bold">12 CAMINHÕES</span>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Activity Item 1 -->
+<div class="flex items-start gap-4">
+<div class="w-8 h-8 rounded-full bg-primary-container text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm font-semibold text-on-surface">Coleta Concluída: Indústria Apex</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Zona Sul • 4.2 Ton • Reciclável</p>
+</div>
+<span class="text-xs text-on-surface-variant ml-auto whitespace-nowrap">Há 10m</span>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex items-start gap-4">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-data-blue flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sm" data-icon="route">route</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm font-semibold text-on-surface">Em Rota: Hospital Central</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Centro • Resíduo Hospitalar</p>
+</div>
+<span class="text-xs text-on-surface-variant ml-auto whitespace-nowrap">Agora</span>
+</div>
+<!-- Activity Item 3 -->
+<div class="flex items-start gap-4">
+<div class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-sm" data-icon="pending">pending</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm font-semibold text-on-surface">Aguardando: Shopping Metro</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant">Zona Leste • Previsão: 14:30</p>
+</div>
+<span class="text-xs text-on-surface-variant ml-auto whitespace-nowrap">Próximo</span>
+</div>
+</div>
+</div>
+<!-- Detailed Table Section -->
+<div class="lg:col-span-12 bg-surface-white rounded-xl shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-surface-variant/50 overflow-hidden mt-6">
+<div class="p-6 border-b border-surface-variant/50 flex flex-col sm:flex-row justify-between items-center gap-4">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Solicitações de Clientes</h3>
+<div class="flex gap-3 w-full sm:w-auto">
+<div class="relative w-full sm:w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border-b border-outline-variant focus:border-primary focus:border-b-2 py-2 pl-9 pr-3 font-body-sm text-body-sm outline-none transition-colors" placeholder="Buscar cliente..." type="text"/>
+</div>
+<button class="bg-surface-container-low hover:bg-surface-container px-4 py-2 rounded-md font-button-text text-button-text text-on-surface transition-colors flex items-center gap-2">
+                            Exportar
+                            <span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-bright text-on-surface-variant font-label-caps text-label-caps uppercase border-b border-outline-variant/30">
+<th class="py-4 px-6 font-medium">ID Solicitação</th>
+<th class="py-4 px-6 font-medium">Cliente</th>
+<th class="py-4 px-6 font-medium">Tipo de Resíduo</th>
+<th class="py-4 px-6 font-medium">Volume Est.</th>
+<th class="py-4 px-6 font-medium">Status</th>
+<th class="py-4 px-6 font-medium text-right">Ação</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm">
+<tr class="border-b border-outline-variant/10 hover:bg-surface-bright/50 transition-colors">
+<td class="py-4 px-6 font-label-caps">REQ-2024-0891</td>
+<td class="py-4 px-6 font-semibold text-on-surface">TechCorp Industries</td>
+<td class="py-4 px-6">Eletrônico (E-waste)</td>
+<td class="py-4 px-6 font-label-caps">1.2 TONS</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-on-surface-variant"></span>
+                                        Pendente
+                                    </span>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-primary hover:text-waste-green font-medium">Atribuir Rota</button>
+</td>
+</tr>
+<tr class="border-b border-outline-variant/10 hover:bg-surface-bright/50 transition-colors">
+<td class="py-4 px-6 font-label-caps">REQ-2024-0890</td>
+<td class="py-4 px-6 font-semibold text-on-surface">Rede SuperMercados XYZ</td>
+<td class="py-4 px-6">Orgânico / Misto</td>
+<td class="py-4 px-6 font-label-caps">8.5 TONS</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container text-data-blue text-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-data-blue"></span>
+                                        Em Rota
+                                    </span>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-secondary hover:text-on-surface font-medium">Ver Caminhão</button>
+</td>
+</tr>
+<tr class="border-b border-outline-variant/10 hover:bg-surface-bright/50 transition-colors">
+<td class="py-4 px-6 font-label-caps">REQ-2024-0889</td>
+<td class="py-4 px-6 font-semibold text-on-surface">Construtora Base</td>
+<td class="py-4 px-6">Entulho / Civil</td>
+<td class="py-4 px-6 font-label-caps">15.0 TONS</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-container text-primary text-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                        Concluído
+                                    </span>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-secondary hover:text-on-surface font-medium">Ver Recibo</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright/50 transition-colors">
+<td class="py-4 px-6 font-label-caps">REQ-2024-0888</td>
+<td class="py-4 px-6 font-semibold text-on-surface">Condomínio Parque</td>
+<td class="py-4 px-6">Reciclável Limpo</td>
+<td class="py-4 px-6 font-label-caps">0.8 TONS</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-on-surface-variant"></span>
+                                        Pendente
+                                    </span>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="text-primary hover:text-waste-green font-medium">Atribuir Rota</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</body></html>

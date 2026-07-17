@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EcoLogic Precision - Admin Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#f9f9f9",
+                      "on-primary": "#ffffff",
+                      "tertiary": "#006059",
+                      "error-container": "#ffdad6",
+                      "primary-fixed": "#a3f69c",
+                      "data-blue": "#1578F7",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed": "#111d23",
+                      "tertiary-fixed-dim": "#5cdacc",
+                      "inverse-primary": "#88d982",
+                      "surface-tint": "#1b6d24",
+                      "surface-dim": "#dadada",
+                      "tertiary-container": "#007b72",
+                      "secondary": "#546067",
+                      "background": "#f9f9f9",
+                      "waste-green": "#1C8200",
+                      "inverse-surface": "#2f3131",
+                      "on-surface-variant": "#40493d",
+                      "alert-lime": "#E8F733",
+                      "on-error": "#ffffff",
+                      "primary-container": "#2e7d32",
+                      "on-tertiary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "surface-container-highest": "#e2e2e2",
+                      "surface-white": "#FFFFFF",
+                      "on-tertiary-fixed": "#00201d",
+                      "on-primary-fixed-variant": "#005312",
+                      "secondary-container": "#d7e4ec",
+                      "outline-variant": "#bfcaba",
+                      "outline": "#707a6c",
+                      "secondary-fixed": "#d7e4ec",
+                      "on-secondary-fixed-variant": "#3c494f",
+                      "surface-variant": "#e2e2e2",
+                      "inverse-on-surface": "#f1f1f1",
+                      "on-primary-container": "#cbffc2",
+                      "on-secondary-container": "#5a666d",
+                      "on-tertiary-container": "#b3fff5",
+                      "secondary-fixed-dim": "#bbc8d0",
+                      "on-tertiary-fixed-variant": "#00504a",
+                      "primary-fixed-dim": "#88d982",
+                      "surface-container-high": "#e8e8e8",
+                      "on-primary-fixed": "#002204",
+                      "on-background": "#1a1c1c",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container": "#eeeeee",
+                      "surface-container-low": "#f3f3f3",
+                      "primary": "#0d631b",
+                      "error": "#ba1a1a",
+                      "surface": "#f9f9f9",
+                      "tertiary-fixed": "#7bf7e9",
+                      "on-surface": "#1a1c1c"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "20px",
+                      "gutter": "24px",
+                      "container-max": "1280px",
+                      "margin-desktop": "64px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "button-text": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "button-text": [
+                              "16px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-sm": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full border-r border-outline-variant bg-surface-container-low shadow-md fixed left-0 top-0 w-64 z-50">
+<div class="p-6">
+<h1 class="font-headline-sm text-headline-sm font-bold text-waste-green">Admin Portal</h1>
+<p class="font-body-sm text-body-sm text-secondary mt-1">Waste Logistics Hub</p>
+</div>
+<div class="px-4 pb-6">
+<button class="w-full bg-waste-green text-on-primary font-button-text text-button-text h-12 rounded-lg flex items-center justify-center gap-2 hover:bg-primary transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">add</span>
+                Nova Coleta
+            </button>
+</div>
+<ul class="flex-1 overflow-y-auto font-label-caps text-label-caps space-y-1">
+<li>
+<a class="bg-secondary-container text-on-secondary-container rounded-lg mx-2 my-1 px-4 py-3 flex items-center gap-3 cursor-pointer active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<span>Frota</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:bg-surface-container-highest transition-all cursor-pointer active:scale-95 duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span>Clientes</span>
+</a>
+</li>
+<li>
+<a class="text-on-surface-variant mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:bg-surface-container-highest transition-all cursor-pointer active:scale-95 duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined">route</span>
+<span>Logística</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto border-t border-outline-variant p-4 space-y-1 font-label-caps text-label-caps">
+<a class="text-on-surface-variant mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:bg-surface-container-highest transition-all cursor-pointer active:scale-95 duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>Suporte</span>
+</a>
+<a class="text-on-surface-variant mx-2 my-1 px-4 py-3 flex items-center gap-3 hover:bg-surface-container-highest transition-all cursor-pointer active:scale-95 duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Logout</span>
+</a>
+<div class="mt-4 flex items-center gap-3 px-2">
+<img alt="Admin profile" class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a mature administrative manager in a well-lit modern logistics office setting, wearing a tailored navy blazer and subtle glasses. The lighting is crisp and natural, highlighting a clean, high-tech environment with a focus on efficiency. Corporate and trustworthy aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdNfz8uy0P0D9GMyabhQxqsZTYZWmr54d6IjaN1VAKwQtbpcQP2TNGg0-g4NcY3hH3JSRJPHgg9WAx8hOsADzY_lroeWsQ_J8KTc5mNTbsG68-In9JRjqeC5pGvPGgxbdxSAR2zU-rrqnZNmmhh5NTqlNDF-1QcWOUPDWJ8UYyFboLrH1BAF3tPp3qepZdS7YDCGju0U3lDQthgSh1mnztvef67sHkRPKe7rMZFrE_DjdmcOcNiVj7jjUAEQ47OZPCeXqsNxHuHo4"/>
+<div class="flex-1 min-w-0">
+<p class="font-body-sm text-body-sm font-semibold truncate text-on-surface">Admin User</p>
+<p class="font-label-caps text-label-caps text-secondary truncate">Operations</p>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-0 md:ml-64 p-margin-mobile md:p-gutter lg:p-margin-desktop min-h-screen">
+<header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Hub Logístico</h2>
+<p class="font-body-lg text-body-lg text-secondary mt-2">Visão global de frota, consolidação de rotas e gestão de custos operacionais.</p>
+</div>
+<div class="flex gap-3">
+<button class="h-12 px-6 border border-outline text-secondary font-button-text text-button-text rounded-lg flex items-center gap-2 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">download</span>
+                    Exportar Relatório
+                </button>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Fleet Capacity Overview -->
+<section class="lg:col-span-8 bg-surface-white rounded-[16px] shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-surface-variant p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface">Visão de Frota</h3>
+<span class="font-label-caps text-label-caps bg-primary-container text-on-primary-container px-3 py-1 rounded-full">STATUS: OPERACIONAL</span>
+</div>
+<div class="space-y-4">
+<!-- Truck Item -->
+<div class="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-lg border border-surface-variant bg-surface-bright hover:border-outline transition-colors gap-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Caminhão ABC-1234</h4>
+<p class="font-body-sm text-body-sm text-secondary">Motorista: Carlos S. • Rota: ZS-01</p>
+</div>
+</div>
+<div class="flex-1 max-w-xs w-full">
+<div class="flex justify-between font-label-caps text-label-caps mb-1">
+<span class="text-secondary">Ocupação</span>
+<span class="text-on-surface font-bold">65% (8.5 TONS)</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-waste-green" style="width: 65%;"></div>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="text-secondary hover:text-primary transition-colors p-2"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+</div>
+<!-- Truck Item -->
+<div class="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-lg border border-surface-variant bg-surface-bright hover:border-outline transition-colors gap-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Caminhão XYZ-9876</h4>
+<p class="font-body-sm text-body-sm text-secondary">Motorista: Ana L. • Rota: ZL-04</p>
+</div>
+</div>
+<div class="flex-1 max-w-xs w-full">
+<div class="flex justify-between font-label-caps text-label-caps mb-1">
+<span class="text-secondary">Ocupação</span>
+<span class="text-on-surface font-bold">92% (12.0 TONS)</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary" style="width: 92%;"></div>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="text-secondary hover:text-primary transition-colors p-2"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+</div>
+<!-- Truck Item -->
+<div class="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-lg border border-surface-variant bg-surface-bright hover:border-outline transition-colors gap-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Caminhão DEF-5555</h4>
+<p class="font-body-sm text-body-sm text-secondary">Motorista: N/A • Base Leste</p>
+</div>
+</div>
+<div class="flex-1 max-w-xs w-full">
+<div class="flex justify-between font-label-caps text-label-caps mb-1">
+<span class="text-secondary">Ocupação</span>
+<span class="text-on-surface font-bold">0% (0.0 TONS)</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-surface-dim" style="width: 0%;"></div>
+</div>
+</div>
+<div class="flex gap-2">
+<span class="font-label-caps text-label-caps bg-surface-variant text-on-surface-variant px-3 py-1 rounded-full self-center">OCIOSO</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Cost Management Table -->
+<section class="lg:col-span-4 bg-surface-white rounded-[16px] shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-surface-variant p-6 flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6">Gestão de Custos</h3>
+<div class="flex-1 overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="font-label-caps text-label-caps text-secondary border-b border-surface-variant">
+<tr>
+<th class="pb-3 font-medium">Recurso</th>
+<th class="pb-3 font-medium text-right">Custo/KM</th>
+<th class="pb-3 font-medium text-right">Diária</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant">
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-3">Caminhão Peq.</td>
+<td class="py-3 text-right font-label-caps">R$ 2,45</td>
+<td class="py-3 text-right font-label-caps">R$ 350</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-3">Caminhão Grd.</td>
+<td class="py-3 text-right font-label-caps">R$ 4,10</td>
+<td class="py-3 text-right font-label-caps">R$ 680</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-3">Mot. Principal</td>
+<td class="py-3 text-right font-label-caps">-</td>
+<td class="py-3 text-right font-label-caps">R$ 220</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="py-3">Ajudante</td>
+<td class="py-3 text-right font-label-caps">-</td>
+<td class="py-3 text-right font-label-caps">R$ 140</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="mt-6 pt-4 border-t border-surface-variant">
+<div class="flex justify-between items-center font-headline-sm text-headline-sm">
+<span class="text-secondary">OPEX Médio/Dia</span>
+<span class="text-on-surface font-bold">R$ 14.520</span>
+</div>
+</div>
+</section>
+<!-- Route Simulator -->
+<section class="lg:col-span-12 bg-surface-white rounded-[16px] shadow-[0px_4px_20px_rgba(0,0,0,0.04)] border border-surface-variant p-6 mt-4">
+<div class="flex flex-col md:flex-row justify-between md:items-center mb-6 gap-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Simulador de Rota: Consolidação</h3>
+<p class="font-body-sm text-body-sm text-secondary">Otimize a carga de veículos parcialmente ocupados com solicitações pendentes próximas.</p>
+</div>
+<button class="h-10 px-4 bg-tertiary-container text-on-tertiary-container font-button-text text-button-text rounded-lg flex items-center gap-2 hover:bg-tertiary transition-colors hover:text-on-tertiary">
+<span class="material-symbols-outlined">map</span>
+                        Visualizar Mapa
+                    </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Pending Requests List -->
+<div class="md:col-span-1 border-r-0 md:border-r border-surface-variant pr-0 md:pr-6 space-y-4">
+<h4 class="font-label-caps text-label-caps text-secondary mb-4">SOLICITAÇÕES PENDENTES (ZONA SUL)</h4>
+<!-- Request Card -->
+<div class="p-4 border border-outline-variant rounded-lg bg-surface-bright cursor-pointer hover:border-waste-green transition-colors">
+<div class="flex justify-between mb-2">
+<span class="font-body-sm text-body-sm font-semibold">Condomínio Verde</span>
+<span class="font-label-caps text-label-caps text-waste-green">1.2 TONS</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary mb-3">Distância: 4.5km do ABC-1234</p>
+<button class="w-full py-2 border border-waste-green text-waste-green font-button-text text-button-text text-sm rounded hover:bg-primary-container hover:text-on-primary-container transition-colors flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add_circle</span> Adicionar à Rota
+                            </button>
+</div>
+<!-- Request Card -->
+<div class="p-4 border border-outline-variant rounded-lg bg-surface-bright cursor-pointer hover:border-waste-green transition-colors">
+<div class="flex justify-between mb-2">
+<span class="font-body-sm text-body-sm font-semibold">Indústria Beta</span>
+<span class="font-label-caps text-label-caps text-waste-green">0.8 TONS</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary mb-3">Distância: 6.2km do ABC-1234</p>
+<button class="w-full py-2 border border-waste-green text-waste-green font-button-text text-button-text text-sm rounded hover:bg-primary-container hover:text-on-primary-container transition-colors flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add_circle</span> Adicionar à Rota
+                            </button>
+</div>
+</div>
+<!-- Simulation Result -->
+<div class="md:col-span-2 flex flex-col justify-center items-center p-6 bg-surface-container-low rounded-lg border border-dashed border-outline-variant text-center">
+<div class="w-16 h-16 bg-surface-container-high rounded-full flex items-center justify-center text-secondary mb-4">
+<span class="material-symbols-outlined text-3xl">route</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">Selecione solicitações para simular</h4>
+<p class="font-body-md text-body-md text-secondary max-w-md">Adicione cargas pendentes à rota de um veículo operacional para visualizar o impacto no custo por KM e na taxa de ocupação consolidada.</p>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

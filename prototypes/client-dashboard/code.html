@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard de Coletas e ESG - EcoLogic Precision</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#f9f9f9",
+                      "on-primary": "#ffffff",
+                      "tertiary": "#006059",
+                      "error-container": "#ffdad6",
+                      "primary-fixed": "#a3f69c",
+                      "data-blue": "#1578F7",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed": "#111d23",
+                      "tertiary-fixed-dim": "#5cdacc",
+                      "inverse-primary": "#88d982",
+                      "surface-tint": "#1b6d24",
+                      "surface-dim": "#dadada",
+                      "tertiary-container": "#007b72",
+                      "secondary": "#546067",
+                      "background": "#f9f9f9",
+                      "waste-green": "#1C8200",
+                      "inverse-surface": "#2f3131",
+                      "on-surface-variant": "#40493d",
+                      "alert-lime": "#E8F733",
+                      "on-error": "#ffffff",
+                      "primary-container": "#2e7d32",
+                      "on-tertiary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "surface-container-highest": "#e2e2e2",
+                      "surface-white": "#FFFFFF",
+                      "on-tertiary-fixed": "#00201d",
+                      "on-primary-fixed-variant": "#005312",
+                      "secondary-container": "#d7e4ec",
+                      "outline-variant": "#bfcaba",
+                      "outline": "#707a6c",
+                      "secondary-fixed": "#d7e4ec",
+                      "on-secondary-fixed-variant": "#3c494f",
+                      "surface-variant": "#e2e2e2",
+                      "inverse-on-surface": "#f1f1f1",
+                      "on-primary-container": "#cbffc2",
+                      "on-secondary-container": "#5a666d",
+                      "on-tertiary-container": "#b3fff5",
+                      "secondary-fixed-dim": "#bbc8d0",
+                      "on-tertiary-fixed-variant": "#00504a",
+                      "primary-fixed-dim": "#88d982",
+                      "surface-container-high": "#e8e8e8",
+                      "on-primary-fixed": "#002204",
+                      "on-background": "#1a1c1c",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container": "#eeeeee",
+                      "surface-container-low": "#f3f3f3",
+                      "primary": "#0d631b",
+                      "error": "#ba1a1a",
+                      "surface": "#f9f9f9",
+                      "tertiary-fixed": "#7bf7e9",
+                      "on-surface": "#1a1c1c"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "20px",
+                      "gutter": "24px",
+                      "container-max": "1280px",
+                      "margin-desktop": "64px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "body-sm": ["Inter"],
+                      "label-caps": ["JetBrains Mono"],
+                      "headline-lg-mobile": ["Hanken Grotesk"],
+                      "headline-lg": ["Hanken Grotesk"],
+                      "headline-md": ["Hanken Grotesk"],
+                      "button-text": ["Hanken Grotesk"],
+                      "body-md": ["Inter"],
+                      "headline-sm": ["Hanken Grotesk"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "headline-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "headline-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "button-text": ["16px", {"lineHeight": "16px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface-bright text-on-surface font-body-sm min-h-screen flex flex-col">
+<!-- Shared Component: TopNavBar -->
+<header class="bg-surface-white dark:bg-inverse-surface border-b border-outline-variant dark:border-outline shadow-sm docked full-width top-0 sticky z-50">
+<div class="flex justify-between items-center px-margin-desktop w-full max-w-container-max mx-auto h-16">
+<!-- Brand Logo -->
+<div class="font-headline-sm text-headline-sm font-bold text-primary dark:text-inverse-primary cursor-pointer active:opacity-80">
+                EcoLogic Precision
+            </div>
+<!-- Navigation Links -->
+<nav class="hidden md:flex gap-8">
+<!-- Dashboard (Active) -->
+<a class="font-body-md text-body-md text-primary dark:text-inverse-primary font-bold border-b-2 border-primary pb-1 cursor-pointer active:opacity-80 transition-colors flex items-center h-16 mt-0.5" href="#">
+                    Dashboard
+                </a>
+<!-- Coletas -->
+<a class="font-body-md text-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim transition-colors cursor-pointer active:opacity-80 flex items-center h-16" href="#">
+                    Coletas
+                </a>
+<!-- Documentos -->
+<a class="font-body-md text-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim transition-colors cursor-pointer active:opacity-80 flex items-center h-16" href="#">
+                    Documentos
+                </a>
+<!-- Impacto ESG -->
+<a class="font-body-md text-body-md text-secondary dark:text-secondary-fixed-dim hover:text-primary dark:hover:text-primary-fixed-dim transition-colors cursor-pointer active:opacity-80 flex items-center h-16" href="#">
+                    Impacto ESG
+                </a>
+</nav>
+<!-- Trailing Icon Actions -->
+<div class="flex items-center gap-4 text-primary dark:text-inverse-primary">
+<span class="material-symbols-outlined cursor-pointer active:opacity-80 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer active:opacity-80 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" data-icon="settings">settings</span>
+<img alt="User profile avatar" class="w-8 h-8 rounded-full ml-2 border border-outline-variant object-cover cursor-pointer active:opacity-80" data-alt="A small, professional headshot photo of an industrial manager wearing a crisp white shirt, clean lighting, white background, suitable for a corporate profile avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1spusIaaTST4nZ90lPPq46k8zzSBf3jnkBcdI2cRxcNuRmj4xreXSHsgNXPBP7cwRLqRB-tVv6Lw6DdwIP2qoL73bGMUIY8YHC9V0RmavPFXf8tsKRv-md8r0j5m57hys5lZUScLLlNc71ZFlhinuWLHLior1vtWqdXnwFW_Y9yrgrwf3Bv4K7gljFQwWIZTgxxJ9V4mudJ36O-Do0FkpdTwkh9Lw54oooqi42qiIJsH-WZP3WVWXwQNcNKgIPF1niER3sxEIP_E"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-gutter flex flex-col gap-12">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mt-8">
+<div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface">
+                    Visão Geral da Operação
+                </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2 max-w-2xl">
+                    Acompanhe a logística reversa em tempo real e consolide suas métricas de sustentabilidade com precisão técnica.
+                </p>
+</div>
+<button class="bg-waste-green hover:bg-surface-tint text-surface-white font-button-text text-button-text px-6 h-12 rounded-lg transition-colors flex items-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
+<span class="material-symbols-outlined">add</span>
+                Nova Solicitação
+            </button>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Map Card (Real-time) - 8 columns wide -->
+<div class="lg:col-span-8 bg-surface-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-outline-variant overflow-hidden flex flex-col">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-bright">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="share_location">share_location</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Monitoramento em Tempo Real</h2>
+</div>
+<span class="font-label-caps text-label-caps bg-primary-container text-on-primary-container px-3 py-1 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-waste-green animate-pulse"></span>
+                        AO VIVO
+                    </span>
+</div>
+<div class="relative w-full h-[400px] bg-surface-container-low">
+<!-- Map Placeholder -->
+<div class="absolute inset-0 bg-cover bg-center w-full h-full" data-alt="A sleek, light-mode digital map interface centered on an industrial complex in São Paulo. The map features a minimalist color palette with soft grays, off-whites, and muted greens for terrain. Roads are crisp white lines. There are glowing green marker icons representing logistics trucks converging on a central factory facility. The aesthetic is modern, clean, and highly technical, avoiding any visual clutter." data-location="São Paulo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNgJ3VU0V1VbJ_nvGF_DGlXje3jsWlBXXcAm8LQwiWg-bkrmiwue9yKAE26YM6S1hiMEiqEJbYPUDJfpSh6aNx9XP9TE2Gm0EgUHw9yp1kKCr87ZKvDRC9lL9GnYptFGLlGak5-AFb7KmennY0pZEyfCAhlkqmZjcrWCqLqLfym2ftQCyTIdcNppPI30CNznMOmouWhgQHpCo0jmTu0-0HywT6quufhEk_E6C5BsWiATT_k6U3DBaeHJoqYuCHCea7DqHJuUcZ8O0')"></div>
+<!-- Overlay Controls Mockup -->
+<div class="absolute bottom-6 left-6 flex flex-col gap-2">
+<button class="w-10 h-10 bg-surface-white rounded shadow-md flex items-center justify-center text-on-surface hover:text-waste-green transition-colors">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<button class="w-10 h-10 bg-surface-white rounded shadow-md flex items-center justify-center text-on-surface hover:text-waste-green transition-colors">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+</div>
+<!-- Floating Stats on Map -->
+<div class="absolute top-6 right-6 bg-surface-white/90 backdrop-blur-sm p-4 rounded-lg shadow-sm border border-outline-variant flex flex-col gap-2 min-w-[200px]">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-secondary">Caminhões em Rota</span>
+<span class="font-headline-sm text-headline-sm text-waste-green font-bold">4</span>
+</div>
+<div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden mt-1">
+<div class="h-full bg-waste-green w-3/4 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Column - 4 columns wide -->
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<!-- Opportunity Alert Card -->
+<div class="bg-surface-container-lowest border-l-4 border-alert-lime rounded-r-xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] p-6 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-primary" data-icon="bolt">bolt</span>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-alert-lime fill" data-icon="notifications_active">notifications_active</span>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Alerta de Oportunidade</h3>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface leading-relaxed mb-6 font-medium">
+                        Caminhão passando em <span class="text-waste-green font-bold">15 min</span> com <span class="text-waste-green font-bold">30% de espaço livre</span> — Desconto de <span class="bg-alert-lime/30 px-2 py-0.5 rounded text-on-surface font-bold">20% no frete</span>.
+                    </p>
+<button class="w-full bg-surface-white border border-outline hover:border-primary text-primary font-button-text text-button-text h-12 rounded-lg transition-colors flex justify-center items-center gap-2">
+                        Reservar Espaço
+                        <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Status Summary Card -->
+<div class="bg-surface-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-outline-variant p-6 flex-grow flex flex-col justify-center">
+<h3 class="font-label-caps text-label-caps text-secondary mb-6">Status Diário da Planta</h3>
+<div class="space-y-6">
+<div class="flex justify-between items-end border-b border-surface-container pb-4">
+<div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Coletas Realizadas</p>
+<p class="font-headline-md text-headline-md text-on-surface mt-1">12</p>
+</div>
+<span class="material-symbols-outlined text-tertiary-container text-3xl" data-icon="check_circle">check_circle</span>
+</div>
+<div class="flex justify-between items-end border-b border-surface-container pb-4">
+<div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Volume Projetado</p>
+<p class="font-headline-md text-headline-md text-on-surface mt-1">45 <span class="font-label-caps text-label-caps text-secondary">TONS</span></p>
+</div>
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="weight">weight</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ESG Section (Bottom Row) -->
+<section class="mt-8 mb-16">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-tertiary-container" data-icon="eco">eco</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Impacto ESG Consolidado</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Card: Toneladas Recicladas -->
+<div class="bg-surface-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-outline-variant p-8">
+<div class="flex justify-between items-start mb-8">
+<h3 class="font-label-caps text-label-caps text-secondary">Toneladas Recicladas</h3>
+<span class="material-symbols-outlined text-primary-container" data-icon="recycling">recycling</span>
+</div>
+<div class="flex items-end gap-3 mb-4">
+<p class="font-headline-lg text-headline-lg text-waste-green">342.5</p>
+<p class="font-body-md text-body-md text-secondary mb-2">t/mês</p>
+</div>
+<!-- Custom Mini Chart -->
+<div class="flex items-end gap-1 h-16 w-full mt-4">
+<div class="w-1/6 bg-primary-fixed-dim/30 h-1/4 rounded-t-sm"></div>
+<div class="w-1/6 bg-primary-fixed-dim/50 h-2/4 rounded-t-sm"></div>
+<div class="w-1/6 bg-primary-fixed-dim/70 h-3/4 rounded-t-sm"></div>
+<div class="w-1/6 bg-primary-fixed-dim/90 h-2/3 rounded-t-sm"></div>
+<div class="w-1/6 bg-waste-green h-full rounded-t-sm relative group cursor-pointer">
+<div class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-inverse-surface text-surface-white font-label-caps text-label-caps px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Atual</div>
+</div>
+</div>
+</div>
+<!-- Card: Rejeitos (Landfill) -->
+<div class="bg-surface-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-outline-variant p-8">
+<div class="flex justify-between items-start mb-8">
+<h3 class="font-label-caps text-label-caps text-secondary">Rejeitos para Aterro</h3>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="delete">delete</span>
+</div>
+<div class="flex items-end gap-3 mb-4">
+<p class="font-headline-lg text-headline-lg text-on-surface">45.2</p>
+<p class="font-body-md text-body-md text-secondary mb-2">t/mês</p>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="material-symbols-outlined text-alert-lime text-sm" data-icon="trending_down">trending_down</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">-12% comparado ao mês anterior</p>
+</div>
+<!-- Custom Progress Bar -->
+<div class="mt-8">
+<div class="flex justify-between font-label-caps text-label-caps text-secondary mb-2">
+<span>Taxa de Desvio (Diversion Rate)</span>
+<span class="text-waste-green font-bold">88%</span>
+</div>
+<div class="w-full h-2 bg-surface-container-high rounded-full overflow-hidden flex">
+<div class="bg-waste-green w-[88%] h-full rounded-l-full"></div>
+<div class="bg-surface-dim w-[12%] h-full"></div>
+</div>
+</div>
+</div>
+<!-- Card: Economia de CO2 -->
+<div class="bg-surface-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-outline-variant p-8 bg-gradient-to-br from-surface-white to-surface-bright">
+<div class="flex justify-between items-start mb-8">
+<h3 class="font-label-caps text-label-caps text-secondary">Economia de CO2</h3>
+<span class="material-symbols-outlined text-tertiary-container" data-icon="cloud">cloud</span>
+</div>
+<div class="flex flex-col h-full justify-between pb-4">
+<div>
+<p class="font-headline-lg text-headline-lg text-tertiary-container">1,204</p>
+<p class="font-body-lg text-body-lg text-secondary">Toneladas evitadas</p>
+</div>
+<div class="mt-6 p-4 bg-tertiary-fixed/10 rounded-lg border border-tertiary-fixed-dim/20 flex items-center gap-4">
+<span class="material-symbols-outlined text-tertiary text-3xl" data-icon="forest">forest</span>
+<p class="font-body-sm text-body-sm text-tertiary-container font-medium">
+                                Equivalente a plantar <span class="font-bold">5.400 árvores</span> neste ano fiscal.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

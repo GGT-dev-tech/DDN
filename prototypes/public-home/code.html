@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DDN Resíduos - Destinação de Resíduos Inteligente e Sustentável</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "surface-bright": "#f9f9f9",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#00504a",
+                        "on-secondary-fixed-variant": "#3c494f",
+                        "on-primary-container": "#cbffc2",
+                        "on-background": "#1a1c1c",
+                        "primary-fixed": "#a3f69c",
+                        "outline-variant": "#bfcaba",
+                        "on-surface-variant": "#40493d",
+                        "primary": "#0d631b",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f3f3f3",
+                        "tertiary-fixed-dim": "#5cdacc",
+                        "on-tertiary-container": "#b3fff5",
+                        "on-surface": "#1a1c1c",
+                        "surface-tint": "#1b6d24",
+                        "secondary-fixed": "#d7e4ec",
+                        "primary-container": "#2e7d32",
+                        "inverse-primary": "#88d982",
+                        "tertiary-container": "#007b72",
+                        "surface-container": "#eeeeee",
+                        "tertiary": "#006059",
+                        "secondary": "#546067",
+                        "on-tertiary-fixed": "#00201d",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2f3131",
+                        "surface-variant": "#e2e2e2",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-secondary-fixed": "#111d23",
+                        "on-primary-fixed": "#002204",
+                        "primary-fixed-dim": "#88d982",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#7bf7e9",
+                        "surface-white": "#FFFFFF",
+                        "data-blue": "#1578F7",
+                        "secondary-fixed-dim": "#bbc8d0",
+                        "secondary-container": "#d7e4ec",
+                        "waste-green": "#1C8200",
+                        "surface": "#f9f9f9",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-primary-fixed-variant": "#005312",
+                        "surface-dim": "#dadada",
+                        "on-secondary-container": "#5a666d",
+                        "outline": "#707a6c",
+                        "surface-container-high": "#e8e8e8",
+                        "error": "#ba1a1a",
+                        "background": "#f9f9f9",
+                        "on-primary": "#ffffff",
+                        "alert-lime": "#E8F733",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "base": "8px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "64px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "headline-sm": ["Hanken Grotesk"],
+                        "body-sm": ["Inter"],
+                        "label-caps": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "button-text": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "button-text": ["16px", { "lineHeight": "16px", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #0d631b 0%, #1578F7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-pattern {
+            background-image: radial-gradient(#e2e2e2 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+    </style>
+</head>
+<body class="bg-surface-white text-on-surface font-body-lg antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto bg-surface-white shadow-sm docked full-width top-0">
+<div class="flex items-center gap-4">
+<img alt="DDN Resíduos Logo" class="h-10 w-10 object-contain rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACDbnIo_qzeSsuwrJQJChfO4wB9sh_O5ldxkX_DK8ieQH6ZzKzKe2jJ1R33deKYGChIW7YcjYP8YMD1ZZHoc1tIy_r-oEDlglbYU7DyzItOFk5nogdqXcEoRnYTtsOoJwH-wDydOpgs1cY30baQPMy9Ztr1A0M9vHmsDq1JRjB8BV0L5mKCQbMigWrgsEo2lDUx0U7ZiAxssK_foUfqnG_zGr8cdQxIjvTORZBVG5535hCOehdJgzm6lwXwxr7YXWatEOOS6Dl9Fw"/>
+<span class="text-headline-sm font-headline-md font-bold text-primary">DDN Resíduos</span>
+</div>
+<nav class="hidden md:flex gap-8">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 hover:text-primary transition-colors font-body-md" href="#inicio">Início</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors font-body-md" href="#servicos">Serviços</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors font-body-md" href="#calculadora">Calculadora</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors font-body-md" href="#impacto">Impacto</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors font-body-md" href="#social">Social</a>
+</nav>
+<button class="bg-primary text-on-primary font-button-text text-button-text px-6 py-3 rounded-lg hover:bg-waste-green transition-colors hidden md:block">Entrar</button>
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+</header>
+<main class="pt-24 pb-20">
+<!-- Hero Section -->
+<section class="relative min-h-[90vh] flex items-center px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto hero-pattern" id="inicio">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter items-center relative z-10 w-full">
+<div class="max-w-2xl">
+<span class="font-label-caps text-label-caps text-tertiary-container uppercase tracking-wider mb-4 block border border-tertiary-container/30 px-3 py-1 rounded-full w-max bg-surface-container-low">TECNOLOGIA &amp; SUSTENTABILIDADE</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface mb-6 leading-tight">
+                        Destinação de Resíduos <br/>
+<span class="text-gradient">Inteligente e Sustentável</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-lg">
+                        Integramos dados precisos e economia circular para otimizar a gestão de resíduos da sua empresa. Mais transparência, menos impacto ambiental.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary text-on-primary font-button-text text-button-text px-8 py-4 rounded-lg hover:bg-waste-green transition-all shadow-[0_4px_14px_0_rgba(13,99,27,0.39)] hover:shadow-[0_6px_20px_rgba(13,99,27,0.23)] hover:-translate-y-1 h-12 flex items-center justify-center">
+                            Solicitar Orçamento Rápido
+                        </button>
+<button class="border border-outline font-button-text text-button-text text-on-surface px-8 py-4 rounded-lg hover:bg-surface-container-low transition-colors h-12 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">play_circle</span>
+                            Ver como funciona
+                        </button>
+</div>
+</div>
+<div class="relative h-[400px] md:h-[600px] w-full rounded-2xl overflow-hidden shadow-2xl glass-card flex items-center justify-center bg-surface-container-lowest">
+<!-- Placeholder for 3D animation -->
+<div class="text-center p-8">
+<span class="material-symbols-outlined text-[64px] text-tertiary-container mb-4 opacity-50 block">3d_rotation</span>
+<p class="font-body-md text-body-md text-on-surface-variant italic">[Placeholder for Interactive 3D Logistics Visualization]</p>
+</div>
+</div>
+</div>
+<!-- Quick Stats Bottom Bar -->
+<div class="absolute bottom-0 left-0 w-full border-t border-surface-variant bg-surface-white/90 backdrop-blur-sm hidden md:block">
+<div class="max-w-container-max mx-auto px-margin-desktop py-6 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[32px]">recycling</span>
+<div>
+<p class="font-headline-sm text-headline-sm text-on-surface m-0 leading-none">94%</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant m-0">TAXA DE RECICLAGEM</p>
+</div>
+</div>
+<div class="h-10 w-px bg-surface-variant"></div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary-container text-[32px]">factory</span>
+<div>
+<p class="font-headline-sm text-headline-sm text-on-surface m-0 leading-none">+500</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant m-0">INDÚSTRIAS ATENDIDAS</p>
+</div>
+</div>
+<div class="h-10 w-px bg-surface-variant"></div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-data-blue text-[32px]">co2</span>
+<div>
+<p class="font-headline-sm text-headline-sm text-on-surface m-0 leading-none">12.5 TONS</p>
+<p class="font-label-caps text-label-caps text-on-surface-variant m-0">CO2 EVITADO MENSALMENTE</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Spacer -->
+<div class="h-32"></div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-base bg-surface-container-highest dark:bg-inverse-surface full-width bottom flat no shadows text-on-surface">
+<div class="flex items-center gap-4 mb-6 md:mb-0">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">DDN Resíduos</span>
+</div>
+<nav class="flex flex-wrap justify-center gap-6 mb-6 md:mb-0">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors opacity-90 hover:opacity-100" href="#">Privacidade</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors opacity-90 hover:opacity-100" href="#">Termos de Uso</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors opacity-90 hover:opacity-100" href="#">Contato</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors opacity-90 hover:opacity-100" href="#">Trabalhe Conosco</a>
+</nav>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center md:text-right">
+            © 2024 DDN Destinação de Resíduos. Todos os direitos reservados.
+        </p>
+</footer>
+</body></html>
