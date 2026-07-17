@@ -1,11 +1,12 @@
 FROM ghcr.io/astral-sh/uv:python3.14-bookworm-slim
 
 WORKDIR /app
-COPY pyproject.toml uv.lock ./
+COPY backend/pyproject.toml backend/uv.lock ./
 RUN uv sync --frozen --no-install-project
 
-COPY apps ./apps
-COPY modules ./modules
+COPY backend/apps/api_gateway ./apps/api_gateway
+COPY backend/modules ./modules
+COPY backend/packages ./packages
 
 ENV PYTHONPATH=/app
 
