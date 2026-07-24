@@ -1,0 +1,24 @@
+[importlinter]
+root_packages =
+    modules
+    database
+    apps
+
+[importlinter:contract:domain_independence]
+name = Domain layer should not import infrastructure, framework or database
+type = independence
+modules =
+    modules.identity.domain
+    modules.tenant.domain
+    modules.audit.domain
+    modules.core.domain
+ignore_imports =
+    modules.*.domain -> database.core.base
+
+[importlinter:contract:layer_independence]
+name = Layers strict dependency
+type = layers
+layers =
+    apps
+    modules
+    database

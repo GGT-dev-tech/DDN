@@ -6,13 +6,21 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "alembic>=1.18.5",
+    "asyncpg>=0.31.0",
+    "bcrypt>=5.0.0",
     "celery>=5.6.3",
+    "email-validator>=2.3.0",
     "fastapi>=0.139.2",
     "opentelemetry-api>=1.44.0",
+    "passlib>=1.7.4",
+    "psycopg[binary,pool]>=3.3.4",
     "pydantic-settings>=2.14.2",
+    "pyjwt>=2.13.0",
+    "python-multipart>=0.0.32",
     "redis>=8.0.1",
     "sqlalchemy>=2.0.51",
     "structlog>=26.1.0",
+    "uuid6>=2025.0.1",
     "uvicorn>=0.51.0",
 ]
 
@@ -21,4 +29,5 @@ dev = [
     "httpx>=0.28.1",
     "pytest>=9.1.1",
     "pytest-asyncio>=1.4.0",
+    "import-linter>=2.1",
 ]
