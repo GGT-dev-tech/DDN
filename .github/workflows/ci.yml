@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - develop
   pull_request:
 
 jobs:
@@ -13,6 +14,25 @@ jobs:
       run:
         working-directory: backend
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+
     steps:
       - uses: actions/checkout@v4
 
@@ -20,19 +40,68 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-          version: "0.11.29"
 
       - name: Install dependencies
-        run: uv sync --frozen
+        run: uv sync
 
-      - name: Run Pytest
-        run: uv run pytest tests/
+      - name: Lint (Ruff)
+        run: uv run ruff check .
+
+      - name: Format Check (Black)
+        run: uv run black --check .
+
+      - name: Type Check (Mypy)
+        run: uv run mypy . || echo "Mypy failed, proceeding for now"
+
+      - name: Security Scan (Bandit)
+        run: |
+          uv pip install bandit
+          uv run bandit -r . -x ./tests -lll || echo "Bandit found issues"
+
+      - name: Security Scan (Pip-Audit)
+        run: |
+          uv pip install pip-audit
+          uv run pip-audit || echo "Pip-Audit found issues"
+
+      - name: Test Database Migration (Alembic)
+        run: |
+          uv run alembic upgrade head
+          uv run alembic downgrade base
+          uv run alembic upgrade head
+        env:
+          DATABASE_URL: "postgresql+asyncpg://test:test@localhost:5432/test"
+
+      - name: Run Architecture & Unit Tests (Pytest)
+        run: uv run pytest tests/ modules/ --cov=. --cov-report=xml
         env:
           ENVIRONMENT: test
-          DATABASE_HOST: localhost
-          DATABASE_PORT: 5432
-          DATABASE_USER: test
-          DATABASE_PASSWORD: test
-          DATABASE_NAME: test
-          REDIS_HOST: localhost
-          REDIS_PORT: 6379
+          DATABASE_URL: "postgresql+asyncpg://test:test@localhost:5432/test"
+          REDIS_URL: "redis://localhost:6379/0"
+
+  frontend-checks:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Security Scan (npm audit)
+        run: npm audit || echo "NPM audit found issues"
+
+  docker-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Backend Docker Image
+        run: docker build -t ddn-backend:latest -f backend/Dockerfile.dev backend/
+      - name: Scan with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'ddn-backend:latest'
+          format: 'table'
+          exit-code: '0' # Informational only for now
+          severity: 'CRITICAL,HIGH'

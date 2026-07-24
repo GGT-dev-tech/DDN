@@ -14,11 +14,27 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-target_metadata = None
+from modules.core.config.settings import settings
+from database.core.base import Base
+
+# Import all models to ensure they are registered with Base.metadata
+import modules.identity.domain.entities.user
+import modules.identity.domain.entities.refresh_token
+import modules.tenant.domain.entities.tenant
+import modules.tenant.domain.entities.tenant_user
+import modules.tenant.domain.entities.rbac
+import modules.audit.domain.entities.audit_log
+import modules.core.infrastructure.outbox
+import modules.routing.infrastructure.orm_models
+import modules.fleet.infrastructure.orm_models
+
+target_metadata = Base.metadata
+
+def include_object(object, name, type_, reflected, compare_to):
+    if type_ == "table" and reflected and name not in target_metadata.tables:
+        return False
+    return True
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -38,12 +54,13 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = settings.db.migration_url.replace("postgresql://", "postgresql+psycopg://")
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        include_object=include_object,
     )
 
     with context.begin_transaction():
@@ -57,6 +74,9 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+    url = settings.db.migration_url.replace("postgresql://", "postgresql+psycopg://")
+    config.set_main_option("sqlalchemy.url", url)
+    
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
@@ -65,7 +85,7 @@ def run_migrations_online() -> None:
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata
+            connection=connection, target_metadata=target_metadata, include_object=include_object
         )
 
         with context.begin_transaction():
