@@ -12,15 +12,30 @@ class OutboxEvent(Base):
     __tablename__ = "outbox_events"
     
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid7)
-    aggregate_name: Mapped[str] = mapped_column(index=True)
-    aggregate_id: Mapped[str] = mapped_column()
-    event_type: Mapped[str] = mapped_column()
-    payload: Mapped[dict] = mapped_column(type_=JSONB)
-    metadata_json: Mapped[dict] = mapped_column(type_=JSONB, default=dict)
+    tenant_id: Mapped[uuid.UUID | None] = mapped_column(nullable=True, index=True)
     
-    status: Mapped[str] = mapped_column(default="PENDING", index=True) # PENDING, PROCESSED, FAILED
-    retry_count: Mapped[int] = mapped_column(default=0)
-    error_message: Mapped[str | None] = mapped_column(nullable=True)
+    aggregate_id: Mapped[str] = mapped_column(index=True)
+    aggregate_type: Mapped[str] = mapped_column()
+    
+    event_name: Mapped[str] = mapped_column()
+    
+    payload: Mapped[dict] = mapped_column(type_=JSONB)
+    headers: Mapped[dict] = mapped_column(type_=JSONB, default=dict)
+    
+    status: Mapped[str] = mapped_column(default="PENDING", index=True) # PENDING, PROCESSING, PROCESSED, FAILED, RETRYING, DEAD_LETTER, EXPIRED
+    
+    attempts: Mapped[int] = mapped_column(default=0)
+    max_attempts: Mapped[int] = mapped_column(default=3)
+    
+    available_at: Mapped[datetime] = mapped_column(default=utc_now, index=True)
+    processed_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    locked_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    worker_id: Mapped[str | None] = mapped_column(nullable=True)
+    
+    correlation_id: Mapped[str] = mapped_column()
+    causation_id: Mapped[str | None] = mapped_column(nullable=True)
     
     created_at: Mapped[datetime] = mapped_column(default=utc_now)
-    processed_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(default=utc_now, onupdate=utc_now)
+    
+    error_message: Mapped[str | None] = mapped_column(nullable=True)

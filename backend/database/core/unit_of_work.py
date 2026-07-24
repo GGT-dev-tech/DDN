@@ -2,8 +2,10 @@ from abc import ABC, abstractmethod
 from typing import List
 from contextlib import contextmanager
 from sqlalchemy.orm import Session
-from modules.core.domain.events import DomainEvent
-from modules.core.domain.aggregate import AggregateRoot
+
+from shared_kernel.events.base import DomainEvent
+from shared_kernel.contracts.aggregate_root import AggregateRoot
+from shared_kernel.messaging.outbox_repository import OutboxRepository
 
 class UnitOfWork(ABC):
     @abstractmethod
@@ -28,8 +30,9 @@ class UnitOfWork(ABC):
         pass
 
 class SQLAlchemyUnitOfWork(UnitOfWork):
-    def __init__(self, session: Session):
+    def __init__(self, session: Session, outbox_repository: OutboxRepository):
         self.session = session
+        self.outbox_repository = outbox_repository
         self.events: List[DomainEvent] = []
         
     @contextmanager
@@ -41,8 +44,8 @@ class SQLAlchemyUnitOfWork(UnitOfWork):
             raise
             
     def commit(self):
-        # We could process the self.events here (e.g. saving them to the outbox table)
-        # For now we just clear them and commit
+        if self.events:
+            self.outbox_repository.save(list(self.events))
         self.session.commit()
         self.events.clear()
         

@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "event_id": "00000000-0000-0000-0000-000000000001",
+    "tenant_id": "00000000-0000-0000-0000-000000000002",
+    "correlation_id": "corr-123",
+    "causation_id": "cause-456",
+    "occurred_at": "2026-07-24T12:00:00+00:00",
+    "event_schema_version": 1,
+    "aggregate_version": 5
+  },
+  "payload": {
+    "route_id": "00000000-0000-0000-0000-000000000003",
+    "price": {
+      "amount": "150.50",
+      "currency": "BRL"
+    },
+    "origin": {
+      "coordinates": {
+        "latitude": -23.5505,
+        "longitude": -46.6333
+      },
+      "address": "SP"
+    },
+    "status": "CREATED",
+    "distance_km": "42.195"
+  }
+}
