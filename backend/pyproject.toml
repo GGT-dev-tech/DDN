@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "alembic>=1.18.5",
+    "asgi-correlation-id>=4.3.5",
     "asyncpg>=0.31.0",
     "bcrypt>=5.0.0",
     "celery>=5.6.3",
@@ -31,3 +32,42 @@ dev = [
     "pytest-asyncio>=1.4.0",
     "import-linter>=2.1",
 ]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --cov=. --cov-report=xml --cov-report=term"
+testpaths = ["tests", "modules"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.coverage.run]
+branch = true
+source = ["modules", "apps"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "pass",
+    "raise ImportError"
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.black]
+line-length = 100
+target-version = ['py312']
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.bandit]
+exclude_dirs = ["tests"]

@@ -6,7 +6,7 @@ services:
     container_name: stitch_postgres
     restart: unless-stopped
     env_file:
-      - ../.env
+      - backend/.env.local
     environment:
       POSTGRES_USER: ${DATABASE_USER:-stitch_admin}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-secret_postgres}
@@ -15,7 +15,7 @@ services:
       - "${DATABASE_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-scripts:/docker-entrypoint-initdb.d
+      - ./backend/init-scripts:/docker-entrypoint-initdb.d
     networks:
       - stitch_network
     healthcheck:
@@ -40,6 +40,40 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: stitch_api
+    restart: unless-stopped
+    env_file:
+      - backend/.env.local
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - stitch_network
+
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    container_name: stitch_worker
+    restart: unless-stopped
+    env_file:
+      - worker/.env.example
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - stitch_network
 
 volumes:
   postgres_data:

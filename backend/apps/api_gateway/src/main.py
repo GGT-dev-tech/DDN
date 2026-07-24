@@ -4,6 +4,7 @@ from sqlalchemy.exc import OperationalError
 import redis
 import os
 from apps.api_gateway.src.routes import auth, tenant, routing, fleet
+from asgi_correlation_id import CorrelationIdMiddleware
 from modules.core.observability.middleware import CorrelationMiddleware
 from modules.core.logging.logger import setup_logging
 
@@ -13,6 +14,7 @@ setup_logging()
 app = FastAPI(title="Stitch API Gateway", version="1.0.0")
 
 app.add_middleware(CorrelationMiddleware)
+app.add_middleware(CorrelationIdMiddleware)
 
 app.include_router(auth.router)
 app.include_router(tenant.router)

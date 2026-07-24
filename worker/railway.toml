@@ -1,0 +1,11 @@
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "echo 'Worker not implemented yet' && sleep 3600"
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+
+[env]
+PYTHONUNBUFFERED = "1"

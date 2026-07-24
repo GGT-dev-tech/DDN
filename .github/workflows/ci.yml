@@ -72,11 +72,24 @@ jobs:
           DATABASE_URL: "postgresql+asyncpg://test:test@localhost:5432/test"
 
       - name: Run Architecture & Unit Tests (Pytest)
-        run: uv run pytest tests/ modules/ --cov=. --cov-report=xml
+        run: uv run pytest
         env:
           ENVIRONMENT: test
           DATABASE_URL: "postgresql+asyncpg://test:test@localhost:5432/test"
           REDIS_URL: "redis://localhost:6379/0"
+
+      - name: Coverage Drift Check
+        run: |
+          CURRENT_COV=$(uv run coverage report | grep TOTAL | awk '{print $4}' | sed 's/%//')
+          BASELINE_COV=$(cat coverage-baseline.txt 2>/dev/null || echo 0)
+          echo "Current Coverage: $CURRENT_COV%"
+          echo "Baseline Coverage: $BASELINE_COV%"
+          if (( $(echo "$CURRENT_COV < $BASELINE_COV" | bc -l) )); then
+            echo "Coverage dropped below baseline ($BASELINE_COV%)."
+            exit 1
+          fi
+          echo "$CURRENT_COV" > coverage-baseline.txt
+          echo "Coverage is acceptable."
 
   frontend-checks:
     runs-on: ubuntu-latest
@@ -97,7 +110,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build Backend Docker Image
-        run: docker build -t ddn-backend:latest -f backend/Dockerfile.dev backend/
+        run: docker build -t ddn-backend:latest -f backend/Dockerfile backend/
       - name: Scan with Trivy
         uses: aquasecurity/trivy-action@master
         with:
