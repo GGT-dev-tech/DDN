@@ -17,7 +17,7 @@ from modules.core.context import (
 from modules.tenant.domain.entities.tenant_user import TenantUser
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
-auth_service = AuthService(secret_key=settings.app.secret_key)
+auth_service = AuthService(secret_key=settings.security.jwt_secret)
 
 async def get_current_user_id(request: Request, token: Annotated[str, Depends(oauth2_scheme)]) -> UUID:
     try:

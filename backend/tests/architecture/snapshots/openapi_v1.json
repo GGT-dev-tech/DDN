@@ -167,6 +167,288 @@
         }
       }
     },
+    "/routing/routes": {
+      "post": {
+        "tags": [
+          "Routing"
+        ],
+        "summary": "Create Route",
+        "operationId": "create_route_routing_routes_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRouteRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteResponseDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routing/routes/{route_id}/stops": {
+      "post": {
+        "tags": [
+          "Routing"
+        ],
+        "summary": "Add Stop To Route",
+        "operationId": "add_stop_to_route_routing_routes__route_id__stops_post",
+        "parameters": [
+          {
+            "name": "route_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Route Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddStopRequestDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteResponseDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routing/routes/{route_id}/assign": {
+      "post": {
+        "tags": [
+          "Routing"
+        ],
+        "summary": "Assign Route Resources",
+        "operationId": "assign_route_resources_routing_routes__route_id__assign_post",
+        "parameters": [
+          {
+            "name": "route_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Route Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignRouteResourcesRequestDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteResponseDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fleet/vehicles": {
+      "post": {
+        "tags": [
+          "Fleet"
+        ],
+        "summary": "Register Vehicle",
+        "operationId": "register_vehicle_fleet_vehicles_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterVehicleRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleResponseDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fleet/drivers": {
+      "post": {
+        "tags": [
+          "Fleet"
+        ],
+        "summary": "Register Driver",
+        "operationId": "register_driver_fleet_drivers_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDriverRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DriverResponseDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dashboard/stats": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Get Dashboard Stats",
+        "description": "Retrieves the main operational metrics for the current tenant's dashboard.",
+        "operationId": "get_dashboard_stats_api_v1_dashboard_stats_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardStatsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health/live": {
       "get": {
         "tags": [
@@ -230,6 +512,165 @@
   },
   "components": {
     "schemas": {
+      "AddStopRequestDTO": {
+        "properties": {
+          "route_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Route Id"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationDTO"
+          },
+          "order": {
+            "type": "integer",
+            "title": "Order"
+          }
+        },
+        "type": "object",
+        "required": [
+          "route_id",
+          "location",
+          "order"
+        ],
+        "title": "AddStopRequestDTO"
+      },
+      "AssignRouteResourcesRequestDTO": {
+        "properties": {
+          "route_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Route Id"
+          },
+          "vehicle_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Vehicle Id"
+          },
+          "driver_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Driver Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "route_id",
+          "vehicle_id",
+          "driver_id"
+        ],
+        "title": "AssignRouteResourcesRequestDTO"
+      },
+      "CreateRouteRequestDTO": {
+        "properties": {
+          "execution_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Execution Date"
+          },
+          "estimated_volume": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Volume"
+          },
+          "estimated_weight": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Weight"
+          },
+          "planned_distance": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Planned Distance"
+          },
+          "planned_duration": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Planned Duration"
+          }
+        },
+        "type": "object",
+        "required": [
+          "execution_date"
+        ],
+        "title": "CreateRouteRequestDTO"
+      },
+      "DashboardStatsResponse": {
+        "properties": {
+          "active_routes": {
+            "type": "integer",
+            "title": "Active Routes"
+          },
+          "available_vehicles": {
+            "type": "integer",
+            "title": "Available Vehicles"
+          },
+          "pending_deliveries": {
+            "type": "integer",
+            "title": "Pending Deliveries"
+          }
+        },
+        "type": "object",
+        "required": [
+          "active_routes",
+          "available_vehicles",
+          "pending_deliveries"
+        ],
+        "title": "DashboardStatsResponse"
+      },
+      "DriverResponseDTO": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "license_number": {
+            "type": "string",
+            "title": "License Number"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "license_number",
+          "status"
+        ],
+        "title": "DriverResponseDTO"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -242,6 +683,215 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "LocationDTO": {
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "title": "Latitude"
+          },
+          "longitude": {
+            "type": "number",
+            "title": "Longitude"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          }
+        },
+        "type": "object",
+        "required": [
+          "latitude",
+          "longitude",
+          "address"
+        ],
+        "title": "LocationDTO"
+      },
+      "RegisterDriverRequestDTO": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "license_number": {
+            "type": "string",
+            "title": "License Number"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "license_number"
+        ],
+        "title": "RegisterDriverRequestDTO"
+      },
+      "RegisterVehicleRequestDTO": {
+        "properties": {
+          "license_plate": {
+            "type": "string",
+            "title": "License Plate"
+          },
+          "vehicle_type": {
+            "type": "string",
+            "title": "Vehicle Type"
+          },
+          "capacity_volume": {
+            "type": "number",
+            "title": "Capacity Volume"
+          },
+          "capacity_weight": {
+            "type": "number",
+            "title": "Capacity Weight"
+          }
+        },
+        "type": "object",
+        "required": [
+          "license_plate",
+          "vehicle_type",
+          "capacity_volume",
+          "capacity_weight"
+        ],
+        "title": "RegisterVehicleRequestDTO"
+      },
+      "RouteResponseDTO": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "execution_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Execution Date"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "estimated_volume": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Volume"
+          },
+          "estimated_weight": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Weight"
+          },
+          "planned_distance": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Planned Distance"
+          },
+          "planned_duration": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Planned Duration"
+          },
+          "vehicle_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vehicle Id"
+          },
+          "driver_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Driver Id"
+          },
+          "stops": {
+            "items": {
+              "$ref": "#/components/schemas/StopResponseDTO"
+            },
+            "type": "array",
+            "title": "Stops"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "execution_date",
+          "status",
+          "stops"
+        ],
+        "title": "RouteResponseDTO"
+      },
+      "StopResponseDTO": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "latitude": {
+            "type": "number",
+            "title": "Latitude"
+          },
+          "longitude": {
+            "type": "number",
+            "title": "Longitude"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "order": {
+            "type": "integer",
+            "title": "Order"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "latitude",
+          "longitude",
+          "address",
+          "order",
+          "status"
+        ],
+        "title": "StopResponseDTO"
       },
       "TenantContextResponse": {
         "properties": {
@@ -441,6 +1091,45 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "VehicleResponseDTO": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "license_plate": {
+            "type": "string",
+            "title": "License Plate"
+          },
+          "vehicle_type": {
+            "type": "string",
+            "title": "Vehicle Type"
+          },
+          "capacity_volume": {
+            "type": "number",
+            "title": "Capacity Volume"
+          },
+          "capacity_weight": {
+            "type": "number",
+            "title": "Capacity Weight"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "license_plate",
+          "vehicle_type",
+          "capacity_volume",
+          "capacity_weight",
+          "status"
+        ],
+        "title": "VehicleResponseDTO"
       }
     },
     "securitySchemes": {
