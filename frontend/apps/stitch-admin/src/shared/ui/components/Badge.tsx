@@ -1,4 +1,4 @@
-import { HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react'
 import { cn } from './Button'
 
 interface BadgeProps extends HTMLAttributes<HTMLDivElement> {

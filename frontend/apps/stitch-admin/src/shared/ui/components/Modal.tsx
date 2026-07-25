@@ -1,4 +1,5 @@
-import { ReactNode, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
+import type { ReactNode } from 'react'
 import { X } from 'lucide-react'
 import { Button } from './Button'
 import { cn } from './Button'

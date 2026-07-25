@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Search, Route, Truck } from 'lucide-react'
-import { Modal } from '../../../shared/ui/components/Modal'
-import { Input } from '../../../shared/ui/components/Input'
+import { Modal } from '../../shared/ui/components/Modal'
+
 
 interface CommandPaletteProps {
   isOpen: boolean

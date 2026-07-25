@@ -2,7 +2,7 @@ import { http, HttpResponse, delay } from 'msw'
 
 export const handlers = [
   // Mocking Backend Auth Route
-  http.post('*/api/v1/auth/login', async ({ request }) => {
+  http.post('*/api/v1/auth/login', async () => {
     await delay(800) // Simulate network latency
     return HttpResponse.json({
       access_token: 'mock-jwt-token-xyz',

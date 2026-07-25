@@ -1,6 +1,6 @@
-import { HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react'
 import { LayoutDashboard, Route, Truck, Users, Settings } from 'lucide-react'
-import { cn } from '../../../shared/ui/components/Button'
+import { cn } from '../../shared/ui/components/Button'
 
 interface SidebarProps extends HTMLAttributes<HTMLDivElement> {}
 

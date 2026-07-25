@@ -1,10 +1,11 @@
-import { HTMLAttributes, useState } from 'react'
+import { useState } from 'react'
+import type { HTMLAttributes } from 'react'
 import { Bell, Search } from 'lucide-react'
-import { Button } from '../../../shared/ui/components/Button'
+import { Button } from '../../shared/ui/components/Button'
 import { CommandPalette } from './CommandPalette'
-import { cn } from '../../../shared/ui/components/Button'
+import { cn } from '../../shared/ui/components/Button'
 
-interface HeaderProps extends HTMLAttributes<HTMLHeaderElement> {}
+interface HeaderProps extends HTMLAttributes<HTMLElement> {}
 
 export function Header({ className, ...props }: HeaderProps) {
   const [isCommandOpen, setCommandOpen] = useState(false)

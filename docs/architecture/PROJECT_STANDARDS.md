@@ -83,3 +83,19 @@ O Worker assíncrono deve tratar eventos puramente como *Strings JSON* opacas (`
 - Nenhuma feature de negócio será construída antes de seus componentes atômicos.
 - O Frontend usa **Feature-Sliced Design (FSD)**.
 - **Nenhum componente de negócio pode conter CSS próprio.** Estilos derivam exclusivamente dos *Design Tokens* e componentes do Design System (Card, Button, Typography).
+
+## Deployment Policy
+
+Todo PR deve garantir a passagem no pipeline de CI com o seguinte checklist antes de ser mesclado, para evitar quebrar o deploy contínuo em produção:
+
+- [x] docker build backend
+- [x] docker build frontend
+- [x] docker build worker
+- [x] compose up (Homologação local)
+- [x] healthcheck responde 200 OK
+- [x] migrations alembic (bidirecionais testadas)
+- [x] OpenAPI Schema exportado com sucesso
+- [x] build frontend bem sucedido (TS Check + Vite)
+- [x] lints (Ruff, ESLint)
+- [x] tests (Pytest, Vitest)
+- [x] commit padronizado

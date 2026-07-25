@@ -1,4 +1,4 @@
-import { HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react'
 import { cn } from './Button'
 
 export function Skeleton({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
