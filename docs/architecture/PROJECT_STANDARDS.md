@@ -40,6 +40,7 @@ Toda migration deve garantir:
 - Criação de Índices (`Index`) e Chaves Estrangeiras (`ForeignKey`) explícitas.
 - Nomenclatura consistente do ID de revisão e ausência absoluta de "SQL Morto".
 - Validação na CI via esteira: `upgrade head` -> `downgrade -1` -> `upgrade head`.
+- Migrations não podem referenciar roles PostgreSQL específicos de ambientes. Roles devem ser providos pela infraestrutura.
 
 ---
 

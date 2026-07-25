@@ -48,9 +48,8 @@ def upgrade() -> None:
     op.execute("""
         CREATE POLICY tenant_isolation_policy ON routing_routes
         AS PERMISSIVE FOR ALL
-        TO stitch_app
-        USING (tenant_id = current_setting('stitch.current_tenant_id', true)::uuid)
-        WITH CHECK (tenant_id = current_setting('stitch.current_tenant_id', true)::uuid);
+        USING (tenant_id = current_setting('app.current_tenant_id', true)::uuid)
+        WITH CHECK (tenant_id = current_setting('app.current_tenant_id', true)::uuid);
     """)
 
 def downgrade() -> None:
@@ -63,4 +62,8 @@ def downgrade() -> None:
     op.drop_table('routing_stops')
     op.drop_index(op.f('ix_routing_routes_tenant_id'), table_name='routing_routes')
     op.drop_table('routing_routes')
+    
+    from sqlalchemy.dialects import postgresql
+    routestatus = postgresql.ENUM('DRAFT', 'PLANNED', 'ASSIGNED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED', name='routestatus')
+    routestatus.drop(op.get_bind())
     # ### end Alembic commands ###

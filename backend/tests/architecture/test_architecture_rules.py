@@ -7,7 +7,7 @@ BACKEND_DIR = Path(__file__).parent.parent.parent
 
 def iter_python_files(directory):
     for root, _, files in os.walk(directory):
-        if ".venv" in root or "__pycache__" in root:
+        if ".venv" in root or "__pycache__" in root or "tests" in root:
             continue
         for f in files:
             if f.endswith(".py"):

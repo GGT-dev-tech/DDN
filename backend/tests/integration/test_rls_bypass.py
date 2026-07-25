@@ -20,19 +20,20 @@ async def test_rls_prevents_cross_tenant_access():
     # 1. As migration user (admin), insert test tenants and some tenant_users
     # Assuming tests are run with superuser or stitch_migration for setup
     async with engine.begin() as conn:
-        await conn.execute(text("INSERT INTO tenants (id, name, document, plan, status, created_at, updated_at) VALUES (:id, 'Tenant 1', 'doc1', 'FREE', 'ACTIVE', now(), now())"), {"id": tenant_1_id})
-        await conn.execute(text("INSERT INTO tenants (id, name, document, plan, status, created_at, updated_at) VALUES (:id, 'Tenant 2', 'doc2', 'FREE', 'ACTIVE', now(), now())"), {"id": tenant_2_id})
+        await conn.execute(text("INSERT INTO tenants (id, name, document_number, plan, status, created_at, updated_at) VALUES (:id, 'Tenant 1', :doc, 'FREE', 'ACTIVE', now(), now())"), {"id": tenant_1_id, "doc": f"doc1_{uuid7()}"})
+        await conn.execute(text("INSERT INTO tenants (id, name, document_number, plan, status, created_at, updated_at) VALUES (:id, 'Tenant 2', :doc, 'FREE', 'ACTIVE', now(), now())"), {"id": tenant_2_id, "doc": f"doc2_{uuid7()}"})
         
         user_id = uuid7()
-        await conn.execute(text("INSERT INTO users (id, email, password_hash, status, created_at, updated_at) VALUES (:id, 'testrls@stitch.com', 'hash', 'ACTIVE', now(), now())"), {"id": user_id})
+        await conn.execute(text("INSERT INTO users (id, email, password_hash, status, created_at, updated_at) VALUES (:id, :email, 'hash', 'ACTIVE', now(), now())"), {"id": user_id, "email": f"testrls_{uuid7()}@stitch.com"})
         
         # Insert a user in tenant 1
-        await conn.execute(text("INSERT INTO tenant_users (id, tenant_id, user_id, role, created_at, updated_at) VALUES (:id, :tenant, :user, 'OWNER', now(), now())"), {"id": uuid7(), "tenant": tenant_1_id, "user": user_id})
+        await conn.execute(text("INSERT INTO tenant_users (id, tenant_id, user_id, role, created_at) VALUES (:id, :tenant, :user, 'OWNER', now())"), {"id": uuid7(), "tenant": tenant_1_id, "user": user_id})
 
     # 2. Reconnect as stitch_app (App user)
     app_engine = create_async_engine(
-        settings.db.url.replace("postgresql://", "postgresql+asyncpg://").replace("stitch_admin", "stitch_app").replace("stitch_user", "stitch_app")
-        # In a real environment we would specifically connect with stitch_app credentials here
+        settings.db.url.replace("postgresql://", "postgresql+asyncpg://")
+        .replace("stitch_admin:secret_postgres", "stitch_app:app_secret")
+        .replace("stitch_user", "stitch_app")
     )
     
     # Try querying tenant_users without setting context

@@ -4,6 +4,12 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sess
 from apps.api_gateway.src.main import app
 from database.core.base import Base
 from database.session import get_db_session
+from sqlalchemy.ext.compiler import compiles
+from sqlalchemy.dialects.postgresql import JSONB
+
+@compiles(JSONB, "sqlite")
+def compile_jsonb_sqlite(type_, compiler, **kw):
+    return "JSON"
 
 # Use an in-memory SQLite for simple integration testing without a real Postgres
 # SQLite async driver: aiosqlite
