@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f8fafc;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #475569;
+    --color-border: #e2e8f0;
+  }
+
+  .dark {
+    --color-bg-primary: #0f172a;
+    --color-bg-secondary: #1e293b;
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #94a3b8;
+    --color-border: #334155;
+  }
+
+  body {
+    @apply bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] antialiased;
+    transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Glassmorphism Utilities */
+@layer utilities {
+  .glass-panel {
+    @apply bg-surface-glass backdrop-blur-glass border border-[var(--color-border)] shadow-soft;
+  }
+  
+  .dark .glass-panel {
+    @apply bg-surface-glass/10 backdrop-blur-glass;
+  }
+
+  .liquid-button {
+    @apply relative overflow-hidden bg-brand-600 text-white font-medium shadow-soft transition-all duration-150 hover:bg-brand-500 hover:shadow-glow;
+  }
+  
+  .liquid-button::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-tr from-transparent via-surface-liquid to-transparent opacity-0 transition-opacity duration-300;
+  }
+  
+  .liquid-button:hover::after {
+    @apply opacity-100;
+  }
+}
