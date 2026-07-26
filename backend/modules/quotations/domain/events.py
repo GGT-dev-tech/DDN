@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from uuid import UUID
-from datetime import datetime
 
 from modules.core.domain.events import DomainEvent
 

@@ -1,9 +1,7 @@
-from typing import Optional
-from uuid import UUID
 
 from modules.pricing.application.services.pricing_service import PricingService
-from modules.quotations.application.ports.pricing_gateway import PricingGateway, PricingContext
-from modules.quotations.domain.value_objects import QuotationItemSnapshot, Money
+from modules.quotations.application.ports.pricing_gateway import PricingContext, PricingGateway
+from modules.quotations.domain.value_objects import Money, QuotationItemSnapshot
 
 
 class PricingGatewayImpl(PricingGateway):

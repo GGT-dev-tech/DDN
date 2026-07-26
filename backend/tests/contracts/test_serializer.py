@@ -5,8 +5,8 @@ from decimal import Decimal
 from enum import Enum
 from uuid import UUID, uuid4
 
-from shared_kernel.events.base import DomainEvent, EventMetadata
-from shared_kernel.messaging.serialization.serializer import JsonEventSerializer
+from shared_kernel.events.integration import IntegrationEvent, EventMetadata
+from shared_kernel.outbox.serialization.serializer import JsonEventSerializer
 from shared_kernel.value_objects.finance.money import Money
 from shared_kernel.value_objects.geo.location import Coordinates, GeoPoint
 
@@ -16,7 +16,7 @@ class RouteStatus(Enum):
     IN_PROGRESS = "IN_PROGRESS"
 
 @dataclass(frozen=True)
-class RouteComplexEvent(DomainEvent):
+class RouteComplexEvent(IntegrationEvent):
     route_id: UUID
     price: Money
     origin: GeoPoint

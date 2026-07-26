@@ -1,8 +1,7 @@
-from typing import Optional
 from uuid import UUID
 
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, text
 
 from modules.quotations.application.ports.catalog_gateway import CatalogGateway
 
@@ -22,7 +21,7 @@ class CatalogGatewayImpl(CatalogGateway):
         name = result.scalar_one_or_none()
         if not name:
             raise ValueError(f"Service offering {offering_id} not found in catalog")
-        return name
+        return str(name)
         
     async def get_unit_of_measure_name(self, uom_id: UUID) -> str:
         stmt = text("SELECT symbol FROM catalog_unit_of_measures WHERE id = :id")
@@ -30,4 +29,4 @@ class CatalogGatewayImpl(CatalogGateway):
         name = result.scalar_one_or_none()
         if not name:
             raise ValueError(f"UOM {uom_id} not found in catalog")
-        return name
+        return str(name)

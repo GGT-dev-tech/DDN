@@ -5,11 +5,11 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
-from shared_kernel.events.base import DomainEvent, EventMetadata
+from shared_kernel.events.integration import EventMetadata, IntegrationEvent
 
 
 @dataclass(frozen=True)
-class ContractActivatedIntegrationEvent(DomainEvent):
+class ContractActivatedIntegrationEvent(IntegrationEvent):
     metadata: EventMetadata
     contract_id: uuid.UUID
     tenant_id: uuid.UUID

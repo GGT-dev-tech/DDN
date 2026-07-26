@@ -7,17 +7,17 @@ from enum import Enum
 from typing import Any
 from uuid import UUID
 
-from shared_kernel.events.base import DomainEvent, EventMetadata
+from shared_kernel.events.integration import EventMetadata, IntegrationEvent
 
 
 class Serializer(ABC):
     @abstractmethod
-    def serialize(self, event: DomainEvent) -> dict[str, Any]:
-        """Convert a DomainEvent to a dictionary envelope containing metadata and payload."""
+    def serialize(self, event: IntegrationEvent) -> dict[str, Any]:
+        """Convert a IntegrationEvent to a dictionary envelope containing metadata and payload."""
 
     @abstractmethod
-    def deserialize(self, data: dict[str, Any], event_class: type[DomainEvent]) -> DomainEvent:
-        """Reconstruct a DomainEvent from a dictionary envelope."""
+    def deserialize(self, data: dict[str, Any], event_class: type[IntegrationEvent]) -> IntegrationEvent:
+        """Reconstruct a IntegrationEvent from a dictionary envelope."""
 
 class CustomJSONEncoder(json.JSONEncoder):
     """Handles UUID, datetime, Decimal, Enum serialization."""
@@ -37,10 +37,10 @@ class CustomJSONEncoder(json.JSONEncoder):
 
 class JsonEventSerializer(Serializer):
     """
-    Serializes a DomainEvent into a JSON-compatible dictionary.
+    Serializes a IntegrationEvent into a JSON-compatible dictionary.
     Extracts the 'metadata' field and groups the rest into 'payload'.
     """
-    def serialize(self, event: DomainEvent) -> dict[str, Any]:
+    def serialize(self, event: IntegrationEvent) -> dict[str, Any]:
         if not dataclasses.is_dataclass(event):
             raise ValueError("Event must be a dataclass")
             
@@ -57,7 +57,7 @@ class JsonEventSerializer(Serializer):
             "payload": safe_dict
         }
 
-    def deserialize(self, data: dict[str, Any], event_class: type[DomainEvent]) -> DomainEvent:
+    def deserialize(self, data: dict[str, Any], event_class: type[IntegrationEvent]) -> IntegrationEvent:
         # Note: True deserialization of nested dataclasses and value objects requires
         # a structural parser like dacite, pydantic, or cattrs.
         # For simplicity in this baseline, we instantiate directly.

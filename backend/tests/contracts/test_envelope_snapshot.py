@@ -4,8 +4,8 @@ from datetime import UTC, datetime
 from decimal import Decimal
 from uuid import UUID
 
-from shared_kernel.events.base import EventMetadata
-from shared_kernel.messaging.serialization.serializer import JsonEventSerializer
+from shared_kernel.events.integration import EventMetadata
+from shared_kernel.outbox.serialization.serializer import JsonEventSerializer
 from tests.contracts.test_serializer import (
     Coordinates,
     GeoPoint,

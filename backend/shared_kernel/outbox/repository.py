@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from shared_kernel.events.base import DomainEvent
+from shared_kernel.events.integration import IntegrationEvent
 
 
 class OutboxRepository(ABC):
     @abstractmethod
-    def save(self, events: list[DomainEvent]) -> None:
+    def save(self, events: list[IntegrationEvent]) -> None:
         """Serializes and saves domain events to the outbox table."""
 
     @abstractmethod

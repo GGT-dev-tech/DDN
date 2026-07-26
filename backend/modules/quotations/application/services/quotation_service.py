@@ -1,14 +1,14 @@
-from datetime import date, datetime, timedelta, UTC
+from datetime import UTC, date, datetime, timedelta
 from decimal import Decimal
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from modules.quotations.application.ports.catalog_gateway import CatalogGateway
+from modules.quotations.application.ports.pricing_gateway import PricingContext, PricingGateway
 from modules.quotations.domain.entities.quotation import Quotation
 from modules.quotations.domain.value_objects import QuotationStatus
 from modules.quotations.infrastructure.repositories.quotation_repository import QuotationRepository
-from modules.quotations.application.ports.pricing_gateway import PricingGateway, PricingContext
-from modules.quotations.application.ports.catalog_gateway import CatalogGateway
 
 
 class QuotationService:

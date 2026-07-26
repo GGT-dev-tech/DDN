@@ -8,7 +8,7 @@ from database.session import get_db_session
 from sqlalchemy.ext.asyncio import AsyncSession
 from modules.contracts.application.services.contract_service import ContractService
 from modules.contracts.infrastructure.repositories.contract_repository import ContractRepository
-from shared_kernel.messaging.outbox_repository import OutboxRepository
+from shared_kernel.outbox.repository import OutboxRepository
 
 router = APIRouter(prefix="/contracts", tags=["Contracts"])
 

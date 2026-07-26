@@ -5,9 +5,9 @@ from sqlalchemy import delete, select, update
 from sqlalchemy.orm import Session
 
 from modules.core.infrastructure.outbox import OutboxEvent
-from shared_kernel.events.base import DomainEvent
-from shared_kernel.messaging.outbox_repository import OutboxRepository
-from shared_kernel.messaging.serialization.serializer import Serializer
+from shared_kernel.events.integration import IntegrationEvent
+from shared_kernel.outbox.repository import OutboxRepository
+from shared_kernel.outbox.serialization.serializer import Serializer
 
 
 class SQLAlchemyOutboxRepository(OutboxRepository):
@@ -15,7 +15,7 @@ class SQLAlchemyOutboxRepository(OutboxRepository):
         self.session = session
         self.serializer = serializer
 
-    def save(self, events: list[DomainEvent]) -> None:
+    def save(self, events: list[IntegrationEvent]) -> None:
         for event in events:
             serialized = self.serializer.serialize(event)
             metadata = serialized["metadata"]

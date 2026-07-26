@@ -1,19 +1,27 @@
 import uuid
-from datetime import UTC, date, datetime
+from datetime import date
 from typing import Any
 
 from modules.contracts.domain.entities.contract import Contract
 from modules.contracts.domain.integration_events import ContractActivatedIntegrationEvent
 from modules.contracts.domain.value_objects import ContractItemSnapshot, ContractTerm
 from modules.contracts.infrastructure.repositories.contract_repository import ContractRepository
-from shared_kernel.messaging.outbox_repository import OutboxRepository
+from modules.core.application.integration_event_factory import IntegrationEventFactory
+from shared_kernel.outbox.repository import OutboxRepository
 
 
 class ContractService:
-    def __init__(self, session: Any, repository: ContractRepository, outbox_repo: OutboxRepository):
+    def __init__(
+        self,
+        session: Any,
+        repository: ContractRepository,
+        outbox_repo: OutboxRepository,
+        event_factory: IntegrationEventFactory,
+    ) -> None:
         self.session = session
         self.repository = repository
         self.outbox_repo = outbox_repo
+        self.event_factory = event_factory
 
     async def create_contract(
         self, 
@@ -59,11 +67,9 @@ class ContractService:
             
         await self.repository.save_contract(contract)
         
-        # Persist outbox events for Domain Events
-        events = contract.collect_events()
-        if events:
-            self.outbox_repo.save(events)
-            contract.clear_events()
+        # Domain events are internal and handled synchronously or within the BC
+        # We don't push them to the Outbox.
+        contract.clear_events()
         
         await self.session.commit()
         return contract.id
@@ -76,10 +82,7 @@ class ContractService:
         contract.send_for_signature()
         
         await self.repository.save_contract(contract)
-        events = contract.collect_events()
-        if events:
-            self.outbox_repo.save(events)
-            contract.clear_events()
+        contract.clear_events()
         await self.session.commit()
 
     async def activate_contract(self, contract_id: uuid.UUID) -> None:
@@ -100,32 +103,23 @@ class ContractService:
                 "final_price": str(item.snapshot.final_price.amount)
             })
             
-        from shared_kernel.events.base import EventMetadata
-        
-        metadata = EventMetadata(
-            event_id=uuid.uuid4(),
+        metadata = self.event_factory.build_metadata(
             tenant_id=contract.tenant_id,
-            correlation_id=str(contract.id),
-            causation_id=None,
-            occurred_at=datetime.now(UTC),
-            event_schema_version=1,
-            aggregate_version=contract.version
+            causation_id=str(contract.id),
+            aggregate_version=contract.version,
         )
-        
+
         integration_event = ContractActivatedIntegrationEvent(
             metadata=metadata,
             contract_id=contract.id,
             tenant_id=contract.tenant_id,
             effective_date=contract.terms.effective_date.isoformat(),
-            items=items_payload
+            items=items_payload,
         )
-        
-        # Integration event doesn't go into aggregate root internal event store
+
+        # Integration event goes into Outbox
         self.outbox_repo.save([integration_event])
         
         await self.repository.save_contract(contract)
-        events = contract.collect_events()
-        if events:
-            self.outbox_repo.save(events)
-            contract.clear_events()
+        contract.clear_events()
         await self.session.commit()

@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from decimal import Decimal
 from enum import Enum
-from typing import Optional
-from uuid import UUID
 
 
 class QuotationStatus(Enum):
@@ -33,4 +31,4 @@ class QuotationItemSnapshot:
     surcharges_total: Money
     discounts_total: Money
     final_price: Money
-    pricing_reference: Optional[str] = None # ID de regras ou justificativas do motor
+    pricing_reference: str | None = None # ID de regras ou justificativas do motor

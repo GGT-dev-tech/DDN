@@ -1,21 +1,24 @@
 import uuid
 from datetime import UTC, datetime
-from typing import Optional
 
 from sqlalchemy import select
-from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from modules.quotations.domain.entities.quotation import Quotation, QuotationItem
-from modules.quotations.domain.value_objects import QuotationItemSnapshot, QuotationStatus, Money
-from modules.quotations.infrastructure.orm_models import QuotationModel, QuotationItemModel, QuotationItemSnapshotModel
+from modules.quotations.domain.value_objects import Money, QuotationItemSnapshot
+from modules.quotations.infrastructure.orm_models import (
+    QuotationItemModel,
+    QuotationItemSnapshotModel,
+    QuotationModel,
+)
 
 
 class QuotationRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_quotation_by_id(self, quotation_id: uuid.UUID) -> Optional[Quotation]:
+    async def get_quotation_by_id(self, quotation_id: uuid.UUID) -> Quotation | None:
         stmt = (
             select(QuotationModel)
             .options(

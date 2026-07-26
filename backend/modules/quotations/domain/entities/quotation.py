@@ -1,20 +1,19 @@
 import uuid
 from datetime import UTC, datetime
 from decimal import Decimal
-from typing import Optional
 
-from shared_kernel.contracts.aggregate_root import AggregateRoot
-from modules.quotations.domain.value_objects import QuotationStatus, QuotationItemSnapshot, Money
 from modules.quotations.domain.events import (
+    QuotationApproved,
     QuotationDraftCreated,
+    QuotationExpired,
     QuotationItemAdded,
     QuotationPriced,
+    QuotationRejected,
     QuotationSnapshotGenerated,
     QuotationSubmitted,
-    QuotationApproved,
-    QuotationRejected,
-    QuotationExpired
 )
+from modules.quotations.domain.value_objects import QuotationItemSnapshot, QuotationStatus
+from shared_kernel.contracts.aggregate_root import AggregateRoot
 
 
 class QuotationItem:
@@ -23,8 +22,8 @@ class QuotationItem:
         service_offering_id: uuid.UUID,
         unit_of_measure_id: uuid.UUID,
         quantity: Decimal,
-        id: Optional[uuid.UUID] = None,
-        snapshot: Optional[QuotationItemSnapshot] = None
+        id: uuid.UUID | None = None,
+        snapshot: QuotationItemSnapshot | None = None
     ):
         self.id = id or uuid.uuid4()
         self.service_offering_id = service_offering_id
@@ -41,11 +40,11 @@ class Quotation(AggregateRoot):
         self,
         company_id: uuid.UUID,
         tenant_id: uuid.UUID,
-        id: Optional[uuid.UUID] = None,
+        id: uuid.UUID | None = None,
         status: QuotationStatus = QuotationStatus.DRAFT,
-        expires_at: Optional[datetime] = None,
-        created_at: Optional[datetime] = None,
-        updated_at: Optional[datetime] = None
+        expires_at: datetime | None = None,
+        created_at: datetime | None = None,
+        updated_at: datetime | None = None
     ):
         super().__init__()
         self._id = id or uuid.uuid4()

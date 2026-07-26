@@ -1,4 +1,5 @@
-from sqlalchemy import Column, String, DateTime, ForeignKey, Numeric, Enum as SQLEnum
+from sqlalchemy import Column, DateTime, ForeignKey, Numeric, String
+from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -12,7 +13,7 @@ class QuotationModel(Base):
     id = Column(UUID(as_uuid=True), primary_key=True)
     tenant_id = Column(UUID(as_uuid=True), index=True, nullable=False)
     company_id = Column(UUID(as_uuid=True), index=True, nullable=False)
-    status = Column(SQLEnum(QuotationStatus, name="quotationstatus", create_type=False), nullable=False)
+    status: Column = Column(SQLEnum(QuotationStatus, name="quotationstatus", create_type=False), nullable=False)
     
     expires_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), nullable=False)

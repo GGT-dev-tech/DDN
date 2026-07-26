@@ -4,7 +4,7 @@ from uuid import uuid4
 
 from modules.core.infrastructure.outbox import OutboxEvent
 from modules.core.infrastructure.outbox_repository import SQLAlchemyOutboxRepository
-from shared_kernel.events.base import DomainEvent, EventMetadata
+from shared_kernel.events.integration import IntegrationEvent, EventMetadata
 
 
 def test_outbox_repository_save():
@@ -27,7 +27,7 @@ def test_outbox_repository_save():
         "payload": {"data": "test"}
     }
     
-    event = DomainEvent(
+    event = IntegrationEvent(
         metadata=EventMetadata(
             event_id=event_id,
             tenant_id=tenant_id,

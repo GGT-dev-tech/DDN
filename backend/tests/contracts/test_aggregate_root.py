@@ -3,11 +3,11 @@ from datetime import UTC, datetime
 from uuid import uuid4
 
 from shared_kernel.contracts.aggregate_root import AggregateRoot
-from shared_kernel.events.base import DomainEvent, EventMetadata
+from shared_kernel.events.integration import IntegrationEvent, EventMetadata
 
 
 @dataclass(frozen=True)
-class DummyEvent(DomainEvent):
+class DummyEvent(IntegrationEvent):
     some_data: str
 
 class DummyAggregate(AggregateRoot):

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
-from typing import Optional, Protocol
+from typing import Protocol
 from uuid import UUID
 
 from modules.quotations.domain.value_objects import QuotationItemSnapshot
@@ -13,8 +13,8 @@ class PricingContext:
     unit_of_measure_id: UUID
     quantity: Decimal
     reference_date: date
-    customer_id: Optional[UUID] = None
-    region_id: Optional[UUID] = None
+    customer_id: UUID | None = None
+    region_id: UUID | None = None
     
     # Metadata for snapshot enrichment
     service_name: str = ""
