@@ -1,11 +1,11 @@
-import pytest
-from unittest.mock import Mock, call
+from datetime import UTC, datetime
+from unittest.mock import Mock
 from uuid import uuid4
-from datetime import datetime, UTC
 
-from modules.core.infrastructure.outbox_repository import SQLAlchemyOutboxRepository
 from modules.core.infrastructure.outbox import OutboxEvent
+from modules.core.infrastructure.outbox_repository import SQLAlchemyOutboxRepository
 from shared_kernel.events.base import DomainEvent, EventMetadata
+
 
 def test_outbox_repository_save():
     mock_session = Mock()

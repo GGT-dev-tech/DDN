@@ -1,11 +1,11 @@
 from uuid import UUID
-from typing import Optional
-from sqlalchemy.orm import Session
-from sqlalchemy.orm import selectinload
+
+from sqlalchemy.orm import Session, selectinload
 
 from modules.routing.application.repositories import RoutingRepository
-from modules.routing.domain.entities.route import Route, Stop, Location
+from modules.routing.domain.entities.route import Location, Route, Stop
 from modules.routing.infrastructure.orm_models import RouteModel, StopModel
+
 
 class SQLAlchemyRoutingRepository(RoutingRepository):
     def __init__(self, session: Session):
@@ -93,7 +93,7 @@ class SQLAlchemyRoutingRepository(RoutingRepository):
                 existing_stop_model.order = stop.order
                 existing_stop_model.status = stop.status
 
-    def get_by_id(self, route_id: UUID) -> Optional[Route]:
+    def get_by_id(self, route_id: UUID) -> Route | None:
         model = self.session.query(RouteModel).options(selectinload(RouteModel.stops)).filter_by(id=route_id).first()
         if not model:
             return None

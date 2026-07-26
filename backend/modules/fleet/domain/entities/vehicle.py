@@ -5,6 +5,7 @@ from uuid import UUID
 from modules.core.domain.aggregate import AggregateRoot
 from modules.core.domain.id_generator import IdGenerator
 
+
 class VehicleType(Enum):
     COMPACTOR_TRUCK = "COMPACTOR_TRUCK"
     ROLL_OFF_TRUCK = "ROLL_OFF_TRUCK"

@@ -1,6 +1,10 @@
 from uuid import UUID
-from modules.dashboard.infrastructure.repositories.dashboard_read_repository import IDashboardReadRepository
+
 from modules.dashboard.application.dto.dashboard_dto import DashboardStatsResponse
+from modules.dashboard.infrastructure.repositories.dashboard_read_repository import (
+    IDashboardReadRepository,
+)
+
 
 class DashboardService:
     def __init__(self, read_repository: IDashboardReadRepository):

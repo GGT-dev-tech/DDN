@@ -1,14 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 from typing import Annotated
 from uuid import UUID
 
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from database.session import get_db_session
+from modules.identity.dependencies import get_current_user_id, require_tenant
 from modules.tenant.domain.dto import TenantContextResponse, TenantResponse
 from modules.tenant.domain.entities.tenant import Tenant
 from modules.tenant.domain.entities.tenant_user import TenantUser
-from database.session import get_db_session
-from modules.identity.dependencies import require_tenant, get_current_user_id
 
 router = APIRouter(prefix="/tenant", tags=["tenant"])
 

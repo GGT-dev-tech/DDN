@@ -1,13 +1,18 @@
-import pytest
 import json
 import os
-from uuid import UUID
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 from decimal import Decimal
+from uuid import UUID
 
 from shared_kernel.events.base import EventMetadata
 from shared_kernel.messaging.serialization.serializer import JsonEventSerializer
-from tests.contracts.test_serializer import RouteComplexEvent, RouteStatus, Money, GeoPoint, Coordinates
+from tests.contracts.test_serializer import (
+    Coordinates,
+    GeoPoint,
+    Money,
+    RouteComplexEvent,
+    RouteStatus,
+)
 
 SNAPSHOT_FILE = os.path.join(os.path.dirname(__file__), "..", "architecture", "snapshots", "envelope_v1.json")
 

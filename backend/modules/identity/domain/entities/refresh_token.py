@@ -1,9 +1,12 @@
 from datetime import datetime
 from uuid import UUID
-from uuid6 import uuid7
-from sqlalchemy import String, DateTime, ForeignKey
+
+from sqlalchemy import DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from uuid6 import uuid7
+
 from database.core.base import Base, utcnow
+
 
 class RefreshToken(Base):
     __tablename__ = "refresh_tokens"

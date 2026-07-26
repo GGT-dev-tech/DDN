@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import List, Callable, Awaitable
+from collections.abc import Awaitable, Callable
+
 from .events import EventEnvelope
+
 
 class EventBus(ABC):
     @abstractmethod

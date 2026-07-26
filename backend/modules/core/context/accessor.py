@@ -1,16 +1,17 @@
 from abc import ABC, abstractmethod
-from typing import Optional
-from .models import RequestContext, AuthContext, TenantContext
+
+from .models import AuthContext, RequestContext, TenantContext
+
 
 class ContextAccessor(ABC):
     @abstractmethod
-    def request(self) -> Optional[RequestContext]:
+    def request(self) -> RequestContext | None:
         pass
 
     @abstractmethod
-    def auth(self) -> Optional[AuthContext]:
+    def auth(self) -> AuthContext | None:
         pass
 
     @abstractmethod
-    def tenant(self) -> Optional[TenantContext]:
+    def tenant(self) -> TenantContext | None:
         pass

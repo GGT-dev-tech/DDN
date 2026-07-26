@@ -1,20 +1,20 @@
 import contextvars
-from typing import Optional
-from .models import RequestContext, AuthContext, TenantContext
-from .accessor import ContextAccessor
 
-_request_context_var: contextvars.ContextVar[Optional[RequestContext]] = contextvars.ContextVar("request_context", default=None)
-_auth_context_var: contextvars.ContextVar[Optional[AuthContext]] = contextvars.ContextVar("auth_context", default=None)
-_tenant_context_var: contextvars.ContextVar[Optional[TenantContext]] = contextvars.ContextVar("tenant_context", default=None)
+from .accessor import ContextAccessor
+from .models import AuthContext, RequestContext, TenantContext
+
+_request_context_var: contextvars.ContextVar[RequestContext | None] = contextvars.ContextVar("request_context", default=None)
+_auth_context_var: contextvars.ContextVar[AuthContext | None] = contextvars.ContextVar("auth_context", default=None)
+_tenant_context_var: contextvars.ContextVar[TenantContext | None] = contextvars.ContextVar("tenant_context", default=None)
 
 class ContextVarsAccessor(ContextAccessor):
-    def request(self) -> Optional[RequestContext]:
+    def request(self) -> RequestContext | None:
         return _request_context_var.get()
 
-    def auth(self) -> Optional[AuthContext]:
+    def auth(self) -> AuthContext | None:
         return _auth_context_var.get()
 
-    def tenant(self) -> Optional[TenantContext]:
+    def tenant(self) -> TenantContext | None:
         return _tenant_context_var.get()
 
 def set_request_context(context: RequestContext) -> contextvars.Token:

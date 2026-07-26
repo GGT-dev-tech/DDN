@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
+
 
 class Severity(Enum):
     INFO = "INFO"
@@ -12,10 +13,10 @@ class Severity(Enum):
 @dataclass
 class SpecificationResult:
     is_valid: bool
-    reason: Optional[str] = None
-    code: Optional[str] = None
+    reason: str | None = None
+    code: str | None = None
     severity: Severity = Severity.BLOCKING
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     @classmethod
     def success(cls) -> "SpecificationResult":
@@ -27,7 +28,7 @@ class SpecificationResult:
         reason: str, 
         code: str, 
         severity: Severity = Severity.BLOCKING, 
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: dict[str, Any] | None = None
     ) -> "SpecificationResult":
         return cls(
             is_valid=False, 

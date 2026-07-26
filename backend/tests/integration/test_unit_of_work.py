@@ -1,11 +1,13 @@
-import pytest
-from unittest.mock import Mock, call
+from datetime import UTC, datetime
+from unittest.mock import Mock
 from uuid import uuid4
+
+import pytest
 
 from database.core.unit_of_work import SQLAlchemyUnitOfWork
 from shared_kernel.contracts.aggregate_root import AggregateRoot
 from shared_kernel.events.base import DomainEvent, EventMetadata
-from datetime import datetime, UTC
+
 
 class MockAggregate(AggregateRoot):
     def __init__(self, id, version):
@@ -76,10 +78,9 @@ def test_uow_rollback_clears_events():
     )
     aggregate.add_event(event)
     
-    with pytest.raises(ValueError):
-        with uow.begin():
-            uow.collect_events(aggregate)
-            raise ValueError("Something went wrong")
+    with pytest.raises(ValueError), uow.begin():
+        uow.collect_events(aggregate)
+        raise ValueError("Something went wrong")
             
     # Verify rollback was called
     mock_session.rollback.assert_called_once()

@@ -1,24 +1,25 @@
 import abc
 from uuid import UUID
-from typing import Dict
-from sqlalchemy import select, func
+
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from modules.routing.infrastructure.orm_models import RouteModel, StopModel
+from modules.fleet.domain.entities.vehicle import VehicleStatus
 from modules.fleet.infrastructure.orm_models import VehicleModel
 from modules.routing.domain.entities.route import RouteStatus, StopStatus
-from modules.fleet.domain.entities.vehicle import VehicleStatus
+from modules.routing.infrastructure.orm_models import RouteModel, StopModel
+
 
 class IDashboardReadRepository(abc.ABC):
     @abc.abstractmethod
-    async def get_stats(self, tenant_id: UUID) -> Dict[str, int]:
+    async def get_stats(self, tenant_id: UUID) -> dict[str, int]:
         pass
 
 class DashboardReadRepository(IDashboardReadRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_stats(self, tenant_id: UUID) -> Dict[str, int]:
+    async def get_stats(self, tenant_id: UUID) -> dict[str, int]:
         # Active Routes: routes IN_PROGRESS for the given tenant
         active_routes_query = select(func.count(RouteModel.id)).where(
             RouteModel.tenant_id == tenant_id,

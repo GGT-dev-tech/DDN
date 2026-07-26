@@ -1,5 +1,5 @@
-from typing import Any
 from dataclasses import dataclass
+
 
 @dataclass(frozen=True)
 class ValueObject:
@@ -12,4 +12,3 @@ class ValueObject:
         
     def validate(self) -> None:
         """Override this method to enforce domain invariants."""
-        pass

@@ -1,11 +1,14 @@
 import enum
 from datetime import datetime
 from uuid import UUID
-from uuid6 import uuid7
-from sqlalchemy import String, Enum, DateTime, Boolean
+
+from sqlalchemy import DateTime, Enum, String
 from sqlalchemy.orm import Mapped, mapped_column
+from uuid6 import uuid7
+
 from database.core.base import Base, utcnow
 from modules.core.domain.aggregate import AggregateRoot
+
 
 class UserStatus(str, enum.Enum):
     ACTIVE = "ACTIVE"

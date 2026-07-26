@@ -61,3 +61,7 @@ htmlcov/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+
+# Knowledge Base
+knowledge/*
+!knowledge/README.md

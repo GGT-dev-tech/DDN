@@ -1,6 +1,6 @@
-from enum import Enum
 from dataclasses import dataclass
-from typing import Dict, List, Optional
+from enum import Enum
+
 
 class PermissionCode(str, Enum):
     # Route Management
@@ -27,7 +27,7 @@ class PermissionDefinition:
     module: str
 
 class PermissionRegistry:
-    _permissions: Dict[PermissionCode, PermissionDefinition] = {}
+    _permissions: dict[PermissionCode, PermissionDefinition] = {}
 
     @classmethod
     def register(cls, definition: PermissionDefinition) -> None:
@@ -36,11 +36,11 @@ class PermissionRegistry:
         cls._permissions[definition.code] = definition
 
     @classmethod
-    def get_all(cls) -> List[PermissionDefinition]:
+    def get_all(cls) -> list[PermissionDefinition]:
         return list(cls._permissions.values())
         
     @classmethod
-    def get(cls, code: PermissionCode) -> Optional[PermissionDefinition]:
+    def get(cls, code: PermissionCode) -> PermissionDefinition | None:
         return cls._permissions.get(code)
 
 # Register default permissions

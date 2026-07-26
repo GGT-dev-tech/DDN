@@ -1,6 +1,8 @@
 from collections.abc import AsyncGenerator
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+
 from sqlalchemy import event, text
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+
 from modules.core.config.settings import settings
 from modules.core.context import accessor
 
@@ -12,6 +14,7 @@ engine = create_async_engine(
 )
 
 from modules.audit.services.audit_listener import setup_audit_listeners
+
 
 @event.listens_for(engine.sync_engine, "begin")
 def do_begin(conn):

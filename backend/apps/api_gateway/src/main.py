@@ -1,12 +1,14 @@
+import os
+
+import redis
+from asgi_correlation_id import CorrelationIdMiddleware
 from fastapi import FastAPI, Response, status
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import OperationalError
-import redis
-import os
-from apps.api_gateway.src.routes import auth, tenant, routing, fleet, dashboard
-from asgi_correlation_id import CorrelationIdMiddleware
-from modules.core.observability.middleware import CorrelationMiddleware
+
+from apps.api_gateway.src.routes import auth, catalog, commercial, dashboard, fleet, routing, tenant
 from modules.core.logging.logger import setup_logging
+from modules.core.observability.middleware import CorrelationMiddleware
 
 # Setup structlog
 setup_logging()
@@ -21,6 +23,8 @@ app.include_router(tenant.router)
 app.include_router(routing.router)
 app.include_router(fleet.router)
 app.include_router(dashboard.router)
+app.include_router(commercial.router)
+app.include_router(catalog.router)
 
 # Database & Cache settings loaded directly from ENV for the Health Check
 # In a real scenario, this would be imported from modules.core.config

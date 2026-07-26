@@ -1,5 +1,6 @@
-from typing import List
+
 from .events import DomainEvent
+
 
 class AggregateRoot:
     """
@@ -9,7 +10,7 @@ class AggregateRoot:
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self._domain_events: List[DomainEvent] = []
+        self._domain_events: list[DomainEvent] = []
         
     def add_event(self, event: DomainEvent) -> None:
         """Add a domain event to the aggregate's internal collection."""
@@ -17,7 +18,7 @@ class AggregateRoot:
             self._domain_events = []
         self._domain_events.append(event)
         
-    def collect_events(self) -> List[DomainEvent]:
+    def collect_events(self) -> list[DomainEvent]:
         """Return all accumulated domain events."""
         if not hasattr(self, "_domain_events"):
             self._domain_events = []

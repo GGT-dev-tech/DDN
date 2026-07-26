@@ -1,10 +1,13 @@
 import enum
 from datetime import datetime
 from uuid import UUID
-from uuid6 import uuid7
-from sqlalchemy import String, Enum, DateTime, ForeignKey
+
+from sqlalchemy import DateTime, Enum, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from uuid6 import uuid7
+
 from database.core.base import Base, utcnow
+
 
 class TenantRole(str, enum.Enum):
     OWNER = "OWNER"

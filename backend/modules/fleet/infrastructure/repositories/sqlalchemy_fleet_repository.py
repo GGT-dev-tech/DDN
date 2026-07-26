@@ -1,11 +1,12 @@
 from uuid import UUID
-from typing import Optional
+
 from sqlalchemy.orm import Session
 
 from modules.fleet.application.repositories import FleetRepository
-from modules.fleet.domain.entities.vehicle import Vehicle
 from modules.fleet.domain.entities.driver import Driver
-from modules.fleet.infrastructure.orm_models import VehicleModel, DriverModel
+from modules.fleet.domain.entities.vehicle import Vehicle
+from modules.fleet.infrastructure.orm_models import DriverModel, VehicleModel
+
 
 class SQLAlchemyFleetRepository(FleetRepository):
     def __init__(self, session: Session):
@@ -32,7 +33,7 @@ class SQLAlchemyFleetRepository(FleetRepository):
             model.capacity_volume = vehicle.capacity_volume
             model.capacity_weight = vehicle.capacity_weight
 
-    def get_vehicle_by_id(self, vehicle_id: UUID) -> Optional[Vehicle]:
+    def get_vehicle_by_id(self, vehicle_id: UUID) -> Vehicle | None:
         model = self.session.query(VehicleModel).filter_by(id=vehicle_id).first()
         if not model:
             return None
@@ -63,7 +64,7 @@ class SQLAlchemyFleetRepository(FleetRepository):
             model.license_number = driver.license_number
             model.status = driver.status
 
-    def get_driver_by_id(self, driver_id: UUID) -> Optional[Driver]:
+    def get_driver_by_id(self, driver_id: UUID) -> Driver | None:
         model = self.session.query(DriverModel).filter_by(id=driver_id).first()
         if not model:
             return None

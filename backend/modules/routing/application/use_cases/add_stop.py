@@ -1,9 +1,9 @@
-from uuid import UUID
 
+from database.core.unit_of_work import UnitOfWork
 from modules.routing.application.dto import AddStopRequestDTO, RouteResponseDTO, StopResponseDTO
 from modules.routing.application.repositories import RoutingRepository
 from modules.routing.domain.entities.route import Location
-from database.core.unit_of_work import UnitOfWork
+
 
 class AddStopUseCase:
     def __init__(self, uow: UnitOfWork, routing_repository: RoutingRepository):

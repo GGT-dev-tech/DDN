@@ -1,0 +1,133 @@
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+____________________________ test_company_creation _____________________________
+
+    def test_company_creation():
+        tenant_id = uuid4()
+        company = Company.create(
+            tenant_id=tenant_id,
+            trade_name="Tech Corp",
+            corporate_name="Tech Corporation SA",
+            document_number="12.345.678/0001-90"
+        )
+    
+        assert company.status == CompanyStatus.PROSPECT
+        assert company.document_number == "12.345.678/0001-90"
+>       assert len(company.events) == 1
+                   ^^^^^^^^^^^^^^
+E       AttributeError: 'Company' object has no attribute 'events'
+
+tests/modules/commercial/domain/test_company.py:18: AttributeError
+=============================== warnings summary ===============================
+tests/modules/commercial/domain/test_company.py::test_company_creation
+  <string>:9: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.14.2-final-0 _______________
+
+Name                                                                           Stmts   Miss Branch BrPart  Cover
+----------------------------------------------------------------------------------------------------------------
+apps/api_gateway/src/main.py                                                      56     23      4      0    55%
+apps/api_gateway/src/routes/auth.py                                               52     32      4      0    36%
+apps/api_gateway/src/routes/commercial.py                                         54     20      0      0    63%
+apps/api_gateway/src/routes/dashboard.py                                          16      3      0      0    81%
+apps/api_gateway/src/routes/fleet.py                                              14      0      0      0   100%
+apps/api_gateway/src/routes/routing.py                                            49     29      4      0    38%
+apps/api_gateway/src/routes/tenant.py                                             20      7      2      0    59%
+cli.py                                                                            25     25      4      0     0%
+database/core/base.py                                                             13      1      0      0    92%
+database/core/unit_of_work.py                                                     40     16      2      0    57%
+database/session.py                                                               25     13      8      0    36%
+modules/audit/domain/entities/audit_log.py                                        15      0      0      0   100%
+modules/audit/services/audit_listener.py                                          44     26     10      0    33%
+modules/commercial/__init__.py                                                     0      0      0      0   100%
+modules/commercial/application/__init__.py                                         0      0      0      0   100%
+modules/commercial/application/services/__init__.py                                0      0      0      0   100%
+modules/commercial/application/services/company_service.py                        16      8      2      0    44%
+modules/commercial/application/services/lead_service.py                           38     27     10      0    23%
+modules/commercial/application/services/opportunity_service.py                    12      4      0      0    67%
+modules/commercial/domain/__init__.py                                              0      0      0      0   100%
+modules/commercial/domain/entities/__init__.py                                     0      0      0      0   100%
+modules/commercial/domain/entities/company.py                                     26      1      2      0    96%
+modules/commercial/domain/entities/lead.py                                        46     19      8      0    50%
+modules/commercial/domain/entities/opportunity.py                                 34     11      4      0    61%
+modules/commercial/domain/events.py                                               13      0      0      0   100%
+modules/commercial/domain/exceptions.py                                            5      0      0      0   100%
+modules/commercial/infrastructure/__init__.py                                      0      0      0      0   100%
+modules/commercial/infrastructure/models.py                                       67      0      0      0   100%
+modules/commercial/infrastructure/repositories/__init__.py                         0      0      0      0   100%
+modules/commercial/infrastructure/repositories/company_repository.py              38     25      6      0    30%
+modules/commercial/infrastructure/repositories/lead_repository.py                 31     20      4      0    31%
+modules/commercial/infrastructure/repositories/opportunity_repository.py          30     19      4      0    32%
+modules/core/config/__init__.py                                                    2      0      0      0   100%
+modules/core/config/database.py                                                   10      1      0      0    90%
+modules/core/config/security.py                                                    8      0      0      0   100%
+modules/core/config/settings.py                                                   14      0      0      0   100%
+modules/core/context/__init__.py                                                   4      0      0      0   100%
+modules/core/context/accessor.py                                                  10      0      0      0   100%
+modules/core/context/context_vars_accessor.py                                     26      9      0      0    65%
+modules/core/context/models.py                                                    18      0      0      0   100%
+modules/core/domain/aggregate.py                                                  16      6      4      1    55%
+modules/core/domain/events.py                                                     20      6      0      0    70%
+modules/core/domain/id_generator.py                                                6      0      0      0   100%
+modules/core/logging/logger.py                                                     8      0      0      0   100%
+modules/core/observability/middleware.py                                          32     20      0      0    38%
+modules/dashboard/application/dto/dashboard_dto.py                                 2      0      0      0   100%
+modules/dashboard/application/services/dashboard_service.py                        9      3      0      0    67%
+modules/dashboard/infrastructure/repositories/dashboard_read_repository.py        26     11      0      0    58%
+modules/fleet/application/dto.py                                                   6      0      0      0   100%
+modules/fleet/application/repositories.py                                         14      0      0      0   100%
+modules/fleet/application/use_cases/register_driver.py                            20     12      2      0    36%
+modules/fleet/application/use_cases/register_vehicle.py                           20     12      2      0    36%
+modules/fleet/domain/entities/driver.py                                           35     15     10      0    44%
+modules/fleet/domain/entities/vehicle.py                                          38     13      8      0    54%
+modules/fleet/infrastructure/orm_models.py                                        24      0      0      0   100%
+modules/fleet/infrastructure/repositories/sqlalchemy_fleet_repository.py          38     25      8      0    28%
+modules/identity/dependencies.py                                                  45     28      8      0    32%
+modules/identity/domain/dto.py                                                     9      0      0      0   100%
+modules/identity/domain/entities/refresh_token.py                                 19      0      0      0   100%
+modules/identity/domain/entities/user.py                                          22      0      0      0   100%
+modules/identity/services/auth_service.py                                         19      8      2      0    52%
+modules/routing/__init__.py                                                        0      0      0      0   100%
+modules/routing/application/__init__.py                                            0      0      0      0   100%
+modules/routing/application/dto.py                                                19      0      0      0   100%
+modules/routing/application/repositories.py                                        9      0      0      0   100%
+modules/routing/application/use_cases/__init__.py                                  0      0      0      0   100%
+modules/routing/application/use_cases/add_stop.py                                 20     12      2      0    36%
+modules/routing/application/use_cases/create_route.py                             30     20     10      0    25%
+modules/routing/domain/__init__.py                                                 0      0      0      0   100%
+modules/routing/domain/entities/__init__.py                                        0      0      0      0   100%
+modules/routing/domain/entities/route.py                                          89     45     24      0    39%
+modules/routing/domain/events.py                                                  20      0      0      0   100%
+modules/routing/domain/exceptions.py                                               6      0      0      0   100%
+modules/routing/infrastructure/__init__.py                                         0      0      0      0   100%
+modules/routing/infrastructure/orm_models.py                                      31      0      0      0   100%
+modules/routing/infrastructure/repositories/__init__.py                            0      0      0      0   100%
+modules/routing/infrastructure/repositories/sqlalchemy_routing_repository.py      46     34     12      0    21%
+modules/tenant/domain/dto.py                                                       7      0      0      0   100%
+modules/tenant/domain/entities/tenant.py                                          26      0      0      0   100%
+modules/tenant/domain/entities/tenant_user.py                                     21      0      0      0   100%
+shared_kernel/__init__.py                                                          0      0      0      0   100%
+shared_kernel/contracts/__init__.py                                                0      0      0      0   100%
+shared_kernel/contracts/aggregate_root.py                                         24      9      4      0    54%
+shared_kernel/events/__init__.py                                                   0      0      0      0   100%
+shared_kernel/events/base.py                                                       8      0      0      0   100%
+shared_kernel/exceptions/__init__.py                                               0      0      0      0   100%
+shared_kernel/exceptions/domain.py                                                 1      1      0      0     0%
+shared_kernel/messaging/__init__.py                                                0      0      0      0   100%
+shared_kernel/messaging/outbox_repository.py                                      25      0      0      0   100%
+shared_kernel/policies/__init__.py                                                 0      0      0      0   100%
+shared_kernel/policies/base.py                                                    24     24      2      0     0%
+shared_kernel/specifications/__init__.py                                           0      0      0      0   100%
+shared_kernel/specifications/base.py                                              59     59      8      0     0%
+shared_kernel/value_objects/__init__.py                                            0      0      0      0   100%
+shared_kernel/value_objects/base.py                                                7      7      0      0     0%
+tests/conftest.py                                                                 38     19      0      0    50%
+tests/modules/commercial/domain/test_company.py                                   15      1      0      0    93%
+----------------------------------------------------------------------------------------------------------------
+TOTAL                                                                           1824    729    184      1    55%
+Coverage XML written to file coverage.xml
+=========================== short test summary info ============================
+FAILED tests/modules/commercial/domain/test_company.py::test_company_creation
+1 failed, 1 passed, 1 warning in 0.28s

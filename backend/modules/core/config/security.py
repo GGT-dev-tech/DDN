@@ -1,6 +1,7 @@
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
 class SecuritySettings(BaseSettings):
     jwt_secret: str = Field(validation_alias="JWT_SECRET", default="super-secret-local-key")
     jwt_algorithm: str = Field(default="HS256")

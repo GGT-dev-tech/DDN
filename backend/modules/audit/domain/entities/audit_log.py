@@ -1,9 +1,12 @@
 from datetime import datetime
 from uuid import UUID
-from uuid6 import uuid7
-from sqlalchemy import String, DateTime, JSON, ForeignKey
+
+from sqlalchemy import JSON, DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
+from uuid6 import uuid7
+
 from database.core.base import Base, utcnow
+
 
 class AuditLog(Base):
     __tablename__ = "audit_logs"

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
 from uuid import UUID
+
 
 @dataclass(frozen=True)
 class EventMetadata:
@@ -10,9 +10,9 @@ class EventMetadata:
     Separated from the payload to keep domain events clean.
     """
     event_id: UUID
-    tenant_id: Optional[UUID]
+    tenant_id: UUID | None
     correlation_id: str
-    causation_id: Optional[str]
+    causation_id: str | None
     occurred_at: datetime
     event_schema_version: int
     aggregate_version: int

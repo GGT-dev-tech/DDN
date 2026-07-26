@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from uuid import UUID
-from typing import Optional
+
 from modules.core.domain.events import DomainEvent
+
 
 @dataclass(frozen=True)
 class RouteCreated(DomainEvent):

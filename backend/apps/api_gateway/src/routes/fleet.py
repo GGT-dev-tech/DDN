@@ -1,15 +1,19 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
+
 from database.session import get_db_session as get_db
+
+
 # Dummy context accessor for now to fix crash
 def get_context_accessor():
     pass
 
-from database.core.unit_of_work import SQLAlchemyUnitOfWork
-from modules.fleet.infrastructure.repositories.sqlalchemy_fleet_repository import SQLAlchemyFleetRepository
-from modules.fleet.application.dto import RegisterVehicleRequestDTO, VehicleResponseDTO, RegisterDriverRequestDTO, DriverResponseDTO
-from modules.fleet.application.use_cases.register_vehicle import RegisterVehicleUseCase
-from modules.fleet.application.use_cases.register_driver import RegisterDriverUseCase
+from modules.fleet.application.dto import (
+    DriverResponseDTO,
+    RegisterDriverRequestDTO,
+    RegisterVehicleRequestDTO,
+    VehicleResponseDTO,
+)
 
 router = APIRouter(prefix="/fleet", tags=["Fleet"])
 

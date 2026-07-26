@@ -1,12 +1,14 @@
-from sqlalchemy import String, Enum, DateTime, Date, Float, Integer, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import UUID
 from datetime import date
-from uuid6 import uuid7
 from uuid import UUID as PyUUID
 
-from database.core.base import Base, utcnow
+from sqlalchemy import Date, Enum, Float, ForeignKey, Integer, String
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from uuid6 import uuid7
+
+from database.core.base import Base
 from modules.routing.domain.entities.route import RouteStatus, StopStatus
+
 
 class RouteModel(Base):
     __tablename__ = "routing_routes"

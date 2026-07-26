@@ -1,8 +1,10 @@
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
 from uuid import UUID
+
 from .id_generator import IdGenerator
+
 
 @dataclass(frozen=True)
 class DomainEvent:
@@ -10,15 +12,14 @@ class DomainEvent:
     Base class for all Domain Events.
     Must be pure and not contain any infrastructure metadata.
     """
-    pass
 
 @dataclass(frozen=True)
 class EventMetadata:
     trace_id: str
     request_id: UUID
-    tenant_id: Optional[UUID]
-    user_id: Optional[UUID]
-    session_id: Optional[UUID]
+    tenant_id: UUID | None
+    user_id: UUID | None
+    session_id: UUID | None
 
 @dataclass(frozen=True)
 class EventEnvelope:
@@ -27,7 +28,7 @@ class EventEnvelope:
     version: int
     occurred_at: datetime
     metadata: EventMetadata
-    payload: Dict[str, Any]
+    payload: dict[str, Any]
 
 class EventEnvelopeFactory:
     """

@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Optional, List
 from uuid import UUID
 
-from modules.fleet.domain.entities.vehicle import Vehicle
 from modules.fleet.domain.entities.driver import Driver
+from modules.fleet.domain.entities.vehicle import Vehicle
+
 
 class FleetRepository(ABC):
     @abstractmethod
@@ -11,7 +11,7 @@ class FleetRepository(ABC):
         pass
         
     @abstractmethod
-    def get_vehicle_by_id(self, vehicle_id: UUID) -> Optional[Vehicle]:
+    def get_vehicle_by_id(self, vehicle_id: UUID) -> Vehicle | None:
         pass
 
     @abstractmethod
@@ -19,5 +19,5 @@ class FleetRepository(ABC):
         pass
         
     @abstractmethod
-    def get_driver_by_id(self, driver_id: UUID) -> Optional[Driver]:
+    def get_driver_by_id(self, driver_id: UUID) -> Driver | None:
         pass

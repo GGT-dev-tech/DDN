@@ -1,10 +1,13 @@
-import asyncio
 import argparse
+import asyncio
 import sys
-from sqlalchemy.ext.asyncio import create_async_engine
+
 from sqlalchemy import text
+from sqlalchemy.ext.asyncio import create_async_engine
+
 from modules.core.config.settings import settings
 from modules.identity.domain.permissions import PermissionRegistry
+
 
 async def sync_permissions():
     """

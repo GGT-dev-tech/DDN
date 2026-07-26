@@ -1,18 +1,18 @@
-import pytest
-from uuid6 import uuid7
-from uuid import UUID
 from datetime import date
-from httpx import AsyncClient
+from uuid import UUID
+
+import pytest
 from fastapi import Header
+from httpx import AsyncClient
+from uuid6 import uuid7
 
 from apps.api_gateway.src.main import app
-from modules.identity.dependencies import require_tenant
-
-
-from modules.routing.infrastructure.orm_models import RouteModel, StopModel
+from modules.fleet.domain.entities.vehicle import VehicleStatus, VehicleType
 from modules.fleet.infrastructure.orm_models import VehicleModel
+from modules.identity.dependencies import require_tenant
 from modules.routing.domain.entities.route import RouteStatus, StopStatus
-from modules.fleet.domain.entities.vehicle import VehicleType, VehicleStatus
+from modules.routing.infrastructure.orm_models import RouteModel, StopModel
+
 
 @pytest.fixture
 def test_tenant_id():

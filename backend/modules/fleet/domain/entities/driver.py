@@ -5,6 +5,7 @@ from uuid import UUID
 from modules.core.domain.aggregate import AggregateRoot
 from modules.core.domain.id_generator import IdGenerator
 
+
 class DriverStatus(Enum):
     AVAILABLE = "AVAILABLE"
     ASSIGNED = "ASSIGNED"

@@ -1,13 +1,18 @@
-import pytest
-import json
 import time
-from uuid import uuid4, UUID
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 from decimal import Decimal
+from uuid import uuid4
 
 from shared_kernel.events.base import EventMetadata
 from shared_kernel.messaging.serialization.serializer import JsonEventSerializer
-from tests.contracts.test_serializer import RouteComplexEvent, RouteStatus, Money, GeoPoint, Coordinates
+from tests.contracts.test_serializer import (
+    Coordinates,
+    GeoPoint,
+    Money,
+    RouteComplexEvent,
+    RouteStatus,
+)
+
 
 def test_json_event_serializer_benchmark():
     serializer = JsonEventSerializer()

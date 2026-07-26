@@ -1,14 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from database.session import get_db_session as get_db
 from database.core.unit_of_work import SQLAlchemyUnitOfWork
-from modules.core.context import accessor as context_accessor_instance, ContextAccessor
-from modules.routing.application.dto import CreateRouteRequestDTO, AddStopRequestDTO, RouteResponseDTO, AssignRouteResourcesRequestDTO
-from modules.routing.application.use_cases.create_route import CreateRouteUseCase
+from database.session import get_db_session as get_db
+from modules.core.context import ContextAccessor
+from modules.core.context import accessor as context_accessor_instance
+from modules.routing.application.dto import (
+    AddStopRequestDTO,
+    AssignRouteResourcesRequestDTO,
+    CreateRouteRequestDTO,
+    RouteResponseDTO,
+)
 from modules.routing.application.use_cases.add_stop import AddStopUseCase
-from modules.routing.infrastructure.repositories.sqlalchemy_routing_repository import SQLAlchemyRoutingRepository
+from modules.routing.application.use_cases.create_route import CreateRouteUseCase
 from modules.routing.domain.exceptions import RoutingDomainException
+from modules.routing.infrastructure.repositories.sqlalchemy_routing_repository import (
+    SQLAlchemyRoutingRepository,
+)
 
 router = APIRouter(prefix="/routing", tags=["Routing"])
 
@@ -67,8 +75,12 @@ def assign_route_resources(
         raise HTTPException(status_code=400, detail="Route ID mismatch")
         
     try:
-        from modules.fleet.infrastructure.repositories.sqlalchemy_fleet_repository import SQLAlchemyFleetRepository
-        from modules.routing.application.use_cases.assign_route_resources import AssignRouteResourcesUseCase
+        from modules.fleet.infrastructure.repositories.sqlalchemy_fleet_repository import (
+            SQLAlchemyFleetRepository,
+        )
+        from modules.routing.application.use_cases.assign_route_resources import (
+            AssignRouteResourcesUseCase,
+        )
         
         fleet_repo = SQLAlchemyFleetRepository(db)
         use_case = AssignRouteResourcesUseCase(uow, routing_repo, fleet_repo, context_accessor)

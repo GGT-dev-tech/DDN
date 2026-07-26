@@ -1,28 +1,28 @@
 from dataclasses import dataclass, field
+from datetime import date
 from enum import Enum
 from uuid import UUID
-from datetime import date
-from typing import List, Optional
 
 from modules.core.domain.aggregate import AggregateRoot
 from modules.core.domain.id_generator import IdGenerator
 from modules.routing.domain.events import (
+    RouteAssigned,
+    RouteCancelled,
+    RouteCompleted,
     RouteCreated,
     RoutePlanned,
     RouteStarted,
-    RouteCompleted,
-    RouteCancelled,
-    RouteAssigned,
     StopAddedToRoute,
     StopRemovedFromRoute,
 )
 from modules.routing.domain.exceptions import (
-    RouteWithoutStopsException,
+    DuplicateStopOrderException,
     InvalidRouteStatusTransitionException,
     RouteModificationException,
+    RouteWithoutStopsException,
     StopModificationException,
-    DuplicateStopOrderException,
 )
+
 
 class RouteStatus(Enum):
     DRAFT = "DRAFT"
@@ -59,16 +59,16 @@ class Route(AggregateRoot):
     status: RouteStatus
     
     # Operational Capacity
-    estimated_volume: Optional[float] = None
-    estimated_weight: Optional[float] = None
-    planned_distance: Optional[float] = None
-    planned_duration: Optional[float] = None
+    estimated_volume: float | None = None
+    estimated_weight: float | None = None
+    planned_distance: float | None = None
+    planned_duration: float | None = None
     
     # Fleet Assignment
-    vehicle_id: Optional[UUID] = None
-    driver_id: Optional[UUID] = None
+    vehicle_id: UUID | None = None
+    driver_id: UUID | None = None
     
-    stops: List[Stop] = field(default_factory=list)
+    stops: list[Stop] = field(default_factory=list)
 
     @classmethod
     def create(cls, tenant_id: UUID, execution_date: date) -> "Route":

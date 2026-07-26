@@ -1,24 +1,23 @@
+import dataclasses
 import json
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Type
-from uuid import UUID
 from datetime import datetime
 from decimal import Decimal
 from enum import Enum
-import dataclasses
+from typing import Any
+from uuid import UUID
 
 from shared_kernel.events.base import DomainEvent, EventMetadata
 
+
 class Serializer(ABC):
     @abstractmethod
-    def serialize(self, event: DomainEvent) -> Dict[str, Any]:
+    def serialize(self, event: DomainEvent) -> dict[str, Any]:
         """Convert a DomainEvent to a dictionary envelope containing metadata and payload."""
-        pass
 
     @abstractmethod
-    def deserialize(self, data: Dict[str, Any], event_class: Type[DomainEvent]) -> DomainEvent:
+    def deserialize(self, data: dict[str, Any], event_class: type[DomainEvent]) -> DomainEvent:
         """Reconstruct a DomainEvent from a dictionary envelope."""
-        pass
 
 class CustomJSONEncoder(json.JSONEncoder):
     """Handles UUID, datetime, Decimal, Enum serialization."""
@@ -41,7 +40,7 @@ class JsonEventSerializer(Serializer):
     Serializes a DomainEvent into a JSON-compatible dictionary.
     Extracts the 'metadata' field and groups the rest into 'payload'.
     """
-    def serialize(self, event: DomainEvent) -> Dict[str, Any]:
+    def serialize(self, event: DomainEvent) -> dict[str, Any]:
         if not dataclasses.is_dataclass(event):
             raise ValueError("Event must be a dataclass")
             
@@ -58,7 +57,7 @@ class JsonEventSerializer(Serializer):
             "payload": safe_dict
         }
 
-    def deserialize(self, data: Dict[str, Any], event_class: Type[DomainEvent]) -> DomainEvent:
+    def deserialize(self, data: dict[str, Any], event_class: type[DomainEvent]) -> DomainEvent:
         # Note: True deserialization of nested dataclasses and value objects requires
         # a structural parser like dacite, pydantic, or cattrs.
         # For simplicity in this baseline, we instantiate directly.

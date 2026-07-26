@@ -1,15 +1,13 @@
-from datetime import datetime, timezone
 import uuid
+from datetime import UTC, datetime
+
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy.sql import func
-from typing import Any
-from sqlalchemy import UUID, text
+
 
 class Base(DeclarativeBase):
     """Base class for all SQLAlchemy models."""
     
     # Common columns could be added here, though we prefer explicitness on entities.
-    pass
 
 class TenantScopedEntity(Base):
     """
@@ -24,4 +22,4 @@ class TenantScopedEntity(Base):
 
 def utcnow() -> datetime:
     """Helper to get timezone-aware UTC datetime."""
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)

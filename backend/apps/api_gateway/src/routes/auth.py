@@ -1,17 +1,23 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from typing import Annotated
-from datetime import timedelta, datetime, timezone
 import secrets
+from datetime import UTC, datetime, timedelta
+from typing import Annotated
 
-from modules.identity.domain.dto import UserRegisterRequest, UserLoginRequest, TokenResponse, UserResponse
-from modules.identity.domain.entities.user import User, UserStatus
-from modules.identity.domain.entities.refresh_token import RefreshToken
-from modules.tenant.domain.entities.tenant import Tenant, TenantStatus, TenantPlan
-from modules.tenant.domain.entities.tenant_user import TenantUser, TenantRole
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from database.session import get_db_session
 from modules.identity.dependencies import auth_service, get_current_user_id
+from modules.identity.domain.dto import (
+    TokenResponse,
+    UserLoginRequest,
+    UserRegisterRequest,
+    UserResponse,
+)
+from modules.identity.domain.entities.refresh_token import RefreshToken
+from modules.identity.domain.entities.user import User, UserStatus
+from modules.tenant.domain.entities.tenant import Tenant, TenantPlan, TenantStatus
+from modules.tenant.domain.entities.tenant_user import TenantRole, TenantUser
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -58,7 +64,7 @@ async def register(request: UserRegisterRequest, db: Annotated[AsyncSession, Dep
     refresh_token = RefreshToken(
         user_id=user.id,
         token_hash=auth_service.get_password_hash(refresh_token_str), # We can hash the RT for security
-        expires_at=datetime.now(timezone.utc) + timedelta(days=30)
+        expires_at=datetime.now(UTC) + timedelta(days=30)
     )
     db.add(refresh_token)
     
@@ -80,7 +86,7 @@ async def login(request: UserLoginRequest, db: Annotated[AsyncSession, Depends(g
     if user.status != UserStatus.ACTIVE:
         raise HTTPException(status_code=403, detail="Account is not active")
         
-    user.last_login_at = datetime.now(timezone.utc)
+    user.last_login_at = datetime.now(UTC)
     
     access_token = auth_service.create_access_token(data={"sub": str(user.id)}, expires_delta=timedelta(minutes=15))
     refresh_token_str = secrets.token_urlsafe(64)
@@ -88,7 +94,7 @@ async def login(request: UserLoginRequest, db: Annotated[AsyncSession, Depends(g
     refresh_token = RefreshToken(
         user_id=user.id,
         token_hash=auth_service.get_password_hash(refresh_token_str),
-        expires_at=datetime.now(timezone.utc) + timedelta(days=30)
+        expires_at=datetime.now(UTC) + timedelta(days=30)
     )
     db.add(refresh_token)
     await db.commit()

@@ -1,8 +1,13 @@
-from modules.routing.application.dto import AssignRouteResourcesRequestDTO, RouteResponseDTO, StopResponseDTO
-from modules.routing.application.repositories import RoutingRepository
-from modules.fleet.application.repositories import FleetRepository
-from modules.core.context import ContextAccessor
 from database.core.unit_of_work import UnitOfWork
+from modules.core.context import ContextAccessor
+from modules.fleet.application.repositories import FleetRepository
+from modules.routing.application.dto import (
+    AssignRouteResourcesRequestDTO,
+    RouteResponseDTO,
+    StopResponseDTO,
+)
+from modules.routing.application.repositories import RoutingRepository
+
 
 class AssignRouteResourcesUseCase:
     def __init__(

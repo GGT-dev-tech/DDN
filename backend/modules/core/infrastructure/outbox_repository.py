@@ -1,20 +1,21 @@
-from typing import List, Optional
+from datetime import UTC, datetime
 from uuid import UUID
-from datetime import datetime, UTC
-from sqlalchemy.orm import Session
-from sqlalchemy import select, update, text, delete
 
+from sqlalchemy import delete, select, update
+from sqlalchemy.orm import Session
+
+from modules.core.infrastructure.outbox import OutboxEvent
 from shared_kernel.events.base import DomainEvent
 from shared_kernel.messaging.outbox_repository import OutboxRepository
 from shared_kernel.messaging.serialization.serializer import Serializer
-from modules.core.infrastructure.outbox import OutboxEvent
+
 
 class SQLAlchemyOutboxRepository(OutboxRepository):
     def __init__(self, session: Session, serializer: Serializer):
         self.session = session
         self.serializer = serializer
 
-    def save(self, events: List[DomainEvent]) -> None:
+    def save(self, events: list[DomainEvent]) -> None:
         for event in events:
             serialized = self.serializer.serialize(event)
             metadata = serialized["metadata"]
@@ -43,7 +44,7 @@ class SQLAlchemyOutboxRepository(OutboxRepository):
             )
             self.session.add(outbox_event)
 
-    def lock_batch(self, batch_size: int, worker_id: str) -> List[UUID]:
+    def lock_batch(self, batch_size: int, worker_id: str) -> list[UUID]:
         # Using SELECT FOR UPDATE SKIP LOCKED
         now = datetime.now(UTC)
         
@@ -155,7 +156,7 @@ class SQLAlchemyOutboxRepository(OutboxRepository):
         stmt = select(OutboxEvent.id).where(OutboxEvent.id == event_id)
         return self.session.scalar(stmt) is not None
 
-    def find_by_event_id(self, event_id: UUID) -> Optional[dict]:
+    def find_by_event_id(self, event_id: UUID) -> dict | None:
         event = self.session.get(OutboxEvent, event_id)
         if not event:
             return None

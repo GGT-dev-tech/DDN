@@ -1,6 +1,8 @@
-from pydantic import BaseModel
-from uuid import UUID
 from datetime import date
+from uuid import UUID
+
+from pydantic import BaseModel
+
 
 # Input DTOs
 class CreateRouteRequestDTO(BaseModel):

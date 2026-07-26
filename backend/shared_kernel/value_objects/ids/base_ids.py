@@ -1,6 +1,8 @@
-from uuid import UUID
 from dataclasses import dataclass
+from uuid import UUID
+
 from shared_kernel.value_objects.base import ValueObject
+
 
 @dataclass(frozen=True)
 class TenantId(ValueObject):

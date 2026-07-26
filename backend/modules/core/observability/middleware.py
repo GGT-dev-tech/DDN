@@ -1,11 +1,13 @@
 import time
+from datetime import UTC, datetime
+
 import structlog
-from datetime import datetime, timezone
-from uuid6 import uuid7
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import Response
-from modules.core.context import RequestContext, set_request_context, reset_request_context
+from uuid6 import uuid7
+
+from modules.core.context import RequestContext, reset_request_context, set_request_context
 
 logger = structlog.get_logger()
 
@@ -15,7 +17,7 @@ def generate_trace_id() -> str:
 
 class CorrelationMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
-        started_at = datetime.now(timezone.utc)
+        started_at = datetime.now(UTC)
         start_time = time.perf_counter()
         
         request_id = uuid7()

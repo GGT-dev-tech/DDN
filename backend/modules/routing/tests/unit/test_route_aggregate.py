@@ -1,22 +1,21 @@
-import pytest
 from datetime import date
-from uuid import uuid4
 
-from modules.routing.domain.entities.route import Route, RouteStatus, Location, Stop
-from modules.routing.domain.exceptions import (
-    RouteWithoutStopsException,
-    InvalidRouteStatusTransitionException,
-    RouteModificationException,
-    StopModificationException,
-    DuplicateStopOrderException,
-)
+import pytest
+
+from modules.core.domain.id_generator import IdGenerator
+from modules.routing.domain.entities.route import Location, Route, RouteStatus
 from modules.routing.domain.events import (
     RouteCreated,
-    RouteStarted,
     StopAddedToRoute,
-    StopRemovedFromRoute,
 )
-from modules.core.domain.id_generator import IdGenerator
+from modules.routing.domain.exceptions import (
+    DuplicateStopOrderException,
+    InvalidRouteStatusTransitionException,
+    RouteModificationException,
+    RouteWithoutStopsException,
+    StopModificationException,
+)
+
 
 # Fixtures
 @pytest.fixture

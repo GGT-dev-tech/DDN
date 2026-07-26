@@ -1,9 +1,11 @@
-import json
 from uuid import UUID
+
 from sqlalchemy import event, inspect
 from sqlalchemy.orm import Session
-from modules.core.context import accessor
+
 from modules.audit.domain.entities.audit_log import AuditLog
+from modules.core.context import accessor
+
 
 def row_to_dict(obj):
     """Convert an SQLAlchemy object to a dict of its mapped columns."""

@@ -1,8 +1,9 @@
+
 import pytest
-import uuid
-from uuid6 import uuid7
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
+from uuid6 import uuid7
+
 from modules.core.config.settings import settings
 
 pytestmark = pytest.mark.asyncio

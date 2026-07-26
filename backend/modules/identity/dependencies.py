@@ -1,19 +1,23 @@
-from fastapi import Depends, HTTPException, status, Header, Request
-from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, text
-from typing import Annotated
-import jwt
-from uuid import UUID
 from datetime import datetime
+from typing import Annotated
+from uuid import UUID
 
-from modules.core.config.settings import settings
+import jwt
+from fastapi import Depends, Header, HTTPException, Request, status
+from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from database.session import get_db_session
-from modules.identity.services.auth_service import AuthService
+from modules.core.config.settings import settings
 from modules.core.context import (
-    AuthContext, TenantContext, AuthenticationMethod,
-    set_auth_context, set_tenant_context
+    AuthContext,
+    AuthenticationMethod,
+    TenantContext,
+    set_auth_context,
+    set_tenant_context,
 )
+from modules.identity.services.auth_service import AuthService
 from modules.tenant.domain.entities.tenant_user import TenantUser
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")

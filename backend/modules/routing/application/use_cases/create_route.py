@@ -1,11 +1,10 @@
-from typing import Dict, Any
-from uuid import UUID
 
-from modules.routing.application.dto import CreateRouteRequestDTO, RouteResponseDTO, StopResponseDTO
+from database.core.unit_of_work import UnitOfWork
+from modules.core.context import ContextAccessor
+from modules.routing.application.dto import CreateRouteRequestDTO, RouteResponseDTO
 from modules.routing.application.repositories import RoutingRepository
 from modules.routing.domain.entities.route import Route
-from modules.core.context import ContextAccessor
-from database.core.unit_of_work import UnitOfWork
+
 
 class CreateRouteUseCase:
     def __init__(self, uow: UnitOfWork, routing_repository: RoutingRepository, context_accessor: ContextAccessor):

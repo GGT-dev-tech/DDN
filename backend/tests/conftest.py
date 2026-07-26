@@ -1,11 +1,16 @@
+import uuid
+
 import pytest
-from httpx import AsyncClient, ASGITransport
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from httpx import ASGITransport, AsyncClient
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.compiler import compiles
+
 from apps.api_gateway.src.main import app
 from database.core.base import Base
 from database.session import get_db_session
-from sqlalchemy.ext.compiler import compiles
-from sqlalchemy.dialects.postgresql import JSONB
+from modules.identity.dependencies import require_tenant
+
 
 @compiles(JSONB, "sqlite")
 def compile_jsonb_sqlite(type_, compiler, **kw):
@@ -46,7 +51,11 @@ async def async_client(db_session):
         finally:
             pass
             
+    def mock_require_tenant():
+        return uuid.uuid4()
+            
     app.dependency_overrides[get_db_session] = override_get_db
+    app.dependency_overrides[require_tenant] = mock_require_tenant
     
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:

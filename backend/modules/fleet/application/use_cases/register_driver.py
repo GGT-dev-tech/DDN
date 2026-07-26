@@ -1,8 +1,9 @@
-from modules.fleet.application.dto import RegisterDriverRequestDTO, DriverResponseDTO
+from database.core.unit_of_work import UnitOfWork
+from modules.core.context import ContextAccessor
+from modules.fleet.application.dto import DriverResponseDTO, RegisterDriverRequestDTO
 from modules.fleet.application.repositories import FleetRepository
 from modules.fleet.domain.entities.driver import Driver
-from modules.core.context import ContextAccessor
-from database.core.unit_of_work import UnitOfWork
+
 
 class RegisterDriverUseCase:
     def __init__(self, uow: UnitOfWork, fleet_repository: FleetRepository, context_accessor: ContextAccessor):

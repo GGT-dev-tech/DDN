@@ -1,15 +1,15 @@
-import pytest
 import json
-from uuid import uuid4, UUID
-from datetime import datetime, UTC
+from dataclasses import dataclass
+from datetime import UTC, datetime
 from decimal import Decimal
 from enum import Enum
-from dataclasses import dataclass
+from uuid import UUID, uuid4
 
 from shared_kernel.events.base import DomainEvent, EventMetadata
 from shared_kernel.messaging.serialization.serializer import JsonEventSerializer
 from shared_kernel.value_objects.finance.money import Money
 from shared_kernel.value_objects.geo.location import Coordinates, GeoPoint
+
 
 class RouteStatus(Enum):
     CREATED = "CREATED"

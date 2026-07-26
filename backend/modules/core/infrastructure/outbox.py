@@ -1,9 +1,12 @@
 import uuid
-from uuid6 import uuid7
-from datetime import datetime, UTC
-from sqlalchemy.orm import Mapped, mapped_column
+from datetime import UTC, datetime
+
 from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm import Mapped, mapped_column
+from uuid6 import uuid7
+
 from database.core.base import Base
+
 
 def utc_now():
     return datetime.now(UTC)

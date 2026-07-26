@@ -1,12 +1,14 @@
-from sqlalchemy import String, Enum, Float
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.dialects.postgresql import UUID
-from uuid6 import uuid7
 from uuid import UUID as PyUUID
 
+from sqlalchemy import Enum, Float, String
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column
+from uuid6 import uuid7
+
 from database.core.base import Base
-from modules.fleet.domain.entities.vehicle import VehicleType, VehicleStatus
 from modules.fleet.domain.entities.driver import DriverStatus
+from modules.fleet.domain.entities.vehicle import VehicleStatus, VehicleType
+
 
 class VehicleModel(Base):
     __tablename__ = "fleet_vehicles"

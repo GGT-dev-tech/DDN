@@ -1,8 +1,11 @@
 from uuid import UUID
-from uuid6 import uuid7
-from sqlalchemy import String, ForeignKey
+
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from uuid6 import uuid7
+
 from database.core.base import Base
+
 
 class Role(Base):
     __tablename__ = "roles"

@@ -1,12 +1,14 @@
 import json
-import pytest
 import sys
 from pathlib import Path
+
+import pytest
 
 BACKEND_DIR = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(BACKEND_DIR))
 
 from fastapi.testclient import TestClient
+
 from apps.api_gateway.src.main import app
 
 SNAPSHOT_DIR = Path(__file__).parent / "snapshots"

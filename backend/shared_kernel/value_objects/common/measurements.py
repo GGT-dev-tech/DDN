@@ -1,8 +1,10 @@
 import re
 from dataclasses import dataclass
 from decimal import Decimal
-from shared_kernel.value_objects.base import ValueObject
+
 from shared_kernel.exceptions.domain import DomainException
+from shared_kernel.value_objects.base import ValueObject
+
 
 @dataclass(frozen=True)
 class LicensePlate(ValueObject):

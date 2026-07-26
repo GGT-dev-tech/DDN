@@ -1,6 +1,7 @@
+
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-import os
+
 
 class DatabaseSettings(BaseSettings):
     url: str = Field(validation_alias="DATABASE_URL", default="postgresql+asyncpg://stitch_admin:secret_postgres@localhost:5432/stitch_db")

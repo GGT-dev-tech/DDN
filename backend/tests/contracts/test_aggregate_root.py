@@ -1,10 +1,10 @@
-import pytest
-from uuid import uuid4
-from datetime import datetime, UTC
 from dataclasses import dataclass
+from datetime import UTC, datetime
+from uuid import uuid4
 
 from shared_kernel.contracts.aggregate_root import AggregateRoot
 from shared_kernel.events.base import DomainEvent, EventMetadata
+
 
 @dataclass(frozen=True)
 class DummyEvent(DomainEvent):

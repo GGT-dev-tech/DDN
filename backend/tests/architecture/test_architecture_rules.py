@@ -1,6 +1,5 @@
-import os
 import ast
-import pytest
+import os
 from pathlib import Path
 
 BACKEND_DIR = Path(__file__).parent.parent.parent

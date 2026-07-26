@@ -1,7 +1,9 @@
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 from .database import DatabaseSettings
 from .security import SecuritySettings
+
 
 class AppSettings(BaseSettings):
     environment: str = Field(default="development", validation_alias="ENVIRONMENT")

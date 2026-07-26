@@ -1,5 +1,7 @@
 import uuid
+
 from uuid6 import uuid7
+
 
 class IdGenerator:
     """

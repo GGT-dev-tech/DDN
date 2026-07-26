@@ -1,9 +1,7 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
 from alembic import context
+from sqlalchemy import engine_from_config, pool
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -14,19 +12,10 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-from modules.core.config.settings import settings
-from database.core.base import Base
 
 # Import all models to ensure they are registered with Base.metadata
-import modules.identity.domain.entities.user
-import modules.identity.domain.entities.refresh_token
-import modules.tenant.domain.entities.tenant
-import modules.tenant.domain.entities.tenant_user
-import modules.tenant.domain.entities.rbac
-import modules.audit.domain.entities.audit_log
-import modules.core.infrastructure.outbox
-import modules.routing.infrastructure.orm_models
-import modules.fleet.infrastructure.orm_models
+from database.core.base import Base
+from modules.core.config.settings import settings
 
 target_metadata = Base.metadata
 
