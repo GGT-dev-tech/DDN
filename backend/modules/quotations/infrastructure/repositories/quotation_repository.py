@@ -1,0 +1,134 @@
+import uuid
+from datetime import UTC, datetime
+from typing import Optional
+
+from sqlalchemy import select
+from sqlalchemy.orm import selectinload
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from modules.quotations.domain.entities.quotation import Quotation, QuotationItem
+from modules.quotations.domain.value_objects import QuotationItemSnapshot, QuotationStatus, Money
+from modules.quotations.infrastructure.orm_models import QuotationModel, QuotationItemModel, QuotationItemSnapshotModel
+
+
+class QuotationRepository:
+    def __init__(self, session: AsyncSession):
+        self.session = session
+
+    async def get_quotation_by_id(self, quotation_id: uuid.UUID) -> Optional[Quotation]:
+        stmt = (
+            select(QuotationModel)
+            .options(
+                selectinload(QuotationModel.items)
+                .selectinload(QuotationItemModel.snapshot)
+            )
+            .where(QuotationModel.id == quotation_id)
+        )
+        
+        result = await self.session.execute(stmt)
+        model = result.scalar_one_or_none()
+        
+        if not model:
+            return None
+            
+        quotation = Quotation(
+            company_id=model.company_id,
+            tenant_id=model.tenant_id,
+            id=model.id,
+            status=model.status,
+            expires_at=model.expires_at,
+            created_at=model.created_at,
+            updated_at=model.updated_at
+        )
+        
+        for item_model in model.items:
+            snapshot = None
+            if item_model.snapshot:
+                snapshot = QuotationItemSnapshot(
+                    service_name=item_model.snapshot.service_name,
+                    unit_name=item_model.snapshot.unit_name,
+                    base_unit_price=Money(item_model.snapshot.base_unit_price, item_model.snapshot.currency),
+                    total_base_price=Money(item_model.snapshot.total_base_price, item_model.snapshot.currency),
+                    surcharges_total=Money(item_model.snapshot.surcharges_total, item_model.snapshot.currency),
+                    discounts_total=Money(item_model.snapshot.discounts_total, item_model.snapshot.currency),
+                    final_price=Money(item_model.snapshot.final_price, item_model.snapshot.currency),
+                    pricing_reference=item_model.snapshot.pricing_reference
+                )
+                
+            item = QuotationItem(
+                id=item_model.id,
+                service_offering_id=item_model.service_offering_id,
+                unit_of_measure_id=item_model.unit_of_measure_id,
+                quantity=item_model.quantity,
+                snapshot=snapshot
+            )
+            quotation.items.append(item)
+            
+        return quotation
+
+    async def save_quotation(self, quotation: Quotation) -> None:
+        model = await self.session.get(QuotationModel, quotation.id)
+        
+        if not model:
+            model = QuotationModel(
+                id=quotation.id,
+                tenant_id=quotation.tenant_id,
+                company_id=quotation.company_id,
+                status=quotation.status,
+                expires_at=quotation.expires_at,
+                created_at=quotation.created_at,
+                updated_at=quotation.updated_at
+            )
+            self.session.add(model)
+        else:
+            model.status = quotation.status
+            model.expires_at = quotation.expires_at
+            model.updated_at = quotation.updated_at
+            
+        # Handle Items
+        # A simple merge approach for items:
+        existing_items = {item.id: item for item in await self._get_existing_items(quotation.id)}
+        
+        for item in quotation.items:
+            if item.id in existing_items:
+                item_model = existing_items[item.id]
+                item_model.service_offering_id = item.service_offering_id
+                item_model.unit_of_measure_id = item.unit_of_measure_id
+                item_model.quantity = item.quantity
+            else:
+                item_model = QuotationItemModel(
+                    id=item.id,
+                    tenant_id=quotation.tenant_id,
+                    quotation_id=quotation.id,
+                    service_offering_id=item.service_offering_id,
+                    unit_of_measure_id=item.unit_of_measure_id,
+                    quantity=item.quantity
+                )
+                self.session.add(item_model)
+                
+            # Handle Snapshot
+            if item.snapshot:
+                # Get existing snapshot model if any
+                snapshot_model = await self.session.get(QuotationItemSnapshotModel, item.id)
+                if not snapshot_model:
+                    snapshot_model = QuotationItemSnapshotModel(
+                        id=item.id,
+                        tenant_id=quotation.tenant_id,
+                        quotation_item_id=item.id,
+                        service_name=item.snapshot.service_name,
+                        unit_name=item.snapshot.unit_name,
+                        base_unit_price=item.snapshot.base_unit_price.amount,
+                        total_base_price=item.snapshot.total_base_price.amount,
+                        surcharges_total=item.snapshot.surcharges_total.amount,
+                        discounts_total=item.snapshot.discounts_total.amount,
+                        final_price=item.snapshot.final_price.amount,
+                        currency=item.snapshot.final_price.currency,
+                        pricing_reference=item.snapshot.pricing_reference,
+                        created_at=datetime.now(UTC)
+                    )
+                    self.session.add(snapshot_model)
+
+    async def _get_existing_items(self, quotation_id: uuid.UUID) -> list[QuotationItemModel]:
+        stmt = select(QuotationItemModel).where(QuotationItemModel.quotation_id == quotation_id)
+        result = await self.session.execute(stmt)
+        return list(result.scalars().all())

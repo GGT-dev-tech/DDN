@@ -1,0 +1,243 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/gustavo/Documents/dev/projects/ddn_management/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, asyncio-1.4.0, anyio-4.14.2
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collected 1 item
+
+tests/integration/pricing/test_pricing_api.py F                          [100%]
+
+=================================== FAILURES ===================================
+___________________________ test_create_price_table ____________________________
+
+async_client = <httpx.AsyncClient object at 0x10c6a02f0>
+
+    async def test_create_price_table(async_client):
+        client = async_client
+        tenant_id = uuid4()
+        headers = {"x-tenant-id": str(tenant_id)}
+    
+        # 1. Create table
+        response = await client.post(
+            "/api/v1/pricing/tables",
+            json={
+                "name": "API Test Table",
+                "effective_date": "2026-01-01",
+                "is_active": True
+            },
+            headers=headers
+        )
+        assert response.status_code == 201
+        table_id = response.json()["id"]
+    
+        # 2. Add item to table
+        service_id = str(uuid4())
+        uom_id = str(uuid4())
+    
+        resp_item = await client.post(
+            f"/api/v1/pricing/tables/{table_id}/items",
+            json={
+                "service_offering_id": service_id,
+                "unit_of_measure_id": uom_id,
+                "amount": 250.00,
+                "currency": "BRL"
+            },
+            headers=headers
+        )
+        assert resp_item.status_code == 201
+    
+        # 3. Create Rule
+        resp_rule = await client.post(
+            "/api/v1/pricing/rules",
+            json={
+                "name": "API Global Discount",
+                "scope": "GLOBAL",
+                "rule_type": "PERCENTAGE_DISCOUNT",
+                "value": 10.00,
+                "priority": 1
+            },
+            headers=headers
+        )
+        assert resp_rule.status_code == 201
+    
+        # 4. Calculate Price
+        resp_calc = await client.post(
+            "/api/v1/pricing/calculate",
+            json={
+                "service_offering_id": service_id,
+                "unit_of_measure_id": uom_id,
+                "quantity": 2, # 2 * 250 = 500, less 10% = 450
+                "reference_date": "2026-06-01"
+            },
+            headers=headers
+        )
+        assert resp_calc.status_code == 200
+        data = resp_calc.json()
+        assert data["base_unit_price"]["amount"] == "250.00"
+        assert data["total_base_price"]["amount"] == "500.00"
+>       assert data["final_price"]["amount"] == "450.00"
+E       AssertionError: assert '450.0000' == '450.00'
+E         
+E         - 450.00
+E         + 450.0000
+E         ?       ++
+
+tests/integration/pricing/test_pricing_api.py:69: AssertionError
+----------------------------- Captured stdout call -----------------------------
+{"status_code": 201, "duration_s": 0.023662167019210756, "event": "request_completed", "path": "/api/v1/pricing/tables", "request_id": "019f9d00-984c-78d7-ac61-c7b0765e61d3", "trace_id": "019f9d00984d7c428288b14ff1038631019f9d00984e7d79aecc9b625ffd817d", "ip": "127.0.0.1", "method": "POST", "level": "info", "logger": "modules.core.observability.middleware", "timestamp": "2026-07-26T05:58:09.764267Z"}
+HTTP Request: POST http://test/api/v1/pricing/tables "HTTP/1.1 201 Created"
+{"status_code": 201, "duration_s": 0.006148874992504716, "event": "request_completed", "path": "/api/v1/pricing/tables/9f9da95f-d67a-4b37-92a8-e75a28f25e2d/items", "request_id": "019f9d00-9865-77ab-964a-5f0ce1a9b978", "trace_id": "019f9d0098667e159904ee14f9f36eb9019f9d00986772e98d25b7171600ea3c", "ip": "127.0.0.1", "method": "POST", "level": "info", "logger": "modules.core.observability.middleware", "timestamp": "2026-07-26T05:58:09.771655Z"}
+HTTP Request: POST http://test/api/v1/pricing/tables/9f9da95f-d67a-4b37-92a8-e75a28f25e2d/items "HTTP/1.1 201 Created"
+{"status_code": 201, "duration_s": 0.0033477089600637555, "event": "request_completed", "path": "/api/v1/pricing/rules", "request_id": "019f9d00-986f-7a4a-a6e5-0f276cf54f56", "trace_id": "019f9d0098707c0ab400d35945616556019f9d00987179c28e8b02275a8aca84", "ip": "127.0.0.1", "method": "POST", "level": "info", "logger": "modules.core.observability.middleware", "timestamp": "2026-07-26T05:58:09.778669Z"}
+HTTP Request: POST http://test/api/v1/pricing/rules "HTTP/1.1 201 Created"
+{"status_code": 200, "duration_s": 0.004251584061421454, "event": "request_completed", "path": "/api/v1/pricing/calculate", "request_id": "019f9d00-9873-73bd-9685-ab68508d9046", "trace_id": "019f9d009874733085c57d12adfe03be019f9d009875783e8e4e89b585b80305", "ip": "127.0.0.1", "method": "POST", "level": "info", "logger": "modules.core.observability.middleware", "timestamp": "2026-07-26T05:58:09.783411Z"}
+HTTP Request: POST http://test/api/v1/pricing/calculate "HTTP/1.1 200 OK"
+------------------------------ Captured log call -------------------------------
+INFO     modules.core.observability.middleware:middleware.py:59 {"status_code": 201, "duration_s": 0.023662167019210756, "event": "request_completed", "path": "/api/v1/pricing/tables", "request_id": "019f9d00-984c-78d7-ac61-c7b0765e61d3", "trace_id": "019f9d00984d7c428288b14ff1038631019f9d00984e7d79aecc9b625ffd817d", "ip": "127.0.0.1", "method": "POST", "level": "info", "logger": "modules.core.observability.middleware", "timestamp": "2026-07-26T05:58:09.764267Z"}
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/api/v1/pricing/tables "HTTP/1.1 201 Created"
+INFO     modules.core.observability.middleware:middleware.py:59 {"status_code": 201, "duration_s": 0.006148874992504716, "event": "request_completed", "path": "/api/v1/pricing/tables/9f9da95f-d67a-4b37-92a8-e75a28f25e2d/items", "request_id": "019f9d00-9865-77ab-964a-5f0ce1a9b978", "trace_id": "019f9d0098667e159904ee14f9f36eb9019f9d00986772e98d25b7171600ea3c", "ip": "127.0.0.1", "method": "POST", "level": "info", "logger": "modules.core.observability.middleware", "timestamp": "2026-07-26T05:58:09.771655Z"}
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/api/v1/pricing/tables/9f9da95f-d67a-4b37-92a8-e75a28f25e2d/items "HTTP/1.1 201 Created"
+INFO     modules.core.observability.middleware:middleware.py:59 {"status_code": 201, "duration_s": 0.0033477089600637555, "event": "request_completed", "path": "/api/v1/pricing/rules", "request_id": "019f9d00-986f-7a4a-a6e5-0f276cf54f56", "trace_id": "019f9d0098707c0ab400d35945616556019f9d00987179c28e8b02275a8aca84", "ip": "127.0.0.1", "method": "POST", "level": "info", "logger": "modules.core.observability.middleware", "timestamp": "2026-07-26T05:58:09.778669Z"}
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/api/v1/pricing/rules "HTTP/1.1 201 Created"
+INFO     modules.core.observability.middleware:middleware.py:59 {"status_code": 200, "duration_s": 0.004251584061421454, "event": "request_completed", "path": "/api/v1/pricing/calculate", "request_id": "019f9d00-9873-73bd-9685-ab68508d9046", "trace_id": "019f9d009874733085c57d12adfe03be019f9d009875783e8e4e89b585b80305", "ip": "127.0.0.1", "method": "POST", "level": "info", "logger": "modules.core.observability.middleware", "timestamp": "2026-07-26T05:58:09.783411Z"}
+INFO     httpx:_client.py:1740 HTTP Request: POST http://test/api/v1/pricing/calculate "HTTP/1.1 200 OK"
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.14.2-final-0 _______________
+
+Name                                                                           Stmts   Miss Branch BrPart  Cover
+----------------------------------------------------------------------------------------------------------------
+apps/api_gateway/src/main.py                                                      61     23      4      0    58%
+apps/api_gateway/src/routes/auth.py                                               52     32      4      0    36%
+apps/api_gateway/src/routes/catalog.py                                            52     31      0      0    40%
+apps/api_gateway/src/routes/commercial.py                                         53     20      0      0    62%
+apps/api_gateway/src/routes/dashboard.py                                          15      3      0      0    80%
+apps/api_gateway/src/routes/fleet.py                                              10      0      0      0   100%
+apps/api_gateway/src/routes/pricing.py                                            41      6      0      0    85%
+apps/api_gateway/src/routes/routing.py                                            50     29      4      0    39%
+apps/api_gateway/src/routes/tenant.py                                             20      7      2      0    59%
+cli.py                                                                            25     25      4      0     0%
+database/core/base.py                                                             10      1      0      0    90%
+database/core/unit_of_work.py                                                     39     16      2      0    56%
+database/session.py                                                               25     13      8      0    36%
+modules/audit/domain/entities/audit_log.py                                        15      0      0      0   100%
+modules/audit/services/audit_listener.py                                          43     21     10      2    45%
+modules/catalog/__init__.py                                                        0      0      0      0   100%
+modules/catalog/application/__init__.py                                            0      0      0      0   100%
+modules/catalog/application/dto/requests.py                                       22      0      0      0   100%
+modules/catalog/application/services/__init__.py                                   0      0      0      0   100%
+modules/catalog/application/services/catalog_service.py                           81     64     20      0    17%
+modules/catalog/domain/__init__.py                                                 0      0      0      0   100%
+modules/catalog/domain/entities/__init__.py                                        0      0      0      0   100%
+modules/catalog/domain/entities/service_attribute.py                              42     17      8      0    50%
+modules/catalog/domain/entities/service_offering.py                               52     23     10      0    47%
+modules/catalog/domain/entities/unit_of_measure.py                                38     14      6      0    55%
+modules/catalog/domain/events.py                                                  17      0      0      0   100%
+modules/catalog/infrastructure/__init__.py                                         0      0      0      0   100%
+modules/catalog/infrastructure/orm_models.py                                      50      0      0      0   100%
+modules/catalog/infrastructure/repositories/__init__.py                            0      0      0      0   100%
+modules/catalog/infrastructure/repositories/catalog_repository.py                 81     62     18      0    19%
+modules/commercial/__init__.py                                                     0      0      0      0   100%
+modules/commercial/application/__init__.py                                         0      0      0      0   100%
+modules/commercial/application/services/__init__.py                                0      0      0      0   100%
+modules/commercial/application/services/company_service.py                        15      8      2      0    41%
+modules/commercial/application/services/lead_service.py                           37     27     10      0    21%
+modules/commercial/application/services/opportunity_service.py                    11      4      0      0    64%
+modules/commercial/domain/__init__.py                                              0      0      0      0   100%
+modules/commercial/domain/entities/__init__.py                                     0      0      0      0   100%
+modules/commercial/domain/entities/company.py                                     25      6      2      0    70%
+modules/commercial/domain/entities/lead.py                                        45     19      8      0    49%
+modules/commercial/domain/entities/opportunity.py                                 33     11      4      0    59%
+modules/commercial/domain/events.py                                               13      0      0      0   100%
+modules/commercial/domain/exceptions.py                                            5      0      0      0   100%
+modules/commercial/infrastructure/__init__.py                                      0      0      0      0   100%
+modules/commercial/infrastructure/models.py                                       67      0      0      0   100%
+modules/commercial/infrastructure/repositories/__init__.py                         0      0      0      0   100%
+modules/commercial/infrastructure/repositories/company_repository.py              36     25      6      0    26%
+modules/commercial/infrastructure/repositories/lead_repository.py                 30     20      4      0    29%
+modules/commercial/infrastructure/repositories/opportunity_repository.py          29     19      4      0    30%
+modules/core/config/__init__.py                                                    2      0      0      0   100%
+modules/core/config/database.py                                                    9      1      0      0    89%
+modules/core/config/security.py                                                    8      0      0      0   100%
+modules/core/config/settings.py                                                   14      0      0      0   100%
+modules/core/context/__init__.py                                                   4      0      0      0   100%
+modules/core/context/accessor.py                                                   9      0      0      0   100%
+modules/core/context/context_vars_accessor.py                                     25      7      0      0    72%
+modules/core/context/models.py                                                    17      0      0      0   100%
+modules/core/domain/aggregate.py                                                  15      9      4      0    32%
+modules/core/domain/events.py                                                     20      6      0      0    70%
+modules/core/domain/id_generator.py                                                6      1      0      0    83%
+modules/core/logging/logger.py                                                     8      0      0      0   100%
+modules/core/observability/middleware.py                                          32      0      0      0   100%
+modules/dashboard/application/dto/dashboard_dto.py                                 2      0      0      0   100%
+modules/dashboard/application/services/dashboard_service.py                        9      3      0      0    67%
+modules/dashboard/infrastructure/repositories/dashboard_read_repository.py        25     11      0      0    56%
+modules/fleet/application/dto.py                                                   6      0      0      0   100%
+modules/fleet/domain/entities/driver.py                                           35     15     10      0    44%
+modules/fleet/domain/entities/vehicle.py                                          38     13      8      0    54%
+modules/fleet/infrastructure/orm_models.py                                        24      0      0      0   100%
+modules/identity/dependencies.py                                                  45     28      8      0    32%
+modules/identity/domain/dto.py                                                     9      0      0      0   100%
+modules/identity/domain/entities/refresh_token.py                                 19      0      0      0   100%
+modules/identity/domain/entities/user.py                                          22      0      0      0   100%
+modules/identity/services/auth_service.py                                         17      8      2      0    47%
+modules/pricing/__init__.py                                                        0      0      0      0   100%
+modules/pricing/application/__init__.py                                            0      0      0      0   100%
+modules/pricing/application/dto/__init__.py                                        0      0      0      0   100%
+modules/pricing/application/dto/requests.py                                       28      0      0      0   100%
+modules/pricing/application/services/__init__.py                                   0      0      0      0   100%
+modules/pricing/application/services/pricing_service.py                           45      1      2      1    96%
+modules/pricing/domain/__init__.py                                                 0      0      0      0   100%
+modules/pricing/domain/entities/__init__.py                                        0      0      0      0   100%
+modules/pricing/domain/entities/price_table.py                                    53      9     10      2    76%
+modules/pricing/domain/entities/pricing_rule.py                                   49     13     16      4    65%
+modules/pricing/domain/events.py                                                   9      0      0      0   100%
+modules/pricing/domain/services/__init__.py                                        0      0      0      0   100%
+modules/pricing/domain/services/price_calculation_engine.py                       36      9     16      5    65%
+modules/pricing/domain/value_objects.py                                           30      6      4      0    71%
+modules/pricing/infrastructure/__init__.py                                         0      0      0      0   100%
+modules/pricing/infrastructure/orm_models.py                                      44      0      0      0   100%
+modules/pricing/infrastructure/repositories/__init__.py                            0      0      0      0   100%
+modules/pricing/infrastructure/repositories/pricing_repository.py                 83     14     20      7    80%
+modules/routing/__init__.py                                                        0      0      0      0   100%
+modules/routing/application/__init__.py                                            0      0      0      0   100%
+modules/routing/application/dto.py                                                19      0      0      0   100%
+modules/routing/application/repositories.py                                        8      0      0      0   100%
+modules/routing/application/use_cases/__init__.py                                  0      0      0      0   100%
+modules/routing/application/use_cases/add_stop.py                                 19     12      2      0    33%
+modules/routing/application/use_cases/create_route.py                             28     20     10      0    21%
+modules/routing/domain/__init__.py                                                 0      0      0      0   100%
+modules/routing/domain/entities/__init__.py                                        0      0      0      0   100%
+modules/routing/domain/entities/route.py                                          88     45     24      0    38%
+modules/routing/domain/events.py                                                  19      0      0      0   100%
+modules/routing/domain/exceptions.py                                               6      0      0      0   100%
+modules/routing/infrastructure/__init__.py                                         0      0      0      0   100%
+modules/routing/infrastructure/orm_models.py                                      31      0      0      0   100%
+modules/routing/infrastructure/repositories/__init__.py                            0      0      0      0   100%
+modules/routing/infrastructure/repositories/sqlalchemy_routing_repository.py      44     34     12      0    18%
+modules/tenant/domain/dto.py                                                       7      0      0      0   100%
+modules/tenant/domain/entities/tenant.py                                          26      0      0      0   100%
+modules/tenant/domain/entities/tenant_user.py                                     21      0      0      0   100%
+shared_kernel/__init__.py                                                          0      0      0      0   100%
+shared_kernel/contracts/__init__.py                                                0      0      0      0   100%
+shared_kernel/contracts/aggregate_root.py                                         24      2      4      2    86%
+shared_kernel/events/__init__.py                                                   0      0      0      0   100%
+shared_kernel/events/base.py                                                       7      0      0      0   100%
+shared_kernel/exceptions/__init__.py                                               0      0      0      0   100%
+shared_kernel/exceptions/domain.py                                                 1      1      0      0     0%
+shared_kernel/messaging/__init__.py                                                0      0      0      0   100%
+shared_kernel/messaging/outbox_repository.py                                      24      0      0      0   100%
+shared_kernel/policies/__init__.py                                                 0      0      0      0   100%
+shared_kernel/policies/base.py                                                    24     24      2      0     0%
+shared_kernel/specifications/__init__.py                                           0      0      0      0   100%
+shared_kernel/specifications/base.py                                              59     59      8      0     0%
+shared_kernel/value_objects/__init__.py                                            0      0      0      0   100%
+shared_kernel/value_objects/base.py                                                6      6      0      0     0%
+tests/conftest.py                                                                 43      1      0      0    98%
+tests/integration/pricing/test_pricing_api.py                                     22      0      0      0   100%
+----------------------------------------------------------------------------------------------------------------
+TOTAL                                                                           2563    904    302     23    59%
+Coverage XML written to file coverage.xml
+=========================== short test summary info ============================
+FAILED tests/integration/pricing/test_pricing_api.py::test_create_price_table
+============================== 1 failed in 0.46s ===============================

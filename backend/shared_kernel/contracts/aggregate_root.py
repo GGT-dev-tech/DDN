@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Protocol, runtime_checkable
 from uuid import UUID
 
-from shared_kernel.events.base import DomainEvent
-
+@runtime_checkable
+class DomainEventProtocol(Protocol):
+    pass
+    # We can enforce properties like occurred_at if needed, but for now just a marker interface
 
 class AggregateRoot(ABC):
     """
@@ -23,15 +25,15 @@ class AggregateRoot(ABC):
 
     def __init__(self, **kwargs: Any):
         super().__init__(**kwargs)
-        self._domain_events: list[DomainEvent] = []
+        self._domain_events: list[DomainEventProtocol] = []
         
-    def add_event(self, event: DomainEvent) -> None:
+    def add_event(self, event: DomainEventProtocol) -> None:
         """Add a domain event to the aggregate's internal collection."""
         if not hasattr(self, "_domain_events"):
             self._domain_events = []
         self._domain_events.append(event)
         
-    def collect_events(self) -> list[DomainEvent]:
+    def collect_events(self) -> list[DomainEventProtocol]:
         """Return all accumulated domain events."""
         if not hasattr(self, "_domain_events"):
             self._domain_events = []

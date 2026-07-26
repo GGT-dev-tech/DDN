@@ -16,6 +16,9 @@ if config.config_file_name is not None:
 # Import all models to ensure they are registered with Base.metadata
 from database.core.base import Base
 from modules.core.config.settings import settings
+from modules.pricing.infrastructure.orm_models import PricingPriceTableModel, PricingPriceTableItemModel, PricingRuleModel
+from modules.quotations.infrastructure.orm_models import QuotationModel, QuotationItemModel, QuotationItemSnapshotModel
+from modules.contracts.infrastructure.orm_models import ContractModel, ContractVersionModel, ContractItemModel, ContractItemSnapshotModel
 
 target_metadata = Base.metadata
 

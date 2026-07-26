@@ -6,7 +6,12 @@ from fastapi import FastAPI, Response, status
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import OperationalError
 
-from apps.api_gateway.src.routes import auth, catalog, commercial, dashboard, fleet, routing, tenant
+from apps.api_gateway.src.routes import auth, dashboard, fleet, routing, tenant
+from apps.api_gateway.src.routes.catalog import router as catalog_router
+from apps.api_gateway.src.routes.commercial import router as commercial_router
+from apps.api_gateway.src.routes.pricing import router as pricing_router
+from apps.api_gateway.src.routes.quotations import router as quotations_router
+from apps.api_gateway.src.routes.contracts import router as contracts_router
 from modules.core.logging.logger import setup_logging
 from modules.core.observability.middleware import CorrelationMiddleware
 
@@ -23,8 +28,11 @@ app.include_router(tenant.router)
 app.include_router(routing.router)
 app.include_router(fleet.router)
 app.include_router(dashboard.router)
-app.include_router(commercial.router)
-app.include_router(catalog.router)
+app.include_router(commercial_router, prefix="/api/v1")
+app.include_router(catalog_router, prefix="/api/v1")
+app.include_router(pricing_router, prefix="/api/v1")
+app.include_router(quotations_router, prefix="/api/v1")
+app.include_router(contracts_router, prefix="/api/v1")
 
 # Database & Cache settings loaded directly from ENV for the Health Check
 # In a real scenario, this would be imported from modules.core.config

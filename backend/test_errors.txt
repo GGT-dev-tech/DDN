@@ -1,0 +1,332 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.2, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/gustavo/Documents/dev/projects/ddn_management/backend
+configfile: pyproject.toml
+plugins: cov-7.1.0, asyncio-1.4.0, anyio-4.14.2
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collected 6 items
+
+tests/integration/pricing/test_pricing_api.py E                          [ 16%]
+tests/integration/pricing/test_pricing_repository.py EEE                 [ 66%]
+tests/modules/pricing/domain/test_price_calculation_engine.py FF         [100%]
+
+==================================== ERRORS ====================================
+__________________ ERROR at setup of test_create_price_table ___________________
+file /Users/gustavo/Documents/dev/projects/ddn_management/backend/tests/integration/pricing/test_pricing_api.py, line 6
+  async def test_create_price_table(async_api_client):
+      client, tenant_id = async_api_client
+
+      headers = {"x-tenant-id": str(tenant_id)}
+
+      # 1. Create table
+      response = await client.post(
+          "/api/v1/pricing/tables",
+          json={
+              "name": "API Test Table",
+              "effective_date": "2026-01-01",
+              "is_active": True
+          },
+          headers=headers
+      )
+      assert response.status_code == 201
+      table_id = response.json()["id"]
+
+      # 2. Add item to table
+      service_id = str(uuid4())
+      uom_id = str(uuid4())
+
+      resp_item = await client.post(
+          f"/api/v1/pricing/tables/{table_id}/items",
+          json={
+              "service_offering_id": service_id,
+              "unit_of_measure_id": uom_id,
+              "amount": 250.00,
+              "currency": "BRL"
+          },
+          headers=headers
+      )
+      assert resp_item.status_code == 201
+
+      # 3. Create Rule
+      resp_rule = await client.post(
+          "/api/v1/pricing/rules",
+          json={
+              "name": "API Global Discount",
+              "scope": "GLOBAL",
+              "rule_type": "PERCENTAGE_DISCOUNT",
+              "value": 10.00,
+              "priority": 1
+          },
+          headers=headers
+      )
+      assert resp_rule.status_code == 201
+
+      # 4. Calculate Price
+      resp_calc = await client.post(
+          "/api/v1/pricing/calculate",
+          json={
+              "service_offering_id": service_id,
+              "unit_of_measure_id": uom_id,
+              "quantity": 2, # 2 * 250 = 500, less 10% = 450
+              "reference_date": "2026-06-01"
+          },
+          headers=headers
+      )
+      assert resp_calc.status_code == 200
+      data = resp_calc.json()
+      assert data["base_unit_price"]["amount"] == "250.00"
+      assert data["total_base_price"]["amount"] == "500.00"
+      assert data["final_price"]["amount"] == "450.00"
+E       fixture 'async_api_client' not found
+>       available fixtures: _asyncio_loop_factory, _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_client, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, db_engine, db_session, doctest_namespace, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/gustavo/Documents/dev/projects/ddn_management/backend/tests/integration/pricing/test_pricing_api.py:6
+______ ERROR at setup of test_pricing_repository_save_and_retrieve_table _______
+file /Users/gustavo/Documents/dev/projects/ddn_management/backend/tests/integration/pricing/test_pricing_repository.py, line 13
+  async def test_pricing_repository_save_and_retrieve_table(db_session, test_tenant_id):
+      repo = PricingRepository(db_session)
+
+      table = PriceTable(name="Integration Table", effective_date=date(2026, 1, 1), is_active=True)
+      service_id = uuid4()
+      uom_id = uuid4()
+      table.add_item(service_id, uom_id, Money(Decimal("150.00")))
+
+      await repo.save_price_table(table, test_tenant_id)
+      await db_session.commit()
+
+      loaded = await repo.get_price_table_by_id(table.id)
+      assert loaded is not None
+      assert loaded.name == "Integration Table"
+      assert len(loaded.items) == 1
+      assert loaded.items[0].unit_price.amount == Decimal("150.00")
+E       fixture 'test_tenant_id' not found
+>       available fixtures: _asyncio_loop_factory, _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_client, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, db_engine, db_session, doctest_namespace, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/gustavo/Documents/dev/projects/ddn_management/backend/tests/integration/pricing/test_pricing_repository.py:13
+______________ ERROR at setup of test_get_applicable_price_tables ______________
+file /Users/gustavo/Documents/dev/projects/ddn_management/backend/tests/integration/pricing/test_pricing_repository.py, line 30
+  async def test_get_applicable_price_tables(db_session, test_tenant_id):
+      repo = PricingRepository(db_session)
+
+      service_id = uuid4()
+      uom_id = uuid4()
+
+      table = PriceTable(name="Active Global", effective_date=date(2025, 1, 1), is_active=True)
+      table.add_item(service_id, uom_id, Money(Decimal("100.00")))
+
+      await repo.save_price_table(table, test_tenant_id)
+      await db_session.commit()
+
+      tables = await repo.get_applicable_price_tables(
+          service_offering_id=service_id,
+          unit_of_measure_id=uom_id,
+          reference_date=date(2026, 1, 1)
+      )
+
+      assert len(tables) == 1
+      assert tables[0].id == table.id
+E       fixture 'test_tenant_id' not found
+>       available fixtures: _asyncio_loop_factory, _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_client, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, db_engine, db_session, doctest_namespace, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/gustavo/Documents/dev/projects/ddn_management/backend/tests/integration/pricing/test_pricing_repository.py:30
+________________ ERROR at setup of test_save_and_retrieve_rule _________________
+file /Users/gustavo/Documents/dev/projects/ddn_management/backend/tests/integration/pricing/test_pricing_repository.py, line 51
+  async def test_save_and_retrieve_rule(db_session, test_tenant_id):
+      repo = PricingRepository(db_session)
+
+      rule = PricingRule(
+          name="Global 10%",
+          scope=PricingRuleScope.GLOBAL,
+          rule_type=PricingRuleType.PERCENTAGE_DISCOUNT,
+          value=Decimal("10.00"),
+          priority=1
+      )
+
+      await repo.save_pricing_rule(rule, test_tenant_id)
+      await db_session.commit()
+
+      rules = await repo.get_applicable_pricing_rules(service_offering_id=uuid4())
+      assert len(rules) == 1
+      assert rules[0].name == "Global 10%"
+E       fixture 'test_tenant_id' not found
+>       available fixtures: _asyncio_loop_factory, _class_scoped_runner, _function_scoped_runner, _module_scoped_runner, _package_scoped_runner, _session_scoped_runner, anyio_backend, anyio_backend_name, anyio_backend_options, async_client, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, db_engine, db_session, doctest_namespace, event_loop_policy, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, unused_tcp_port, unused_tcp_port_factory, unused_udp_port, unused_udp_port_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/gustavo/Documents/dev/projects/ddn_management/backend/tests/integration/pricing/test_pricing_repository.py:51
+=================================== FAILURES ===================================
+____________________ test_engine_calculates_price_correctly ____________________
+
+    def test_engine_calculates_price_correctly():
+        engine = PriceCalculationEngine()
+        service_offering_id = uuid4()
+        uom_id = uuid4()
+        customer_id = uuid4()
+    
+        # Setup global table
+>       global_table = PriceTable(name="Global 2026", effective_date=date(2026, 1, 1))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: Can't instantiate abstract class PriceTable without an implementation for abstract methods 'id', 'version'
+
+tests/modules/pricing/domain/test_price_calculation_engine.py:18: TypeError
+_________________________ test_engine_table_precedence _________________________
+
+    def test_engine_table_precedence():
+        engine = PriceCalculationEngine()
+        service_offering_id = uuid4()
+        uom_id = uuid4()
+        customer_id = uuid4()
+    
+>       global_table = PriceTable(name="Global 2026", effective_date=date(2026, 1, 1))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: Can't instantiate abstract class PriceTable without an implementation for abstract methods 'id', 'version'
+
+tests/modules/pricing/domain/test_price_calculation_engine.py:61: TypeError
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.14.2-final-0 _______________
+
+Name                                                                           Stmts   Miss Branch BrPart  Cover
+----------------------------------------------------------------------------------------------------------------
+apps/api_gateway/src/main.py                                                      61     23      4      0    58%
+apps/api_gateway/src/routes/auth.py                                               52     32      4      0    36%
+apps/api_gateway/src/routes/catalog.py                                            52     31      0      0    40%
+apps/api_gateway/src/routes/commercial.py                                         53     20      0      0    62%
+apps/api_gateway/src/routes/dashboard.py                                          15      3      0      0    80%
+apps/api_gateway/src/routes/fleet.py                                              10      0      0      0   100%
+apps/api_gateway/src/routes/pricing.py                                            42     21      0      0    50%
+apps/api_gateway/src/routes/routing.py                                            50     29      4      0    39%
+apps/api_gateway/src/routes/tenant.py                                             20      7      2      0    59%
+cli.py                                                                            25     25      4      0     0%
+database/core/base.py                                                             10      1      0      0    90%
+database/core/unit_of_work.py                                                     39     16      2      0    56%
+database/session.py                                                               25     13      8      0    36%
+modules/audit/domain/entities/audit_log.py                                        15      0      0      0   100%
+modules/audit/services/audit_listener.py                                          43     26     10      0    32%
+modules/catalog/__init__.py                                                        0      0      0      0   100%
+modules/catalog/application/__init__.py                                            0      0      0      0   100%
+modules/catalog/application/dto/requests.py                                       22      0      0      0   100%
+modules/catalog/application/services/__init__.py                                   0      0      0      0   100%
+modules/catalog/application/services/catalog_service.py                           81     64     20      0    17%
+modules/catalog/domain/__init__.py                                                 0      0      0      0   100%
+modules/catalog/domain/entities/__init__.py                                        0      0      0      0   100%
+modules/catalog/domain/entities/service_attribute.py                              42     17      8      0    50%
+modules/catalog/domain/entities/service_offering.py                               52     23     10      0    47%
+modules/catalog/domain/entities/unit_of_measure.py                                38     14      6      0    55%
+modules/catalog/domain/events.py                                                  17      0      0      0   100%
+modules/catalog/infrastructure/__init__.py                                         0      0      0      0   100%
+modules/catalog/infrastructure/orm_models.py                                      50      0      0      0   100%
+modules/catalog/infrastructure/repositories/__init__.py                            0      0      0      0   100%
+modules/catalog/infrastructure/repositories/catalog_repository.py                 81     62     18      0    19%
+modules/commercial/__init__.py                                                     0      0      0      0   100%
+modules/commercial/application/__init__.py                                         0      0      0      0   100%
+modules/commercial/application/services/__init__.py                                0      0      0      0   100%
+modules/commercial/application/services/company_service.py                        15      8      2      0    41%
+modules/commercial/application/services/lead_service.py                           37     27     10      0    21%
+modules/commercial/application/services/opportunity_service.py                    11      4      0      0    64%
+modules/commercial/domain/__init__.py                                              0      0      0      0   100%
+modules/commercial/domain/entities/__init__.py                                     0      0      0      0   100%
+modules/commercial/domain/entities/company.py                                     25      6      2      0    70%
+modules/commercial/domain/entities/lead.py                                        45     19      8      0    49%
+modules/commercial/domain/entities/opportunity.py                                 33     11      4      0    59%
+modules/commercial/domain/events.py                                               13      0      0      0   100%
+modules/commercial/domain/exceptions.py                                            5      0      0      0   100%
+modules/commercial/infrastructure/__init__.py                                      0      0      0      0   100%
+modules/commercial/infrastructure/models.py                                       67      0      0      0   100%
+modules/commercial/infrastructure/repositories/__init__.py                         0      0      0      0   100%
+modules/commercial/infrastructure/repositories/company_repository.py              36     25      6      0    26%
+modules/commercial/infrastructure/repositories/lead_repository.py                 30     20      4      0    29%
+modules/commercial/infrastructure/repositories/opportunity_repository.py          29     19      4      0    30%
+modules/core/config/__init__.py                                                    2      0      0      0   100%
+modules/core/config/database.py                                                    9      1      0      0    89%
+modules/core/config/security.py                                                    8      0      0      0   100%
+modules/core/config/settings.py                                                   14      0      0      0   100%
+modules/core/context/__init__.py                                                   4      0      0      0   100%
+modules/core/context/accessor.py                                                   9      0      0      0   100%
+modules/core/context/context_vars_accessor.py                                     25      9      0      0    64%
+modules/core/context/models.py                                                    17      0      0      0   100%
+modules/core/domain/aggregate.py                                                  15      9      4      0    32%
+modules/core/domain/events.py                                                     20      6      0      0    70%
+modules/core/domain/id_generator.py                                                6      1      0      0    83%
+modules/core/logging/logger.py                                                     8      0      0      0   100%
+modules/core/observability/middleware.py                                          32     20      0      0    38%
+modules/dashboard/application/dto/dashboard_dto.py                                 2      0      0      0   100%
+modules/dashboard/application/services/dashboard_service.py                        9      3      0      0    67%
+modules/dashboard/infrastructure/repositories/dashboard_read_repository.py        25     11      0      0    56%
+modules/fleet/application/dto.py                                                   6      0      0      0   100%
+modules/fleet/domain/entities/driver.py                                           35     15     10      0    44%
+modules/fleet/domain/entities/vehicle.py                                          38     13      8      0    54%
+modules/fleet/infrastructure/orm_models.py                                        24      0      0      0   100%
+modules/identity/dependencies.py                                                  45     28      8      0    32%
+modules/identity/domain/dto.py                                                     9      0      0      0   100%
+modules/identity/domain/entities/refresh_token.py                                 19      0      0      0   100%
+modules/identity/domain/entities/user.py                                          22      0      0      0   100%
+modules/identity/services/auth_service.py                                         17      8      2      0    47%
+modules/pricing/__init__.py                                                        0      0      0      0   100%
+modules/pricing/application/__init__.py                                            0      0      0      0   100%
+modules/pricing/application/dto/__init__.py                                        0      0      0      0   100%
+modules/pricing/application/dto/requests.py                                       28      0      0      0   100%
+modules/pricing/application/services/__init__.py                                   0      0      0      0   100%
+modules/pricing/application/services/pricing_service.py                           43     27      2      0    36%
+modules/pricing/domain/__init__.py                                                 0      0      0      0   100%
+modules/pricing/domain/entities/__init__.py                                        0      0      0      0   100%
+modules/pricing/domain/entities/price_table.py                                    44     29     10      0    28%
+modules/pricing/domain/entities/pricing_rule.py                                   42     32     16      0    17%
+modules/pricing/domain/events.py                                                   9      0      0      0   100%
+modules/pricing/domain/services/__init__.py                                        0      0      0      0   100%
+modules/pricing/domain/services/price_calculation_engine.py                       36     27     16      0    17%
+modules/pricing/domain/value_objects.py                                           30      6      4      0    71%
+modules/pricing/infrastructure/__init__.py                                         0      0      0      0   100%
+modules/pricing/infrastructure/orm_models.py                                      44      0      0      0   100%
+modules/pricing/infrastructure/repositories/__init__.py                            0      0      0      0   100%
+modules/pricing/infrastructure/repositories/pricing_repository.py                 83     64     20      0    18%
+modules/routing/__init__.py                                                        0      0      0      0   100%
+modules/routing/application/__init__.py                                            0      0      0      0   100%
+modules/routing/application/dto.py                                                19      0      0      0   100%
+modules/routing/application/repositories.py                                        8      0      0      0   100%
+modules/routing/application/use_cases/__init__.py                                  0      0      0      0   100%
+modules/routing/application/use_cases/add_stop.py                                 19     12      2      0    33%
+modules/routing/application/use_cases/create_route.py                             28     20     10      0    21%
+modules/routing/domain/__init__.py                                                 0      0      0      0   100%
+modules/routing/domain/entities/__init__.py                                        0      0      0      0   100%
+modules/routing/domain/entities/route.py                                          88     45     24      0    38%
+modules/routing/domain/events.py                                                  19      0      0      0   100%
+modules/routing/domain/exceptions.py                                               6      0      0      0   100%
+modules/routing/infrastructure/__init__.py                                         0      0      0      0   100%
+modules/routing/infrastructure/orm_models.py                                      31      0      0      0   100%
+modules/routing/infrastructure/repositories/__init__.py                            0      0      0      0   100%
+modules/routing/infrastructure/repositories/sqlalchemy_routing_repository.py      44     34     12      0    18%
+modules/tenant/domain/dto.py                                                       7      0      0      0   100%
+modules/tenant/domain/entities/tenant.py                                          26      0      0      0   100%
+modules/tenant/domain/entities/tenant_user.py                                     21      0      0      0   100%
+shared_kernel/__init__.py                                                          0      0      0      0   100%
+shared_kernel/contracts/__init__.py                                                0      0      0      0   100%
+shared_kernel/contracts/aggregate_root.py                                         24      9      4      0    54%
+shared_kernel/events/__init__.py                                                   0      0      0      0   100%
+shared_kernel/events/base.py                                                       7      0      0      0   100%
+shared_kernel/exceptions/__init__.py                                               0      0      0      0   100%
+shared_kernel/exceptions/domain.py                                                 1      1      0      0     0%
+shared_kernel/messaging/__init__.py                                                0      0      0      0   100%
+shared_kernel/messaging/outbox_repository.py                                      24      0      0      0   100%
+shared_kernel/policies/__init__.py                                                 0      0      0      0   100%
+shared_kernel/policies/base.py                                                    24     24      2      0     0%
+shared_kernel/specifications/__init__.py                                           0      0      0      0   100%
+shared_kernel/specifications/base.py                                              59     59      8      0     0%
+shared_kernel/value_objects/__init__.py                                            0      0      0      0   100%
+shared_kernel/value_objects/base.py                                                6      6      0      0     0%
+tests/conftest.py                                                                 43     12      0      0    72%
+tests/integration/pricing/test_pricing_api.py                                     21     17      0      0    19%
+tests/integration/pricing/test_pricing_repository.py                              41     29      0      0    29%
+tests/modules/pricing/domain/test_price_calculation_engine.py                     32     12      0      0    62%
+----------------------------------------------------------------------------------------------------------------
+TOTAL                                                                           2618   1155    302      0    50%
+Coverage XML written to file coverage.xml
+=========================== short test summary info ============================
+ERROR tests/integration/pricing/test_pricing_api.py::test_create_price_table
+ERROR tests/integration/pricing/test_pricing_repository.py::test_pricing_repository_save_and_retrieve_table
+ERROR tests/integration/pricing/test_pricing_repository.py::test_get_applicable_price_tables
+ERROR tests/integration/pricing/test_pricing_repository.py::test_save_and_retrieve_rule
+FAILED tests/modules/pricing/domain/test_price_calculation_engine.py::test_engine_calculates_price_correctly
+FAILED tests/modules/pricing/domain/test_price_calculation_engine.py::test_engine_table_precedence
+========================= 2 failed, 4 errors in 0.46s ==========================
