@@ -17,6 +17,17 @@ export const handlers = [
       created_at: "2024-01-01T00:00:00Z"
     });
   }),
+  http.post('http://localhost:3000/api/v1/contracts', async ({ request }) => {
+    const data = await request.json() as any;
+    return HttpResponse.json({
+      id: `ctr-${Math.random().toString(36).substr(2, 9)}`,
+      quotation_id: data.quotation_id,
+      customer_id: data.company_id,
+      status: "DRAFT",
+      created_at: new Date().toISOString(),
+      valid_until: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString()
+    });
+  }),
   http.get('http://localhost:3000/api/v1/contracts', () => {
     return HttpResponse.json([
       {

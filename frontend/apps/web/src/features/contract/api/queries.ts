@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Contract, ContractStatus } from "../../../entities/contract/model/types";
 
 // Fallback interface matching what our API would look like
@@ -42,5 +42,20 @@ export function useContractsQuery() {
       const data: ContractDTO[] = await response.json();
       return data.map(mapContractDTOToUI);
     }
+  });
+}
+
+export function useCreateContractMutation() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async (data: import("@repo/api").ContractCreateRequest) => {
+      const { createContractApiV1ContractsPost } = await import("@repo/api");
+      const response = await createContractApiV1ContractsPost(data);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["contracts"] });
+    },
   });
 }
