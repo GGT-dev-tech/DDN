@@ -89,3 +89,12 @@ def assign_route_resources(
         raise HTTPException(status_code=404, detail=str(e))
     except RoutingDomainException as e:
         raise HTTPException(status_code=422, detail=str(e))
+
+from modules.routing.application.use_cases.list_routes import ListRoutes
+
+@router.get("/routes", response_model=list[RouteResponseDTO])
+def list_routes(
+    routing_repo: SQLAlchemyRoutingRepository = Depends(get_routing_repository)
+):
+    use_case = ListRoutes(routing_repo)
+    return use_case.execute()

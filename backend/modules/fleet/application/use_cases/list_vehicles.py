@@ -1,0 +1,21 @@
+from modules.fleet.application.dto import VehicleResponseDTO
+from modules.fleet.application.repositories import FleetRepository
+
+class ListVehicles:
+    def __init__(self, repository: FleetRepository):
+        self.repository = repository
+
+    def execute(self) -> list[VehicleResponseDTO]:
+        vehicles = self.repository.list_vehicles()
+        return [
+            VehicleResponseDTO(
+                id=v.id,
+                tenant_id=v.tenant_id,
+                license_plate=v.license_plate,
+                vehicle_type=v.vehicle_type,
+                capacity_volume=v.capacity_volume,
+                capacity_weight=v.capacity_weight,
+                status=v.status
+            )
+            for v in vehicles
+        ]

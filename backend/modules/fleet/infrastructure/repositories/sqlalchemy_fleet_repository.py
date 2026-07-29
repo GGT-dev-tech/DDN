@@ -75,3 +75,31 @@ class SQLAlchemyFleetRepository(FleetRepository):
             license_number=model.license_number,
             status=model.status
         )
+
+    def list_vehicles(self) -> list[Vehicle]:
+        models = self.session.query(VehicleModel).all()
+        return [
+            Vehicle(
+                id=m.id,
+                tenant_id=m.tenant_id,
+                license_plate=m.license_plate,
+                vehicle_type=m.vehicle_type,
+                capacity_volume=m.capacity_volume,
+                capacity_weight=m.capacity_weight,
+                status=m.status
+            )
+            for m in models
+        ]
+
+    def list_drivers(self) -> list[Driver]:
+        models = self.session.query(DriverModel).all()
+        return [
+            Driver(
+                id=m.id,
+                tenant_id=m.tenant_id,
+                name=m.name,
+                license_number=m.license_number,
+                status=m.status
+            )
+            for m in models
+        ]

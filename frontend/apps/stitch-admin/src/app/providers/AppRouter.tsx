@@ -1,6 +1,10 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AppLayout } from '../../widgets/layout/AppLayout'
 import { DashboardPage } from '../../pages/Dashboard/DashboardPage'
+import { RoutesPage } from '../../pages/Routes/RoutesPage'
+import { FleetPage } from '../../pages/Fleet/FleetPage'
+import { DriversPage } from '../../pages/Drivers/DriversPage'
+import { SettingsPage } from '../../pages/Settings/SettingsPage'
 
 const router = createBrowserRouter([
   {
@@ -11,22 +15,21 @@ const router = createBrowserRouter([
         index: true,
         element: <DashboardPage />,
       },
-      // Other routes to be implemented in Sprint 6
       {
         path: 'routes',
-        element: <div className="p-4">Routes Content (WIP)</div>,
+        element: <RoutesPage />,
       },
       {
         path: 'fleet',
-        element: <div className="p-4">Fleet Content (WIP)</div>,
+        element: <FleetPage />,
       },
       {
         path: 'drivers',
-        element: <div className="p-4">Drivers Content (WIP)</div>,
+        element: <DriversPage />,
       },
       {
         path: 'settings',
-        element: <div className="p-4">Settings Content (WIP)</div>,
+        element: <SettingsPage />,
       },
     ],
   },

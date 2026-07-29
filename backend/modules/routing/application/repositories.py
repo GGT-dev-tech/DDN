@@ -12,3 +12,7 @@ class RoutingRepository(ABC):
     @abstractmethod
     def get_by_id(self, route_id: UUID) -> Route | None:
         """Gets a route by its ID"""
+
+    @abstractmethod
+    def list_routes(self) -> list[Route]:
+        """Gets all routes"""

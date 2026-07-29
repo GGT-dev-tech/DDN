@@ -98,3 +98,7 @@ class SQLAlchemyRoutingRepository(RoutingRepository):
         if not model:
             return None
         return self._to_domain(model)
+
+    def list_routes(self) -> list[Route]:
+        models = self.session.query(RouteModel).options(selectinload(RouteModel.stops)).all()
+        return [self._to_domain(m) for m in models]

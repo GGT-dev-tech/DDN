@@ -5,7 +5,7 @@ export default defineConfig({
     input: {
       // Usa a API Real rodando localmente (VITE_API_MODE=real)
       // O CI pode sobrescrever passando --input openapi.json localmente se necessário
-      target: '../../../backend/tests/architecture/snapshots/openapi_v1.json',
+      target: '../../../backend/openapi.json',
     },
     output: {
       mode: 'tags-split',

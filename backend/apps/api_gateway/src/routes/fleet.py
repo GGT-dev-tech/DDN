@@ -32,3 +32,19 @@ def register_driver(
     context_accessor: dict = Depends(get_context_accessor)
 ):
     pass
+
+from modules.fleet.application.use_cases.list_vehicles import ListVehicles
+from modules.fleet.application.use_cases.list_drivers import ListDrivers
+from modules.fleet.infrastructure.repositories.sqlalchemy_fleet_repository import SQLAlchemyFleetRepository
+
+@router.get("/vehicles", response_model=list[VehicleResponseDTO])
+def list_vehicles(db: Session = Depends(get_db)):
+    repo = SQLAlchemyFleetRepository(db)
+    use_case = ListVehicles(repo)
+    return use_case.execute()
+
+@router.get("/drivers", response_model=list[DriverResponseDTO])
+def list_drivers(db: Session = Depends(get_db)):
+    repo = SQLAlchemyFleetRepository(db)
+    use_case = ListDrivers(repo)
+    return use_case.execute()

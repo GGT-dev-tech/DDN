@@ -168,6 +168,29 @@
       }
     },
     "/routing/routes": {
+      "get": {
+        "tags": [
+          "Routing"
+        ],
+        "summary": "List Routes",
+        "operationId": "list_routes_routing_routes_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RouteResponseDTO"
+                  },
+                  "type": "array",
+                  "title": "Response List Routes Routing Routes Get"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Routing"
@@ -313,6 +336,29 @@
       }
     },
     "/fleet/vehicles": {
+      "get": {
+        "tags": [
+          "Fleet"
+        ],
+        "summary": "List Vehicles",
+        "operationId": "list_vehicles_fleet_vehicles_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/VehicleResponseDTO"
+                  },
+                  "type": "array",
+                  "title": "Response List Vehicles Fleet Vehicles Get"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Fleet"
@@ -354,6 +400,29 @@
       }
     },
     "/fleet/drivers": {
+      "get": {
+        "tags": [
+          "Fleet"
+        ],
+        "summary": "List Drivers",
+        "operationId": "list_drivers_fleet_drivers_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DriverResponseDTO"
+                  },
+                  "type": "array",
+                  "title": "Response List Drivers Fleet Drivers Get"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Fleet"
@@ -1784,6 +1853,295 @@
         }
       }
     },
+    "/api/v1/service-plans/{plan_id}": {
+      "get": {
+        "tags": [
+          "Service Plans"
+        ],
+        "summary": "Get Plan",
+        "operationId": "get_plan_api_v1_service_plans__plan_id__get",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Plan Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Plan Api V1 Service Plans  Plan Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Service Plans"
+        ],
+        "summary": "Update Schedules",
+        "description": "Batch update of schedule details (CollectionPoint + Recurrence).\nOnly allowed while the plan is in DRAFT status.\nAll schedules are applied in a single transactional operation.",
+        "operationId": "update_schedules_api_v1_service_plans__plan_id__patch",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Plan Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSchedulesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Update Schedules Api V1 Service Plans  Plan Id  Patch"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/service-plans/contract/{contract_id}": {
+      "get": {
+        "tags": [
+          "Service Plans"
+        ],
+        "summary": "List Plans By Contract",
+        "operationId": "list_plans_by_contract_api_v1_service_plans_contract__contract_id__get",
+        "parameters": [
+          {
+            "name": "contract_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Contract Id"
+            }
+          },
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Tenant Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {},
+                  "title": "Response List Plans By Contract Api V1 Service Plans Contract  Contract Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/service-plans/{plan_id}/publish": {
+      "post": {
+        "tags": [
+          "Service Plans"
+        ],
+        "summary": "Publish Plan",
+        "operationId": "publish_plan_api_v1_service_plans__plan_id__publish_post",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Plan Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Publish Plan Api V1 Service Plans  Plan Id  Publish Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/service-plans/{plan_id}/suspend": {
+      "post": {
+        "tags": [
+          "Service Plans"
+        ],
+        "summary": "Suspend Plan",
+        "operationId": "suspend_plan_api_v1_service_plans__plan_id__suspend_post",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Plan Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Suspend Plan Api V1 Service Plans  Plan Id  Suspend Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/service-plans/{plan_id}/reactivate": {
+      "post": {
+        "tags": [
+          "Service Plans"
+        ],
+        "summary": "Reactivate Plan",
+        "operationId": "reactivate_plan_api_v1_service_plans__plan_id__reactivate_post",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Plan Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Reactivate Plan Api V1 Service Plans  Plan Id  Reactivate Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health/live": {
       "get": {
         "tags": [
@@ -1973,6 +2331,52 @@
           "reference_date"
         ],
         "title": "CalculateQuotationRequest"
+      },
+      "CollectionPointRequest": {
+        "properties": {
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "latitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latitude"
+          },
+          "longitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Longitude"
+          },
+          "reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference"
+          }
+        },
+        "type": "object",
+        "required": [
+          "address"
+        ],
+        "title": "CollectionPointRequest"
       },
       "ContractCreateRequest": {
         "properties": {
@@ -2717,6 +3121,47 @@
         ],
         "title": "PricingRuleType"
       },
+      "RecurrenceRequest": {
+        "properties": {
+          "frequency": {
+            "type": "string",
+            "title": "Frequency"
+          },
+          "interval": {
+            "type": "integer",
+            "title": "Interval",
+            "default": 1
+          },
+          "weekdays": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Weekdays",
+            "default": []
+          },
+          "start_time": {
+            "type": "string",
+            "title": "Start Time"
+          },
+          "end_time": {
+            "type": "string",
+            "title": "End Time"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone",
+            "default": "America/Sao_Paulo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "frequency",
+          "start_time",
+          "end_time"
+        ],
+        "title": "RecurrenceRequest"
+      },
       "RegisterDriverRequestDTO": {
         "properties": {
           "name": {
@@ -2887,6 +3332,51 @@
           "stops"
         ],
         "title": "RouteResponseDTO"
+      },
+      "ScheduleUpdateRequest": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "collection_point": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CollectionPointRequest"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "recurrence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RecurrenceRequest"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "ScheduleUpdateRequest"
       },
       "ServiceAttributeResponse": {
         "properties": {
@@ -3065,6 +3555,22 @@
           "id"
         ],
         "title": "UOMResponse"
+      },
+      "UpdateSchedulesRequest": {
+        "properties": {
+          "schedules": {
+            "items": {
+              "$ref": "#/components/schemas/ScheduleUpdateRequest"
+            },
+            "type": "array",
+            "title": "Schedules"
+          }
+        },
+        "type": "object",
+        "required": [
+          "schedules"
+        ],
+        "title": "UpdateSchedulesRequest"
       },
       "UserLoginRequest": {
         "properties": {

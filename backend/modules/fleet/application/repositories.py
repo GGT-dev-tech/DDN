@@ -21,3 +21,11 @@ class FleetRepository(ABC):
     @abstractmethod
     def get_driver_by_id(self, driver_id: UUID) -> Driver | None:
         pass
+
+    @abstractmethod
+    def list_vehicles(self) -> list[Vehicle]:
+        pass
+
+    @abstractmethod
+    def list_drivers(self) -> list[Driver]:
+        pass
