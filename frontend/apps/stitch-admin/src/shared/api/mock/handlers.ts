@@ -36,5 +36,17 @@ export const handlers = [
         progress: 0,
       }
     ])
+  }),
+
+  // Mocking Dashboard Stats
+  http.get('*/api/v1/dashboard/stats', async () => {
+    await delay(800)
+    return HttpResponse.json({
+      active_routes: 12,
+      pending_deliveries: 450,
+      available_vehicles: 8,
+      active_drivers: 15,
+      total_completed_today: 120,
+    })
   })
 ]
