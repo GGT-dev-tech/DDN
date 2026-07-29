@@ -9,7 +9,7 @@ from httpx import AsyncClient
 async def test_register_uom_api(async_client: AsyncClient):
     tenant_id = str(uuid.uuid4())
     response = await async_client.post(
-        "/catalog/uom",
+        "/api/v1/catalog/uom",
         json={
             "symbol": "ton_api",
             "name": "Ton",
@@ -25,7 +25,7 @@ async def test_register_uom_api(async_client: AsyncClient):
 async def test_define_attribute_api(async_client: AsyncClient):
     tenant_id = str(uuid.uuid4())
     response = await async_client.post(
-        "/catalog/attributes",
+        "/api/v1/catalog/attributes",
         json={
             "name": "Frequency_api",
             "attribute_type": "FREQUENCY",
@@ -45,13 +45,13 @@ async def test_draft_and_activate_offering_api(async_client: AsyncClient):
     
     # Setup UOM
     uom_resp = await async_client.post(
-        "/catalog/uom", json={"symbol": "m3_api", "name": "M3", "base_type": "VOLUME"}, headers=headers
+        "/api/v1/catalog/uom", json={"symbol": "m3_api", "name": "M3", "base_type": "VOLUME"}, headers=headers
     )
     uom_id = uom_resp.json()["id"]
 
     # Setup Attribute
     attr_resp = await async_client.post(
-        "/catalog/attributes", json={
+        "/api/v1/catalog/attributes", json={
             "name": "Type_api", "attribute_type": "WASTE_TYPE", "possible_values": ["A", "B", "C"]
         }, headers=headers
     )
@@ -59,7 +59,7 @@ async def test_draft_and_activate_offering_api(async_client: AsyncClient):
 
     # Draft Offering
     draft_resp = await async_client.post(
-        "/catalog/offerings",
+        "/api/v1/catalog/offerings",
         json={
             "name": "Collection API",
             "description": "Collect waste",
@@ -74,7 +74,7 @@ async def test_draft_and_activate_offering_api(async_client: AsyncClient):
 
     # Attach Attribute
     attach_resp = await async_client.post(
-        f"/catalog/offerings/{offering_id}/attributes",
+        f"/api/v1/catalog/offerings/{offering_id}/attributes",
         json={
             "attribute_id": attr_id,
             "allowed_values": ["A", "B"]
@@ -84,5 +84,5 @@ async def test_draft_and_activate_offering_api(async_client: AsyncClient):
     assert attach_resp.status_code == 200
 
     # Activate
-    activate_resp = await async_client.post(f"/catalog/offerings/{offering_id}/activate", headers=headers)
+    activate_resp = await async_client.post(f"/api/v1/catalog/offerings/{offering_id}/activate", headers=headers)
     assert activate_resp.status_code == 200

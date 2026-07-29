@@ -55,7 +55,7 @@ async def test_register_lead(async_api_client):
     client, tenant_id = async_api_client
     
     response = await client.post(
-        "/commercial/leads",
+        "/api/v1/commercial/leads",
         json={
             "company_name": "API Test Corp",
             "contact_name": "API John",
@@ -75,7 +75,7 @@ async def test_qualify_lead(async_api_client):
     
     # Register first
     response = await client.post(
-        "/commercial/leads",
+        "/api/v1/commercial/leads",
         json={
             "company_name": "API Qualify Corp",
             "contact_name": "Jane",
@@ -87,7 +87,7 @@ async def test_qualify_lead(async_api_client):
     lead_id = response.json()["id"]
     
     # Qualify
-    qualify_response = await client.post(f"/commercial/leads/{lead_id}/qualify")
+    qualify_response = await client.post(f"/api/v1/commercial/leads/{lead_id}/qualify")
     print("Error output:", qualify_response.json())
     assert qualify_response.status_code == 200
     

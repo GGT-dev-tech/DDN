@@ -1,3 +1,4 @@
+from modules.core.domain.id_generator import IdGenerator
 from typing import Optional
 from uuid import UUID, uuid4
 from decimal import Decimal
@@ -20,7 +21,7 @@ class PricingRule(AggregateRoot):
         is_active: bool = True
     ):
         super().__init__()
-        self._id = id or uuid4()
+        self._id = id or IdGenerator.generate()
         self._version = 1
         self.name = name
         self.scope = scope

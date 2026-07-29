@@ -13,5 +13,8 @@ class ContractActivatedIntegrationEvent(IntegrationEvent):
     metadata: EventMetadata
     contract_id: uuid.UUID
     tenant_id: uuid.UUID
+    company_id: uuid.UUID           # enriched for Service Plan BC
     effective_date: str
+    expiration_date: str | None     # from ContractTerm.expiration_date
     items: list[dict[str, Any]]
+

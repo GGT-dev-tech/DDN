@@ -30,7 +30,7 @@ def test_uow_atomicity_and_event_collection():
     uow = SQLAlchemyUnitOfWork(session=mock_session, outbox_repository=mock_outbox_repo)
     
     aggregate = MockAggregate(id=uuid4(), version=1)
-    event = DomainEvent(
+    event = IntegrationEvent(
         metadata=EventMetadata(
             event_id=uuid4(),
             tenant_id=None,
@@ -65,7 +65,7 @@ def test_uow_rollback_clears_events():
     uow = SQLAlchemyUnitOfWork(session=mock_session, outbox_repository=mock_outbox_repo)
     
     aggregate = MockAggregate(id=uuid4(), version=1)
-    event = DomainEvent(
+    event = IntegrationEvent(
         metadata=EventMetadata(
             event_id=uuid4(),
             tenant_id=None,

@@ -63,7 +63,7 @@ class IntegrationEventFactory:
 
         # correlation_id mapeia 1:1 com o trace_id do request,
         # garantindo que toda a cadeia de eventos de uma request compartilha o mesmo ID.
-        correlation_id = req_ctx.trace_id if req_ctx else str(uuid.uuid4())
+        correlation_id = req_ctx.trace_id if req_ctx else str(IdGenerator.generate())
 
         return EventMetadata(
             event_id=IdGenerator.generate(),

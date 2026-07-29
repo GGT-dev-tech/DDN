@@ -32,11 +32,7 @@ class RouteStatus(Enum):
     COMPLETED = "COMPLETED"
     CANCELLED = "CANCELLED"
 
-@dataclass(frozen=True)
-class Location:
-    latitude: float
-    longitude: float
-    address: str
+from modules.routing.domain.value_objects import Location
 
 class StopStatus(Enum):
     SCHEDULED = "SCHEDULED"

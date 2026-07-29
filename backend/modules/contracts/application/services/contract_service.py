@@ -113,9 +113,15 @@ class ContractService:
             metadata=metadata,
             contract_id=contract.id,
             tenant_id=contract.tenant_id,
+            company_id=contract.company_id,
             effective_date=contract.terms.effective_date.isoformat(),
+            expiration_date=(
+                contract.terms.expiration_date.isoformat()
+                if contract.terms.expiration_date else None
+            ),
             items=items_payload,
         )
+
 
         # Integration event goes into Outbox
         self.outbox_repo.save([integration_event])

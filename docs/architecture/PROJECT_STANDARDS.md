@@ -100,3 +100,32 @@ Todo PR deve garantir a passagem no pipeline de CI com o seguinte checklist ante
 - [x] lints (Ruff, ESLint)
 - [x] tests (Pytest, Vitest)
 - [x] commit padronizado
+
+---
+
+## ADR-001 — JSONB para Value Objects do Service Plan (Sprint 12)
+
+**Status:** Accepted
+
+**Contexto:**
+`CollectionPoint` e `Recurrence` são Value Objects do BC Service Plan.
+Eles não possuem identidade própria e nunca são consultados isoladamente.
+O custo de criar tabelas separadas (com FK e JOIN) para objetos sem identidade
+viola o princípio de que VOs são parte do Aggregate que os contém.
+
+**Decisão:**
+Armazenar `CollectionPoint` e `Recurrence` como colunas `JSONB` nas tabelas
+`service_plan_plans` e `service_plan_schedules`.
+
+**Consequências conhecidas:**
+- ✅ Sem JOIN para recuperar o Aggregate completo.
+- ✅ Facilidade de evolução do VO sem migration de coluna.
+- ⚠️ Queries SQL por campos internos (`recurrence->>'timezone'`) são possíveis mas
+  devem ser evitadas. Se o produto exigir filtros como "quais coletas ocorrem às
+  segundas-feiras?", reavaliar a decisão e migrar para colunas explícitas ou índices
+  GIN/funcional no JSONB.
+- ⚠️ Não há validação de schema no banco — a integridade é garantida pelo domínio.
+  Qualquer corrupção do JSONB deve ser detectada na camada de mapeamento do repositório.
+
+**Revisão:** Reavaliar se o Routing BC ou um futuro serviço de Analytics precisar
+filtrar schedules por campos internos da Recurrence.

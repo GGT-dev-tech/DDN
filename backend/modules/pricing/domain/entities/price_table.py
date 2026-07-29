@@ -1,3 +1,4 @@
+from modules.core.domain.id_generator import IdGenerator
 from typing import List, Optional
 from uuid import UUID, uuid4
 from datetime import date
@@ -13,7 +14,7 @@ class PriceTableItem:
         unit_price: Money,
         id: Optional[UUID] = None
     ):
-        self.id = id or uuid4()
+        self.id = id or IdGenerator.generate()
         self.service_offering_id = service_offering_id
         self.unit_of_measure_id = unit_of_measure_id
         self.unit_price = unit_price
@@ -30,7 +31,7 @@ class PriceTable(AggregateRoot):
         is_active: bool = False
     ):
         super().__init__()
-        self._id = id or uuid4()
+        self._id = id or IdGenerator.generate()
         self._version = 1
         self.name = name
         self.effective_date = effective_date

@@ -1,3 +1,4 @@
+from modules.core.domain.id_generator import IdGenerator
 import uuid
 from datetime import UTC, datetime
 
@@ -28,7 +29,7 @@ class Contract(AggregateRoot):
         updated_at: datetime | None = None
     ):
         super().__init__()
-        self._id = id or uuid.uuid4()
+        self._id = id or IdGenerator.generate()
         self.company_id = company_id
         self.tenant_id = tenant_id
         self.quotation_id = quotation_id  # Reference to origin if any

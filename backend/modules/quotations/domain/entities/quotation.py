@@ -1,3 +1,4 @@
+from modules.core.domain.id_generator import IdGenerator
 import uuid
 from datetime import UTC, datetime
 from decimal import Decimal
@@ -25,7 +26,7 @@ class QuotationItem:
         id: uuid.UUID | None = None,
         snapshot: QuotationItemSnapshot | None = None
     ):
-        self.id = id or uuid.uuid4()
+        self.id = id or IdGenerator.generate()
         self.service_offering_id = service_offering_id
         self.unit_of_measure_id = unit_of_measure_id
         self.quantity = quantity
@@ -47,7 +48,7 @@ class Quotation(AggregateRoot):
         updated_at: datetime | None = None
     ):
         super().__init__()
-        self._id = id or uuid.uuid4()
+        self._id = id or IdGenerator.generate()
         self.tenant_id = tenant_id
         self.company_id = company_id
         self.status = status

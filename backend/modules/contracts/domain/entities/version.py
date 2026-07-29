@@ -1,3 +1,4 @@
+from modules.core.domain.id_generator import IdGenerator
 import uuid
 from datetime import UTC, datetime
 from decimal import Decimal
@@ -14,7 +15,7 @@ class ContractItem:
         snapshot: ContractItemSnapshot,
         id: uuid.UUID | None = None
     ):
-        self.id = id or uuid.uuid4()
+        self.id = id or IdGenerator.generate()
         self.service_offering_id = service_offering_id
         self.unit_of_measure_id = unit_of_measure_id
         self.quantity = quantity
@@ -28,7 +29,7 @@ class ContractVersion:
         id: uuid.UUID | None = None,
         created_at: datetime | None = None
     ):
-        self.id = id or uuid.uuid4()
+        self.id = id or IdGenerator.generate()
         self.version_number = version_number
         self.created_at = created_at or datetime.now(UTC)
         self.items: list[ContractItem] = []
