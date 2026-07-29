@@ -4,28 +4,24 @@ import { useServicePlans } from "../../../features/service-plan/api/queries";
 import { ServicePlanTable } from "../../../entities/service-plan/ui/service-plan-table";
 import { ServicePlanDrawer } from "../../../entities/service-plan/ui/service-plan-drawer";
 import { ServicePlan } from "../../../entities/service-plan/model/types";
-import { useState } from "react";
+import { useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 
-export default function ServicePlansPage() {
-  const [contractId, setContractId] = useState("mock-contract-id-123");
+function ServicePlansContent() {
+  const searchParams = useSearchParams();
+  const contractId = searchParams.get("contractId") || "";
   const { data: plans, isLoading, error } = useServicePlans(contractId);
   const [selectedPlan, setSelectedPlan] = useState<ServicePlan | null>(null);
 
   return (
-    <div className="p-8 max-w-6xl mx-auto space-y-6">
+    <>
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold tracking-tight">Service Plans</h1>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Service Plans {contractId && <span className="text-zinc-500 text-lg font-normal ml-2">for Contract: {contractId}</span>}
+        </h1>
       </div>
       
-      <div className="flex gap-4 items-center">
-        <label className="text-sm font-medium">Contract ID:</label>
-        <input 
-          type="text" 
-          value={contractId} 
-          onChange={e => setContractId(e.target.value)}
-          className="border rounded p-2 text-sm w-64"
-        />
-      </div>
+      {/* Removed manual input since it comes from the URL now */}
 
       {isLoading && (
         <div className="p-8 text-center text-zinc-500 animate-pulse">
@@ -51,6 +47,16 @@ export default function ServicePlansPage() {
         isOpen={!!selectedPlan} 
         onOpenChange={(open) => !open && setSelectedPlan(null)} 
       />
+    </>
+  );
+}
+
+export default function ServicePlansPage() {
+  return (
+    <div className="p-8 max-w-6xl mx-auto space-y-6">
+      <Suspense fallback={<div className="p-8 text-center text-zinc-500 animate-pulse">Loading...</div>}>
+        <ServicePlansContent />
+      </Suspense>
     </div>
   );
 }
