@@ -4,7 +4,7 @@ import { Modal } from '../../../shared/ui/components/Modal';
 import { Input } from '../../../shared/ui/components/Input';
 import { Button } from '../../../shared/ui/components/Button';
 import { Select } from '../../../shared/ui/components/Select';
-import { useRegisterVehicleFleetVehiclesPost, getListVehiclesFleetVehiclesGetQueryKey } from '../../../shared/api/generated/fleet/fleet';
+import { useRegisterVehicleApiV1FleetVehiclesPost, getListVehiclesApiV1FleetVehiclesGetQueryKey } from '../../../shared/api/generated/fleet/fleet';
 
 interface AddVehicleModalProps {
   isOpen: boolean;
@@ -13,7 +13,7 @@ interface AddVehicleModalProps {
 
 export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
   const queryClient = useQueryClient();
-  const { mutateAsync: registerVehicle, isPending } = useRegisterVehicleFleetVehiclesPost();
+  const { mutateAsync: registerVehicle, isPending } = useRegisterVehicleApiV1FleetVehiclesPost();
   
   const [licensePlate, setLicensePlate] = useState('');
   const [vehicleType, setVehicleType] = useState<string>('VAN');
@@ -34,7 +34,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
         }
       });
       // Invalidate the query so the table refreshes
-      queryClient.invalidateQueries({ queryKey: getListVehiclesFleetVehiclesGetQueryKey() });
+      queryClient.invalidateQueries({ queryKey: getListVehiclesApiV1FleetVehiclesGetQueryKey() });
       
       // Clear form and close
       setLicensePlate('');

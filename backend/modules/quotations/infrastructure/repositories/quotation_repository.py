@@ -135,3 +135,56 @@ class QuotationRepository:
         stmt = select(QuotationItemModel).where(QuotationItemModel.quotation_id == quotation_id)
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
+
+    async def list_quotations(self, tenant_id: uuid.UUID) -> list[Quotation]:
+        stmt = (
+            select(QuotationModel)
+            .options(
+                selectinload(QuotationModel.items)
+                .selectinload(QuotationItemModel.snapshot)
+            )
+            .where(QuotationModel.tenant_id == tenant_id)
+            .order_by(QuotationModel.created_at.desc())
+        )
+        
+        result = await self.session.execute(stmt)
+        models = result.scalars().all()
+        
+        quotations = []
+        for model in models:
+            quotation = Quotation(
+                company_id=model.company_id,
+                tenant_id=model.tenant_id,
+                id=model.id,
+                status=model.status,
+                expires_at=model.expires_at,
+                created_at=model.created_at,
+                updated_at=model.updated_at
+            )
+            
+            for item_model in model.items:
+                snapshot = None
+                if item_model.snapshot:
+                    snapshot = QuotationItemSnapshot(
+                        service_name=item_model.snapshot.service_name,
+                        unit_name=item_model.snapshot.unit_name,
+                        base_unit_price=Money(item_model.snapshot.base_unit_price, item_model.snapshot.currency),
+                        total_base_price=Money(item_model.snapshot.total_base_price, item_model.snapshot.currency),
+                        surcharges_total=Money(item_model.snapshot.surcharges_total, item_model.snapshot.currency),
+                        discounts_total=Money(item_model.snapshot.discounts_total, item_model.snapshot.currency),
+                        final_price=Money(item_model.snapshot.final_price, item_model.snapshot.currency),
+                        pricing_reference=item_model.snapshot.pricing_reference
+                    )
+                    
+                item = QuotationItem(
+                    id=item_model.id,
+                    service_offering_id=item_model.service_offering_id,
+                    unit_of_measure_id=item_model.unit_of_measure_id,
+                    quantity=item_model.quantity,
+                    snapshot=snapshot
+                )
+                quotation.items.append(item)
+                
+            quotations.append(quotation)
+            
+        return quotations

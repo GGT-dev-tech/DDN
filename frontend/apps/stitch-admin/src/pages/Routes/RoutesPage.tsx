@@ -3,12 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../..
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../shared/ui/components/Table';
 import { Badge } from '../../shared/ui/components/Badge';
 import { Button } from '../../shared/ui/components/Button';
-import { useListRoutesRoutingRoutesGet } from '../../shared/api/generated/routing/routing';
+import { useListRoutesApiV1RoutingRoutesGet } from '../../shared/api/generated/routing/routing';
 import { AddRouteModal } from './components/AddRouteModal';
 
 export function RoutesPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const { data: routes, isLoading, isError } = useListRoutesRoutingRoutesGet();
+  const { data: routes, isLoading, isError } = useListRoutesApiV1RoutingRoutesGet();
 
   if (isLoading) return <div className="p-4">Loading routes...</div>;
   if (isError) return <div className="p-4 text-red-500">Error loading routes.</div>;
@@ -51,7 +51,7 @@ export function RoutesPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                routes?.map((route) => (
+                routes?.map((route: any) => (
                   <TableRow key={route.id}>
                     <TableCell className="font-medium">{route.id.split('-')[0]}</TableCell>
                     <TableCell>{route.execution_date}</TableCell>

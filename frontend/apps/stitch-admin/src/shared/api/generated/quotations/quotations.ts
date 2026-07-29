@@ -5,13 +5,22 @@
  * OpenAPI spec version: 1.0.0
  */
 import {
-  useMutation
+  useMutation,
+  useQuery
 } from '@tanstack/react-query';
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
   UseMutationOptions,
-  UseMutationResult
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
@@ -23,6 +32,7 @@ import type {
   CreateQuotationApiV1QuotationsPost200,
   CreateQuotationRequest,
   HTTPValidationError,
+  QuotationResponse,
   SubmitQuotationApiV1QuotationsQuotationIdSubmitPost200
 } from '../model';
 
@@ -32,6 +42,21 @@ import { customAxiosInstance } from '../../axios';
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
+
+const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K };
+  for (const key of Object.keys(query)) {
+    // The explicit queryKey always wins, matching the previous
+    // `{ ...query, queryKey }` spread where it was set last.
+    if (key === 'queryKey') continue;
+    Object.defineProperty(result, key, {
+      enumerable: true,
+      configurable: true,
+      get: () => (query as Record<string, unknown>)[key],
+    });
+  }
+  return result;
+};
 
 /**
  * @summary Create Quotation
@@ -98,6 +123,98 @@ export const useCreateQuotationApiV1QuotationsPost = <TError = HTTPValidationErr
       return useMutation(getCreateQuotationApiV1QuotationsPostMutationOptions(options), queryClient);
     }
     /**
+ * @summary List Quotations
+ */
+export const listQuotationsApiV1QuotationsGet = (
+
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<QuotationResponse[]>(
+      {url: `/api/v1/quotations`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getListQuotationsApiV1QuotationsGetQueryKey = () => {
+    return [
+    `/api/v1/quotations`
+    ] as const;
+    }
+
+
+export const getListQuotationsApiV1QuotationsGetQueryOptions = <TData = Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListQuotationsApiV1QuotationsGetQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>> = ({ signal }) => listQuotationsApiV1QuotationsGet(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListQuotationsApiV1QuotationsGetQueryResult = NonNullable<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>>
+export type ListQuotationsApiV1QuotationsGetQueryError = HTTPValidationError
+
+
+export function useListQuotationsApiV1QuotationsGet<TData = Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>,
+          TError,
+          Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListQuotationsApiV1QuotationsGet<TData = Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>,
+          TError,
+          Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListQuotationsApiV1QuotationsGet<TData = Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary List Quotations
+ */
+
+export function useListQuotationsApiV1QuotationsGet<TData = Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getListQuotationsApiV1QuotationsGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * @summary Add Quotation Item
  */
 export const addQuotationItemApiV1QuotationsQuotationIdItemsPost = (

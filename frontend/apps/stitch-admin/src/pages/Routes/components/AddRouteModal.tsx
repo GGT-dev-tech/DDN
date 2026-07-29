@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Modal } from '../../../shared/ui/components/Modal';
 import { Input } from '../../../shared/ui/components/Input';
 import { Button } from '../../../shared/ui/components/Button';
-import { useCreateRouteRoutingRoutesPost, getListRoutesRoutingRoutesGetQueryKey } from '../../../shared/api/generated/routing/routing';
+import { useCreateRouteApiV1RoutingRoutesPost, getListRoutesApiV1RoutingRoutesGetQueryKey } from '../../../shared/api/generated/routing/routing';
 
 interface AddRouteModalProps {
   isOpen: boolean;
@@ -12,7 +12,7 @@ interface AddRouteModalProps {
 
 export function AddRouteModal({ isOpen, onClose }: AddRouteModalProps) {
   const queryClient = useQueryClient();
-  const { mutateAsync: createRoute, isPending } = useCreateRouteRoutingRoutesPost();
+  const { mutateAsync: createRoute, isPending } = useCreateRouteApiV1RoutingRoutesPost();
   
   // execution_date is required, formatted as YYYY-MM-DD
   const [executionDate, setExecutionDate] = useState(new Date().toISOString().split('T')[0]);
@@ -28,7 +28,7 @@ export function AddRouteModal({ isOpen, onClose }: AddRouteModalProps) {
         }
       });
       // Invalidate the query so the table refreshes
-      queryClient.invalidateQueries({ queryKey: getListRoutesRoutingRoutesGetQueryKey() });
+      queryClient.invalidateQueries({ queryKey: getListRoutesApiV1RoutingRoutesGetQueryKey() });
       
       // Close modal
       onClose();

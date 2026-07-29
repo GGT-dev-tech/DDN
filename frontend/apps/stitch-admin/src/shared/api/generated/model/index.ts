@@ -44,6 +44,8 @@ export * from './pricingRuleCreateRequest';
 export * from './pricingRuleScope';
 export * from './pricingRuleType';
 export * from './publishPlanApiV1ServicePlansPlanIdPublishPost200';
+export * from './quotationItemResponse';
+export * from './quotationResponse';
 export * from './reactivatePlanApiV1ServicePlansPlanIdReactivatePost200';
 export * from './recurrenceRequest';
 export * from './registerDriverRequestDTO';

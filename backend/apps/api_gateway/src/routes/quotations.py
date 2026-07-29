@@ -63,6 +63,18 @@ async def create_quotation(
     return {"quotation_id": quotation_id}
 
 
+from modules.quotations.application.use_cases.list_quotations import ListQuotations, QuotationResponse
+
+@router.get("", response_model=list[QuotationResponse])
+async def list_quotations(
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    session = Depends(get_db_session)
+) -> list[QuotationResponse]:
+    repo = QuotationRepository(session)
+    use_case = ListQuotations(repo)
+    return await use_case.execute(tenant_id)
+
+
 @router.post("/{quotation_id}/items")
 async def add_quotation_item(
     quotation_id: uuid.UUID,

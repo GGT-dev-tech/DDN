@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Modal } from '../../../shared/ui/components/Modal';
 import { Input } from '../../../shared/ui/components/Input';
 import { Button } from '../../../shared/ui/components/Button';
-import { useRegisterDriverFleetDriversPost, getListDriversFleetDriversGetQueryKey } from '../../../shared/api/generated/fleet/fleet';
+import { useRegisterDriverApiV1FleetDriversPost, getListDriversApiV1FleetDriversGetQueryKey } from '../../../shared/api/generated/fleet/fleet';
 
 interface AddDriverModalProps {
   isOpen: boolean;
@@ -12,7 +12,7 @@ interface AddDriverModalProps {
 
 export function AddDriverModal({ isOpen, onClose }: AddDriverModalProps) {
   const queryClient = useQueryClient();
-  const { mutateAsync: registerDriver, isPending } = useRegisterDriverFleetDriversPost();
+  const { mutateAsync: registerDriver, isPending } = useRegisterDriverApiV1FleetDriversPost();
   
   const [name, setName] = useState('');
   const [licenseNumber, setLicenseNumber] = useState('');
@@ -29,7 +29,7 @@ export function AddDriverModal({ isOpen, onClose }: AddDriverModalProps) {
         }
       });
       // Invalidate the query so the table refreshes
-      queryClient.invalidateQueries({ queryKey: getListDriversFleetDriversGetQueryKey() });
+      queryClient.invalidateQueries({ queryKey: getListDriversApiV1FleetDriversGetQueryKey() });
       
       // Clear form and close
       setName('');

@@ -3,12 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../..
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../shared/ui/components/Table';
 import { Badge } from '../../shared/ui/components/Badge';
 import { Button } from '../../shared/ui/components/Button';
-import { useListDriversFleetDriversGet } from '../../shared/api/generated/fleet/fleet';
+import { useListDriversApiV1FleetDriversGet } from '../../shared/api/generated/fleet/fleet';
 import { AddDriverModal } from './components/AddDriverModal';
 
 export function DriversPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const { data: drivers, isLoading, isError } = useListDriversFleetDriversGet();
+  const { data: drivers, isLoading, isError } = useListDriversApiV1FleetDriversGet();
 
   if (isLoading) return <div className="p-4">Loading drivers...</div>;
   if (isError) return <div className="p-4 text-red-500">Error loading drivers.</div>;
@@ -49,7 +49,7 @@ export function DriversPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                drivers?.map((driver) => (
+                drivers?.map((driver: any) => (
                   <TableRow key={driver.id}>
                     <TableCell className="font-medium">{driver.name}</TableCell>
                     <TableCell>{driver.license_number}</TableCell>

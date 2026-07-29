@@ -3,12 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../..
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../shared/ui/components/Table';
 import { Badge } from '../../shared/ui/components/Badge';
 import { Button } from '../../shared/ui/components/Button';
-import { useListVehiclesFleetVehiclesGet } from '../../shared/api/generated/fleet/fleet';
+import { useListVehiclesApiV1FleetVehiclesGet } from '../../shared/api/generated/fleet/fleet';
 import { AddVehicleModal } from './components/AddVehicleModal';
 
 export function FleetPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const { data: vehicles, isLoading, isError } = useListVehiclesFleetVehiclesGet();
+  const { data: vehicles, isLoading, isError } = useListVehiclesApiV1FleetVehiclesGet();
 
   if (isLoading) return <div className="p-4">Loading vehicles...</div>;
   if (isError) return <div className="p-4 text-red-500">Error loading vehicles.</div>;
@@ -51,7 +51,7 @@ export function FleetPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                vehicles?.map((vehicle) => (
+                vehicles?.map((vehicle: any) => (
                   <TableRow key={vehicle.id}>
                     <TableCell className="font-medium">{vehicle.license_plate}</TableCell>
                     <TableCell>{vehicle.vehicle_type}</TableCell>

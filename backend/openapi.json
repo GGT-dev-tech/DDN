@@ -1442,6 +1442,62 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "Quotations"
+        ],
+        "summary": "List Quotations",
+        "operationId": "list_quotations_api_v1_quotations_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuotationResponse"
+                  },
+                  "title": "Response List Quotations Api V1 Quotations Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/v1/quotations/{quotation_id}/items": {
@@ -3120,6 +3176,102 @@
           "ABSOLUTE_SURCHARGE"
         ],
         "title": "PricingRuleType"
+      },
+      "QuotationItemResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "service_offering_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Service Offering Id"
+          },
+          "unit_of_measure_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Unit Of Measure Id"
+          },
+          "quantity": {
+            "type": "string",
+            "title": "Quantity"
+          },
+          "service_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Service Name"
+          },
+          "final_price": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Final Price"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "service_offering_id",
+          "unit_of_measure_id",
+          "quantity"
+        ],
+        "title": "QuotationItemResponse"
+      },
+      "QuotationResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "company_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Company Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "expires_at": {
+            "type": "string",
+            "title": "Expires At"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/QuotationItemResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "company_id",
+          "status",
+          "expires_at",
+          "created_at",
+          "items"
+        ],
+        "title": "QuotationResponse"
       },
       "RecurrenceRequest": {
         "properties": {
