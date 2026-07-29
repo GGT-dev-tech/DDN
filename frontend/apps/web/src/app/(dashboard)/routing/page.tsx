@@ -25,9 +25,11 @@ export default function RoutingPage() {
           <h1 className="text-2xl font-bold tracking-tight">Routing Engine</h1>
           <p className="text-zinc-500 mt-1">Manage execution routes and collection requirements.</p>
         </div>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Create Route
+        <Button asChild>
+          <Link href="/routing/new">
+            <Plus className="mr-2 h-4 w-4" />
+            Create Route
+          </Link>
         </Button>
       </div>
 

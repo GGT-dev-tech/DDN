@@ -4,13 +4,13 @@ import { mapRouteToUI } from "../../../entities/route/api/mapper";
 
 // TODO: Replace with Orval generated clients once GET endpoints are added to the OpenAPI spec
 async function fetchRoutes(): Promise<RouteResponseDTO[]> {
-  const response = await fetch("http://localhost:3000/api/v1/routes");
+  const response = await fetch("/api/v1/routes");
   if (!response.ok) throw new Error("Failed to fetch routes");
   return response.json();
 }
 
 async function fetchRouteById(routeId: string): Promise<RouteResponseDTO> {
-  const response = await fetch(`http://localhost:3000/api/v1/routes/${routeId}`);
+  const response = await fetch(`/api/v1/routes/${routeId}`);
   if (!response.ok) throw new Error("Failed to fetch route");
   return response.json();
 }

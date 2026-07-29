@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 export const handlers = [
-  http.post('http://localhost:3000/auth/login', async ({ request }) => {
+  http.post('/auth/login', async ({ request }) => {
     // We can parse the body here to simulate failure, but we'll always return success for MSW
     return HttpResponse.json({
       access_token: "mock-jwt-access-token",
@@ -9,7 +9,7 @@ export const handlers = [
       token_type: "bearer"
     });
   }),
-  http.get('http://localhost:3000/auth/me', () => {
+  http.get('/auth/me', () => {
     return HttpResponse.json({
       id: "usr-admin-1",
       email: "admin@goauct.com",
@@ -17,7 +17,7 @@ export const handlers = [
       created_at: "2024-01-01T00:00:00Z"
     });
   }),
-  http.post('http://localhost:3000/api/v1/contracts', async ({ request }) => {
+  http.post('/api/v1/contracts', async ({ request }) => {
     const data = await request.json() as any;
     return HttpResponse.json({
       id: `ctr-${Math.random().toString(36).substr(2, 9)}`,
@@ -28,7 +28,7 @@ export const handlers = [
       valid_until: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString()
     });
   }),
-  http.get('http://localhost:3000/api/v1/contracts', () => {
+  http.get('/api/v1/contracts', () => {
     return HttpResponse.json([
       {
         id: "ctr-abc1",
@@ -48,7 +48,7 @@ export const handlers = [
       }
     ]);
   }),
-  http.get('http://localhost:3000/api/v1/service-plans/contract/:contractId', ({ params }) => {
+  http.get('/api/v1/service-plans/contract/:contractId', ({ params }) => {
     return HttpResponse.json([
       {
         id: "sp-1234",
@@ -70,21 +70,21 @@ export const handlers = [
       }
     ]);
   }),
-  http.post('http://localhost:3000/api/v1/service-plans/:planId/publish', ({ params }) => {
+  http.post('/api/v1/service-plans/:planId/publish', ({ params }) => {
     return HttpResponse.json({
       id: params.planId,
       status: "ACTIVE",
       version: 1
     });
   }),
-  http.post('http://localhost:3000/api/v1/service-plans/:planId/suspend', ({ params }) => {
+  http.post('/api/v1/service-plans/:planId/suspend', ({ params }) => {
     return HttpResponse.json({
       id: params.planId,
       status: "SUSPENDED",
       version: 1
     });
   }),
-  http.get('http://localhost:3000/api/v1/routes', () => {
+  http.get('/api/v1/routes', () => {
     return HttpResponse.json([
       {
         id: "rt-1234",
@@ -117,7 +117,7 @@ export const handlers = [
       }
     ]);
   }),
-  http.get('http://localhost:3000/api/v1/routes/:routeId', ({ params }) => {
+  http.get('/api/v1/routes/:routeId', ({ params }) => {
     return HttpResponse.json({
       id: params.routeId,
       execution_date: new Date().toISOString(),
@@ -154,6 +154,38 @@ export const handlers = [
           status: "PENDING"
         }
       ]
+    });
+  }),
+  // NEW: Mock for creating a route
+  http.post('/api/v1/routes', async ({ request }) => {
+    const data = await request.json() as any;
+    return HttpResponse.json({
+      id: `rt-${Math.random().toString(36).substr(2, 9)}`,
+      execution_date: data.execution_date,
+      status: "PLANNED",
+      estimated_volume: data.estimated_volume || 0,
+      estimated_weight: data.estimated_weight || 0,
+      planned_distance: data.planned_distance || 0,
+      planned_duration: data.planned_duration || 0,
+    });
+  }),
+  // NEW: Mock for assigning resources to a route
+  http.post('/api/v1/routes/:routeId/assign', async ({ request, params }) => {
+    const data = await request.json() as any;
+    return HttpResponse.json({
+      id: params.routeId,
+      vehicle_id: data.vehicle_id,
+      driver_id: data.driver_id,
+    });
+  }),
+  // NEW: Mock for adding a stop to a route
+  http.post('/api/v1/routes/:routeId/stops', async ({ request, params }) => {
+    const data = await request.json() as any;
+    return HttpResponse.json({
+      id: `stp-${Math.random().toString(36).substr(2, 9)}`,
+      route_id: params.routeId,
+      ...data,
+      status: "PENDING"
     });
   }),
 ];
