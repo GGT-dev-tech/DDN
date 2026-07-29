@@ -2,11 +2,14 @@
 
 import { useServicePlans } from "../../../features/service-plan/api/queries";
 import { ServicePlanTable } from "../../../entities/service-plan/ui/service-plan-table";
+import { ServicePlanDrawer } from "../../../entities/service-plan/ui/service-plan-drawer";
+import { ServicePlan } from "../../../entities/service-plan/model/types";
 import { useState } from "react";
 
 export default function ServicePlansPage() {
   const [contractId, setContractId] = useState("mock-contract-id-123");
   const { data: plans, isLoading, error } = useServicePlans(contractId);
+  const [selectedPlan, setSelectedPlan] = useState<ServicePlan | null>(null);
 
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-6">
@@ -36,7 +39,18 @@ export default function ServicePlansPage() {
         </div>
       )}
 
-      {plans && <ServicePlanTable plans={plans} />}
+      {plans && (
+        <ServicePlanTable 
+          plans={plans} 
+          onSelect={(plan) => setSelectedPlan(plan)}
+        />
+      )}
+
+      <ServicePlanDrawer 
+        plan={selectedPlan} 
+        isOpen={!!selectedPlan} 
+        onOpenChange={(open) => !open && setSelectedPlan(null)} 
+      />
     </div>
   );
 }

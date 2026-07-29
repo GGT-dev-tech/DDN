@@ -31,4 +31,18 @@ export const handlers = [
       }
     ]);
   }),
+  http.post('http://localhost:3000/api/v1/service-plans/:planId/publish', ({ params }) => {
+    return HttpResponse.json({
+      id: params.planId,
+      status: "ACTIVE",
+      version: 1
+    });
+  }),
+  http.post('http://localhost:3000/api/v1/service-plans/:planId/suspend', ({ params }) => {
+    return HttpResponse.json({
+      id: params.planId,
+      status: "SUSPENDED",
+      version: 1
+    });
+  }),
 ];
