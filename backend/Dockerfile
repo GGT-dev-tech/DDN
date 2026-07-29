@@ -17,8 +17,5 @@ RUN chmod +x scripts/start.sh
 ENV PYTHONPATH=/app
 ENV ENVIRONMENT=production
 
-# Expose standard port (though Railway will provide its own PORT env var)
-EXPOSE 8000
-
 # Run the application through the start script
 CMD ["./scripts/start.sh"]
