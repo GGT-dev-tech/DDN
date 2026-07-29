@@ -18,6 +18,12 @@ RUN NODE_ENV=development npm ci
 
 # Build the project
 COPY --from=builder /app/out/full/ .
+ARG VITE_API_URL
+ARG VITE_API_MODE
+ARG VITE_ENVIRONMENT
+ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_API_MODE=$VITE_API_MODE
+ENV VITE_ENVIRONMENT=$VITE_ENVIRONMENT
 RUN turbo run build --filter=stitch-admin...
 
 FROM base AS runner

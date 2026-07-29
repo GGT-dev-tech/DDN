@@ -1,7 +1,7 @@
 import axios from 'axios'
 import type { AxiosRequestConfig } from 'axios'
 
-let apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
+let apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 if (apiBaseUrl && !apiBaseUrl.startsWith('http')) {
   apiBaseUrl = `https://${apiBaseUrl}`
 }
