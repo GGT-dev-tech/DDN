@@ -1,9 +1,13 @@
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../shared/ui/components/Card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../shared/ui/components/Table';
 import { Badge } from '../../shared/ui/components/Badge';
+import { Button } from '../../shared/ui/components/Button';
 import { useListDriversFleetDriversGet } from '../../shared/api/generated/fleet/fleet';
+import { AddDriverModal } from './components/AddDriverModal';
 
 export function DriversPage() {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { data: drivers, isLoading, isError } = useListDriversFleetDriversGet();
 
   if (isLoading) return <div className="p-4">Loading drivers...</div>;
@@ -11,7 +15,15 @@ export function DriversPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">Drivers</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold tracking-tight">Drivers</h1>
+        <Button onClick={() => setIsAddModalOpen(true)}>Add Driver</Button>
+      </div>
+
+      <AddDriverModal 
+        isOpen={isAddModalOpen} 
+        onClose={() => setIsAddModalOpen(false)} 
+      />
       
       <Card>
         <CardHeader>
