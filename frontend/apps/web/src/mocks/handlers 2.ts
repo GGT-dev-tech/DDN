@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 export const handlers = [
-  http.post('/auth/login', async ({ request }) => {
+  http.post('http://localhost:3000/auth/login', async ({ request }) => {
     // We can parse the body here to simulate failure, but we'll always return success for MSW
     return HttpResponse.json({
       access_token: "mock-jwt-access-token",
@@ -9,7 +9,7 @@ export const handlers = [
       token_type: "bearer"
     });
   }),
-  http.get('/auth/me', () => {
+  http.get('http://localhost:3000/auth/me', () => {
     return HttpResponse.json({
       id: "usr-admin-1",
       email: "admin@goauct.com",
@@ -17,7 +17,7 @@ export const handlers = [
       created_at: "2024-01-01T00:00:00Z"
     });
   }),
-  http.post('/api/v1/contracts', async ({ request }) => {
+  http.post('http://localhost:3000/api/v1/contracts', async ({ request }) => {
     const data = await request.json() as any;
     return HttpResponse.json({
       id: `ctr-${Math.random().toString(36).substr(2, 9)}`,
@@ -28,7 +28,7 @@ export const handlers = [
       valid_until: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString()
     });
   }),
-  http.get('/api/v1/contracts', () => {
+  http.get('http://localhost:3000/api/v1/contracts', () => {
     return HttpResponse.json([
       {
         id: "ctr-abc1",
@@ -48,7 +48,7 @@ export const handlers = [
       }
     ]);
   }),
-  http.get('/api/v1/service-plans/contract/:contractId', ({ params }) => {
+  http.get('http://localhost:3000/api/v1/service-plans/contract/:contractId', ({ params }) => {
     return HttpResponse.json([
       {
         id: "sp-1234",
@@ -70,21 +70,21 @@ export const handlers = [
       }
     ]);
   }),
-  http.post('/api/v1/service-plans/:planId/publish', ({ params }) => {
+  http.post('http://localhost:3000/api/v1/service-plans/:planId/publish', ({ params }) => {
     return HttpResponse.json({
       id: params.planId,
       status: "ACTIVE",
       version: 1
     });
   }),
-  http.post('/api/v1/service-plans/:planId/suspend', ({ params }) => {
+  http.post('http://localhost:3000/api/v1/service-plans/:planId/suspend', ({ params }) => {
     return HttpResponse.json({
       id: params.planId,
       status: "SUSPENDED",
       version: 1
     });
   }),
-  http.get('/api/v1/routes', () => {
+  http.get('http://localhost:3000/api/v1/routes', () => {
     return HttpResponse.json([
       {
         id: "rt-1234",
@@ -117,7 +117,7 @@ export const handlers = [
       }
     ]);
   }),
-  http.get('/api/v1/routes/:routeId', ({ params }) => {
+  http.get('http://localhost:3000/api/v1/routes/:routeId', ({ params }) => {
     return HttpResponse.json({
       id: params.routeId,
       execution_date: new Date().toISOString(),

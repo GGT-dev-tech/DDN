@@ -29,7 +29,7 @@ export function useContractsQuery() {
     queryKey: ["contracts"],
     queryFn: async () => {
       // Direct fetch call since backend SDK doesn't have the GET /contracts endpoint yet
-      const response = await fetch("http://localhost:3000/api/v1/contracts", {
+      const response = await fetch("/api/v1/contracts", {
         headers: {
           "Content-Type": "application/json"
         }

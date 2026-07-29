@@ -15,7 +15,6 @@ const geistMono = Geist_Mono({
 import { Providers } from "./providers";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { DevTools } from "@/devtools";
-import { MSWProvider } from "@/components/msw-provider";
 
 export const metadata: Metadata = {
   title: "GoAuct Intelligence OS",
@@ -33,12 +32,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ErrorBoundary>
-          <MSWProvider>
-            <Providers>
-              {children}
-              <DevTools />
-            </Providers>
-          </MSWProvider>
+          <Providers>
+            {children}
+            <DevTools />
+          </Providers>
         </ErrorBoundary>
       </body>
     </html>
