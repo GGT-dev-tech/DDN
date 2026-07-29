@@ -20,7 +20,17 @@ from modules.core.observability.middleware import CorrelationMiddleware
 # Setup structlog
 setup_logging()
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI(title="Stitch API Gateway", version="1.0.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, this should be restricted to the frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.add_middleware(CorrelationMiddleware)
 app.add_middleware(CorrelationIdMiddleware)
