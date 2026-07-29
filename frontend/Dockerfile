@@ -14,7 +14,7 @@ WORKDIR /app
 # First install dependencies
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/package-lock.json ./package-lock.json
-RUN npm ci
+RUN NODE_ENV=development npm ci
 
 # Build the project
 COPY --from=builder /app/out/full/ .
