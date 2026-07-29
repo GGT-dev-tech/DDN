@@ -5,13 +5,13 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/auth/register": {
+    "/api/v1/auth/register": {
       "post": {
         "tags": [
           "auth"
         ],
         "summary": "Register",
-        "operationId": "register_auth_register_post",
+        "operationId": "register_api_v1_auth_register_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -46,13 +46,13 @@
         }
       }
     },
-    "/auth/login": {
+    "/api/v1/auth/login": {
       "post": {
         "tags": [
           "auth"
         ],
         "summary": "Login",
-        "operationId": "login_auth_login_post",
+        "operationId": "login_api_v1_auth_login_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -87,13 +87,13 @@
         }
       }
     },
-    "/auth/me": {
+    "/api/v1/auth/me": {
       "get": {
         "tags": [
           "auth"
         ],
         "summary": "Get Me",
-        "operationId": "get_me_auth_me_get",
+        "operationId": "get_me_api_v1_auth_me_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -113,13 +113,13 @@
         ]
       }
     },
-    "/tenant/current": {
+    "/api/v1/tenant/current": {
       "get": {
         "tags": [
           "tenant"
         ],
         "summary": "Get Current Tenant",
-        "operationId": "get_current_tenant_tenant_current_get",
+        "operationId": "get_current_tenant_api_v1_tenant_current_get",
         "security": [
           {
             "OAuth2PasswordBearer": []
@@ -167,13 +167,13 @@
         }
       }
     },
-    "/routing/routes": {
+    "/api/v1/routing/routes": {
       "get": {
         "tags": [
           "Routing"
         ],
         "summary": "List Routes",
-        "operationId": "list_routes_routing_routes_get",
+        "operationId": "list_routes_api_v1_routing_routes_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -184,7 +184,7 @@
                     "$ref": "#/components/schemas/RouteResponseDTO"
                   },
                   "type": "array",
-                  "title": "Response List Routes Routing Routes Get"
+                  "title": "Response List Routes Api V1 Routing Routes Get"
                 }
               }
             }
@@ -196,7 +196,7 @@
           "Routing"
         ],
         "summary": "Create Route",
-        "operationId": "create_route_routing_routes_post",
+        "operationId": "create_route_api_v1_routing_routes_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -231,13 +231,13 @@
         }
       }
     },
-    "/routing/routes/{route_id}/stops": {
+    "/api/v1/routing/routes/{route_id}/stops": {
       "post": {
         "tags": [
           "Routing"
         ],
         "summary": "Add Stop To Route",
-        "operationId": "add_stop_to_route_routing_routes__route_id__stops_post",
+        "operationId": "add_stop_to_route_api_v1_routing_routes__route_id__stops_post",
         "parameters": [
           {
             "name": "route_id",
@@ -283,13 +283,13 @@
         }
       }
     },
-    "/routing/routes/{route_id}/assign": {
+    "/api/v1/routing/routes/{route_id}/assign": {
       "post": {
         "tags": [
           "Routing"
         ],
         "summary": "Assign Route Resources",
-        "operationId": "assign_route_resources_routing_routes__route_id__assign_post",
+        "operationId": "assign_route_resources_api_v1_routing_routes__route_id__assign_post",
         "parameters": [
           {
             "name": "route_id",
@@ -335,13 +335,13 @@
         }
       }
     },
-    "/fleet/vehicles": {
+    "/api/v1/fleet/vehicles": {
       "get": {
         "tags": [
           "Fleet"
         ],
         "summary": "List Vehicles",
-        "operationId": "list_vehicles_fleet_vehicles_get",
+        "operationId": "list_vehicles_api_v1_fleet_vehicles_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -352,7 +352,7 @@
                     "$ref": "#/components/schemas/VehicleResponseDTO"
                   },
                   "type": "array",
-                  "title": "Response List Vehicles Fleet Vehicles Get"
+                  "title": "Response List Vehicles Api V1 Fleet Vehicles Get"
                 }
               }
             }
@@ -364,7 +364,7 @@
           "Fleet"
         ],
         "summary": "Register Vehicle",
-        "operationId": "register_vehicle_fleet_vehicles_post",
+        "operationId": "register_vehicle_api_v1_fleet_vehicles_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -399,13 +399,13 @@
         }
       }
     },
-    "/fleet/drivers": {
+    "/api/v1/fleet/drivers": {
       "get": {
         "tags": [
           "Fleet"
         ],
         "summary": "List Drivers",
-        "operationId": "list_drivers_fleet_drivers_get",
+        "operationId": "list_drivers_api_v1_fleet_drivers_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -416,7 +416,7 @@
                     "$ref": "#/components/schemas/DriverResponseDTO"
                   },
                   "type": "array",
-                  "title": "Response List Drivers Fleet Drivers Get"
+                  "title": "Response List Drivers Api V1 Fleet Drivers Get"
                 }
               }
             }
@@ -428,7 +428,7 @@
           "Fleet"
         ],
         "summary": "Register Driver",
-        "operationId": "register_driver_fleet_drivers_post",
+        "operationId": "register_driver_api_v1_fleet_drivers_post",
         "requestBody": {
           "content": {
             "application/json": {

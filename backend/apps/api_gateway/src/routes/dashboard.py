@@ -11,7 +11,7 @@ from modules.dashboard.infrastructure.repositories.dashboard_read_repository imp
 )
 from modules.identity.dependencies import require_tenant
 
-router = APIRouter(prefix="/api/v1/dashboard", tags=["Dashboard"])
+router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
 def get_dashboard_service(db: AsyncSession = Depends(get_db_session)) -> DashboardService:
     repo = DashboardReadRepository(db)

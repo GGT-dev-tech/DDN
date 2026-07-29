@@ -6,6 +6,15 @@ if (apiBaseUrl && !apiBaseUrl.startsWith('http')) {
   apiBaseUrl = `https://${apiBaseUrl}`
 }
 
+// Railway sometimes sets VITE_API_URL to include /api/v1.
+// Since our OpenAPI paths now include /api/v1 natively, we must strip it from the base URL.
+if (apiBaseUrl.endsWith('/api/v1')) {
+  apiBaseUrl = apiBaseUrl.replace('/api/v1', '')
+}
+if (apiBaseUrl.endsWith('/api/v1/')) {
+  apiBaseUrl = apiBaseUrl.replace('/api/v1/', '')
+}
+
 export const axiosInstance = axios.create({
   baseURL: apiBaseUrl,
 })

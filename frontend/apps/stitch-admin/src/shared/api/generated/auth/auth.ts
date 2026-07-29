@@ -56,14 +56,14 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 /**
  * @summary Register
  */
-export const registerAuthRegisterPost = (
+export const registerApiV1AuthRegisterPost = (
     userRegisterRequest: UserRegisterRequest,
  options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
 ) => {
 
 
       return customAxiosInstance<TokenResponse>(
-      {url: `/auth/register`, method: 'POST',
+      {url: `/api/v1/auth/register`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: userRegisterRequest, signal
     },
@@ -73,11 +73,11 @@ export const registerAuthRegisterPost = (
 
 
 
-export const getRegisterAuthRegisterPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerAuthRegisterPost>>, TError,{data: UserRegisterRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof registerAuthRegisterPost>>, TError,{data: UserRegisterRequest}, TContext> => {
+export const getRegisterApiV1AuthRegisterPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerApiV1AuthRegisterPost>>, TError,{data: UserRegisterRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof registerApiV1AuthRegisterPost>>, TError,{data: UserRegisterRequest}, TContext> => {
 
-const mutationKey = ['registerAuthRegisterPost'];
+const mutationKey = ['registerApiV1AuthRegisterPost'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -87,10 +87,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof registerAuthRegisterPost>>, {data: UserRegisterRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof registerApiV1AuthRegisterPost>>, {data: UserRegisterRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  registerAuthRegisterPost(data,requestOptions)
+          return  registerApiV1AuthRegisterPost(data,requestOptions)
         }
 
 
@@ -100,34 +100,34 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type RegisterAuthRegisterPostMutationResult = NonNullable<Awaited<ReturnType<typeof registerAuthRegisterPost>>>
-    export type RegisterAuthRegisterPostMutationBody = UserRegisterRequest
-    export type RegisterAuthRegisterPostMutationError = HTTPValidationError
+    export type RegisterApiV1AuthRegisterPostMutationResult = NonNullable<Awaited<ReturnType<typeof registerApiV1AuthRegisterPost>>>
+    export type RegisterApiV1AuthRegisterPostMutationBody = UserRegisterRequest
+    export type RegisterApiV1AuthRegisterPostMutationError = HTTPValidationError
 
     /**
  * @summary Register
  */
-export const useRegisterAuthRegisterPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerAuthRegisterPost>>, TError,{data: UserRegisterRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+export const useRegisterApiV1AuthRegisterPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerApiV1AuthRegisterPost>>, TError,{data: UserRegisterRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof registerAuthRegisterPost>>,
+        Awaited<ReturnType<typeof registerApiV1AuthRegisterPost>>,
         TError,
         {data: UserRegisterRequest},
         TContext
       > => {
-      return useMutation(getRegisterAuthRegisterPostMutationOptions(options), queryClient);
+      return useMutation(getRegisterApiV1AuthRegisterPostMutationOptions(options), queryClient);
     }
     /**
  * @summary Login
  */
-export const loginAuthLoginPost = (
+export const loginApiV1AuthLoginPost = (
     userLoginRequest: UserLoginRequest,
  options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
 ) => {
 
 
       return customAxiosInstance<TokenResponse>(
-      {url: `/auth/login`, method: 'POST',
+      {url: `/api/v1/auth/login`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: userLoginRequest, signal
     },
@@ -137,11 +137,11 @@ export const loginAuthLoginPost = (
 
 
 
-export const getLoginAuthLoginPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginAuthLoginPost>>, TError,{data: UserLoginRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof loginAuthLoginPost>>, TError,{data: UserLoginRequest}, TContext> => {
+export const getLoginApiV1AuthLoginPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginApiV1AuthLoginPost>>, TError,{data: UserLoginRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof loginApiV1AuthLoginPost>>, TError,{data: UserLoginRequest}, TContext> => {
 
-const mutationKey = ['loginAuthLoginPost'];
+const mutationKey = ['loginApiV1AuthLoginPost'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -151,10 +151,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof loginAuthLoginPost>>, {data: UserLoginRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof loginApiV1AuthLoginPost>>, {data: UserLoginRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  loginAuthLoginPost(data,requestOptions)
+          return  loginApiV1AuthLoginPost(data,requestOptions)
         }
 
 
@@ -164,34 +164,34 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type LoginAuthLoginPostMutationResult = NonNullable<Awaited<ReturnType<typeof loginAuthLoginPost>>>
-    export type LoginAuthLoginPostMutationBody = UserLoginRequest
-    export type LoginAuthLoginPostMutationError = HTTPValidationError
+    export type LoginApiV1AuthLoginPostMutationResult = NonNullable<Awaited<ReturnType<typeof loginApiV1AuthLoginPost>>>
+    export type LoginApiV1AuthLoginPostMutationBody = UserLoginRequest
+    export type LoginApiV1AuthLoginPostMutationError = HTTPValidationError
 
     /**
  * @summary Login
  */
-export const useLoginAuthLoginPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginAuthLoginPost>>, TError,{data: UserLoginRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+export const useLoginApiV1AuthLoginPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginApiV1AuthLoginPost>>, TError,{data: UserLoginRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof loginAuthLoginPost>>,
+        Awaited<ReturnType<typeof loginApiV1AuthLoginPost>>,
         TError,
         {data: UserLoginRequest},
         TContext
       > => {
-      return useMutation(getLoginAuthLoginPostMutationOptions(options), queryClient);
+      return useMutation(getLoginApiV1AuthLoginPostMutationOptions(options), queryClient);
     }
     /**
  * @summary Get Me
  */
-export const getMeAuthMeGet = (
+export const getMeApiV1AuthMeGet = (
 
  options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
 ) => {
 
 
       return customAxiosInstance<UserResponse>(
-      {url: `/auth/me`, method: 'GET', signal
+      {url: `/api/v1/auth/me`, method: 'GET', signal
     },
       options);
     }
@@ -199,69 +199,69 @@ export const getMeAuthMeGet = (
 
 
 
-export const getGetMeAuthMeGetQueryKey = () => {
+export const getGetMeApiV1AuthMeGetQueryKey = () => {
     return [
-    `/auth/me`
+    `/api/v1/auth/me`
     ] as const;
     }
 
 
-export const getGetMeAuthMeGetQueryOptions = <TData = Awaited<ReturnType<typeof getMeAuthMeGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeAuthMeGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export const getGetMeApiV1AuthMeGetQueryOptions = <TData = Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetMeAuthMeGetQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetMeApiV1AuthMeGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMeAuthMeGet>>> = ({ signal }) => getMeAuthMeGet(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>> = ({ signal }) => getMeApiV1AuthMeGet(requestOptions, signal);
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMeAuthMeGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetMeAuthMeGetQueryResult = NonNullable<Awaited<ReturnType<typeof getMeAuthMeGet>>>
-export type GetMeAuthMeGetQueryError = unknown
+export type GetMeApiV1AuthMeGetQueryResult = NonNullable<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>>
+export type GetMeApiV1AuthMeGetQueryError = unknown
 
 
-export function useGetMeAuthMeGet<TData = Awaited<ReturnType<typeof getMeAuthMeGet>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeAuthMeGet>>, TError, TData>> & Pick<
+export function useGetMeApiV1AuthMeGet<TData = Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getMeAuthMeGet>>,
+          Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>,
           TError,
-          Awaited<ReturnType<typeof getMeAuthMeGet>>
+          Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMeAuthMeGet<TData = Awaited<ReturnType<typeof getMeAuthMeGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeAuthMeGet>>, TError, TData>> & Pick<
+export function useGetMeApiV1AuthMeGet<TData = Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getMeAuthMeGet>>,
+          Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>,
           TError,
-          Awaited<ReturnType<typeof getMeAuthMeGet>>
+          Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMeAuthMeGet<TData = Awaited<ReturnType<typeof getMeAuthMeGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeAuthMeGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export function useGetMeApiV1AuthMeGet<TData = Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get Me
  */
 
-export function useGetMeAuthMeGet<TData = Awaited<ReturnType<typeof getMeAuthMeGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeAuthMeGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export function useGetMeApiV1AuthMeGet<TData = Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetMeAuthMeGetQueryOptions(options)
+  const queryOptions = getGetMeApiV1AuthMeGetQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

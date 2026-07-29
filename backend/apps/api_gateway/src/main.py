@@ -2,7 +2,7 @@ import os
 
 import redis
 from asgi_correlation_id import CorrelationIdMiddleware
-from fastapi import FastAPI, Response, status
+from fastapi import FastAPI, Response, status, APIRouter
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import OperationalError
 
@@ -25,18 +25,20 @@ app = FastAPI(title="Stitch API Gateway", version="1.0.0")
 app.add_middleware(CorrelationMiddleware)
 app.add_middleware(CorrelationIdMiddleware)
 
-app.include_router(auth.router)
-app.include_router(tenant.router)
-app.include_router(routing.router)
-app.include_router(fleet.router)
-app.include_router(dashboard.router)
-app.include_router(commercial_router, prefix="/api/v1")
-app.include_router(catalog_router, prefix="/api/v1")
-app.include_router(pricing_router, prefix="/api/v1")
-app.include_router(quotations_router, prefix="/api/v1")
-app.include_router(contracts_router, prefix="/api/v1")
-app.include_router(service_plan_router, prefix="/api/v1")
+api_v1 = APIRouter(prefix="/api/v1")
+api_v1.include_router(auth.router)
+api_v1.include_router(tenant.router)
+api_v1.include_router(routing.router)
+api_v1.include_router(fleet.router)
+api_v1.include_router(dashboard.router)
+api_v1.include_router(commercial_router)
+api_v1.include_router(catalog_router)
+api_v1.include_router(pricing_router)
+api_v1.include_router(quotations_router)
+api_v1.include_router(contracts_router)
+api_v1.include_router(service_plan_router)
 
+app.include_router(api_v1)
 
 # Database & Cache settings loaded directly from ENV for the Health Check
 # In a real scenario, this would be imported from modules.core.config

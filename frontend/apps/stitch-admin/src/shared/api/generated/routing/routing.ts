@@ -56,14 +56,14 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 /**
  * @summary List Routes
  */
-export const listRoutesRoutingRoutesGet = (
+export const listRoutesApiV1RoutingRoutesGet = (
 
  options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
 ) => {
 
 
       return customAxiosInstance<RouteResponseDTO[]>(
-      {url: `/routing/routes`, method: 'GET', signal
+      {url: `/api/v1/routing/routes`, method: 'GET', signal
     },
       options);
     }
@@ -71,69 +71,69 @@ export const listRoutesRoutingRoutesGet = (
 
 
 
-export const getListRoutesRoutingRoutesGetQueryKey = () => {
+export const getListRoutesApiV1RoutingRoutesGetQueryKey = () => {
     return [
-    `/routing/routes`
+    `/api/v1/routing/routes`
     ] as const;
     }
 
 
-export const getListRoutesRoutingRoutesGetQueryOptions = <TData = Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export const getListRoutesApiV1RoutingRoutesGetQueryOptions = <TData = Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getListRoutesRoutingRoutesGetQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getListRoutesApiV1RoutingRoutesGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>> = ({ signal }) => listRoutesRoutingRoutesGet(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>> = ({ signal }) => listRoutesApiV1RoutingRoutesGet(requestOptions, signal);
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ListRoutesRoutingRoutesGetQueryResult = NonNullable<Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>>
-export type ListRoutesRoutingRoutesGetQueryError = unknown
+export type ListRoutesApiV1RoutingRoutesGetQueryResult = NonNullable<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>>
+export type ListRoutesApiV1RoutingRoutesGetQueryError = unknown
 
 
-export function useListRoutesRoutingRoutesGet<TData = Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>, TError, TData>> & Pick<
+export function useListRoutesApiV1RoutingRoutesGet<TData = Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>,
+          Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>,
           TError,
-          Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>
+          Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListRoutesRoutingRoutesGet<TData = Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>, TError, TData>> & Pick<
+export function useListRoutesApiV1RoutingRoutesGet<TData = Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>,
+          Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>,
           TError,
-          Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>
+          Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListRoutesRoutingRoutesGet<TData = Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export function useListRoutesApiV1RoutingRoutesGet<TData = Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary List Routes
  */
 
-export function useListRoutesRoutingRoutesGet<TData = Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesRoutingRoutesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export function useListRoutesApiV1RoutingRoutesGet<TData = Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getListRoutesRoutingRoutesGetQueryOptions(options)
+  const queryOptions = getListRoutesApiV1RoutingRoutesGetQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -148,14 +148,14 @@ export function useListRoutesRoutingRoutesGet<TData = Awaited<ReturnType<typeof 
 /**
  * @summary Create Route
  */
-export const createRouteRoutingRoutesPost = (
+export const createRouteApiV1RoutingRoutesPost = (
     createRouteRequestDTO: CreateRouteRequestDTO,
  options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
 ) => {
 
 
       return customAxiosInstance<RouteResponseDTO>(
-      {url: `/routing/routes`, method: 'POST',
+      {url: `/api/v1/routing/routes`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createRouteRequestDTO, signal
     },
@@ -165,11 +165,11 @@ export const createRouteRoutingRoutesPost = (
 
 
 
-export const getCreateRouteRoutingRoutesPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRouteRoutingRoutesPost>>, TError,{data: CreateRouteRequestDTO}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof createRouteRoutingRoutesPost>>, TError,{data: CreateRouteRequestDTO}, TContext> => {
+export const getCreateRouteApiV1RoutingRoutesPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRouteApiV1RoutingRoutesPost>>, TError,{data: CreateRouteRequestDTO}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createRouteApiV1RoutingRoutesPost>>, TError,{data: CreateRouteRequestDTO}, TContext> => {
 
-const mutationKey = ['createRouteRoutingRoutesPost'];
+const mutationKey = ['createRouteApiV1RoutingRoutesPost'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -179,10 +179,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createRouteRoutingRoutesPost>>, {data: CreateRouteRequestDTO}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createRouteApiV1RoutingRoutesPost>>, {data: CreateRouteRequestDTO}> = (props) => {
           const {data} = props ?? {};
 
-          return  createRouteRoutingRoutesPost(data,requestOptions)
+          return  createRouteApiV1RoutingRoutesPost(data,requestOptions)
         }
 
 
@@ -192,27 +192,27 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type CreateRouteRoutingRoutesPostMutationResult = NonNullable<Awaited<ReturnType<typeof createRouteRoutingRoutesPost>>>
-    export type CreateRouteRoutingRoutesPostMutationBody = CreateRouteRequestDTO
-    export type CreateRouteRoutingRoutesPostMutationError = HTTPValidationError
+    export type CreateRouteApiV1RoutingRoutesPostMutationResult = NonNullable<Awaited<ReturnType<typeof createRouteApiV1RoutingRoutesPost>>>
+    export type CreateRouteApiV1RoutingRoutesPostMutationBody = CreateRouteRequestDTO
+    export type CreateRouteApiV1RoutingRoutesPostMutationError = HTTPValidationError
 
     /**
  * @summary Create Route
  */
-export const useCreateRouteRoutingRoutesPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRouteRoutingRoutesPost>>, TError,{data: CreateRouteRequestDTO}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+export const useCreateRouteApiV1RoutingRoutesPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRouteApiV1RoutingRoutesPost>>, TError,{data: CreateRouteRequestDTO}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createRouteRoutingRoutesPost>>,
+        Awaited<ReturnType<typeof createRouteApiV1RoutingRoutesPost>>,
         TError,
         {data: CreateRouteRequestDTO},
         TContext
       > => {
-      return useMutation(getCreateRouteRoutingRoutesPostMutationOptions(options), queryClient);
+      return useMutation(getCreateRouteApiV1RoutingRoutesPostMutationOptions(options), queryClient);
     }
     /**
  * @summary Add Stop To Route
  */
-export const addStopToRouteRoutingRoutesRouteIdStopsPost = (
+export const addStopToRouteApiV1RoutingRoutesRouteIdStopsPost = (
     routeId: string,
     addStopRequestDTO: AddStopRequestDTO,
  options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
@@ -220,7 +220,7 @@ export const addStopToRouteRoutingRoutesRouteIdStopsPost = (
 
 
       return customAxiosInstance<RouteResponseDTO>(
-      {url: `/routing/routes/${routeId}/stops`, method: 'POST',
+      {url: `/api/v1/routing/routes/${routeId}/stops`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: addStopRequestDTO, signal
     },
@@ -230,11 +230,11 @@ export const addStopToRouteRoutingRoutesRouteIdStopsPost = (
 
 
 
-export const getAddStopToRouteRoutingRoutesRouteIdStopsPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addStopToRouteRoutingRoutesRouteIdStopsPost>>, TError,{routeId: string;data: AddStopRequestDTO}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof addStopToRouteRoutingRoutesRouteIdStopsPost>>, TError,{routeId: string;data: AddStopRequestDTO}, TContext> => {
+export const getAddStopToRouteApiV1RoutingRoutesRouteIdStopsPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addStopToRouteApiV1RoutingRoutesRouteIdStopsPost>>, TError,{routeId: string;data: AddStopRequestDTO}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof addStopToRouteApiV1RoutingRoutesRouteIdStopsPost>>, TError,{routeId: string;data: AddStopRequestDTO}, TContext> => {
 
-const mutationKey = ['addStopToRouteRoutingRoutesRouteIdStopsPost'];
+const mutationKey = ['addStopToRouteApiV1RoutingRoutesRouteIdStopsPost'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -244,10 +244,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof addStopToRouteRoutingRoutesRouteIdStopsPost>>, {routeId: string;data: AddStopRequestDTO}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof addStopToRouteApiV1RoutingRoutesRouteIdStopsPost>>, {routeId: string;data: AddStopRequestDTO}> = (props) => {
           const {routeId,data} = props ?? {};
 
-          return  addStopToRouteRoutingRoutesRouteIdStopsPost(routeId,data,requestOptions)
+          return  addStopToRouteApiV1RoutingRoutesRouteIdStopsPost(routeId,data,requestOptions)
         }
 
 
@@ -257,27 +257,27 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type AddStopToRouteRoutingRoutesRouteIdStopsPostMutationResult = NonNullable<Awaited<ReturnType<typeof addStopToRouteRoutingRoutesRouteIdStopsPost>>>
-    export type AddStopToRouteRoutingRoutesRouteIdStopsPostMutationBody = AddStopRequestDTO
-    export type AddStopToRouteRoutingRoutesRouteIdStopsPostMutationError = HTTPValidationError
+    export type AddStopToRouteApiV1RoutingRoutesRouteIdStopsPostMutationResult = NonNullable<Awaited<ReturnType<typeof addStopToRouteApiV1RoutingRoutesRouteIdStopsPost>>>
+    export type AddStopToRouteApiV1RoutingRoutesRouteIdStopsPostMutationBody = AddStopRequestDTO
+    export type AddStopToRouteApiV1RoutingRoutesRouteIdStopsPostMutationError = HTTPValidationError
 
     /**
  * @summary Add Stop To Route
  */
-export const useAddStopToRouteRoutingRoutesRouteIdStopsPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addStopToRouteRoutingRoutesRouteIdStopsPost>>, TError,{routeId: string;data: AddStopRequestDTO}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+export const useAddStopToRouteApiV1RoutingRoutesRouteIdStopsPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addStopToRouteApiV1RoutingRoutesRouteIdStopsPost>>, TError,{routeId: string;data: AddStopRequestDTO}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof addStopToRouteRoutingRoutesRouteIdStopsPost>>,
+        Awaited<ReturnType<typeof addStopToRouteApiV1RoutingRoutesRouteIdStopsPost>>,
         TError,
         {routeId: string;data: AddStopRequestDTO},
         TContext
       > => {
-      return useMutation(getAddStopToRouteRoutingRoutesRouteIdStopsPostMutationOptions(options), queryClient);
+      return useMutation(getAddStopToRouteApiV1RoutingRoutesRouteIdStopsPostMutationOptions(options), queryClient);
     }
     /**
  * @summary Assign Route Resources
  */
-export const assignRouteResourcesRoutingRoutesRouteIdAssignPost = (
+export const assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost = (
     routeId: string,
     assignRouteResourcesRequestDTO: AssignRouteResourcesRequestDTO,
  options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
@@ -285,7 +285,7 @@ export const assignRouteResourcesRoutingRoutesRouteIdAssignPost = (
 
 
       return customAxiosInstance<RouteResponseDTO>(
-      {url: `/routing/routes/${routeId}/assign`, method: 'POST',
+      {url: `/api/v1/routing/routes/${routeId}/assign`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: assignRouteResourcesRequestDTO, signal
     },
@@ -295,11 +295,11 @@ export const assignRouteResourcesRoutingRoutesRouteIdAssignPost = (
 
 
 
-export const getAssignRouteResourcesRoutingRoutesRouteIdAssignPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof assignRouteResourcesRoutingRoutesRouteIdAssignPost>>, TError,{routeId: string;data: AssignRouteResourcesRequestDTO}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof assignRouteResourcesRoutingRoutesRouteIdAssignPost>>, TError,{routeId: string;data: AssignRouteResourcesRequestDTO}, TContext> => {
+export const getAssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost>>, TError,{routeId: string;data: AssignRouteResourcesRequestDTO}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost>>, TError,{routeId: string;data: AssignRouteResourcesRequestDTO}, TContext> => {
 
-const mutationKey = ['assignRouteResourcesRoutingRoutesRouteIdAssignPost'];
+const mutationKey = ['assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -309,10 +309,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof assignRouteResourcesRoutingRoutesRouteIdAssignPost>>, {routeId: string;data: AssignRouteResourcesRequestDTO}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost>>, {routeId: string;data: AssignRouteResourcesRequestDTO}> = (props) => {
           const {routeId,data} = props ?? {};
 
-          return  assignRouteResourcesRoutingRoutesRouteIdAssignPost(routeId,data,requestOptions)
+          return  assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost(routeId,data,requestOptions)
         }
 
 
@@ -322,20 +322,20 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type AssignRouteResourcesRoutingRoutesRouteIdAssignPostMutationResult = NonNullable<Awaited<ReturnType<typeof assignRouteResourcesRoutingRoutesRouteIdAssignPost>>>
-    export type AssignRouteResourcesRoutingRoutesRouteIdAssignPostMutationBody = AssignRouteResourcesRequestDTO
-    export type AssignRouteResourcesRoutingRoutesRouteIdAssignPostMutationError = HTTPValidationError
+    export type AssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostMutationResult = NonNullable<Awaited<ReturnType<typeof assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost>>>
+    export type AssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostMutationBody = AssignRouteResourcesRequestDTO
+    export type AssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostMutationError = HTTPValidationError
 
     /**
  * @summary Assign Route Resources
  */
-export const useAssignRouteResourcesRoutingRoutesRouteIdAssignPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof assignRouteResourcesRoutingRoutesRouteIdAssignPost>>, TError,{routeId: string;data: AssignRouteResourcesRequestDTO}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+export const useAssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost>>, TError,{routeId: string;data: AssignRouteResourcesRequestDTO}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof assignRouteResourcesRoutingRoutesRouteIdAssignPost>>,
+        Awaited<ReturnType<typeof assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost>>,
         TError,
         {routeId: string;data: AssignRouteResourcesRequestDTO},
         TContext
       > => {
-      return useMutation(getAssignRouteResourcesRoutingRoutesRouteIdAssignPostMutationOptions(options), queryClient);
+      return useMutation(getAssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostMutationOptions(options), queryClient);
     }

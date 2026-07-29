@@ -49,14 +49,14 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 /**
  * @summary Get Current Tenant
  */
-export const getCurrentTenantTenantCurrentGet = (
+export const getCurrentTenantApiV1TenantCurrentGet = (
 
  options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
 ) => {
 
 
       return customAxiosInstance<TenantContextResponse>(
-      {url: `/tenant/current`, method: 'GET', signal
+      {url: `/api/v1/tenant/current`, method: 'GET', signal
     },
       options);
     }
@@ -64,69 +64,69 @@ export const getCurrentTenantTenantCurrentGet = (
 
 
 
-export const getGetCurrentTenantTenantCurrentGetQueryKey = () => {
+export const getGetCurrentTenantApiV1TenantCurrentGetQueryKey = () => {
     return [
-    `/tenant/current`
+    `/api/v1/tenant/current`
     ] as const;
     }
 
 
-export const getGetCurrentTenantTenantCurrentGetQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export const getGetCurrentTenantApiV1TenantCurrentGetQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetCurrentTenantTenantCurrentGetQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetCurrentTenantApiV1TenantCurrentGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>> = ({ signal }) => getCurrentTenantTenantCurrentGet(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>> = ({ signal }) => getCurrentTenantApiV1TenantCurrentGet(requestOptions, signal);
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetCurrentTenantTenantCurrentGetQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>>
-export type GetCurrentTenantTenantCurrentGetQueryError = HTTPValidationError
+export type GetCurrentTenantApiV1TenantCurrentGetQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>>
+export type GetCurrentTenantApiV1TenantCurrentGetQueryError = HTTPValidationError
 
 
-export function useGetCurrentTenantTenantCurrentGet<TData = Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>, TError = HTTPValidationError>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>, TError, TData>> & Pick<
+export function useGetCurrentTenantApiV1TenantCurrentGet<TData = Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>,
+          Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>,
           TError,
-          Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>
+          Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurrentTenantTenantCurrentGet<TData = Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>, TError, TData>> & Pick<
+export function useGetCurrentTenantApiV1TenantCurrentGet<TData = Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>,
+          Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>,
           TError,
-          Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>
+          Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurrentTenantTenantCurrentGet<TData = Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export function useGetCurrentTenantApiV1TenantCurrentGet<TData = Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get Current Tenant
  */
 
-export function useGetCurrentTenantTenantCurrentGet<TData = Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantTenantCurrentGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export function useGetCurrentTenantApiV1TenantCurrentGet<TData = Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetCurrentTenantTenantCurrentGetQueryOptions(options)
+  const queryOptions = getGetCurrentTenantApiV1TenantCurrentGetQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
