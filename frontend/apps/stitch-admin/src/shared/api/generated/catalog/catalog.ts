@@ -5,13 +5,22 @@
  * OpenAPI spec version: 1.0.0
  */
 import {
-  useMutation
+  useMutation,
+  useQuery
 } from '@tanstack/react-query';
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
   UseMutationOptions,
-  UseMutationResult
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
@@ -19,16 +28,126 @@ import type {
   DefineServiceAttributeRequest,
   DraftServiceOfferingRequest,
   HTTPValidationError,
-  RegisterUOMRequest,
-  ServiceAttributeResponse,
-  ServiceOfferingResponse,
-  UOMResponse
+  ModulesCatalogApplicationDtoRequestsServiceAttributeResponse,
+  ModulesCatalogApplicationDtoRequestsServiceOfferingResponse,
+  ModulesCatalogApplicationDtoRequestsUOMResponse,
+  ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceAttributeResponse,
+  ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceOfferingResponse,
+  ModulesCatalogApplicationUseCasesListCatalogEntitiesUOMResponse,
+  RegisterUOMRequest
 } from '../model';
 
 import { customAxiosInstance } from '../../axios';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
+const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K };
+  for (const key of Object.keys(query)) {
+    // The explicit queryKey always wins, matching the previous
+    // `{ ...query, queryKey }` spread where it was set last.
+    if (key === 'queryKey') continue;
+    Object.defineProperty(result, key, {
+      enumerable: true,
+      configurable: true,
+      get: () => (query as Record<string, unknown>)[key],
+    });
+  }
+  return result;
+};
+
+/**
+ * @summary List Uoms
+ */
+export const listUomsApiV1CatalogUomGet = (
+
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<ModulesCatalogApplicationUseCasesListCatalogEntitiesUOMResponse[]>(
+      {url: `/api/v1/catalog/uom`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getListUomsApiV1CatalogUomGetQueryKey = () => {
+    return [
+    `/api/v1/catalog/uom`
+    ] as const;
+    }
+
+
+export const getListUomsApiV1CatalogUomGetQueryOptions = <TData = Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListUomsApiV1CatalogUomGetQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>> = ({ signal }) => listUomsApiV1CatalogUomGet(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListUomsApiV1CatalogUomGetQueryResult = NonNullable<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>>
+export type ListUomsApiV1CatalogUomGetQueryError = HTTPValidationError
+
+
+export function useListUomsApiV1CatalogUomGet<TData = Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>,
+          TError,
+          Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListUomsApiV1CatalogUomGet<TData = Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>,
+          TError,
+          Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListUomsApiV1CatalogUomGet<TData = Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary List Uoms
+ */
+
+export function useListUomsApiV1CatalogUomGet<TData = Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getListUomsApiV1CatalogUomGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
 
 
 
@@ -41,7 +160,7 @@ export const registerUomApiV1CatalogUomPost = (
 ) => {
 
 
-      return customAxiosInstance<UOMResponse>(
+      return customAxiosInstance<ModulesCatalogApplicationDtoRequestsUOMResponse>(
       {url: `/api/v1/catalog/uom`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: registerUOMRequest, signal
@@ -97,6 +216,98 @@ export const useRegisterUomApiV1CatalogUomPost = <TError = HTTPValidationError,
       return useMutation(getRegisterUomApiV1CatalogUomPostMutationOptions(options), queryClient);
     }
     /**
+ * @summary List Attributes
+ */
+export const listAttributesApiV1CatalogAttributesGet = (
+
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceAttributeResponse[]>(
+      {url: `/api/v1/catalog/attributes`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getListAttributesApiV1CatalogAttributesGetQueryKey = () => {
+    return [
+    `/api/v1/catalog/attributes`
+    ] as const;
+    }
+
+
+export const getListAttributesApiV1CatalogAttributesGetQueryOptions = <TData = Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListAttributesApiV1CatalogAttributesGetQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>> = ({ signal }) => listAttributesApiV1CatalogAttributesGet(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListAttributesApiV1CatalogAttributesGetQueryResult = NonNullable<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>>
+export type ListAttributesApiV1CatalogAttributesGetQueryError = HTTPValidationError
+
+
+export function useListAttributesApiV1CatalogAttributesGet<TData = Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>,
+          TError,
+          Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListAttributesApiV1CatalogAttributesGet<TData = Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>,
+          TError,
+          Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListAttributesApiV1CatalogAttributesGet<TData = Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary List Attributes
+ */
+
+export function useListAttributesApiV1CatalogAttributesGet<TData = Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getListAttributesApiV1CatalogAttributesGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * @summary Define Attribute
  */
 export const defineAttributeApiV1CatalogAttributesPost = (
@@ -105,7 +316,7 @@ export const defineAttributeApiV1CatalogAttributesPost = (
 ) => {
 
 
-      return customAxiosInstance<ServiceAttributeResponse>(
+      return customAxiosInstance<ModulesCatalogApplicationDtoRequestsServiceAttributeResponse>(
       {url: `/api/v1/catalog/attributes`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: defineServiceAttributeRequest, signal
@@ -161,6 +372,98 @@ export const useDefineAttributeApiV1CatalogAttributesPost = <TError = HTTPValida
       return useMutation(getDefineAttributeApiV1CatalogAttributesPostMutationOptions(options), queryClient);
     }
     /**
+ * @summary List Offerings
+ */
+export const listOfferingsApiV1CatalogOfferingsGet = (
+
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceOfferingResponse[]>(
+      {url: `/api/v1/catalog/offerings`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getListOfferingsApiV1CatalogOfferingsGetQueryKey = () => {
+    return [
+    `/api/v1/catalog/offerings`
+    ] as const;
+    }
+
+
+export const getListOfferingsApiV1CatalogOfferingsGetQueryOptions = <TData = Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListOfferingsApiV1CatalogOfferingsGetQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>> = ({ signal }) => listOfferingsApiV1CatalogOfferingsGet(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListOfferingsApiV1CatalogOfferingsGetQueryResult = NonNullable<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>>
+export type ListOfferingsApiV1CatalogOfferingsGetQueryError = HTTPValidationError
+
+
+export function useListOfferingsApiV1CatalogOfferingsGet<TData = Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>,
+          TError,
+          Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListOfferingsApiV1CatalogOfferingsGet<TData = Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>,
+          TError,
+          Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListOfferingsApiV1CatalogOfferingsGet<TData = Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary List Offerings
+ */
+
+export function useListOfferingsApiV1CatalogOfferingsGet<TData = Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getListOfferingsApiV1CatalogOfferingsGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * @summary Draft Offering
  */
 export const draftOfferingApiV1CatalogOfferingsPost = (
@@ -169,7 +472,7 @@ export const draftOfferingApiV1CatalogOfferingsPost = (
 ) => {
 
 
-      return customAxiosInstance<ServiceOfferingResponse>(
+      return customAxiosInstance<ModulesCatalogApplicationDtoRequestsServiceOfferingResponse>(
       {url: `/api/v1/catalog/offerings`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: draftServiceOfferingRequest, signal

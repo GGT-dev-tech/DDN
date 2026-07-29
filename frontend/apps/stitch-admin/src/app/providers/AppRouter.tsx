@@ -6,6 +6,7 @@ import { FleetPage } from '../../pages/Fleet/FleetPage'
 import { DriversPage } from '../../pages/Drivers/DriversPage'
 import { SettingsPage } from '../../pages/Settings/SettingsPage'
 import { QuotationsPage } from '../../pages/Quotations/QuotationsPage'
+import { CatalogPage } from '../../pages/Catalog/CatalogPage'
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: 'quotations',
         element: <QuotationsPage />,
+      },
+      {
+        path: 'catalog',
+        element: <CatalogPage />,
       },
       {
         path: 'settings',

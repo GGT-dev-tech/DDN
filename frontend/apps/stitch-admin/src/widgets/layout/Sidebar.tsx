@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react'
-import { LayoutDashboard, Route, Truck, Users, Settings, FileText } from 'lucide-react'
+import { LayoutDashboard, Route, Truck, Users, Settings, FileText, Library } from 'lucide-react'
 import { cn } from '../../shared/ui/components/Button'
 
 interface SidebarProps extends HTMLAttributes<HTMLDivElement> {}
@@ -7,6 +7,7 @@ interface SidebarProps extends HTMLAttributes<HTMLDivElement> {}
 const NAVIGATION = [
   { name: 'Dashboard', icon: LayoutDashboard, href: '/' },
   { name: 'Quotations', icon: FileText, href: '/quotations' },
+  { name: 'Catalog', icon: Library, href: '/catalog' },
   { name: 'Routes', icon: Route, href: '/routes' },
   { name: 'Fleet', icon: Truck, href: '/fleet' },
   { name: 'Drivers', icon: Users, href: '/drivers' },

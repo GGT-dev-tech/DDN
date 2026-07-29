@@ -24,6 +24,37 @@ def get_catalog_service(
 ) -> CatalogService:
     return CatalogService(session, tenant_id)
 
+from modules.catalog.infrastructure.repositories.catalog_repository import CatalogRepository
+from modules.catalog.application.use_cases.list_catalog_entities import (
+    ListUOMs, UOMResponse as ListUOMResponse,
+    ListServiceAttributes, ServiceAttributeResponse as ListServiceAttributeResponse,
+    ListServiceOfferings, ServiceOfferingResponse as ListServiceOfferingResponse
+)
+
+@router.get("/uom", response_model=list[ListUOMResponse])
+async def list_uoms(
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    session: AsyncSession = Depends(get_db_session)
+):
+    repo = CatalogRepository(session)
+    return await ListUOMs(repo).execute(tenant_id)
+
+@router.get("/attributes", response_model=list[ListServiceAttributeResponse])
+async def list_attributes(
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    session: AsyncSession = Depends(get_db_session)
+):
+    repo = CatalogRepository(session)
+    return await ListServiceAttributes(repo).execute(tenant_id)
+
+@router.get("/offerings", response_model=list[ListServiceOfferingResponse])
+async def list_offerings(
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    session: AsyncSession = Depends(get_db_session)
+):
+    repo = CatalogRepository(session)
+    return await ListServiceOfferings(repo).execute(tenant_id)
+
 
 @router.post("/uom", response_model=UOMResponse, status_code=status.HTTP_201_CREATED)
 async def register_uom(

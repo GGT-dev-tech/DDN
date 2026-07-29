@@ -61,6 +61,24 @@ class CatalogRepository:
             return None
         return await self.get_uom_by_id(orm.id)
 
+    async def list_uoms(self, tenant_id: uuid.UUID) -> list[UnitOfMeasure]:
+        result = await self._session.execute(
+            select(CatalogUnitOfMeasure).where(CatalogUnitOfMeasure.tenant_id == tenant_id)
+        )
+        orms = result.scalars().all()
+        return [
+            UnitOfMeasure(
+                _id=orm.id,
+                tenant_id=orm.tenant_id,
+                symbol=orm.symbol,
+                name=orm.name,
+                base_type=orm.base_type,
+                created_at=orm.created_at,
+                updated_at=orm.updated_at,
+            )
+            for orm in orms
+        ]
+
     # --- Service Attribute ---
 
     async def add_service_attribute(self, attr: ServiceAttribute) -> None:
@@ -102,6 +120,25 @@ class CatalogRepository:
         if not orm:
             return None
         return await self.get_service_attribute_by_id(orm.id)
+
+    async def list_service_attributes(self, tenant_id: uuid.UUID) -> list[ServiceAttribute]:
+        result = await self._session.execute(
+            select(CatalogServiceAttribute).where(CatalogServiceAttribute.tenant_id == tenant_id)
+        )
+        orms = result.scalars().all()
+        return [
+            ServiceAttribute(
+                _id=orm.id,
+                tenant_id=orm.tenant_id,
+                name=orm.name,
+                attribute_type=orm.attribute_type,
+                possible_values=orm.possible_values,
+                is_required=orm.is_required,
+                created_at=orm.created_at,
+                updated_at=orm.updated_at
+            )
+            for orm in orms
+        ]
 
     # --- Service Offering ---
 
@@ -178,6 +215,16 @@ class CatalogRepository:
         if not orm:
             return None
         return await self.get_service_offering_by_id(orm.id)
+
+    async def list_service_offerings(self, tenant_id: uuid.UUID) -> list[ServiceOffering]:
+        result = await self._session.execute(
+            select(CatalogServiceOffering).where(CatalogServiceOffering.tenant_id == tenant_id)
+        )
+        orms = result.scalars().all()
+        offerings = []
+        for orm in orms:
+            offerings.append(await self.get_service_offering_by_id(orm.id))
+        return [o for o in offerings if o is not None]
 
     async def update_service_offering(self, offering: ServiceOffering) -> None:
         result = await self._session.execute(

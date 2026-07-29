@@ -719,6 +719,62 @@
       }
     },
     "/api/v1/catalog/uom": {
+      "get": {
+        "tags": [
+          "Catalog"
+        ],
+        "summary": "List Uoms",
+        "operationId": "list_uoms_api_v1_catalog_uom_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/modules__catalog__application__use_cases__list_catalog_entities__UOMResponse"
+                  },
+                  "title": "Response List Uoms Api V1 Catalog Uom Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Catalog"
@@ -764,7 +820,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UOMResponse"
+                  "$ref": "#/components/schemas/modules__catalog__application__dto__requests__UOMResponse"
                 }
               }
             }
@@ -783,6 +839,62 @@
       }
     },
     "/api/v1/catalog/attributes": {
+      "get": {
+        "tags": [
+          "Catalog"
+        ],
+        "summary": "List Attributes",
+        "operationId": "list_attributes_api_v1_catalog_attributes_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/modules__catalog__application__use_cases__list_catalog_entities__ServiceAttributeResponse"
+                  },
+                  "title": "Response List Attributes Api V1 Catalog Attributes Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Catalog"
@@ -828,7 +940,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ServiceAttributeResponse"
+                  "$ref": "#/components/schemas/modules__catalog__application__dto__requests__ServiceAttributeResponse"
                 }
               }
             }
@@ -847,6 +959,62 @@
       }
     },
     "/api/v1/catalog/offerings": {
+      "get": {
+        "tags": [
+          "Catalog"
+        ],
+        "summary": "List Offerings",
+        "operationId": "list_offerings_api_v1_catalog_offerings_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/modules__catalog__application__use_cases__list_catalog_entities__ServiceOfferingResponse"
+                  },
+                  "title": "Response List Offerings Api V1 Catalog Offerings Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Catalog"
@@ -892,7 +1060,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ServiceOfferingResponse"
+                  "$ref": "#/components/schemas/modules__catalog__application__dto__requests__ServiceOfferingResponse"
                 }
               }
             }
@@ -3530,33 +3698,34 @@
         ],
         "title": "ScheduleUpdateRequest"
       },
-      "ServiceAttributeResponse": {
+      "ServiceOfferingAttributeResponse": {
         "properties": {
-          "id": {
+          "service_attribute_id": {
             "type": "string",
             "format": "uuid",
-            "title": "Id"
+            "title": "Service Attribute Id"
+          },
+          "allowed_values": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allowed Values"
           }
         },
         "type": "object",
         "required": [
-          "id"
+          "service_attribute_id",
+          "allowed_values"
         ],
-        "title": "ServiceAttributeResponse"
-      },
-      "ServiceOfferingResponse": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id"
-        ],
-        "title": "ServiceOfferingResponse"
+        "title": "ServiceOfferingAttributeResponse"
       },
       "StopResponseDTO": {
         "properties": {
@@ -3693,20 +3862,6 @@
           "TIME"
         ],
         "title": "UOMBaseType"
-      },
-      "UOMResponse": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id"
-        ],
-        "title": "UOMResponse"
       },
       "UpdateSchedulesRequest": {
         "properties": {
@@ -3875,6 +4030,176 @@
           "status"
         ],
         "title": "VehicleResponseDTO"
+      },
+      "modules__catalog__application__dto__requests__ServiceAttributeResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "ServiceAttributeResponse"
+      },
+      "modules__catalog__application__dto__requests__ServiceOfferingResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "ServiceOfferingResponse"
+      },
+      "modules__catalog__application__dto__requests__UOMResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "UOMResponse"
+      },
+      "modules__catalog__application__use_cases__list_catalog_entities__ServiceAttributeResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "attribute_type": {
+            "type": "string",
+            "title": "Attribute Type"
+          },
+          "is_required": {
+            "type": "boolean",
+            "title": "Is Required"
+          },
+          "possible_values": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Possible Values"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "attribute_type",
+          "is_required",
+          "possible_values"
+        ],
+        "title": "ServiceAttributeResponse"
+      },
+      "modules__catalog__application__use_cases__list_catalog_entities__ServiceOfferingResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "default_uom_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Default Uom Id"
+          },
+          "attributes": {
+            "items": {
+              "$ref": "#/components/schemas/ServiceOfferingAttributeResponse"
+            },
+            "type": "array",
+            "title": "Attributes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description",
+          "category",
+          "status",
+          "default_uom_id",
+          "attributes"
+        ],
+        "title": "ServiceOfferingResponse"
+      },
+      "modules__catalog__application__use_cases__list_catalog_entities__UOMResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "symbol": {
+            "type": "string",
+            "title": "Symbol"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "base_type": {
+            "type": "string",
+            "title": "Base Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "symbol",
+          "name",
+          "base_type"
+        ],
+        "title": "UOMResponse"
       }
     },
     "securitySchemes": {
