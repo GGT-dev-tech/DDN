@@ -9,6 +9,14 @@ export const handlers = [
       token_type: "bearer"
     });
   }),
+  http.get('http://localhost:3000/auth/me', () => {
+    return HttpResponse.json({
+      id: "usr-admin-1",
+      email: "admin@goauct.com",
+      status: "ACTIVE",
+      created_at: "2024-01-01T00:00:00Z"
+    });
+  }),
   http.get('http://localhost:3000/api/v1/contracts', () => {
     return HttpResponse.json([
       {

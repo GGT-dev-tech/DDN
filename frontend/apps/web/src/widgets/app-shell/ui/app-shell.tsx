@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@repo/ui/src/components/ui/button";
+import { AppBreadcrumbs } from "./breadcrumbs";
+import { UserMenu } from "./user-menu";
+import { Suspense } from "react";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -57,12 +60,15 @@ export function AppShell({ children }: AppShellProps) {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Top header (optional) */}
-        <header className="h-16 flex items-center justify-end px-6 border-b bg-white">
-          <div className="flex items-center gap-4">
-            <div className="h-8 w-8 rounded-full bg-zinc-200 flex items-center justify-center">
-              <span className="text-xs font-medium text-zinc-600">AD</span>
-            </div>
+        {/* Top header */}
+        <header className="h-16 flex items-center justify-between px-6 border-b bg-white">
+          <div className="flex-1 overflow-hidden pr-4">
+            <Suspense fallback={<div className="h-4 w-32 bg-zinc-100 rounded animate-pulse" />}>
+              <AppBreadcrumbs />
+            </Suspense>
+          </div>
+          <div className="flex items-center gap-4 shrink-0">
+            <UserMenu />
           </div>
         </header>
 

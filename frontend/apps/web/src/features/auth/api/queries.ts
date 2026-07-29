@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { loginAuthLoginPost, UserLoginRequest } from "@repo/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { loginAuthLoginPost, getMeAuthMeGet, UserLoginRequest } from "@repo/api";
 import { createSession } from "../actions";
 
 export function useLoginMutation() {
@@ -25,6 +25,16 @@ export function useLoginMutation() {
     onSuccess: () => {
       // Invalidate queries so that anything depending on the auth state refreshes
       queryClient.invalidateQueries({ queryKey: ["me"] });
+    },
+  });
+}
+
+export function useMeQuery() {
+  return useQuery({
+    queryKey: ["auth", "me"],
+    queryFn: async () => {
+      const response = await getMeAuthMeGet();
+      return response.data;
     },
   });
 }
