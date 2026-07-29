@@ -73,4 +73,76 @@ export const handlers = [
       version: 1
     });
   }),
+  http.get('http://localhost:3000/api/v1/routes', () => {
+    return HttpResponse.json([
+      {
+        id: "rt-1234",
+        execution_date: new Date().toISOString(),
+        status: "PLANNED",
+        estimated_volume: 120,
+        estimated_weight: 850,
+        planned_distance: 45,
+        planned_duration: 120,
+        vehicle_id: "veh-99",
+        driver_id: "drv-01",
+        stops: [
+          {
+            id: "stp-1",
+            latitude: -23.55052,
+            longitude: -46.633308,
+            address: "Av. Paulista, 1000",
+            order: 1,
+            status: "PENDING"
+          },
+          {
+            id: "stp-2",
+            latitude: -23.56111,
+            longitude: -46.65611,
+            address: "Rua Augusta, 500",
+            order: 2,
+            status: "PENDING"
+          }
+        ]
+      }
+    ]);
+  }),
+  http.get('http://localhost:3000/api/v1/routes/:routeId', ({ params }) => {
+    return HttpResponse.json({
+      id: params.routeId,
+      execution_date: new Date().toISOString(),
+      status: "IN_PROGRESS",
+      estimated_volume: 120,
+      estimated_weight: 850,
+      planned_distance: 45,
+      planned_duration: 120,
+      vehicle_id: "veh-99",
+      driver_id: "drv-01",
+      stops: [
+        {
+          id: "stp-1",
+          latitude: -23.55052,
+          longitude: -46.633308,
+          address: "Av. Paulista, 1000",
+          order: 1,
+          status: "COLLECTED"
+        },
+        {
+          id: "stp-2",
+          latitude: -23.56111,
+          longitude: -46.65611,
+          address: "Rua Augusta, 500",
+          order: 2,
+          status: "ARRIVED"
+        },
+        {
+          id: "stp-3",
+          latitude: -23.57111,
+          longitude: -46.67611,
+          address: "Av. Faria Lima, 2000",
+          order: 3,
+          status: "PENDING"
+        }
+      ]
+    });
+  }),
 ];
