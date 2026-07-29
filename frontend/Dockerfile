@@ -1,34 +1,49 @@
-FROM node:20-alpine AS builder
+FROM node:20-alpine AS base
 
+# Install necessary tools
+RUN apk add --no-cache libc6-compat
+RUN npm install -g turbo
+
+FROM base AS builder
+WORKDIR /app
+COPY . .
+RUN turbo prune @repo/web --docker
+
+FROM base AS installer
 WORKDIR /app
 
-# Copy the frontend application
-COPY apps/stitch-admin/package.json apps/stitch-admin/package-lock.json* ./apps/stitch-admin/
+# First install dependencies (as they change less often)
+COPY .gitignore .gitignore
+COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/out/package-lock.json ./package-lock.json
+RUN npm ci
 
-# Install dependencies inside the stitch-admin folder
-WORKDIR /app/apps/stitch-admin
-RUN npm ci || npm install
+# Build the project
+COPY --from=builder /app/out/full/ .
+RUN turbo run build --filter=@repo/web...
 
-# Copy the rest of the application
-COPY apps/stitch-admin/ ./
-
-# Build the specific app (Vite will read environment variables like VITE_API_URL here if passed by Railway)
-RUN npm run build
-
-# Stage 2: Serve the built static files using a simple Node.js server
-FROM node:20-alpine AS runner
-
+FROM base AS runner
 WORKDIR /app
 
-# Install the 'serve' package globally
-RUN npm install -g serve
+# Don't run production as root
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+USER nextjs
 
-# Copy the built assets from the builder stage
-COPY --from=builder /app/apps/stitch-admin/dist ./dist
+COPY --from=installer /app/apps/web/next.config.ts .
+COPY --from=installer /app/apps/web/package.json .
 
-# Railway provides the PORT environment variable dynamically
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
+COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
+COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
+
 ENV PORT=3000
-EXPOSE $PORT
+EXPOSE 3000
 
-# Start the 'serve' server on the specified port
-CMD ["sh", "-c", "serve -s dist -l ${PORT:-3000}"]
+ENV HOSTNAME="0.0.0.0"
+
+# Note: The standalone build outputs a server.js file at the root of the standalone folder
+# but because of monorepo it might be under apps/web/server.js
+CMD ["node", "apps/web/server.js"]
