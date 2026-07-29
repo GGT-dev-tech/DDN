@@ -19,6 +19,8 @@ RUN npm ci
 
 # Build the project
 COPY --from=builder /app/out/full/ .
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_OPTIONS="--max-old-space-size=1024"
 RUN turbo run build --filter=@repo/web...
 
 FROM base AS runner
