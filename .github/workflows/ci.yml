@@ -92,7 +92,7 @@ jobs:
           cache-dependency-path: './frontend/apps/stitch-admin/package-lock.json'
       
       - name: Download OpenAPI schema
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: openapi-schema
           path: frontend/apps/stitch-admin/
