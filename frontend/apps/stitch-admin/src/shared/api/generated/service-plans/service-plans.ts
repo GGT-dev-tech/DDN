@@ -24,6 +24,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  CreatePlanApiV1ServicePlansPost200,
+  CreateServicePlanRequest,
   GetPlanApiV1ServicePlansPlanIdGet200,
   HTTPValidationError,
   ListPlansByContractApiV1ServicePlansContractContractIdGetParams,
@@ -215,6 +217,70 @@ export const useUpdateSchedulesApiV1ServicePlansPlanIdPatch = <TError = HTTPVali
         TContext
       > => {
       return useMutation(getUpdateSchedulesApiV1ServicePlansPlanIdPatchMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary Create Plan
+ */
+export const createPlanApiV1ServicePlansPost = (
+    createServicePlanRequest: CreateServicePlanRequest,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<CreatePlanApiV1ServicePlansPost200>(
+      {url: `/api/v1/service-plans`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createServicePlanRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getCreatePlanApiV1ServicePlansPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPlanApiV1ServicePlansPost>>, TError,{data: CreateServicePlanRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createPlanApiV1ServicePlansPost>>, TError,{data: CreateServicePlanRequest}, TContext> => {
+
+const mutationKey = ['createPlanApiV1ServicePlansPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createPlanApiV1ServicePlansPost>>, {data: CreateServicePlanRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createPlanApiV1ServicePlansPost(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreatePlanApiV1ServicePlansPostMutationResult = NonNullable<Awaited<ReturnType<typeof createPlanApiV1ServicePlansPost>>>
+    export type CreatePlanApiV1ServicePlansPostMutationBody = CreateServicePlanRequest
+    export type CreatePlanApiV1ServicePlansPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Create Plan
+ */
+export const useCreatePlanApiV1ServicePlansPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPlanApiV1ServicePlansPost>>, TError,{data: CreateServicePlanRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createPlanApiV1ServicePlansPost>>,
+        TError,
+        {data: CreateServicePlanRequest},
+        TContext
+      > => {
+      return useMutation(getCreatePlanApiV1ServicePlansPostMutationOptions(options), queryClient);
     }
     /**
  * @summary List All Plans

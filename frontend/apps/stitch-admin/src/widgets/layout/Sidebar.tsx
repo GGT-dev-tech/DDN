@@ -14,6 +14,7 @@ const GROUPED_NAVIGATION = [
   {
     category: 'CRM',
     items: [
+      { name: 'Leads', icon: Users, href: '/admin/leads' },
       { name: 'Clientes', icon: Building2, href: '/admin/customers' },
     ]
   },

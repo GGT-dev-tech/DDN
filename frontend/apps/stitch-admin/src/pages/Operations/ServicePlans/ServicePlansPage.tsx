@@ -5,9 +5,12 @@ import { Button } from '../../../shared/ui/components/Button'
 import { EmptyState } from '../../../shared/ui/components/EmptyState'
 import { Plus, CalendarDays } from 'lucide-react'
 import { useListAllPlansApiV1ServicePlansGet } from '../../../shared/api/generated/service-plans/service-plans'
+import { AddServicePlanModal } from './components/AddServicePlanModal'
+import { useState } from 'react'
 
 export function ServicePlansPage() {
   const { data: plans = [], isLoading } = useListAllPlansApiV1ServicePlansGet()
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -16,6 +19,11 @@ export function ServicePlansPage() {
           <p className="text-muted-foreground mt-1">Gerencie os planos operacionais e recorrências de coleta.</p>
         </div>
       </div>
+
+      <AddServicePlanModal 
+        isOpen={isAddModalOpen} 
+        onClose={() => setIsAddModalOpen(false)} 
+      />
 
       <Card>
         <CardHeader className="flex flex-row items-start justify-between">
@@ -28,7 +36,7 @@ export function ServicePlansPage() {
               Planos gerados a partir de contratos para definir as regras de coleta.
             </CardDescription>
           </div>
-          <Button>
+          <Button onClick={() => setIsAddModalOpen(true)}>
             <Plus className="mr-2 h-4 w-4" /> Novo Plano Manual
           </Button>
         </CardHeader>
@@ -63,7 +71,7 @@ export function ServicePlansPage() {
               title="Nenhum plano de serviço"
               description="Os planos de serviço são gerados automaticamente quando um contrato é fechado, ou podem ser criados manualmente."
               action={
-                <Button>
+                <Button onClick={() => setIsAddModalOpen(true)}>
                   <Plus className="mr-2 h-4 w-4" /> Criar Plano Manualmente
                 </Button>
               }

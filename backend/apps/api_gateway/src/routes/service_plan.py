@@ -11,6 +11,7 @@ Endpoints:
 """
 import uuid
 from typing import Any
+from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
@@ -56,6 +57,13 @@ class CollectionPointRequest(BaseModel):
     latitude: float | None = None
     longitude: float | None = None
     reference: str | None = None
+
+class CreateServicePlanRequest(BaseModel):
+    contract_id: uuid.UUID
+    company_id: uuid.UUID
+    effective_date: date
+    expiration_date: date | None = None
+    items: list[dict[str, Any]] = []
 
 
 class RecurrenceRequest(BaseModel):
@@ -128,6 +136,23 @@ async def get_plan(
         return _plan_response(plan)
     except ServicePlanNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+@router.post("", response_model=dict)
+async def create_plan(
+    req: CreateServicePlanRequest,
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    service: ServicePlanService = Depends(get_service_plan_service),
+) -> dict:
+    plan_id = await service.create_from_contract(
+        contract_id=req.contract_id,
+        company_id=req.company_id,
+        tenant_id=tenant_id,
+        effective_date=req.effective_date,
+        expiration_date=req.expiration_date,
+        items=req.items
+    )
+    plan = await service.get_plan_by_id(plan_id)
+    return _plan_response(plan)
 
 @router.get("", response_model=list)
 async def list_all_plans(

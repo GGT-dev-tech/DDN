@@ -4,6 +4,7 @@ import { Modal } from '../../../shared/ui/components/Modal';
 import { Input } from '../../../shared/ui/components/Input';
 import { Button } from '../../../shared/ui/components/Button';
 import { useCreateQuotationApiV1QuotationsPost, getListQuotationsApiV1QuotationsGetQueryKey } from '../../../shared/api/generated/quotations/quotations';
+import { useListCompaniesApiV1CommercialCompaniesGet } from '../../../shared/api/generated/commercial/commercial';
 
 interface AddQuotationModalProps {
   isOpen: boolean;
@@ -13,6 +14,7 @@ interface AddQuotationModalProps {
 export function AddQuotationModal({ isOpen, onClose }: AddQuotationModalProps) {
   const queryClient = useQueryClient();
   const { mutateAsync: createQuotation, isPending } = useCreateQuotationApiV1QuotationsPost();
+  const { data: companies = [], isLoading: isLoadingCompanies } = useListCompaniesApiV1CommercialCompaniesGet();
   
   const [companyId, setCompanyId] = useState('');
   const [validityDays, setValidityDays] = useState('30');
@@ -34,27 +36,35 @@ export function AddQuotationModal({ isOpen, onClose }: AddQuotationModalProps) {
       // Close modal
       onClose();
     } catch (error) {
-      console.error('Failed to create quotation:', error);
+      console.error('Falha ao criar cotação:', error);
     }
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Create New Quotation">
+    <Modal isOpen={isOpen} onClose={onClose} title="Nova Cotação">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="space-y-2">
-          <label htmlFor="companyId" className="text-sm font-medium">Company ID (UUID)</label>
-          <Input 
+          <label htmlFor="companyId" className="text-sm font-medium">Cliente</label>
+          <select
             id="companyId"
-            type="text"
-            placeholder="e.g. 123e4567-e89b-12d3-a456-426614174000"
             value={companyId}
             onChange={(e) => setCompanyId(e.target.value)}
             required
-          />
+            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <option value="" disabled>
+              {isLoadingCompanies ? 'Carregando clientes...' : 'Selecione um cliente'}
+            </option>
+            {companies.map((c: any) => (
+              <option key={c.id} value={c.id}>
+                {c.corporate_name} ({c.document_number})
+              </option>
+            ))}
+          </select>
         </div>
         
         <div className="space-y-2">
-          <label htmlFor="validityDays" className="text-sm font-medium">Validity (Days)</label>
+          <label htmlFor="validityDays" className="text-sm font-medium">Validade (Dias)</label>
           <Input 
             id="validityDays"
             type="number"
@@ -67,10 +77,10 @@ export function AddQuotationModal({ isOpen, onClose }: AddQuotationModalProps) {
         
         <div className="flex justify-end gap-2 mt-4">
           <Button type="button" variant="ghost" onClick={onClose}>
-            Cancel
+            Cancelar
           </Button>
           <Button type="submit" disabled={isPending || !companyId || !validityDays}>
-            {isPending ? 'Creating...' : 'Create Quotation'}
+            {isPending ? 'Criando...' : 'Criar Cotação'}
           </Button>
         </div>
       </form>

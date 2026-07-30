@@ -32,3 +32,6 @@ class CompanyService:
 
     async def get_company(self, tenant_id: UUID, company_id: UUID) -> Company | None:
         return await self.company_repo.get_by_id(tenant_id, company_id)
+
+    async def list_companies(self, tenant_id: UUID) -> list[Company]:
+        return await self.company_repo.list_companies(tenant_id)

@@ -8,11 +8,11 @@ import { EmptyState } from '../../shared/ui/components/EmptyState'
 import { CustomerForm } from './components/CustomerForm'
 import { Plus, Building2 } from 'lucide-react'
 
-import { useListLeadsApiV1CommercialLeadsGet } from '../../shared/api/generated/commercial/commercial'
+import { useListCompaniesApiV1CommercialCompaniesGet } from '../../shared/api/generated/commercial/commercial'
 
 export function CustomersPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
-  const { data: leads = [], isLoading, refetch } = useListLeadsApiV1CommercialLeadsGet()
+  const { data: companies = [], isLoading, refetch } = useListCompaniesApiV1CommercialCompaniesGet()
 
   return (
     <div className="space-y-6">
@@ -41,25 +41,25 @@ export function CustomersPage() {
         <CardContent>
           {isLoading ? (
             <div className="py-8 text-center text-zinc-500">Carregando...</div>
-          ) : leads.length > 0 ? (
+          ) : companies.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Empresa</TableHead>
-                  <TableHead>Contato</TableHead>
-                  <TableHead>Email</TableHead>
+                  <TableHead>Razão Social</TableHead>
+                  <TableHead>Nome Fantasia</TableHead>
+                  <TableHead>Documento</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {leads.map((lead: any) => (
-                  <TableRow key={lead.id}>
-                    <TableCell className="font-medium">{lead.company_name}</TableCell>
-                    <TableCell>{lead.contact_name}</TableCell>
-                    <TableCell>{lead.email || '-'}</TableCell>
+                {companies.map((company: any) => (
+                  <TableRow key={company.id}>
+                    <TableCell className="font-medium">{company.corporate_name}</TableCell>
+                    <TableCell>{company.trade_name}</TableCell>
+                    <TableCell>{company.document_number}</TableCell>
                     <TableCell>
                       <Badge variant="outline">
-                        {lead.status === 'new' ? 'Novo' : lead.status}
+                        {company.status === 'ACTIVE' ? 'Ativo' : company.status}
                       </Badge>
                     </TableCell>
                   </TableRow>

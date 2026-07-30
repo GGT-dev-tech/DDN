@@ -56,6 +56,14 @@ class MatchLeadRequest(BaseModel):
     corporate_name: str | None = None
     document_number: str | None = None
 
+class CompanyResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: UUID
+    trade_name: str
+    corporate_name: str
+    document_number: str
+    status: str
+
 # Routes
 @router.get("/leads", response_model=list[LeadResponse])
 async def list_leads(
@@ -64,6 +72,14 @@ async def list_leads(
 ):
     leads = await lead_service.list_leads(tenant_id)
     return leads
+
+@router.get("/companies", response_model=list[CompanyResponse])
+async def list_companies(
+    tenant_id: UUID = Depends(require_tenant),
+    company_service: CompanyService = Depends(get_company_service)
+):
+    companies = await company_service.list_companies(tenant_id)
+    return companies
 
 @router.post("/leads", response_model=LeadResponse)
 async def register_lead(

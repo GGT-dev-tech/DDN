@@ -81,3 +81,22 @@ class CompanyRepository:
             db_company.corporate_name = company.corporate_name
             db_company.document_number = company.document_number
             db_company.status = company.status
+
+    async def list_companies(self, tenant_id: UUID) -> list[Company]:
+        stmt = select(CommercialCompany).where(
+            CommercialCompany.tenant_id == tenant_id
+        )
+        result = await self.session.execute(stmt)
+        db_companies = result.scalars().all()
+        
+        return [
+            Company(
+                id=c.id,
+                tenant_id=c.tenant_id,
+                trade_name=c.trade_name,
+                corporate_name=c.corporate_name,
+                document_number=c.document_number,
+                status=c.status,
+                created_at=c.created_at
+            ) for c in db_companies
+        ]

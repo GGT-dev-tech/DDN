@@ -10,14 +10,14 @@ export function QuotationsPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { data: quotations, isLoading, isError } = useListQuotationsApiV1QuotationsGet();
 
-  if (isLoading) return <div className="p-4">Loading quotations...</div>;
-  if (isError) return <div className="p-4 text-red-500">Error loading quotations.</div>;
+  if (isLoading) return <div className="p-4">Carregando cotações...</div>;
+  if (isError) return <div className="p-4 text-red-500">Erro ao carregar cotações.</div>;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Quotations</h1>
-        <Button onClick={() => setIsAddModalOpen(true)}>Create Quotation</Button>
+        <h1 className="text-3xl font-bold tracking-tight">Cotações</h1>
+        <Button onClick={() => setIsAddModalOpen(true)}>Nova Cotação</Button>
       </div>
 
       <AddQuotationModal 
@@ -27,21 +27,21 @@ export function QuotationsPage() {
       
       <Card>
         <CardHeader>
-          <CardTitle>Commercial Proposals</CardTitle>
+          <CardTitle>Propostas Comerciais</CardTitle>
           <CardDescription>
-            Manage and track all customer quotations.
+            Gerencie e acompanhe as cotações geradas para clientes.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Quotation ID</TableHead>
-                <TableHead>Company ID</TableHead>
+                <TableHead>ID da Cotação</TableHead>
+                <TableHead>ID da Empresa</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Validity</TableHead>
-                <TableHead>Created At</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>Validade</TableHead>
+                <TableHead>Criado Em</TableHead>
+                <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -58,7 +58,7 @@ export function QuotationsPage() {
                   <TableCell>{q.created_at ? new Date(q.created_at).toLocaleDateString() : 'N/A'}</TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost">
-                      View
+                      Ver
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -66,7 +66,7 @@ export function QuotationsPage() {
               {!quotations?.length && (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center py-6 text-text-secondary">
-                    No quotations found. Create one to get started.
+                    Nenhuma cotação encontrada. Crie uma para começar.
                   </TableCell>
                 </TableRow>
               )}
