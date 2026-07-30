@@ -59,7 +59,7 @@ async def register(request: UserRegisterRequest, db: Annotated[AsyncSession, Dep
     
     # Generate tokens
     access_token = auth_service.create_access_token(data={"sub": str(user.id)}, expires_delta=timedelta(minutes=15))
-    refresh_token_str = secrets.token_urlsafe(64)
+    refresh_token_str = secrets.token_urlsafe(32)
     
     refresh_token = RefreshToken(
         user_id=user.id,
@@ -89,7 +89,7 @@ async def login(request: UserLoginRequest, db: Annotated[AsyncSession, Depends(g
     user.last_login_at = datetime.now(UTC)
     
     access_token = auth_service.create_access_token(data={"sub": str(user.id)}, expires_delta=timedelta(minutes=15))
-    refresh_token_str = secrets.token_urlsafe(64)
+    refresh_token_str = secrets.token_urlsafe(32)
     
     refresh_token = RefreshToken(
         user_id=user.id,

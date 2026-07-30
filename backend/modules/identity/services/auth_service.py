@@ -1,9 +1,7 @@
 from datetime import UTC, datetime, timedelta
 
 import jwt
-from passlib.context import CryptContext
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+import bcrypt
 
 class AuthService:
     def __init__(self, secret_key: str, algorithm: str = "HS256"):
@@ -11,10 +9,11 @@ class AuthService:
         self.algorithm = algorithm
 
     def get_password_hash(self, password: str) -> str:
-        return pwd_context.hash(password)
+        salt = bcrypt.gensalt()
+        return bcrypt.hashpw(password.encode("utf-8"), salt).decode("utf-8")
 
     def verify_password(self, plain_password: str, hashed_password: str) -> bool:
-        return pwd_context.verify(plain_password, hashed_password)
+        return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
 
     def create_access_token(self, data: dict, expires_delta: timedelta | None = None) -> str:
         to_encode = data.copy()
