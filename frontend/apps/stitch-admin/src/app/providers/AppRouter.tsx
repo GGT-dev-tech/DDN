@@ -8,6 +8,7 @@ import { SettingsPage } from '../../pages/Settings/SettingsPage'
 import { QuotationsPage } from '../../pages/Quotations/QuotationsPage'
 import { CatalogPage } from '../../pages/Catalog/CatalogPage'
 import { LoginPage } from '../../pages/Auth/LoginPage'
+import { RegisterPage } from '../../pages/Auth/RegisterPage'
 import { AuthProvider, useAuth } from './AuthProvider'
 
 function ProtectedRoute() {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />,
   },
   {
     path: '/',

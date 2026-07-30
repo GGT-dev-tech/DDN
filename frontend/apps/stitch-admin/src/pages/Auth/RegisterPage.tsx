@@ -1,27 +1,28 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../app/providers/AuthProvider';
-import { useLoginApiV1AuthLoginPost } from '../../shared/api/generated/auth/auth';
+import { useRegisterApiV1AuthRegisterPost } from '../../shared/api/generated/auth/auth';
 import { Button } from '../../shared/ui/components/Button';
 import { Input } from '../../shared/ui/components/Input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../shared/ui/components/Card';
 
-export function LoginPage() {
-  const [email, setEmail] = useState('admin@stitch.com');
-  const [password, setPassword] = useState('stitchadmin');
+export function RegisterPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [tenantName, setTenantName] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   
   const navigate = useNavigate();
   const { login } = useAuth();
   
-  const { mutate: loginMutation, isPending } = useLoginApiV1AuthLoginPost({
+  const { mutate: registerMutation, isPending } = useRegisterApiV1AuthRegisterPost({
     mutation: {
       onSuccess: (data) => {
         login(data.access_token, data.refresh_token);
         navigate('/');
       },
       onError: (error: any) => {
-        setErrorMsg(error.response?.data?.detail || 'Erro ao realizar login');
+        setErrorMsg(error.response?.data?.detail || 'Erro ao realizar cadastro');
       }
     }
   });
@@ -29,10 +30,11 @@ export function LoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
-    loginMutation({
+    registerMutation({
       data: {
         email,
-        password
+        password,
+        tenant_name: tenantName
       }
     });
   };
@@ -45,9 +47,9 @@ export function LoginPage() {
         
         <Card className="relative bg-zinc-950/80 backdrop-blur-xl border-zinc-800">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center tracking-tight">Stitch</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center tracking-tight">Criar Conta</CardTitle>
             <CardDescription className="text-center">
-              Entre com suas credenciais para acessar o painel
+              Crie uma conta para sua empresa no Stitch
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
@@ -58,11 +60,23 @@ export function LoginPage() {
                 </div>
               )}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-300" htmlFor="email">Email</label>
+                <label className="text-sm font-medium text-zinc-300" htmlFor="tenantName">Nome da Empresa</label>
+                <Input 
+                  id="tenantName" 
+                  type="text" 
+                  placeholder="Minha Empresa de Resíduos"
+                  value={tenantName}
+                  onChange={(e) => setTenantName(e.target.value)}
+                  required
+                  className="bg-zinc-900/50"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-zinc-300" htmlFor="email">Email do Administrador</label>
                 <Input 
                   id="email" 
                   type="email" 
-                  placeholder="admin@stitch.com"
+                  placeholder="admin@empresa.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -87,10 +101,10 @@ export function LoginPage() {
                 className="w-full font-semibold"
                 disabled={isPending}
               >
-                {isPending ? 'Entrando...' : 'Entrar'}
+                {isPending ? 'Criando Conta...' : 'Criar Conta'}
               </Button>
               <div className="text-center text-sm text-zinc-400">
-                Não tem uma conta? <Link to="/register" className="text-brand-500 hover:underline">Criar Conta</Link>
+                Já tem uma conta? <Link to="/login" className="text-brand-500 hover:underline">Fazer Login</Link>
               </div>
             </div>
           </form>
