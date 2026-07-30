@@ -23,35 +23,65 @@ import type {
 } from '.././model';
 
 
-export const getRegisterVehicleFleetVehiclesPostResponseMock = (overrideResponse: Partial< VehicleResponseDTO > = {}): VehicleResponseDTO => ({id: faker.string.uuid(), license_plate: faker.string.alpha({length: {min: 10, max: 20}}), vehicle_type: faker.string.alpha({length: {min: 10, max: 20}}), capacity_volume: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), capacity_weight: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), status: faker.string.alpha({length: {min: 10, max: 20}}), ...overrideResponse})
+export const getRegisterVehicleApiV1FleetVehiclesPostResponseMock = (overrideResponse: Partial< VehicleResponseDTO > = {}): VehicleResponseDTO => ({id: faker.string.uuid(), license_plate: faker.string.alpha({length: {min: 10, max: 20}}), vehicle_type: faker.string.alpha({length: {min: 10, max: 20}}), capacity_volume: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), capacity_weight: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), status: faker.string.alpha({length: {min: 10, max: 20}}), ...overrideResponse})
 
-export const getRegisterDriverFleetDriversPostResponseMock = (overrideResponse: Partial< DriverResponseDTO > = {}): DriverResponseDTO => ({id: faker.string.uuid(), name: faker.string.alpha({length: {min: 10, max: 20}}), license_number: faker.string.alpha({length: {min: 10, max: 20}}), status: faker.string.alpha({length: {min: 10, max: 20}}), ...overrideResponse})
+export const getListVehiclesApiV1FleetVehiclesGetResponseMock = (): VehicleResponseDTO[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), license_plate: faker.string.alpha({length: {min: 10, max: 20}}), vehicle_type: faker.string.alpha({length: {min: 10, max: 20}}), capacity_volume: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), capacity_weight: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), status: faker.string.alpha({length: {min: 10, max: 20}})})))
+
+export const getRegisterDriverApiV1FleetDriversPostResponseMock = (overrideResponse: Partial< DriverResponseDTO > = {}): DriverResponseDTO => ({id: faker.string.uuid(), name: faker.string.alpha({length: {min: 10, max: 20}}), license_number: faker.string.alpha({length: {min: 10, max: 20}}), status: faker.string.alpha({length: {min: 10, max: 20}}), ...overrideResponse})
+
+export const getListDriversApiV1FleetDriversGetResponseMock = (): DriverResponseDTO[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), name: faker.string.alpha({length: {min: 10, max: 20}}), license_number: faker.string.alpha({length: {min: 10, max: 20}}), status: faker.string.alpha({length: {min: 10, max: 20}})})))
 
 
-export const getRegisterVehicleFleetVehiclesPostMockHandler = (overrideResponse?: VehicleResponseDTO | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<VehicleResponseDTO> | VehicleResponseDTO), options?: RequestHandlerOptions) => {
-  return http.post('*/fleet/vehicles', async (info) => {await delay(1000);
+export const getRegisterVehicleApiV1FleetVehiclesPostMockHandler = (overrideResponse?: VehicleResponseDTO | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<VehicleResponseDTO> | VehicleResponseDTO), options?: RequestHandlerOptions) => {
+  return http.post('*/api/v1/fleet/vehicles', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
     ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getRegisterVehicleFleetVehiclesPostResponseMock()),
+    : getRegisterVehicleApiV1FleetVehiclesPostResponseMock()),
       { status: 201,
         headers: { 'Content-Type': 'application/json' }
       })
   }, options)
 }
 
-export const getRegisterDriverFleetDriversPostMockHandler = (overrideResponse?: DriverResponseDTO | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<DriverResponseDTO> | DriverResponseDTO), options?: RequestHandlerOptions) => {
-  return http.post('*/fleet/drivers', async (info) => {await delay(1000);
+export const getListVehiclesApiV1FleetVehiclesGetMockHandler = (overrideResponse?: VehicleResponseDTO[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<VehicleResponseDTO[]> | VehicleResponseDTO[]), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/fleet/vehicles', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
     ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getRegisterDriverFleetDriversPostResponseMock()),
+    : getListVehiclesApiV1FleetVehiclesGetResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  }, options)
+}
+
+export const getRegisterDriverApiV1FleetDriversPostMockHandler = (overrideResponse?: DriverResponseDTO | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<DriverResponseDTO> | DriverResponseDTO), options?: RequestHandlerOptions) => {
+  return http.post('*/api/v1/fleet/drivers', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getRegisterDriverApiV1FleetDriversPostResponseMock()),
       { status: 201,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  }, options)
+}
+
+export const getListDriversApiV1FleetDriversGetMockHandler = (overrideResponse?: DriverResponseDTO[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<DriverResponseDTO[]> | DriverResponseDTO[]), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/fleet/drivers', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getListDriversApiV1FleetDriversGetResponseMock()),
+      { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   }, options)
 }
 export const getFleetMock = () => [
-  getRegisterVehicleFleetVehiclesPostMockHandler(),
-  getRegisterDriverFleetDriversPostMockHandler()
+  getRegisterVehicleApiV1FleetVehiclesPostMockHandler(),
+  getListVehiclesApiV1FleetVehiclesGetMockHandler(),
+  getRegisterDriverApiV1FleetDriversPostMockHandler(),
+  getListDriversApiV1FleetDriversGetMockHandler()
 ]

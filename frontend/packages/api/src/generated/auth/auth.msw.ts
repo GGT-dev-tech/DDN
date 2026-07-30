@@ -23,50 +23,50 @@ import type {
 } from '.././model';
 
 
-export const getRegisterAuthRegisterPostResponseMock = (overrideResponse: Partial< TokenResponse > = {}): TokenResponse => ({access_token: faker.string.alpha({length: {min: 10, max: 20}}), refresh_token: faker.string.alpha({length: {min: 10, max: 20}}), token_type: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), undefined]), ...overrideResponse})
+export const getRegisterApiV1AuthRegisterPostResponseMock = (overrideResponse: Partial< TokenResponse > = {}): TokenResponse => ({access_token: faker.string.alpha({length: {min: 10, max: 20}}), refresh_token: faker.string.alpha({length: {min: 10, max: 20}}), token_type: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), undefined]), ...overrideResponse})
 
-export const getLoginAuthLoginPostResponseMock = (overrideResponse: Partial< TokenResponse > = {}): TokenResponse => ({access_token: faker.string.alpha({length: {min: 10, max: 20}}), refresh_token: faker.string.alpha({length: {min: 10, max: 20}}), token_type: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), undefined]), ...overrideResponse})
+export const getLoginApiV1AuthLoginPostResponseMock = (overrideResponse: Partial< TokenResponse > = {}): TokenResponse => ({access_token: faker.string.alpha({length: {min: 10, max: 20}}), refresh_token: faker.string.alpha({length: {min: 10, max: 20}}), token_type: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), undefined]), ...overrideResponse})
 
-export const getGetMeAuthMeGetResponseMock = (overrideResponse: Partial< UserResponse > = {}): UserResponse => ({id: faker.string.uuid(), email: faker.string.alpha({length: {min: 10, max: 20}}), status: faker.string.alpha({length: {min: 10, max: 20}}), created_at: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
+export const getGetMeApiV1AuthMeGetResponseMock = (overrideResponse: Partial< UserResponse > = {}): UserResponse => ({id: faker.string.uuid(), email: faker.string.alpha({length: {min: 10, max: 20}}), status: faker.string.alpha({length: {min: 10, max: 20}}), created_at: `${faker.date.past().toISOString().split('.')[0]}Z`, ...overrideResponse})
 
 
-export const getRegisterAuthRegisterPostMockHandler = (overrideResponse?: TokenResponse | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<TokenResponse> | TokenResponse), options?: RequestHandlerOptions) => {
-  return http.post('*/auth/register', async (info) => {await delay(1000);
+export const getRegisterApiV1AuthRegisterPostMockHandler = (overrideResponse?: TokenResponse | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<TokenResponse> | TokenResponse), options?: RequestHandlerOptions) => {
+  return http.post('*/api/v1/auth/register', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
     ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getRegisterAuthRegisterPostResponseMock()),
+    : getRegisterApiV1AuthRegisterPostResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   }, options)
 }
 
-export const getLoginAuthLoginPostMockHandler = (overrideResponse?: TokenResponse | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<TokenResponse> | TokenResponse), options?: RequestHandlerOptions) => {
-  return http.post('*/auth/login', async (info) => {await delay(1000);
+export const getLoginApiV1AuthLoginPostMockHandler = (overrideResponse?: TokenResponse | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<TokenResponse> | TokenResponse), options?: RequestHandlerOptions) => {
+  return http.post('*/api/v1/auth/login', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
     ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getLoginAuthLoginPostResponseMock()),
+    : getLoginApiV1AuthLoginPostResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   }, options)
 }
 
-export const getGetMeAuthMeGetMockHandler = (overrideResponse?: UserResponse | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<UserResponse> | UserResponse), options?: RequestHandlerOptions) => {
-  return http.get('*/auth/me', async (info) => {await delay(1000);
+export const getGetMeApiV1AuthMeGetMockHandler = (overrideResponse?: UserResponse | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<UserResponse> | UserResponse), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/auth/me', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
     ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetMeAuthMeGetResponseMock()),
+    : getGetMeApiV1AuthMeGetResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   }, options)
 }
 export const getAuthMock = () => [
-  getRegisterAuthRegisterPostMockHandler(),
-  getLoginAuthLoginPostMockHandler(),
-  getGetMeAuthMeGetMockHandler()
+  getRegisterApiV1AuthRegisterPostMockHandler(),
+  getLoginApiV1AuthLoginPostMockHandler(),
+  getGetMeApiV1AuthMeGetMockHandler()
 ]

@@ -4,6 +4,25 @@
  * Stitch API Gateway
  * OpenAPI spec version: 1.0.0
  */
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
+import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
+} from '@tanstack/react-query';
+
 import type {
   AddPriceTableItemApiV1PricingTablesTableIdItemsPost201,
   CreatePriceTableApiV1PricingTablesPost201,
@@ -13,181 +32,364 @@ import type {
   PriceCalculationResponse,
   PriceTableCreateRequest,
   PriceTableItemCreateRequest,
+  PriceTableResponse,
   PricingRuleCreateRequest
 } from '.././model';
 
 import { customClient } from '../../custom-client';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
+/**
+ * @summary List Price Tables
+ */
+export const listPriceTablesApiV1PricingTablesGet = (
+    
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<PriceTableResponse[]>(
+      {url: `/api/v1/pricing/tables`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getListPriceTablesApiV1PricingTablesGetQueryKey = () => {
+    return [
+    `/api/v1/pricing/tables`
+    ] as const;
+    }
+
+    
+export const getListPriceTablesApiV1PricingTablesGetQueryOptions = <TData = Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListPriceTablesApiV1PricingTablesGetQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>> = ({ signal }) => listPriceTablesApiV1PricingTablesGet(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type ListPriceTablesApiV1PricingTablesGetQueryResult = NonNullable<Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>>
+export type ListPriceTablesApiV1PricingTablesGetQueryError = HTTPValidationError
+
+
+export function useListPriceTablesApiV1PricingTablesGet<TData = Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>,
+          TError,
+          Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListPriceTablesApiV1PricingTablesGet<TData = Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>,
+          TError,
+          Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListPriceTablesApiV1PricingTablesGet<TData = Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary List Price Tables
+ */
+
+export function useListPriceTablesApiV1PricingTablesGet<TData = Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPriceTablesApiV1PricingTablesGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getListPriceTablesApiV1PricingTablesGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
 /**
  * @summary Create Price Table
  */
-export type createPriceTableApiV1PricingTablesPostResponse201 = {
-  data: CreatePriceTableApiV1PricingTablesPost201
-  status: 201
-}
-
-export type createPriceTableApiV1PricingTablesPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type createPriceTableApiV1PricingTablesPostResponseSuccess = (createPriceTableApiV1PricingTablesPostResponse201) & {
-  headers: Headers;
-};
-export type createPriceTableApiV1PricingTablesPostResponseError = (createPriceTableApiV1PricingTablesPostResponse422) & {
-  headers: Headers;
-};
-
-export type createPriceTableApiV1PricingTablesPostResponse = (createPriceTableApiV1PricingTablesPostResponseSuccess | createPriceTableApiV1PricingTablesPostResponseError)
-
-export const getCreatePriceTableApiV1PricingTablesPostUrl = () => {
-
-
+export const createPriceTableApiV1PricingTablesPost = (
+    priceTableCreateRequest: PriceTableCreateRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<CreatePriceTableApiV1PricingTablesPost201>(
+      {url: `/api/v1/pricing/tables`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: priceTableCreateRequest, signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/pricing/tables`
-}
 
-export const createPriceTableApiV1PricingTablesPost = async (priceTableCreateRequest: PriceTableCreateRequest, options?: RequestInit): Promise<createPriceTableApiV1PricingTablesPostResponse> => {
-  
-  return customClient<createPriceTableApiV1PricingTablesPostResponse>(getCreatePriceTableApiV1PricingTablesPostUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      priceTableCreateRequest,)
-  }
-);}
+export const getCreatePriceTableApiV1PricingTablesPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPriceTableApiV1PricingTablesPost>>, TError,{data: PriceTableCreateRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof createPriceTableApiV1PricingTablesPost>>, TError,{data: PriceTableCreateRequest}, TContext> => {
+
+const mutationKey = ['createPriceTableApiV1PricingTablesPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
 
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createPriceTableApiV1PricingTablesPost>>, {data: PriceTableCreateRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createPriceTableApiV1PricingTablesPost(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreatePriceTableApiV1PricingTablesPostMutationResult = NonNullable<Awaited<ReturnType<typeof createPriceTableApiV1PricingTablesPost>>>
+    export type CreatePriceTableApiV1PricingTablesPostMutationBody = PriceTableCreateRequest
+    export type CreatePriceTableApiV1PricingTablesPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Create Price Table
+ */
+export const useCreatePriceTableApiV1PricingTablesPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPriceTableApiV1PricingTablesPost>>, TError,{data: PriceTableCreateRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createPriceTableApiV1PricingTablesPost>>,
+        TError,
+        {data: PriceTableCreateRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getCreatePriceTableApiV1PricingTablesPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Add Price Table Item
  */
-export type addPriceTableItemApiV1PricingTablesTableIdItemsPostResponse201 = {
-  data: AddPriceTableItemApiV1PricingTablesTableIdItemsPost201
-  status: 201
-}
-
-export type addPriceTableItemApiV1PricingTablesTableIdItemsPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type addPriceTableItemApiV1PricingTablesTableIdItemsPostResponseSuccess = (addPriceTableItemApiV1PricingTablesTableIdItemsPostResponse201) & {
-  headers: Headers;
-};
-export type addPriceTableItemApiV1PricingTablesTableIdItemsPostResponseError = (addPriceTableItemApiV1PricingTablesTableIdItemsPostResponse422) & {
-  headers: Headers;
-};
-
-export type addPriceTableItemApiV1PricingTablesTableIdItemsPostResponse = (addPriceTableItemApiV1PricingTablesTableIdItemsPostResponseSuccess | addPriceTableItemApiV1PricingTablesTableIdItemsPostResponseError)
-
-export const getAddPriceTableItemApiV1PricingTablesTableIdItemsPostUrl = (tableId: string,) => {
-
-
+export const addPriceTableItemApiV1PricingTablesTableIdItemsPost = (
+    tableId: string,
+    priceTableItemCreateRequest: PriceTableItemCreateRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<AddPriceTableItemApiV1PricingTablesTableIdItemsPost201>(
+      {url: `/api/v1/pricing/tables/${tableId}/items`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: priceTableItemCreateRequest, signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/pricing/tables/${tableId}/items`
-}
 
-export const addPriceTableItemApiV1PricingTablesTableIdItemsPost = async (tableId: string,
-    priceTableItemCreateRequest: PriceTableItemCreateRequest, options?: RequestInit): Promise<addPriceTableItemApiV1PricingTablesTableIdItemsPostResponse> => {
-  
-  return customClient<addPriceTableItemApiV1PricingTablesTableIdItemsPostResponse>(getAddPriceTableItemApiV1PricingTablesTableIdItemsPostUrl(tableId),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      priceTableItemCreateRequest,)
-  }
-);}
+export const getAddPriceTableItemApiV1PricingTablesTableIdItemsPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addPriceTableItemApiV1PricingTablesTableIdItemsPost>>, TError,{tableId: string;data: PriceTableItemCreateRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof addPriceTableItemApiV1PricingTablesTableIdItemsPost>>, TError,{tableId: string;data: PriceTableItemCreateRequest}, TContext> => {
+
+const mutationKey = ['addPriceTableItemApiV1PricingTablesTableIdItemsPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
 
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof addPriceTableItemApiV1PricingTablesTableIdItemsPost>>, {tableId: string;data: PriceTableItemCreateRequest}> = (props) => {
+          const {tableId,data} = props ?? {};
+
+          return  addPriceTableItemApiV1PricingTablesTableIdItemsPost(tableId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AddPriceTableItemApiV1PricingTablesTableIdItemsPostMutationResult = NonNullable<Awaited<ReturnType<typeof addPriceTableItemApiV1PricingTablesTableIdItemsPost>>>
+    export type AddPriceTableItemApiV1PricingTablesTableIdItemsPostMutationBody = PriceTableItemCreateRequest
+    export type AddPriceTableItemApiV1PricingTablesTableIdItemsPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Add Price Table Item
+ */
+export const useAddPriceTableItemApiV1PricingTablesTableIdItemsPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addPriceTableItemApiV1PricingTablesTableIdItemsPost>>, TError,{tableId: string;data: PriceTableItemCreateRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof addPriceTableItemApiV1PricingTablesTableIdItemsPost>>,
+        TError,
+        {tableId: string;data: PriceTableItemCreateRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getAddPriceTableItemApiV1PricingTablesTableIdItemsPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Create Pricing Rule
  */
-export type createPricingRuleApiV1PricingRulesPostResponse201 = {
-  data: CreatePricingRuleApiV1PricingRulesPost201
-  status: 201
-}
-
-export type createPricingRuleApiV1PricingRulesPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type createPricingRuleApiV1PricingRulesPostResponseSuccess = (createPricingRuleApiV1PricingRulesPostResponse201) & {
-  headers: Headers;
-};
-export type createPricingRuleApiV1PricingRulesPostResponseError = (createPricingRuleApiV1PricingRulesPostResponse422) & {
-  headers: Headers;
-};
-
-export type createPricingRuleApiV1PricingRulesPostResponse = (createPricingRuleApiV1PricingRulesPostResponseSuccess | createPricingRuleApiV1PricingRulesPostResponseError)
-
-export const getCreatePricingRuleApiV1PricingRulesPostUrl = () => {
-
-
+export const createPricingRuleApiV1PricingRulesPost = (
+    pricingRuleCreateRequest: PricingRuleCreateRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<CreatePricingRuleApiV1PricingRulesPost201>(
+      {url: `/api/v1/pricing/rules`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: pricingRuleCreateRequest, signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/pricing/rules`
-}
 
-export const createPricingRuleApiV1PricingRulesPost = async (pricingRuleCreateRequest: PricingRuleCreateRequest, options?: RequestInit): Promise<createPricingRuleApiV1PricingRulesPostResponse> => {
-  
-  return customClient<createPricingRuleApiV1PricingRulesPostResponse>(getCreatePricingRuleApiV1PricingRulesPostUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      pricingRuleCreateRequest,)
-  }
-);}
+export const getCreatePricingRuleApiV1PricingRulesPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPricingRuleApiV1PricingRulesPost>>, TError,{data: PricingRuleCreateRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof createPricingRuleApiV1PricingRulesPost>>, TError,{data: PricingRuleCreateRequest}, TContext> => {
+
+const mutationKey = ['createPricingRuleApiV1PricingRulesPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
 
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createPricingRuleApiV1PricingRulesPost>>, {data: PricingRuleCreateRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createPricingRuleApiV1PricingRulesPost(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreatePricingRuleApiV1PricingRulesPostMutationResult = NonNullable<Awaited<ReturnType<typeof createPricingRuleApiV1PricingRulesPost>>>
+    export type CreatePricingRuleApiV1PricingRulesPostMutationBody = PricingRuleCreateRequest
+    export type CreatePricingRuleApiV1PricingRulesPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Create Pricing Rule
+ */
+export const useCreatePricingRuleApiV1PricingRulesPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPricingRuleApiV1PricingRulesPost>>, TError,{data: PricingRuleCreateRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createPricingRuleApiV1PricingRulesPost>>,
+        TError,
+        {data: PricingRuleCreateRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getCreatePricingRuleApiV1PricingRulesPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Calculate Price
  */
-export type calculatePriceApiV1PricingCalculatePostResponse200 = {
-  data: PriceCalculationResponse
-  status: 200
-}
+export const calculatePriceApiV1PricingCalculatePost = (
+    priceCalculationRequest: PriceCalculationRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<PriceCalculationResponse>(
+      {url: `/api/v1/pricing/calculate`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: priceCalculationRequest, signal
+    },
+      options);
+    }
+  
 
-export type calculatePriceApiV1PricingCalculatePostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
+
+export const getCalculatePriceApiV1PricingCalculatePostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculatePriceApiV1PricingCalculatePost>>, TError,{data: PriceCalculationRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof calculatePriceApiV1PricingCalculatePost>>, TError,{data: PriceCalculationRequest}, TContext> => {
+
+const mutationKey = ['calculatePriceApiV1PricingCalculatePost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof calculatePriceApiV1PricingCalculatePost>>, {data: PriceCalculationRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  calculatePriceApiV1PricingCalculatePost(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CalculatePriceApiV1PricingCalculatePostMutationResult = NonNullable<Awaited<ReturnType<typeof calculatePriceApiV1PricingCalculatePost>>>
+    export type CalculatePriceApiV1PricingCalculatePostMutationBody = PriceCalculationRequest
+    export type CalculatePriceApiV1PricingCalculatePostMutationError = HTTPValidationError
+
+    /**
+ * @summary Calculate Price
+ */
+export const useCalculatePriceApiV1PricingCalculatePost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculatePriceApiV1PricingCalculatePost>>, TError,{data: PriceCalculationRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof calculatePriceApiV1PricingCalculatePost>>,
+        TError,
+        {data: PriceCalculationRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getCalculatePriceApiV1PricingCalculatePostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
     
-export type calculatePriceApiV1PricingCalculatePostResponseSuccess = (calculatePriceApiV1PricingCalculatePostResponse200) & {
-  headers: Headers;
-};
-export type calculatePriceApiV1PricingCalculatePostResponseError = (calculatePriceApiV1PricingCalculatePostResponse422) & {
-  headers: Headers;
-};
-
-export type calculatePriceApiV1PricingCalculatePostResponse = (calculatePriceApiV1PricingCalculatePostResponseSuccess | calculatePriceApiV1PricingCalculatePostResponseError)
-
-export const getCalculatePriceApiV1PricingCalculatePostUrl = () => {
-
-
-  
-
-  return `/api/v1/pricing/calculate`
-}
-
-export const calculatePriceApiV1PricingCalculatePost = async (priceCalculationRequest: PriceCalculationRequest, options?: RequestInit): Promise<calculatePriceApiV1PricingCalculatePostResponse> => {
-  
-  return customClient<calculatePriceApiV1PricingCalculatePostResponse>(getCalculatePriceApiV1PricingCalculatePostUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      priceCalculationRequest,)
-  }
-);}
-
-

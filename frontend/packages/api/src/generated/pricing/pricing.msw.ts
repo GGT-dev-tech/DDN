@@ -21,9 +21,12 @@ import type {
   AddPriceTableItemApiV1PricingTablesTableIdItemsPost201,
   CreatePriceTableApiV1PricingTablesPost201,
   CreatePricingRuleApiV1PricingRulesPost201,
-  PriceCalculationResponse
+  PriceCalculationResponse,
+  PriceTableResponse
 } from '.././model';
 
+
+export const getListPriceTablesApiV1PricingTablesGetResponseMock = (): PriceTableResponse[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), name: faker.string.alpha({length: {min: 10, max: 20}}), effective_date: faker.date.past().toISOString().split('T')[0], end_date: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.date.past().toISOString().split('T')[0],null,]), undefined]), region_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), customer_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), is_active: faker.datatype.boolean()})))
 
 export const getCreatePriceTableApiV1PricingTablesPostResponseMock = (): CreatePriceTableApiV1PricingTablesPost201 => ({})
 
@@ -33,6 +36,18 @@ export const getCreatePricingRuleApiV1PricingRulesPostResponseMock = (): CreateP
 
 export const getCalculatePriceApiV1PricingCalculatePostResponseMock = (overrideResponse: Partial< PriceCalculationResponse > = {}): PriceCalculationResponse => ({service_offering_id: faker.string.uuid(), unit_of_measure_id: faker.string.uuid(), quantity: faker.helpers.fromRegExp('^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$'), base_unit_price: {amount: faker.helpers.fromRegExp('^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$'), currency: faker.string.alpha({length: {min: 10, max: 20}})}, total_base_price: {amount: faker.helpers.fromRegExp('^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$'), currency: faker.string.alpha({length: {min: 10, max: 20}})}, final_price: {amount: faker.helpers.fromRegExp('^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$'), currency: faker.string.alpha({length: {min: 10, max: 20}})}, applied_rules_ids: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.uuid())), ...overrideResponse})
 
+
+export const getListPriceTablesApiV1PricingTablesGetMockHandler = (overrideResponse?: PriceTableResponse[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<PriceTableResponse[]> | PriceTableResponse[]), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/pricing/tables', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getListPriceTablesApiV1PricingTablesGetResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  }, options)
+}
 
 export const getCreatePriceTableApiV1PricingTablesPostMockHandler = (overrideResponse?: CreatePriceTableApiV1PricingTablesPost201 | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<CreatePriceTableApiV1PricingTablesPost201> | CreatePriceTableApiV1PricingTablesPost201), options?: RequestHandlerOptions) => {
   return http.post('*/api/v1/pricing/tables', async (info) => {await delay(1000);
@@ -82,6 +97,7 @@ export const getCalculatePriceApiV1PricingCalculatePostMockHandler = (overrideRe
   }, options)
 }
 export const getPricingMock = () => [
+  getListPriceTablesApiV1PricingTablesGetMockHandler(),
   getCreatePriceTableApiV1PricingTablesPostMockHandler(),
   getAddPriceTableItemApiV1PricingTablesTableIdItemsPostMockHandler(),
   getCreatePricingRuleApiV1PricingRulesPostMockHandler(),

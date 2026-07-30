@@ -4,6 +4,16 @@
  * Stitch API Gateway
  * OpenAPI spec version: 1.0.0
  */
+import {
+  useMutation
+} from '@tanstack/react-query';
+import type {
+  MutationFunction,
+  QueryClient,
+  UseMutationOptions,
+  UseMutationResult
+} from '@tanstack/react-query';
+
 import type {
   ContractCreateRequest,
   CreateContractApiV1ContractsPost200,
@@ -12,130 +22,197 @@ import type {
 
 import { customClient } from '../../custom-client';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
 /**
  * @summary Create Contract
  */
-export type createContractApiV1ContractsPostResponse200 = {
-  data: CreateContractApiV1ContractsPost200
-  status: 200
-}
-
-export type createContractApiV1ContractsPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type createContractApiV1ContractsPostResponseSuccess = (createContractApiV1ContractsPostResponse200) & {
-  headers: Headers;
-};
-export type createContractApiV1ContractsPostResponseError = (createContractApiV1ContractsPostResponse422) & {
-  headers: Headers;
-};
-
-export type createContractApiV1ContractsPostResponse = (createContractApiV1ContractsPostResponseSuccess | createContractApiV1ContractsPostResponseError)
-
-export const getCreateContractApiV1ContractsPostUrl = () => {
-
-
+export const createContractApiV1ContractsPost = (
+    contractCreateRequest: ContractCreateRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<CreateContractApiV1ContractsPost200>(
+      {url: `/api/v1/contracts`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: contractCreateRequest, signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/contracts`
-}
 
-export const createContractApiV1ContractsPost = async (contractCreateRequest: ContractCreateRequest, options?: RequestInit): Promise<createContractApiV1ContractsPostResponse> => {
-  
-  return customClient<createContractApiV1ContractsPostResponse>(getCreateContractApiV1ContractsPostUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      contractCreateRequest,)
-  }
-);}
+export const getCreateContractApiV1ContractsPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createContractApiV1ContractsPost>>, TError,{data: ContractCreateRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof createContractApiV1ContractsPost>>, TError,{data: ContractCreateRequest}, TContext> => {
+
+const mutationKey = ['createContractApiV1ContractsPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
 
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createContractApiV1ContractsPost>>, {data: ContractCreateRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createContractApiV1ContractsPost(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateContractApiV1ContractsPostMutationResult = NonNullable<Awaited<ReturnType<typeof createContractApiV1ContractsPost>>>
+    export type CreateContractApiV1ContractsPostMutationBody = ContractCreateRequest
+    export type CreateContractApiV1ContractsPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Create Contract
+ */
+export const useCreateContractApiV1ContractsPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createContractApiV1ContractsPost>>, TError,{data: ContractCreateRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createContractApiV1ContractsPost>>,
+        TError,
+        {data: ContractCreateRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateContractApiV1ContractsPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Send For Signature
  */
-export type sendForSignatureApiV1ContractsContractIdSendForSignaturePostResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type sendForSignatureApiV1ContractsContractIdSendForSignaturePostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type sendForSignatureApiV1ContractsContractIdSendForSignaturePostResponseSuccess = (sendForSignatureApiV1ContractsContractIdSendForSignaturePostResponse200) & {
-  headers: Headers;
-};
-export type sendForSignatureApiV1ContractsContractIdSendForSignaturePostResponseError = (sendForSignatureApiV1ContractsContractIdSendForSignaturePostResponse422) & {
-  headers: Headers;
-};
-
-export type sendForSignatureApiV1ContractsContractIdSendForSignaturePostResponse = (sendForSignatureApiV1ContractsContractIdSendForSignaturePostResponseSuccess | sendForSignatureApiV1ContractsContractIdSendForSignaturePostResponseError)
-
-export const getSendForSignatureApiV1ContractsContractIdSendForSignaturePostUrl = (contractId: string,) => {
-
-
+export const sendForSignatureApiV1ContractsContractIdSendForSignaturePost = (
+    contractId: string,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<unknown>(
+      {url: `/api/v1/contracts/${contractId}/send-for-signature`, method: 'POST', signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/contracts/${contractId}/send-for-signature`
-}
 
-export const sendForSignatureApiV1ContractsContractIdSendForSignaturePost = async (contractId: string, options?: RequestInit): Promise<sendForSignatureApiV1ContractsContractIdSendForSignaturePostResponse> => {
-  
-  return customClient<sendForSignatureApiV1ContractsContractIdSendForSignaturePostResponse>(getSendForSignatureApiV1ContractsContractIdSendForSignaturePostUrl(contractId),
-  {      
-    ...options,
-    method: 'POST'
+export const getSendForSignatureApiV1ContractsContractIdSendForSignaturePostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sendForSignatureApiV1ContractsContractIdSendForSignaturePost>>, TError,{contractId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof sendForSignatureApiV1ContractsContractIdSendForSignaturePost>>, TError,{contractId: string}, TContext> => {
+
+const mutationKey = ['sendForSignatureApiV1ContractsContractIdSendForSignaturePost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof sendForSignatureApiV1ContractsContractIdSendForSignaturePost>>, {contractId: string}> = (props) => {
+          const {contractId} = props ?? {};
+
+          return  sendForSignatureApiV1ContractsContractIdSendForSignaturePost(contractId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SendForSignatureApiV1ContractsContractIdSendForSignaturePostMutationResult = NonNullable<Awaited<ReturnType<typeof sendForSignatureApiV1ContractsContractIdSendForSignaturePost>>>
     
-    
-  }
-);}
+    export type SendForSignatureApiV1ContractsContractIdSendForSignaturePostMutationError = HTTPValidationError
 
+    /**
+ * @summary Send For Signature
+ */
+export const useSendForSignatureApiV1ContractsContractIdSendForSignaturePost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof sendForSignatureApiV1ContractsContractIdSendForSignaturePost>>, TError,{contractId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof sendForSignatureApiV1ContractsContractIdSendForSignaturePost>>,
+        TError,
+        {contractId: string},
+        TContext
+      > => {
 
-/**
+      const mutationOptions = getSendForSignatureApiV1ContractsContractIdSendForSignaturePostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Activate Contract
  */
-export type activateContractApiV1ContractsContractIdActivatePostResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type activateContractApiV1ContractsContractIdActivatePostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type activateContractApiV1ContractsContractIdActivatePostResponseSuccess = (activateContractApiV1ContractsContractIdActivatePostResponse200) & {
-  headers: Headers;
-};
-export type activateContractApiV1ContractsContractIdActivatePostResponseError = (activateContractApiV1ContractsContractIdActivatePostResponse422) & {
-  headers: Headers;
-};
-
-export type activateContractApiV1ContractsContractIdActivatePostResponse = (activateContractApiV1ContractsContractIdActivatePostResponseSuccess | activateContractApiV1ContractsContractIdActivatePostResponseError)
-
-export const getActivateContractApiV1ContractsContractIdActivatePostUrl = (contractId: string,) => {
-
-
+export const activateContractApiV1ContractsContractIdActivatePost = (
+    contractId: string,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<unknown>(
+      {url: `/api/v1/contracts/${contractId}/activate`, method: 'POST', signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/contracts/${contractId}/activate`
-}
 
-export const activateContractApiV1ContractsContractIdActivatePost = async (contractId: string, options?: RequestInit): Promise<activateContractApiV1ContractsContractIdActivatePostResponse> => {
-  
-  return customClient<activateContractApiV1ContractsContractIdActivatePostResponse>(getActivateContractApiV1ContractsContractIdActivatePostUrl(contractId),
-  {      
-    ...options,
-    method: 'POST'
+export const getActivateContractApiV1ContractsContractIdActivatePostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof activateContractApiV1ContractsContractIdActivatePost>>, TError,{contractId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof activateContractApiV1ContractsContractIdActivatePost>>, TError,{contractId: string}, TContext> => {
+
+const mutationKey = ['activateContractApiV1ContractsContractIdActivatePost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof activateContractApiV1ContractsContractIdActivatePost>>, {contractId: string}> = (props) => {
+          const {contractId} = props ?? {};
+
+          return  activateContractApiV1ContractsContractIdActivatePost(contractId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ActivateContractApiV1ContractsContractIdActivatePostMutationResult = NonNullable<Awaited<ReturnType<typeof activateContractApiV1ContractsContractIdActivatePost>>>
     
+    export type ActivateContractApiV1ContractsContractIdActivatePostMutationError = HTTPValidationError
+
+    /**
+ * @summary Activate Contract
+ */
+export const useActivateContractApiV1ContractsContractIdActivatePost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof activateContractApiV1ContractsContractIdActivatePost>>, TError,{contractId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof activateContractApiV1ContractsContractIdActivatePost>>,
+        TError,
+        {contractId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getActivateContractApiV1ContractsContractIdActivatePostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
     
-  }
-);}
-
-

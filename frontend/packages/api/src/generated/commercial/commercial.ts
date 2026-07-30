@@ -4,7 +4,27 @@
  * Stitch API Gateway
  * OpenAPI spec version: 1.0.0
  */
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
+} from '@tanstack/react-query';
+
+import type {
+  CompanyResponse,
   HTTPValidationError,
   LeadRegisterRequest,
   LeadResponse,
@@ -13,132 +33,384 @@ import type {
 
 import { customClient } from '../../custom-client';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
+/**
+ * @summary List Leads
+ */
+export const listLeadsApiV1CommercialLeadsGet = (
+    
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<LeadResponse[]>(
+      {url: `/api/v1/commercial/leads`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getListLeadsApiV1CommercialLeadsGetQueryKey = () => {
+    return [
+    `/api/v1/commercial/leads`
+    ] as const;
+    }
+
+    
+export const getListLeadsApiV1CommercialLeadsGetQueryOptions = <TData = Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListLeadsApiV1CommercialLeadsGetQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>> = ({ signal }) => listLeadsApiV1CommercialLeadsGet(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type ListLeadsApiV1CommercialLeadsGetQueryResult = NonNullable<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>>
+export type ListLeadsApiV1CommercialLeadsGetQueryError = HTTPValidationError
+
+
+export function useListLeadsApiV1CommercialLeadsGet<TData = Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>,
+          TError,
+          Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListLeadsApiV1CommercialLeadsGet<TData = Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>,
+          TError,
+          Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListLeadsApiV1CommercialLeadsGet<TData = Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary List Leads
+ */
+
+export function useListLeadsApiV1CommercialLeadsGet<TData = Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getListLeadsApiV1CommercialLeadsGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
 /**
  * @summary Register Lead
  */
-export type registerLeadApiV1CommercialLeadsPostResponse200 = {
-  data: LeadResponse
-  status: 200
-}
+export const registerLeadApiV1CommercialLeadsPost = (
+    leadRegisterRequest: LeadRegisterRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<LeadResponse>(
+      {url: `/api/v1/commercial/leads`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: leadRegisterRequest, signal
+    },
+      options);
+    }
+  
 
-export type registerLeadApiV1CommercialLeadsPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
+
+export const getRegisterLeadApiV1CommercialLeadsPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerLeadApiV1CommercialLeadsPost>>, TError,{data: LeadRegisterRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof registerLeadApiV1CommercialLeadsPost>>, TError,{data: LeadRegisterRequest}, TContext> => {
+
+const mutationKey = ['registerLeadApiV1CommercialLeadsPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof registerLeadApiV1CommercialLeadsPost>>, {data: LeadRegisterRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  registerLeadApiV1CommercialLeadsPost(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RegisterLeadApiV1CommercialLeadsPostMutationResult = NonNullable<Awaited<ReturnType<typeof registerLeadApiV1CommercialLeadsPost>>>
+    export type RegisterLeadApiV1CommercialLeadsPostMutationBody = LeadRegisterRequest
+    export type RegisterLeadApiV1CommercialLeadsPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Register Lead
+ */
+export const useRegisterLeadApiV1CommercialLeadsPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerLeadApiV1CommercialLeadsPost>>, TError,{data: LeadRegisterRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof registerLeadApiV1CommercialLeadsPost>>,
+        TError,
+        {data: LeadRegisterRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getRegisterLeadApiV1CommercialLeadsPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * @summary List Companies
+ */
+export const listCompaniesApiV1CommercialCompaniesGet = (
     
-export type registerLeadApiV1CommercialLeadsPostResponseSuccess = (registerLeadApiV1CommercialLeadsPostResponse200) & {
-  headers: Headers;
-};
-export type registerLeadApiV1CommercialLeadsPostResponseError = (registerLeadApiV1CommercialLeadsPostResponse422) & {
-  headers: Headers;
-};
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<CompanyResponse[]>(
+      {url: `/api/v1/commercial/companies`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export type registerLeadApiV1CommercialLeadsPostResponse = (registerLeadApiV1CommercialLeadsPostResponseSuccess | registerLeadApiV1CommercialLeadsPostResponseError)
 
-export const getRegisterLeadApiV1CommercialLeadsPostUrl = () => {
 
+export const getListCompaniesApiV1CommercialCompaniesGetQueryKey = () => {
+    return [
+    `/api/v1/commercial/companies`
+    ] as const;
+    }
+
+    
+export const getListCompaniesApiV1CommercialCompaniesGetQueryOptions = <TData = Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListCompaniesApiV1CommercialCompaniesGetQueryKey();
 
   
 
-  return `/api/v1/commercial/leads`
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>> = ({ signal }) => listCompaniesApiV1CommercialCompaniesGet(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export const registerLeadApiV1CommercialLeadsPost = async (leadRegisterRequest: LeadRegisterRequest, options?: RequestInit): Promise<registerLeadApiV1CommercialLeadsPostResponse> => {
-  
-  return customClient<registerLeadApiV1CommercialLeadsPostResponse>(getRegisterLeadApiV1CommercialLeadsPostUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      leadRegisterRequest,)
-  }
-);}
+export type ListCompaniesApiV1CommercialCompaniesGetQueryResult = NonNullable<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>>
+export type ListCompaniesApiV1CommercialCompaniesGetQueryError = HTTPValidationError
+
+
+export function useListCompaniesApiV1CommercialCompaniesGet<TData = Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>,
+          TError,
+          Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListCompaniesApiV1CommercialCompaniesGet<TData = Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>,
+          TError,
+          Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListCompaniesApiV1CommercialCompaniesGet<TData = Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary List Companies
+ */
+
+export function useListCompaniesApiV1CommercialCompaniesGet<TData = Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getListCompaniesApiV1CommercialCompaniesGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
 
 
 /**
  * @summary Qualify Lead
  */
-export type qualifyLeadApiV1CommercialLeadsLeadIdQualifyPostResponse200 = {
-  data: LeadResponse
-  status: 200
-}
-
-export type qualifyLeadApiV1CommercialLeadsLeadIdQualifyPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type qualifyLeadApiV1CommercialLeadsLeadIdQualifyPostResponseSuccess = (qualifyLeadApiV1CommercialLeadsLeadIdQualifyPostResponse200) & {
-  headers: Headers;
-};
-export type qualifyLeadApiV1CommercialLeadsLeadIdQualifyPostResponseError = (qualifyLeadApiV1CommercialLeadsLeadIdQualifyPostResponse422) & {
-  headers: Headers;
-};
-
-export type qualifyLeadApiV1CommercialLeadsLeadIdQualifyPostResponse = (qualifyLeadApiV1CommercialLeadsLeadIdQualifyPostResponseSuccess | qualifyLeadApiV1CommercialLeadsLeadIdQualifyPostResponseError)
-
-export const getQualifyLeadApiV1CommercialLeadsLeadIdQualifyPostUrl = (leadId: string,) => {
-
-
+export const qualifyLeadApiV1CommercialLeadsLeadIdQualifyPost = (
+    leadId: string,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<LeadResponse>(
+      {url: `/api/v1/commercial/leads/${leadId}/qualify`, method: 'POST', signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/commercial/leads/${leadId}/qualify`
-}
 
-export const qualifyLeadApiV1CommercialLeadsLeadIdQualifyPost = async (leadId: string, options?: RequestInit): Promise<qualifyLeadApiV1CommercialLeadsLeadIdQualifyPostResponse> => {
-  
-  return customClient<qualifyLeadApiV1CommercialLeadsLeadIdQualifyPostResponse>(getQualifyLeadApiV1CommercialLeadsLeadIdQualifyPostUrl(leadId),
-  {      
-    ...options,
-    method: 'POST'
+export const getQualifyLeadApiV1CommercialLeadsLeadIdQualifyPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof qualifyLeadApiV1CommercialLeadsLeadIdQualifyPost>>, TError,{leadId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof qualifyLeadApiV1CommercialLeadsLeadIdQualifyPost>>, TError,{leadId: string}, TContext> => {
+
+const mutationKey = ['qualifyLeadApiV1CommercialLeadsLeadIdQualifyPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof qualifyLeadApiV1CommercialLeadsLeadIdQualifyPost>>, {leadId: string}> = (props) => {
+          const {leadId} = props ?? {};
+
+          return  qualifyLeadApiV1CommercialLeadsLeadIdQualifyPost(leadId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type QualifyLeadApiV1CommercialLeadsLeadIdQualifyPostMutationResult = NonNullable<Awaited<ReturnType<typeof qualifyLeadApiV1CommercialLeadsLeadIdQualifyPost>>>
     
-    
-  }
-);}
+    export type QualifyLeadApiV1CommercialLeadsLeadIdQualifyPostMutationError = HTTPValidationError
 
+    /**
+ * @summary Qualify Lead
+ */
+export const useQualifyLeadApiV1CommercialLeadsLeadIdQualifyPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof qualifyLeadApiV1CommercialLeadsLeadIdQualifyPost>>, TError,{leadId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof qualifyLeadApiV1CommercialLeadsLeadIdQualifyPost>>,
+        TError,
+        {leadId: string},
+        TContext
+      > => {
 
-/**
+      const mutationOptions = getQualifyLeadApiV1CommercialLeadsLeadIdQualifyPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Match Lead To Company
  */
-export type matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostResponse200 = {
-  data: unknown
-  status: 200
-}
+export const matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPost = (
+    leadId: string,
+    matchLeadRequest: MatchLeadRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<unknown>(
+      {url: `/api/v1/commercial/leads/${leadId}/match`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: matchLeadRequest, signal
+    },
+      options);
+    }
+  
 
-export type matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
+
+export const getMatchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPost>>, TError,{leadId: string;data: MatchLeadRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPost>>, TError,{leadId: string;data: MatchLeadRequest}, TContext> => {
+
+const mutationKey = ['matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPost>>, {leadId: string;data: MatchLeadRequest}> = (props) => {
+          const {leadId,data} = props ?? {};
+
+          return  matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPost(leadId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type MatchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostMutationResult = NonNullable<Awaited<ReturnType<typeof matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPost>>>
+    export type MatchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostMutationBody = MatchLeadRequest
+    export type MatchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Match Lead To Company
+ */
+export const useMatchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPost>>, TError,{leadId: string;data: MatchLeadRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPost>>,
+        TError,
+        {leadId: string;data: MatchLeadRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getMatchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
     
-export type matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostResponseSuccess = (matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostResponse200) & {
-  headers: Headers;
-};
-export type matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostResponseError = (matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostResponse422) & {
-  headers: Headers;
-};
-
-export type matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostResponse = (matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostResponseSuccess | matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostResponseError)
-
-export const getMatchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostUrl = (leadId: string,) => {
-
-
-  
-
-  return `/api/v1/commercial/leads/${leadId}/match`
-}
-
-export const matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPost = async (leadId: string,
-    matchLeadRequest: MatchLeadRequest, options?: RequestInit): Promise<matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostResponse> => {
-  
-  return customClient<matchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostResponse>(getMatchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostUrl(leadId),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      matchLeadRequest,)
-  }
-);}
-
-

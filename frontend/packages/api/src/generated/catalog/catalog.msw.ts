@@ -18,20 +18,41 @@ import type {
 } from 'msw';
 
 import type {
-  ServiceAttributeResponse,
-  ServiceOfferingResponse,
-  UOMResponse
+  ModulesCatalogApplicationDtoRequestsServiceAttributeResponse,
+  ModulesCatalogApplicationDtoRequestsServiceOfferingResponse,
+  ModulesCatalogApplicationDtoRequestsUOMResponse,
+  ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceAttributeResponse,
+  ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceOfferingResponse,
+  ModulesCatalogApplicationUseCasesListCatalogEntitiesUOMResponse
 } from '.././model';
 
 
-export const getRegisterUomApiV1CatalogUomPostResponseMock = (overrideResponse: Partial< UOMResponse > = {}): UOMResponse => ({id: faker.string.uuid(), ...overrideResponse})
+export const getListUomsApiV1CatalogUomGetResponseMock = (): ModulesCatalogApplicationUseCasesListCatalogEntitiesUOMResponse[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), symbol: faker.string.alpha({length: {min: 10, max: 20}}), name: faker.string.alpha({length: {min: 10, max: 20}}), base_type: faker.string.alpha({length: {min: 10, max: 20}})})))
 
-export const getDefineAttributeApiV1CatalogAttributesPostResponseMock = (overrideResponse: Partial< ServiceAttributeResponse > = {}): ServiceAttributeResponse => ({id: faker.string.uuid(), ...overrideResponse})
+export const getRegisterUomApiV1CatalogUomPostResponseMock = (overrideResponse: Partial< ModulesCatalogApplicationDtoRequestsUOMResponse > = {}): ModulesCatalogApplicationDtoRequestsUOMResponse => ({id: faker.string.uuid(), ...overrideResponse})
 
-export const getDraftOfferingApiV1CatalogOfferingsPostResponseMock = (overrideResponse: Partial< ServiceOfferingResponse > = {}): ServiceOfferingResponse => ({id: faker.string.uuid(), ...overrideResponse})
+export const getListAttributesApiV1CatalogAttributesGetResponseMock = (): ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceAttributeResponse[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), name: faker.string.alpha({length: {min: 10, max: 20}}), attribute_type: faker.string.alpha({length: {min: 10, max: 20}}), is_required: faker.datatype.boolean(), possible_values: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha({length: {min: 10, max: 20}}))),null,])})))
+
+export const getDefineAttributeApiV1CatalogAttributesPostResponseMock = (overrideResponse: Partial< ModulesCatalogApplicationDtoRequestsServiceAttributeResponse > = {}): ModulesCatalogApplicationDtoRequestsServiceAttributeResponse => ({id: faker.string.uuid(), ...overrideResponse})
+
+export const getListOfferingsApiV1CatalogOfferingsGetResponseMock = (): ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceOfferingResponse[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), name: faker.string.alpha({length: {min: 10, max: 20}}), description: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}),null,]), category: faker.string.alpha({length: {min: 10, max: 20}}), status: faker.string.alpha({length: {min: 10, max: 20}}), default_uom_id: faker.string.uuid(), attributes: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({service_attribute_id: faker.string.uuid(), allowed_values: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha({length: {min: 10, max: 20}}))),null,])}))})))
+
+export const getDraftOfferingApiV1CatalogOfferingsPostResponseMock = (overrideResponse: Partial< ModulesCatalogApplicationDtoRequestsServiceOfferingResponse > = {}): ModulesCatalogApplicationDtoRequestsServiceOfferingResponse => ({id: faker.string.uuid(), ...overrideResponse})
 
 
-export const getRegisterUomApiV1CatalogUomPostMockHandler = (overrideResponse?: UOMResponse | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<UOMResponse> | UOMResponse), options?: RequestHandlerOptions) => {
+export const getListUomsApiV1CatalogUomGetMockHandler = (overrideResponse?: ModulesCatalogApplicationUseCasesListCatalogEntitiesUOMResponse[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<ModulesCatalogApplicationUseCasesListCatalogEntitiesUOMResponse[]> | ModulesCatalogApplicationUseCasesListCatalogEntitiesUOMResponse[]), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/catalog/uom', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getListUomsApiV1CatalogUomGetResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  }, options)
+}
+
+export const getRegisterUomApiV1CatalogUomPostMockHandler = (overrideResponse?: ModulesCatalogApplicationDtoRequestsUOMResponse | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<ModulesCatalogApplicationDtoRequestsUOMResponse> | ModulesCatalogApplicationDtoRequestsUOMResponse), options?: RequestHandlerOptions) => {
   return http.post('*/api/v1/catalog/uom', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
@@ -43,7 +64,19 @@ export const getRegisterUomApiV1CatalogUomPostMockHandler = (overrideResponse?: 
   }, options)
 }
 
-export const getDefineAttributeApiV1CatalogAttributesPostMockHandler = (overrideResponse?: ServiceAttributeResponse | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<ServiceAttributeResponse> | ServiceAttributeResponse), options?: RequestHandlerOptions) => {
+export const getListAttributesApiV1CatalogAttributesGetMockHandler = (overrideResponse?: ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceAttributeResponse[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceAttributeResponse[]> | ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceAttributeResponse[]), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/catalog/attributes', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getListAttributesApiV1CatalogAttributesGetResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  }, options)
+}
+
+export const getDefineAttributeApiV1CatalogAttributesPostMockHandler = (overrideResponse?: ModulesCatalogApplicationDtoRequestsServiceAttributeResponse | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<ModulesCatalogApplicationDtoRequestsServiceAttributeResponse> | ModulesCatalogApplicationDtoRequestsServiceAttributeResponse), options?: RequestHandlerOptions) => {
   return http.post('*/api/v1/catalog/attributes', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
@@ -55,7 +88,19 @@ export const getDefineAttributeApiV1CatalogAttributesPostMockHandler = (override
   }, options)
 }
 
-export const getDraftOfferingApiV1CatalogOfferingsPostMockHandler = (overrideResponse?: ServiceOfferingResponse | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<ServiceOfferingResponse> | ServiceOfferingResponse), options?: RequestHandlerOptions) => {
+export const getListOfferingsApiV1CatalogOfferingsGetMockHandler = (overrideResponse?: ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceOfferingResponse[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceOfferingResponse[]> | ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceOfferingResponse[]), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/catalog/offerings', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getListOfferingsApiV1CatalogOfferingsGetResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  }, options)
+}
+
+export const getDraftOfferingApiV1CatalogOfferingsPostMockHandler = (overrideResponse?: ModulesCatalogApplicationDtoRequestsServiceOfferingResponse | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<ModulesCatalogApplicationDtoRequestsServiceOfferingResponse> | ModulesCatalogApplicationDtoRequestsServiceOfferingResponse), options?: RequestHandlerOptions) => {
   return http.post('*/api/v1/catalog/offerings', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
@@ -97,8 +142,11 @@ export const getArchiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostMockHan
   }, options)
 }
 export const getCatalogMock = () => [
+  getListUomsApiV1CatalogUomGetMockHandler(),
   getRegisterUomApiV1CatalogUomPostMockHandler(),
+  getListAttributesApiV1CatalogAttributesGetMockHandler(),
   getDefineAttributeApiV1CatalogAttributesPostMockHandler(),
+  getListOfferingsApiV1CatalogOfferingsGetMockHandler(),
   getDraftOfferingApiV1CatalogOfferingsPostMockHandler(),
   getAttachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostMockHandler(),
   getActivateOfferingApiV1CatalogOfferingsOfferingIdActivatePostMockHandler(),

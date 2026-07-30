@@ -4,6 +4,21 @@
  * Stitch API Gateway
  * OpenAPI spec version: 1.0.0
  */
+import {
+  useQuery
+} from '@tanstack/react-query';
+import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseQueryOptions,
+  UseQueryResult
+} from '@tanstack/react-query';
+
 import type {
   HTTPValidationError,
   TenantContextResponse
@@ -11,45 +26,100 @@ import type {
 
 import { customClient } from '../../custom-client';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
 /**
  * @summary Get Current Tenant
  */
-export type getCurrentTenantTenantCurrentGetResponse200 = {
-  data: TenantContextResponse
-  status: 200
-}
-
-export type getCurrentTenantTenantCurrentGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
+export const getCurrentTenantApiV1TenantCurrentGet = (
     
-export type getCurrentTenantTenantCurrentGetResponseSuccess = (getCurrentTenantTenantCurrentGetResponse200) & {
-  headers: Headers;
-};
-export type getCurrentTenantTenantCurrentGetResponseError = (getCurrentTenantTenantCurrentGetResponse422) & {
-  headers: Headers;
-};
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<TenantContextResponse>(
+      {url: `/api/v1/tenant/current`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export type getCurrentTenantTenantCurrentGetResponse = (getCurrentTenantTenantCurrentGetResponseSuccess | getCurrentTenantTenantCurrentGetResponseError)
 
-export const getGetCurrentTenantTenantCurrentGetUrl = () => {
 
+export const getGetCurrentTenantApiV1TenantCurrentGetQueryKey = () => {
+    return [
+    `/api/v1/tenant/current`
+    ] as const;
+    }
+
+    
+export const getGetCurrentTenantApiV1TenantCurrentGetQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCurrentTenantApiV1TenantCurrentGetQueryKey();
 
   
 
-  return `/tenant/current`
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>> = ({ signal }) => getCurrentTenantApiV1TenantCurrentGet(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export const getCurrentTenantTenantCurrentGet = async ( options?: RequestInit): Promise<getCurrentTenantTenantCurrentGetResponse> => {
-  
-  return customClient<getCurrentTenantTenantCurrentGetResponse>(getGetCurrentTenantTenantCurrentGetUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type GetCurrentTenantApiV1TenantCurrentGetQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>>
+export type GetCurrentTenantApiV1TenantCurrentGetQueryError = HTTPValidationError
+
+
+export function useGetCurrentTenantApiV1TenantCurrentGet<TData = Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>,
+          TError,
+          Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetCurrentTenantApiV1TenantCurrentGet<TData = Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>,
+          TError,
+          Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetCurrentTenantApiV1TenantCurrentGet<TData = Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary Get Current Tenant
+ */
+
+export function useGetCurrentTenantApiV1TenantCurrentGet<TData = Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentTenantApiV1TenantCurrentGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetCurrentTenantApiV1TenantCurrentGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
 
 

@@ -4,144 +4,416 @@
  * Stitch API Gateway
  * OpenAPI spec version: 1.0.0
  */
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
+import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
+} from '@tanstack/react-query';
+
 import type {
   AddStopRequestDTO,
   AssignRouteResourcesRequestDTO,
   CreateRouteRequestDTO,
   HTTPValidationError,
+  RequirementDTO,
   RouteResponseDTO
 } from '.././model';
 
 import { customClient } from '../../custom-client';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
 /**
  * @summary Create Route
  */
-export type createRouteRoutingRoutesPostResponse201 = {
-  data: RouteResponseDTO
-  status: 201
-}
+export const createRouteApiV1RoutingRoutesPost = (
+    createRouteRequestDTO: CreateRouteRequestDTO,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<RouteResponseDTO>(
+      {url: `/api/v1/routing/routes`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createRouteRequestDTO, signal
+    },
+      options);
+    }
+  
 
-export type createRouteRoutingRoutesPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
+
+export const getCreateRouteApiV1RoutingRoutesPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRouteApiV1RoutingRoutesPost>>, TError,{data: CreateRouteRequestDTO}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof createRouteApiV1RoutingRoutesPost>>, TError,{data: CreateRouteRequestDTO}, TContext> => {
+
+const mutationKey = ['createRouteApiV1RoutingRoutesPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createRouteApiV1RoutingRoutesPost>>, {data: CreateRouteRequestDTO}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createRouteApiV1RoutingRoutesPost(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateRouteApiV1RoutingRoutesPostMutationResult = NonNullable<Awaited<ReturnType<typeof createRouteApiV1RoutingRoutesPost>>>
+    export type CreateRouteApiV1RoutingRoutesPostMutationBody = CreateRouteRequestDTO
+    export type CreateRouteApiV1RoutingRoutesPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Create Route
+ */
+export const useCreateRouteApiV1RoutingRoutesPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createRouteApiV1RoutingRoutesPost>>, TError,{data: CreateRouteRequestDTO}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createRouteApiV1RoutingRoutesPost>>,
+        TError,
+        {data: CreateRouteRequestDTO},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateRouteApiV1RoutingRoutesPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * @summary List Routes
+ */
+export const listRoutesApiV1RoutingRoutesGet = (
     
-export type createRouteRoutingRoutesPostResponseSuccess = (createRouteRoutingRoutesPostResponse201) & {
-  headers: Headers;
-};
-export type createRouteRoutingRoutesPostResponseError = (createRouteRoutingRoutesPostResponse422) & {
-  headers: Headers;
-};
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<RouteResponseDTO[]>(
+      {url: `/api/v1/routing/routes`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export type createRouteRoutingRoutesPostResponse = (createRouteRoutingRoutesPostResponseSuccess | createRouteRoutingRoutesPostResponseError)
 
-export const getCreateRouteRoutingRoutesPostUrl = () => {
 
+export const getListRoutesApiV1RoutingRoutesGetQueryKey = () => {
+    return [
+    `/api/v1/routing/routes`
+    ] as const;
+    }
+
+    
+export const getListRoutesApiV1RoutingRoutesGetQueryOptions = <TData = Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListRoutesApiV1RoutingRoutesGetQueryKey();
 
   
 
-  return `/routing/routes`
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>> = ({ signal }) => listRoutesApiV1RoutingRoutesGet(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export const createRouteRoutingRoutesPost = async (createRouteRequestDTO: CreateRouteRequestDTO, options?: RequestInit): Promise<createRouteRoutingRoutesPostResponse> => {
-  
-  return customClient<createRouteRoutingRoutesPostResponse>(getCreateRouteRoutingRoutesPostUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      createRouteRequestDTO,)
-  }
-);}
+export type ListRoutesApiV1RoutingRoutesGetQueryResult = NonNullable<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>>
+export type ListRoutesApiV1RoutingRoutesGetQueryError = HTTPValidationError
+
+
+export function useListRoutesApiV1RoutingRoutesGet<TData = Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>,
+          TError,
+          Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListRoutesApiV1RoutingRoutesGet<TData = Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>,
+          TError,
+          Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListRoutesApiV1RoutingRoutesGet<TData = Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary List Routes
+ */
+
+export function useListRoutesApiV1RoutingRoutesGet<TData = Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRoutesApiV1RoutingRoutesGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getListRoutesApiV1RoutingRoutesGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
 
 
 /**
  * @summary Add Stop To Route
  */
-export type addStopToRouteRoutingRoutesRouteIdStopsPostResponse200 = {
-  data: RouteResponseDTO
-  status: 200
-}
-
-export type addStopToRouteRoutingRoutesRouteIdStopsPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type addStopToRouteRoutingRoutesRouteIdStopsPostResponseSuccess = (addStopToRouteRoutingRoutesRouteIdStopsPostResponse200) & {
-  headers: Headers;
-};
-export type addStopToRouteRoutingRoutesRouteIdStopsPostResponseError = (addStopToRouteRoutingRoutesRouteIdStopsPostResponse422) & {
-  headers: Headers;
-};
-
-export type addStopToRouteRoutingRoutesRouteIdStopsPostResponse = (addStopToRouteRoutingRoutesRouteIdStopsPostResponseSuccess | addStopToRouteRoutingRoutesRouteIdStopsPostResponseError)
-
-export const getAddStopToRouteRoutingRoutesRouteIdStopsPostUrl = (routeId: string,) => {
-
-
+export const addStopToRouteApiV1RoutingRoutesRouteIdStopsPost = (
+    routeId: string,
+    addStopRequestDTO: AddStopRequestDTO,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<RouteResponseDTO>(
+      {url: `/api/v1/routing/routes/${routeId}/stops`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: addStopRequestDTO, signal
+    },
+      options);
+    }
   
 
-  return `/routing/routes/${routeId}/stops`
-}
 
-export const addStopToRouteRoutingRoutesRouteIdStopsPost = async (routeId: string,
-    addStopRequestDTO: AddStopRequestDTO, options?: RequestInit): Promise<addStopToRouteRoutingRoutesRouteIdStopsPostResponse> => {
-  
-  return customClient<addStopToRouteRoutingRoutesRouteIdStopsPostResponse>(getAddStopToRouteRoutingRoutesRouteIdStopsPostUrl(routeId),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      addStopRequestDTO,)
-  }
-);}
+export const getAddStopToRouteApiV1RoutingRoutesRouteIdStopsPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addStopToRouteApiV1RoutingRoutesRouteIdStopsPost>>, TError,{routeId: string;data: AddStopRequestDTO}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof addStopToRouteApiV1RoutingRoutesRouteIdStopsPost>>, TError,{routeId: string;data: AddStopRequestDTO}, TContext> => {
+
+const mutationKey = ['addStopToRouteApiV1RoutingRoutesRouteIdStopsPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
 
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof addStopToRouteApiV1RoutingRoutesRouteIdStopsPost>>, {routeId: string;data: AddStopRequestDTO}> = (props) => {
+          const {routeId,data} = props ?? {};
+
+          return  addStopToRouteApiV1RoutingRoutesRouteIdStopsPost(routeId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AddStopToRouteApiV1RoutingRoutesRouteIdStopsPostMutationResult = NonNullable<Awaited<ReturnType<typeof addStopToRouteApiV1RoutingRoutesRouteIdStopsPost>>>
+    export type AddStopToRouteApiV1RoutingRoutesRouteIdStopsPostMutationBody = AddStopRequestDTO
+    export type AddStopToRouteApiV1RoutingRoutesRouteIdStopsPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Add Stop To Route
+ */
+export const useAddStopToRouteApiV1RoutingRoutesRouteIdStopsPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addStopToRouteApiV1RoutingRoutesRouteIdStopsPost>>, TError,{routeId: string;data: AddStopRequestDTO}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof addStopToRouteApiV1RoutingRoutesRouteIdStopsPost>>,
+        TError,
+        {routeId: string;data: AddStopRequestDTO},
+        TContext
+      > => {
+
+      const mutationOptions = getAddStopToRouteApiV1RoutingRoutesRouteIdStopsPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Assign Route Resources
  */
-export type assignRouteResourcesRoutingRoutesRouteIdAssignPostResponse200 = {
-  data: RouteResponseDTO
-  status: 200
-}
+export const assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost = (
+    routeId: string,
+    assignRouteResourcesRequestDTO: AssignRouteResourcesRequestDTO,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<RouteResponseDTO>(
+      {url: `/api/v1/routing/routes/${routeId}/assign`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: assignRouteResourcesRequestDTO, signal
+    },
+      options);
+    }
+  
 
-export type assignRouteResourcesRoutingRoutesRouteIdAssignPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
+
+export const getAssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost>>, TError,{routeId: string;data: AssignRouteResourcesRequestDTO}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost>>, TError,{routeId: string;data: AssignRouteResourcesRequestDTO}, TContext> => {
+
+const mutationKey = ['assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost>>, {routeId: string;data: AssignRouteResourcesRequestDTO}> = (props) => {
+          const {routeId,data} = props ?? {};
+
+          return  assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost(routeId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostMutationResult = NonNullable<Awaited<ReturnType<typeof assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost>>>
+    export type AssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostMutationBody = AssignRouteResourcesRequestDTO
+    export type AssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Assign Route Resources
+ */
+export const useAssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost>>, TError,{routeId: string;data: AssignRouteResourcesRequestDTO}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost>>,
+        TError,
+        {routeId: string;data: AssignRouteResourcesRequestDTO},
+        TContext
+      > => {
+
+      const mutationOptions = getAssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * @summary List Requirements
+ */
+export const listRequirementsApiV1RoutingRequirementsGet = (
     
-export type assignRouteResourcesRoutingRoutesRouteIdAssignPostResponseSuccess = (assignRouteResourcesRoutingRoutesRouteIdAssignPostResponse200) & {
-  headers: Headers;
-};
-export type assignRouteResourcesRoutingRoutesRouteIdAssignPostResponseError = (assignRouteResourcesRoutingRoutesRouteIdAssignPostResponse422) & {
-  headers: Headers;
-};
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<RequirementDTO[]>(
+      {url: `/api/v1/routing/requirements`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export type assignRouteResourcesRoutingRoutesRouteIdAssignPostResponse = (assignRouteResourcesRoutingRoutesRouteIdAssignPostResponseSuccess | assignRouteResourcesRoutingRoutesRouteIdAssignPostResponseError)
 
-export const getAssignRouteResourcesRoutingRoutesRouteIdAssignPostUrl = (routeId: string,) => {
 
+export const getListRequirementsApiV1RoutingRequirementsGetQueryKey = () => {
+    return [
+    `/api/v1/routing/requirements`
+    ] as const;
+    }
+
+    
+export const getListRequirementsApiV1RoutingRequirementsGetQueryOptions = <TData = Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListRequirementsApiV1RoutingRequirementsGetQueryKey();
 
   
 
-  return `/routing/routes/${routeId}/assign`
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>> = ({ signal }) => listRequirementsApiV1RoutingRequirementsGet(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export const assignRouteResourcesRoutingRoutesRouteIdAssignPost = async (routeId: string,
-    assignRouteResourcesRequestDTO: AssignRouteResourcesRequestDTO, options?: RequestInit): Promise<assignRouteResourcesRoutingRoutesRouteIdAssignPostResponse> => {
-  
-  return customClient<assignRouteResourcesRoutingRoutesRouteIdAssignPostResponse>(getAssignRouteResourcesRoutingRoutesRouteIdAssignPostUrl(routeId),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      assignRouteResourcesRequestDTO,)
-  }
-);}
+export type ListRequirementsApiV1RoutingRequirementsGetQueryResult = NonNullable<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>>
+export type ListRequirementsApiV1RoutingRequirementsGetQueryError = HTTPValidationError
+
+
+export function useListRequirementsApiV1RoutingRequirementsGet<TData = Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>,
+          TError,
+          Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListRequirementsApiV1RoutingRequirementsGet<TData = Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>,
+          TError,
+          Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListRequirementsApiV1RoutingRequirementsGet<TData = Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary List Requirements
+ */
+
+export function useListRequirementsApiV1RoutingRequirementsGet<TData = Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getListRequirementsApiV1RoutingRequirementsGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
 
 

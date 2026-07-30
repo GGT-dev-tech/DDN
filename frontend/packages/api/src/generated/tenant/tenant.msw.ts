@@ -22,20 +22,20 @@ import type {
 } from '.././model';
 
 
-export const getGetCurrentTenantTenantCurrentGetResponseMock = (overrideResponse: Partial< TenantContextResponse > = {}): TenantContextResponse => ({tenant: {id: faker.string.uuid(), name: faker.string.alpha({length: {min: 10, max: 20}}), legal_name: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}),null,]), undefined]), status: faker.string.alpha({length: {min: 10, max: 20}}), plan: faker.string.alpha({length: {min: 10, max: 20}}), created_at: `${faker.date.past().toISOString().split('.')[0]}Z`}, role: faker.string.alpha({length: {min: 10, max: 20}}), ...overrideResponse})
+export const getGetCurrentTenantApiV1TenantCurrentGetResponseMock = (overrideResponse: Partial< TenantContextResponse > = {}): TenantContextResponse => ({tenant: {id: faker.string.uuid(), name: faker.string.alpha({length: {min: 10, max: 20}}), legal_name: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}),null,]), undefined]), status: faker.string.alpha({length: {min: 10, max: 20}}), plan: faker.string.alpha({length: {min: 10, max: 20}}), created_at: `${faker.date.past().toISOString().split('.')[0]}Z`}, role: faker.string.alpha({length: {min: 10, max: 20}}), ...overrideResponse})
 
 
-export const getGetCurrentTenantTenantCurrentGetMockHandler = (overrideResponse?: TenantContextResponse | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<TenantContextResponse> | TenantContextResponse), options?: RequestHandlerOptions) => {
-  return http.get('*/tenant/current', async (info) => {await delay(1000);
+export const getGetCurrentTenantApiV1TenantCurrentGetMockHandler = (overrideResponse?: TenantContextResponse | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<TenantContextResponse> | TenantContextResponse), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/tenant/current', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
     ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetCurrentTenantTenantCurrentGetResponseMock()),
+    : getGetCurrentTenantApiV1TenantCurrentGetResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   }, options)
 }
 export const getTenantMock = () => [
-  getGetCurrentTenantTenantCurrentGetMockHandler()
+  getGetCurrentTenantApiV1TenantCurrentGetMockHandler()
 ]

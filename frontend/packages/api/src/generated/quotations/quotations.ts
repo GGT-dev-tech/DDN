@@ -4,6 +4,25 @@
  * Stitch API Gateway
  * OpenAPI spec version: 1.0.0
  */
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
+import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
+} from '@tanstack/react-query';
+
 import type {
   AddQuotationItemApiV1QuotationsQuotationIdItemsPost200,
   AddQuotationItemRequest,
@@ -13,223 +32,425 @@ import type {
   CreateQuotationApiV1QuotationsPost200,
   CreateQuotationRequest,
   HTTPValidationError,
+  QuotationResponse,
   SubmitQuotationApiV1QuotationsQuotationIdSubmitPost200
 } from '.././model';
 
 import { customClient } from '../../custom-client';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
 /**
  * @summary Create Quotation
  */
-export type createQuotationApiV1QuotationsPostResponse200 = {
-  data: CreateQuotationApiV1QuotationsPost200
-  status: 200
-}
+export const createQuotationApiV1QuotationsPost = (
+    createQuotationRequest: CreateQuotationRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<CreateQuotationApiV1QuotationsPost200>(
+      {url: `/api/v1/quotations`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createQuotationRequest, signal
+    },
+      options);
+    }
+  
 
-export type createQuotationApiV1QuotationsPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
+
+export const getCreateQuotationApiV1QuotationsPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createQuotationApiV1QuotationsPost>>, TError,{data: CreateQuotationRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof createQuotationApiV1QuotationsPost>>, TError,{data: CreateQuotationRequest}, TContext> => {
+
+const mutationKey = ['createQuotationApiV1QuotationsPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createQuotationApiV1QuotationsPost>>, {data: CreateQuotationRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createQuotationApiV1QuotationsPost(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateQuotationApiV1QuotationsPostMutationResult = NonNullable<Awaited<ReturnType<typeof createQuotationApiV1QuotationsPost>>>
+    export type CreateQuotationApiV1QuotationsPostMutationBody = CreateQuotationRequest
+    export type CreateQuotationApiV1QuotationsPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Create Quotation
+ */
+export const useCreateQuotationApiV1QuotationsPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createQuotationApiV1QuotationsPost>>, TError,{data: CreateQuotationRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createQuotationApiV1QuotationsPost>>,
+        TError,
+        {data: CreateQuotationRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getCreateQuotationApiV1QuotationsPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * @summary List Quotations
+ */
+export const listQuotationsApiV1QuotationsGet = (
     
-export type createQuotationApiV1QuotationsPostResponseSuccess = (createQuotationApiV1QuotationsPostResponse200) & {
-  headers: Headers;
-};
-export type createQuotationApiV1QuotationsPostResponseError = (createQuotationApiV1QuotationsPostResponse422) & {
-  headers: Headers;
-};
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<QuotationResponse[]>(
+      {url: `/api/v1/quotations`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export type createQuotationApiV1QuotationsPostResponse = (createQuotationApiV1QuotationsPostResponseSuccess | createQuotationApiV1QuotationsPostResponseError)
 
-export const getCreateQuotationApiV1QuotationsPostUrl = () => {
 
+export const getListQuotationsApiV1QuotationsGetQueryKey = () => {
+    return [
+    `/api/v1/quotations`
+    ] as const;
+    }
+
+    
+export const getListQuotationsApiV1QuotationsGetQueryOptions = <TData = Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListQuotationsApiV1QuotationsGetQueryKey();
 
   
 
-  return `/api/v1/quotations`
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>> = ({ signal }) => listQuotationsApiV1QuotationsGet(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export const createQuotationApiV1QuotationsPost = async (createQuotationRequest: CreateQuotationRequest, options?: RequestInit): Promise<createQuotationApiV1QuotationsPostResponse> => {
-  
-  return customClient<createQuotationApiV1QuotationsPostResponse>(getCreateQuotationApiV1QuotationsPostUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      createQuotationRequest,)
-  }
-);}
+export type ListQuotationsApiV1QuotationsGetQueryResult = NonNullable<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>>
+export type ListQuotationsApiV1QuotationsGetQueryError = HTTPValidationError
+
+
+export function useListQuotationsApiV1QuotationsGet<TData = Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>,
+          TError,
+          Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListQuotationsApiV1QuotationsGet<TData = Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>,
+          TError,
+          Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListQuotationsApiV1QuotationsGet<TData = Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary List Quotations
+ */
+
+export function useListQuotationsApiV1QuotationsGet<TData = Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listQuotationsApiV1QuotationsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getListQuotationsApiV1QuotationsGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
 
 
 /**
  * @summary Add Quotation Item
  */
-export type addQuotationItemApiV1QuotationsQuotationIdItemsPostResponse200 = {
-  data: AddQuotationItemApiV1QuotationsQuotationIdItemsPost200
-  status: 200
-}
-
-export type addQuotationItemApiV1QuotationsQuotationIdItemsPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type addQuotationItemApiV1QuotationsQuotationIdItemsPostResponseSuccess = (addQuotationItemApiV1QuotationsQuotationIdItemsPostResponse200) & {
-  headers: Headers;
-};
-export type addQuotationItemApiV1QuotationsQuotationIdItemsPostResponseError = (addQuotationItemApiV1QuotationsQuotationIdItemsPostResponse422) & {
-  headers: Headers;
-};
-
-export type addQuotationItemApiV1QuotationsQuotationIdItemsPostResponse = (addQuotationItemApiV1QuotationsQuotationIdItemsPostResponseSuccess | addQuotationItemApiV1QuotationsQuotationIdItemsPostResponseError)
-
-export const getAddQuotationItemApiV1QuotationsQuotationIdItemsPostUrl = (quotationId: string,) => {
-
-
+export const addQuotationItemApiV1QuotationsQuotationIdItemsPost = (
+    quotationId: string,
+    addQuotationItemRequest: AddQuotationItemRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<AddQuotationItemApiV1QuotationsQuotationIdItemsPost200>(
+      {url: `/api/v1/quotations/${quotationId}/items`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: addQuotationItemRequest, signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/quotations/${quotationId}/items`
-}
 
-export const addQuotationItemApiV1QuotationsQuotationIdItemsPost = async (quotationId: string,
-    addQuotationItemRequest: AddQuotationItemRequest, options?: RequestInit): Promise<addQuotationItemApiV1QuotationsQuotationIdItemsPostResponse> => {
-  
-  return customClient<addQuotationItemApiV1QuotationsQuotationIdItemsPostResponse>(getAddQuotationItemApiV1QuotationsQuotationIdItemsPostUrl(quotationId),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      addQuotationItemRequest,)
-  }
-);}
+export const getAddQuotationItemApiV1QuotationsQuotationIdItemsPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addQuotationItemApiV1QuotationsQuotationIdItemsPost>>, TError,{quotationId: string;data: AddQuotationItemRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof addQuotationItemApiV1QuotationsQuotationIdItemsPost>>, TError,{quotationId: string;data: AddQuotationItemRequest}, TContext> => {
+
+const mutationKey = ['addQuotationItemApiV1QuotationsQuotationIdItemsPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
 
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof addQuotationItemApiV1QuotationsQuotationIdItemsPost>>, {quotationId: string;data: AddQuotationItemRequest}> = (props) => {
+          const {quotationId,data} = props ?? {};
+
+          return  addQuotationItemApiV1QuotationsQuotationIdItemsPost(quotationId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AddQuotationItemApiV1QuotationsQuotationIdItemsPostMutationResult = NonNullable<Awaited<ReturnType<typeof addQuotationItemApiV1QuotationsQuotationIdItemsPost>>>
+    export type AddQuotationItemApiV1QuotationsQuotationIdItemsPostMutationBody = AddQuotationItemRequest
+    export type AddQuotationItemApiV1QuotationsQuotationIdItemsPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Add Quotation Item
+ */
+export const useAddQuotationItemApiV1QuotationsQuotationIdItemsPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addQuotationItemApiV1QuotationsQuotationIdItemsPost>>, TError,{quotationId: string;data: AddQuotationItemRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof addQuotationItemApiV1QuotationsQuotationIdItemsPost>>,
+        TError,
+        {quotationId: string;data: AddQuotationItemRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getAddQuotationItemApiV1QuotationsQuotationIdItemsPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Calculate Quotation
  */
-export type calculateQuotationApiV1QuotationsQuotationIdCalculatePostResponse200 = {
-  data: CalculateQuotationApiV1QuotationsQuotationIdCalculatePost200
-  status: 200
-}
-
-export type calculateQuotationApiV1QuotationsQuotationIdCalculatePostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type calculateQuotationApiV1QuotationsQuotationIdCalculatePostResponseSuccess = (calculateQuotationApiV1QuotationsQuotationIdCalculatePostResponse200) & {
-  headers: Headers;
-};
-export type calculateQuotationApiV1QuotationsQuotationIdCalculatePostResponseError = (calculateQuotationApiV1QuotationsQuotationIdCalculatePostResponse422) & {
-  headers: Headers;
-};
-
-export type calculateQuotationApiV1QuotationsQuotationIdCalculatePostResponse = (calculateQuotationApiV1QuotationsQuotationIdCalculatePostResponseSuccess | calculateQuotationApiV1QuotationsQuotationIdCalculatePostResponseError)
-
-export const getCalculateQuotationApiV1QuotationsQuotationIdCalculatePostUrl = (quotationId: string,) => {
-
-
+export const calculateQuotationApiV1QuotationsQuotationIdCalculatePost = (
+    quotationId: string,
+    calculateQuotationRequest: CalculateQuotationRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<CalculateQuotationApiV1QuotationsQuotationIdCalculatePost200>(
+      {url: `/api/v1/quotations/${quotationId}/calculate`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: calculateQuotationRequest, signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/quotations/${quotationId}/calculate`
-}
 
-export const calculateQuotationApiV1QuotationsQuotationIdCalculatePost = async (quotationId: string,
-    calculateQuotationRequest: CalculateQuotationRequest, options?: RequestInit): Promise<calculateQuotationApiV1QuotationsQuotationIdCalculatePostResponse> => {
-  
-  return customClient<calculateQuotationApiV1QuotationsQuotationIdCalculatePostResponse>(getCalculateQuotationApiV1QuotationsQuotationIdCalculatePostUrl(quotationId),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      calculateQuotationRequest,)
-  }
-);}
+export const getCalculateQuotationApiV1QuotationsQuotationIdCalculatePostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculateQuotationApiV1QuotationsQuotationIdCalculatePost>>, TError,{quotationId: string;data: CalculateQuotationRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof calculateQuotationApiV1QuotationsQuotationIdCalculatePost>>, TError,{quotationId: string;data: CalculateQuotationRequest}, TContext> => {
+
+const mutationKey = ['calculateQuotationApiV1QuotationsQuotationIdCalculatePost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
 
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof calculateQuotationApiV1QuotationsQuotationIdCalculatePost>>, {quotationId: string;data: CalculateQuotationRequest}> = (props) => {
+          const {quotationId,data} = props ?? {};
+
+          return  calculateQuotationApiV1QuotationsQuotationIdCalculatePost(quotationId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CalculateQuotationApiV1QuotationsQuotationIdCalculatePostMutationResult = NonNullable<Awaited<ReturnType<typeof calculateQuotationApiV1QuotationsQuotationIdCalculatePost>>>
+    export type CalculateQuotationApiV1QuotationsQuotationIdCalculatePostMutationBody = CalculateQuotationRequest
+    export type CalculateQuotationApiV1QuotationsQuotationIdCalculatePostMutationError = HTTPValidationError
+
+    /**
+ * @summary Calculate Quotation
+ */
+export const useCalculateQuotationApiV1QuotationsQuotationIdCalculatePost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof calculateQuotationApiV1QuotationsQuotationIdCalculatePost>>, TError,{quotationId: string;data: CalculateQuotationRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof calculateQuotationApiV1QuotationsQuotationIdCalculatePost>>,
+        TError,
+        {quotationId: string;data: CalculateQuotationRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getCalculateQuotationApiV1QuotationsQuotationIdCalculatePostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Submit Quotation
  */
-export type submitQuotationApiV1QuotationsQuotationIdSubmitPostResponse200 = {
-  data: SubmitQuotationApiV1QuotationsQuotationIdSubmitPost200
-  status: 200
-}
-
-export type submitQuotationApiV1QuotationsQuotationIdSubmitPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type submitQuotationApiV1QuotationsQuotationIdSubmitPostResponseSuccess = (submitQuotationApiV1QuotationsQuotationIdSubmitPostResponse200) & {
-  headers: Headers;
-};
-export type submitQuotationApiV1QuotationsQuotationIdSubmitPostResponseError = (submitQuotationApiV1QuotationsQuotationIdSubmitPostResponse422) & {
-  headers: Headers;
-};
-
-export type submitQuotationApiV1QuotationsQuotationIdSubmitPostResponse = (submitQuotationApiV1QuotationsQuotationIdSubmitPostResponseSuccess | submitQuotationApiV1QuotationsQuotationIdSubmitPostResponseError)
-
-export const getSubmitQuotationApiV1QuotationsQuotationIdSubmitPostUrl = (quotationId: string,) => {
-
-
+export const submitQuotationApiV1QuotationsQuotationIdSubmitPost = (
+    quotationId: string,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<SubmitQuotationApiV1QuotationsQuotationIdSubmitPost200>(
+      {url: `/api/v1/quotations/${quotationId}/submit`, method: 'POST', signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/quotations/${quotationId}/submit`
-}
 
-export const submitQuotationApiV1QuotationsQuotationIdSubmitPost = async (quotationId: string, options?: RequestInit): Promise<submitQuotationApiV1QuotationsQuotationIdSubmitPostResponse> => {
-  
-  return customClient<submitQuotationApiV1QuotationsQuotationIdSubmitPostResponse>(getSubmitQuotationApiV1QuotationsQuotationIdSubmitPostUrl(quotationId),
-  {      
-    ...options,
-    method: 'POST'
+export const getSubmitQuotationApiV1QuotationsQuotationIdSubmitPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitQuotationApiV1QuotationsQuotationIdSubmitPost>>, TError,{quotationId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof submitQuotationApiV1QuotationsQuotationIdSubmitPost>>, TError,{quotationId: string}, TContext> => {
+
+const mutationKey = ['submitQuotationApiV1QuotationsQuotationIdSubmitPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof submitQuotationApiV1QuotationsQuotationIdSubmitPost>>, {quotationId: string}> = (props) => {
+          const {quotationId} = props ?? {};
+
+          return  submitQuotationApiV1QuotationsQuotationIdSubmitPost(quotationId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SubmitQuotationApiV1QuotationsQuotationIdSubmitPostMutationResult = NonNullable<Awaited<ReturnType<typeof submitQuotationApiV1QuotationsQuotationIdSubmitPost>>>
     
-    
-  }
-);}
+    export type SubmitQuotationApiV1QuotationsQuotationIdSubmitPostMutationError = HTTPValidationError
 
+    /**
+ * @summary Submit Quotation
+ */
+export const useSubmitQuotationApiV1QuotationsQuotationIdSubmitPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitQuotationApiV1QuotationsQuotationIdSubmitPost>>, TError,{quotationId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof submitQuotationApiV1QuotationsQuotationIdSubmitPost>>,
+        TError,
+        {quotationId: string},
+        TContext
+      > => {
 
-/**
+      const mutationOptions = getSubmitQuotationApiV1QuotationsQuotationIdSubmitPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Approve Quotation
  */
-export type approveQuotationApiV1QuotationsQuotationIdApprovePostResponse200 = {
-  data: ApproveQuotationApiV1QuotationsQuotationIdApprovePost200
-  status: 200
-}
-
-export type approveQuotationApiV1QuotationsQuotationIdApprovePostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type approveQuotationApiV1QuotationsQuotationIdApprovePostResponseSuccess = (approveQuotationApiV1QuotationsQuotationIdApprovePostResponse200) & {
-  headers: Headers;
-};
-export type approveQuotationApiV1QuotationsQuotationIdApprovePostResponseError = (approveQuotationApiV1QuotationsQuotationIdApprovePostResponse422) & {
-  headers: Headers;
-};
-
-export type approveQuotationApiV1QuotationsQuotationIdApprovePostResponse = (approveQuotationApiV1QuotationsQuotationIdApprovePostResponseSuccess | approveQuotationApiV1QuotationsQuotationIdApprovePostResponseError)
-
-export const getApproveQuotationApiV1QuotationsQuotationIdApprovePostUrl = (quotationId: string,) => {
-
-
+export const approveQuotationApiV1QuotationsQuotationIdApprovePost = (
+    quotationId: string,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<ApproveQuotationApiV1QuotationsQuotationIdApprovePost200>(
+      {url: `/api/v1/quotations/${quotationId}/approve`, method: 'POST', signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/quotations/${quotationId}/approve`
-}
 
-export const approveQuotationApiV1QuotationsQuotationIdApprovePost = async (quotationId: string, options?: RequestInit): Promise<approveQuotationApiV1QuotationsQuotationIdApprovePostResponse> => {
-  
-  return customClient<approveQuotationApiV1QuotationsQuotationIdApprovePostResponse>(getApproveQuotationApiV1QuotationsQuotationIdApprovePostUrl(quotationId),
-  {      
-    ...options,
-    method: 'POST'
+export const getApproveQuotationApiV1QuotationsQuotationIdApprovePostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof approveQuotationApiV1QuotationsQuotationIdApprovePost>>, TError,{quotationId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof approveQuotationApiV1QuotationsQuotationIdApprovePost>>, TError,{quotationId: string}, TContext> => {
+
+const mutationKey = ['approveQuotationApiV1QuotationsQuotationIdApprovePost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof approveQuotationApiV1QuotationsQuotationIdApprovePost>>, {quotationId: string}> = (props) => {
+          const {quotationId} = props ?? {};
+
+          return  approveQuotationApiV1QuotationsQuotationIdApprovePost(quotationId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ApproveQuotationApiV1QuotationsQuotationIdApprovePostMutationResult = NonNullable<Awaited<ReturnType<typeof approveQuotationApiV1QuotationsQuotationIdApprovePost>>>
     
+    export type ApproveQuotationApiV1QuotationsQuotationIdApprovePostMutationError = HTTPValidationError
+
+    /**
+ * @summary Approve Quotation
+ */
+export const useApproveQuotationApiV1QuotationsQuotationIdApprovePost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof approveQuotationApiV1QuotationsQuotationIdApprovePost>>, TError,{quotationId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof approveQuotationApiV1QuotationsQuotationIdApprovePost>>,
+        TError,
+        {quotationId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getApproveQuotationApiV1QuotationsQuotationIdApprovePostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
     
-  }
-);}
-
-

@@ -4,6 +4,21 @@
  * Stitch API Gateway
  * OpenAPI spec version: 1.0.0
  */
+import {
+  useQuery
+} from '@tanstack/react-query';
+import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseQueryOptions,
+  UseQueryResult
+} from '@tanstack/react-query';
+
 import type {
   DashboardStatsResponse,
   HTTPValidationError
@@ -11,46 +26,101 @@ import type {
 
 import { customClient } from '../../custom-client';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
 /**
  * Retrieves the main operational metrics for the current tenant's dashboard.
  * @summary Get Dashboard Stats
  */
-export type getDashboardStatsApiV1DashboardStatsGetResponse200 = {
-  data: DashboardStatsResponse
-  status: 200
-}
-
-export type getDashboardStatsApiV1DashboardStatsGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
+export const getDashboardStatsApiV1DashboardStatsGet = (
     
-export type getDashboardStatsApiV1DashboardStatsGetResponseSuccess = (getDashboardStatsApiV1DashboardStatsGetResponse200) & {
-  headers: Headers;
-};
-export type getDashboardStatsApiV1DashboardStatsGetResponseError = (getDashboardStatsApiV1DashboardStatsGetResponse422) & {
-  headers: Headers;
-};
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<DashboardStatsResponse>(
+      {url: `/api/v1/dashboard/stats`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export type getDashboardStatsApiV1DashboardStatsGetResponse = (getDashboardStatsApiV1DashboardStatsGetResponseSuccess | getDashboardStatsApiV1DashboardStatsGetResponseError)
 
-export const getGetDashboardStatsApiV1DashboardStatsGetUrl = () => {
 
+export const getGetDashboardStatsApiV1DashboardStatsGetQueryKey = () => {
+    return [
+    `/api/v1/dashboard/stats`
+    ] as const;
+    }
+
+    
+export const getGetDashboardStatsApiV1DashboardStatsGetQueryOptions = <TData = Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDashboardStatsApiV1DashboardStatsGetQueryKey();
 
   
 
-  return `/api/v1/dashboard/stats`
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>> = ({ signal }) => getDashboardStatsApiV1DashboardStatsGet(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export const getDashboardStatsApiV1DashboardStatsGet = async ( options?: RequestInit): Promise<getDashboardStatsApiV1DashboardStatsGetResponse> => {
-  
-  return customClient<getDashboardStatsApiV1DashboardStatsGetResponse>(getGetDashboardStatsApiV1DashboardStatsGetUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type GetDashboardStatsApiV1DashboardStatsGetQueryResult = NonNullable<Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>>
+export type GetDashboardStatsApiV1DashboardStatsGetQueryError = HTTPValidationError
+
+
+export function useGetDashboardStatsApiV1DashboardStatsGet<TData = Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>,
+          TError,
+          Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetDashboardStatsApiV1DashboardStatsGet<TData = Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>,
+          TError,
+          Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetDashboardStatsApiV1DashboardStatsGet<TData = Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary Get Dashboard Stats
+ */
+
+export function useGetDashboardStatsApiV1DashboardStatsGet<TData = Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDashboardStatsApiV1DashboardStatsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetDashboardStatsApiV1DashboardStatsGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
 
 

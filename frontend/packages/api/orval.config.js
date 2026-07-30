@@ -1,11 +1,11 @@
 module.exports = {
   ddn_management: {
-    input: '../../../backend/openapi.json',
+    input: './openapi.json',
     output: {
       mode: 'tags-split',
       target: 'src/generated/api.ts',
       schemas: 'src/generated/model',
-      client: 'fetch',
+      client: 'react-query',
       mock: true,
       override: {
         mutator: {

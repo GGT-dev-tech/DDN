@@ -57,6 +57,16 @@ export const getUpdateSchedulesApiV1ServicePlansPlanIdPatchMockHandler = (overri
   }, options)
 }
 
+export const getListAllPlansApiV1ServicePlansGetMockHandler = (overrideResponse?: unknown[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<unknown[]> | unknown[]), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/service-plans', async (info) => {await delay(1000);
+  if (typeof overrideResponse === 'function') {await overrideResponse(info); }
+    return new HttpResponse(null,
+      { status: 200,
+        
+      })
+  }, options)
+}
+
 export const getListPlansByContractApiV1ServicePlansContractContractIdGetMockHandler = (overrideResponse?: unknown[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<unknown[]> | unknown[]), options?: RequestHandlerOptions) => {
   return http.get('*/api/v1/service-plans/contract/:contractId', async (info) => {await delay(1000);
   if (typeof overrideResponse === 'function') {await overrideResponse(info); }
@@ -105,6 +115,7 @@ export const getReactivatePlanApiV1ServicePlansPlanIdReactivatePostMockHandler =
 export const getServicePlansMock = () => [
   getGetPlanApiV1ServicePlansPlanIdGetMockHandler(),
   getUpdateSchedulesApiV1ServicePlansPlanIdPatchMockHandler(),
+  getListAllPlansApiV1ServicePlansGetMockHandler(),
   getListPlansByContractApiV1ServicePlansContractContractIdGetMockHandler(),
   getPublishPlanApiV1ServicePlansPlanIdPublishPostMockHandler(),
   getSuspendPlanApiV1ServicePlansPlanIdSuspendPostMockHandler(),

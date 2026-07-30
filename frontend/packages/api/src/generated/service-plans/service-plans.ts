@@ -4,6 +4,25 @@
  * Stitch API Gateway
  * OpenAPI spec version: 1.0.0
  */
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
+import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
+} from '@tanstack/react-query';
+
 import type {
   GetPlanApiV1ServicePlansPlanIdGet200,
   HTTPValidationError,
@@ -17,46 +36,101 @@ import type {
 
 import { customClient } from '../../custom-client';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
 /**
  * @summary Get Plan
  */
-export type getPlanApiV1ServicePlansPlanIdGetResponse200 = {
-  data: GetPlanApiV1ServicePlansPlanIdGet200
-  status: 200
-}
+export const getPlanApiV1ServicePlansPlanIdGet = (
+    planId: string,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<GetPlanApiV1ServicePlansPlanIdGet200>(
+      {url: `/api/v1/service-plans/${planId}`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export type getPlanApiV1ServicePlansPlanIdGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
+
+
+export const getGetPlanApiV1ServicePlansPlanIdGetQueryKey = (planId?: string,) => {
+    return [
+    `/api/v1/service-plans/${planId}`
+    ] as const;
+    }
+
     
-export type getPlanApiV1ServicePlansPlanIdGetResponseSuccess = (getPlanApiV1ServicePlansPlanIdGetResponse200) & {
-  headers: Headers;
-};
-export type getPlanApiV1ServicePlansPlanIdGetResponseError = (getPlanApiV1ServicePlansPlanIdGetResponse422) & {
-  headers: Headers;
-};
+export const getGetPlanApiV1ServicePlansPlanIdGetQueryOptions = <TData = Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>, TError = HTTPValidationError>(planId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
 
-export type getPlanApiV1ServicePlansPlanIdGetResponse = (getPlanApiV1ServicePlansPlanIdGetResponseSuccess | getPlanApiV1ServicePlansPlanIdGetResponseError)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-export const getGetPlanApiV1ServicePlansPlanIdGetUrl = (planId: string,) => {
-
+  const queryKey =  queryOptions?.queryKey ?? getGetPlanApiV1ServicePlansPlanIdGetQueryKey(planId);
 
   
 
-  return `/api/v1/service-plans/${planId}`
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>> = ({ signal }) => getPlanApiV1ServicePlansPlanIdGet(planId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(planId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export const getPlanApiV1ServicePlansPlanIdGet = async (planId: string, options?: RequestInit): Promise<getPlanApiV1ServicePlansPlanIdGetResponse> => {
-  
-  return customClient<getPlanApiV1ServicePlansPlanIdGetResponse>(getGetPlanApiV1ServicePlansPlanIdGetUrl(planId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type GetPlanApiV1ServicePlansPlanIdGetQueryResult = NonNullable<Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>>
+export type GetPlanApiV1ServicePlansPlanIdGetQueryError = HTTPValidationError
+
+
+export function useGetPlanApiV1ServicePlansPlanIdGet<TData = Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>, TError = HTTPValidationError>(
+ planId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>,
+          TError,
+          Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetPlanApiV1ServicePlansPlanIdGet<TData = Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>, TError = HTTPValidationError>(
+ planId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>,
+          TError,
+          Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetPlanApiV1ServicePlansPlanIdGet<TData = Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>, TError = HTTPValidationError>(
+ planId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary Get Plan
+ */
+
+export function useGetPlanApiV1ServicePlansPlanIdGet<TData = Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>, TError = HTTPValidationError>(
+ planId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPlanApiV1ServicePlansPlanIdGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetPlanApiV1ServicePlansPlanIdGetQueryOptions(planId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
 
 
 /**
@@ -65,221 +139,443 @@ Only allowed while the plan is in DRAFT status.
 All schedules are applied in a single transactional operation.
  * @summary Update Schedules
  */
-export type updateSchedulesApiV1ServicePlansPlanIdPatchResponse200 = {
-  data: UpdateSchedulesApiV1ServicePlansPlanIdPatch200
-  status: 200
-}
+export const updateSchedulesApiV1ServicePlansPlanIdPatch = (
+    planId: string,
+    updateSchedulesRequest: UpdateSchedulesRequest,
+ options?: SecondParameter<typeof customClient>,) => {
+      
+      
+      return customClient<UpdateSchedulesApiV1ServicePlansPlanIdPatch200>(
+      {url: `/api/v1/service-plans/${planId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateSchedulesRequest
+    },
+      options);
+    }
+  
 
-export type updateSchedulesApiV1ServicePlansPlanIdPatchResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
+
+export const getUpdateSchedulesApiV1ServicePlansPlanIdPatchMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSchedulesApiV1ServicePlansPlanIdPatch>>, TError,{planId: string;data: UpdateSchedulesRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateSchedulesApiV1ServicePlansPlanIdPatch>>, TError,{planId: string;data: UpdateSchedulesRequest}, TContext> => {
+
+const mutationKey = ['updateSchedulesApiV1ServicePlansPlanIdPatch'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateSchedulesApiV1ServicePlansPlanIdPatch>>, {planId: string;data: UpdateSchedulesRequest}> = (props) => {
+          const {planId,data} = props ?? {};
+
+          return  updateSchedulesApiV1ServicePlansPlanIdPatch(planId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateSchedulesApiV1ServicePlansPlanIdPatchMutationResult = NonNullable<Awaited<ReturnType<typeof updateSchedulesApiV1ServicePlansPlanIdPatch>>>
+    export type UpdateSchedulesApiV1ServicePlansPlanIdPatchMutationBody = UpdateSchedulesRequest
+    export type UpdateSchedulesApiV1ServicePlansPlanIdPatchMutationError = HTTPValidationError
+
+    /**
+ * @summary Update Schedules
+ */
+export const useUpdateSchedulesApiV1ServicePlansPlanIdPatch = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateSchedulesApiV1ServicePlansPlanIdPatch>>, TError,{planId: string;data: UpdateSchedulesRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateSchedulesApiV1ServicePlansPlanIdPatch>>,
+        TError,
+        {planId: string;data: UpdateSchedulesRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateSchedulesApiV1ServicePlansPlanIdPatchMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * @summary List All Plans
+ */
+export const listAllPlansApiV1ServicePlansGet = (
     
-export type updateSchedulesApiV1ServicePlansPlanIdPatchResponseSuccess = (updateSchedulesApiV1ServicePlansPlanIdPatchResponse200) & {
-  headers: Headers;
-};
-export type updateSchedulesApiV1ServicePlansPlanIdPatchResponseError = (updateSchedulesApiV1ServicePlansPlanIdPatchResponse422) & {
-  headers: Headers;
-};
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<unknown[]>(
+      {url: `/api/v1/service-plans`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export type updateSchedulesApiV1ServicePlansPlanIdPatchResponse = (updateSchedulesApiV1ServicePlansPlanIdPatchResponseSuccess | updateSchedulesApiV1ServicePlansPlanIdPatchResponseError)
 
-export const getUpdateSchedulesApiV1ServicePlansPlanIdPatchUrl = (planId: string,) => {
 
+export const getListAllPlansApiV1ServicePlansGetQueryKey = () => {
+    return [
+    `/api/v1/service-plans`
+    ] as const;
+    }
+
+    
+export const getListAllPlansApiV1ServicePlansGetQueryOptions = <TData = Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListAllPlansApiV1ServicePlansGetQueryKey();
 
   
 
-  return `/api/v1/service-plans/${planId}`
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>> = ({ signal }) => listAllPlansApiV1ServicePlansGet(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export const updateSchedulesApiV1ServicePlansPlanIdPatch = async (planId: string,
-    updateSchedulesRequest: UpdateSchedulesRequest, options?: RequestInit): Promise<updateSchedulesApiV1ServicePlansPlanIdPatchResponse> => {
-  
-  return customClient<updateSchedulesApiV1ServicePlansPlanIdPatchResponse>(getUpdateSchedulesApiV1ServicePlansPlanIdPatchUrl(planId),
-  {      
-    ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      updateSchedulesRequest,)
-  }
-);}
+export type ListAllPlansApiV1ServicePlansGetQueryResult = NonNullable<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>>
+export type ListAllPlansApiV1ServicePlansGetQueryError = HTTPValidationError
+
+
+export function useListAllPlansApiV1ServicePlansGet<TData = Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>,
+          TError,
+          Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListAllPlansApiV1ServicePlansGet<TData = Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>,
+          TError,
+          Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListAllPlansApiV1ServicePlansGet<TData = Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary List All Plans
+ */
+
+export function useListAllPlansApiV1ServicePlansGet<TData = Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getListAllPlansApiV1ServicePlansGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
 
 
 /**
  * @summary List Plans By Contract
  */
-export type listPlansByContractApiV1ServicePlansContractContractIdGetResponse200 = {
-  data: unknown[]
-  status: 200
-}
-
-export type listPlansByContractApiV1ServicePlansContractContractIdGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type listPlansByContractApiV1ServicePlansContractContractIdGetResponseSuccess = (listPlansByContractApiV1ServicePlansContractContractIdGetResponse200) & {
-  headers: Headers;
-};
-export type listPlansByContractApiV1ServicePlansContractContractIdGetResponseError = (listPlansByContractApiV1ServicePlansContractContractIdGetResponse422) & {
-  headers: Headers;
-};
-
-export type listPlansByContractApiV1ServicePlansContractContractIdGetResponse = (listPlansByContractApiV1ServicePlansContractContractIdGetResponseSuccess | listPlansByContractApiV1ServicePlansContractContractIdGetResponseError)
-
-export const getListPlansByContractApiV1ServicePlansContractContractIdGetUrl = (contractId: string,
-    params: ListPlansByContractApiV1ServicePlansContractContractIdGetParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+export const listPlansByContractApiV1ServicePlansContractContractIdGet = (
+    contractId: string,
+    params: ListPlansByContractApiV1ServicePlansContractContractIdGetParams,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<unknown[]>(
+      {url: `/api/v1/service-plans/contract/${contractId}`, method: 'GET',
+        params, signal
+    },
+      options);
     }
-  });
+  
 
-  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v1/service-plans/contract/${contractId}?${stringifiedParams}` : `/api/v1/service-plans/contract/${contractId}`
+
+export const getListPlansByContractApiV1ServicePlansContractContractIdGetQueryKey = (contractId?: string,
+    params?: ListPlansByContractApiV1ServicePlansContractContractIdGetParams,) => {
+    return [
+    `/api/v1/service-plans/contract/${contractId}`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getListPlansByContractApiV1ServicePlansContractContractIdGetQueryOptions = <TData = Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError = HTTPValidationError>(contractId: string,
+    params: ListPlansByContractApiV1ServicePlansContractContractIdGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListPlansByContractApiV1ServicePlansContractContractIdGetQueryKey(contractId,params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>> = ({ signal }) => listPlansByContractApiV1ServicePlansContractContractIdGet(contractId,params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(contractId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export const listPlansByContractApiV1ServicePlansContractContractIdGet = async (contractId: string,
-    params: ListPlansByContractApiV1ServicePlansContractContractIdGetParams, options?: RequestInit): Promise<listPlansByContractApiV1ServicePlansContractContractIdGetResponse> => {
-  
-  return customClient<listPlansByContractApiV1ServicePlansContractContractIdGetResponse>(getListPlansByContractApiV1ServicePlansContractContractIdGetUrl(contractId,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+export type ListPlansByContractApiV1ServicePlansContractContractIdGetQueryResult = NonNullable<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>>
+export type ListPlansByContractApiV1ServicePlansContractContractIdGetQueryError = HTTPValidationError
+
+
+export function useListPlansByContractApiV1ServicePlansContractContractIdGet<TData = Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError = HTTPValidationError>(
+ contractId: string,
+    params: ListPlansByContractApiV1ServicePlansContractContractIdGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>,
+          TError,
+          Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListPlansByContractApiV1ServicePlansContractContractIdGet<TData = Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError = HTTPValidationError>(
+ contractId: string,
+    params: ListPlansByContractApiV1ServicePlansContractContractIdGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>,
+          TError,
+          Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListPlansByContractApiV1ServicePlansContractContractIdGet<TData = Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError = HTTPValidationError>(
+ contractId: string,
+    params: ListPlansByContractApiV1ServicePlansContractContractIdGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary List Plans By Contract
+ */
+
+export function useListPlansByContractApiV1ServicePlansContractContractIdGet<TData = Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError = HTTPValidationError>(
+ contractId: string,
+    params: ListPlansByContractApiV1ServicePlansContractContractIdGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getListPlansByContractApiV1ServicePlansContractContractIdGetQueryOptions(contractId,params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
 
 
 /**
  * @summary Publish Plan
  */
-export type publishPlanApiV1ServicePlansPlanIdPublishPostResponse200 = {
-  data: PublishPlanApiV1ServicePlansPlanIdPublishPost200
-  status: 200
-}
-
-export type publishPlanApiV1ServicePlansPlanIdPublishPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type publishPlanApiV1ServicePlansPlanIdPublishPostResponseSuccess = (publishPlanApiV1ServicePlansPlanIdPublishPostResponse200) & {
-  headers: Headers;
-};
-export type publishPlanApiV1ServicePlansPlanIdPublishPostResponseError = (publishPlanApiV1ServicePlansPlanIdPublishPostResponse422) & {
-  headers: Headers;
-};
-
-export type publishPlanApiV1ServicePlansPlanIdPublishPostResponse = (publishPlanApiV1ServicePlansPlanIdPublishPostResponseSuccess | publishPlanApiV1ServicePlansPlanIdPublishPostResponseError)
-
-export const getPublishPlanApiV1ServicePlansPlanIdPublishPostUrl = (planId: string,) => {
-
-
+export const publishPlanApiV1ServicePlansPlanIdPublishPost = (
+    planId: string,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<PublishPlanApiV1ServicePlansPlanIdPublishPost200>(
+      {url: `/api/v1/service-plans/${planId}/publish`, method: 'POST', signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/service-plans/${planId}/publish`
-}
 
-export const publishPlanApiV1ServicePlansPlanIdPublishPost = async (planId: string, options?: RequestInit): Promise<publishPlanApiV1ServicePlansPlanIdPublishPostResponse> => {
-  
-  return customClient<publishPlanApiV1ServicePlansPlanIdPublishPostResponse>(getPublishPlanApiV1ServicePlansPlanIdPublishPostUrl(planId),
-  {      
-    ...options,
-    method: 'POST'
+export const getPublishPlanApiV1ServicePlansPlanIdPublishPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof publishPlanApiV1ServicePlansPlanIdPublishPost>>, TError,{planId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof publishPlanApiV1ServicePlansPlanIdPublishPost>>, TError,{planId: string}, TContext> => {
+
+const mutationKey = ['publishPlanApiV1ServicePlansPlanIdPublishPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof publishPlanApiV1ServicePlansPlanIdPublishPost>>, {planId: string}> = (props) => {
+          const {planId} = props ?? {};
+
+          return  publishPlanApiV1ServicePlansPlanIdPublishPost(planId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PublishPlanApiV1ServicePlansPlanIdPublishPostMutationResult = NonNullable<Awaited<ReturnType<typeof publishPlanApiV1ServicePlansPlanIdPublishPost>>>
     
-    
-  }
-);}
+    export type PublishPlanApiV1ServicePlansPlanIdPublishPostMutationError = HTTPValidationError
 
+    /**
+ * @summary Publish Plan
+ */
+export const usePublishPlanApiV1ServicePlansPlanIdPublishPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof publishPlanApiV1ServicePlansPlanIdPublishPost>>, TError,{planId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof publishPlanApiV1ServicePlansPlanIdPublishPost>>,
+        TError,
+        {planId: string},
+        TContext
+      > => {
 
-/**
+      const mutationOptions = getPublishPlanApiV1ServicePlansPlanIdPublishPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Suspend Plan
  */
-export type suspendPlanApiV1ServicePlansPlanIdSuspendPostResponse200 = {
-  data: SuspendPlanApiV1ServicePlansPlanIdSuspendPost200
-  status: 200
-}
-
-export type suspendPlanApiV1ServicePlansPlanIdSuspendPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type suspendPlanApiV1ServicePlansPlanIdSuspendPostResponseSuccess = (suspendPlanApiV1ServicePlansPlanIdSuspendPostResponse200) & {
-  headers: Headers;
-};
-export type suspendPlanApiV1ServicePlansPlanIdSuspendPostResponseError = (suspendPlanApiV1ServicePlansPlanIdSuspendPostResponse422) & {
-  headers: Headers;
-};
-
-export type suspendPlanApiV1ServicePlansPlanIdSuspendPostResponse = (suspendPlanApiV1ServicePlansPlanIdSuspendPostResponseSuccess | suspendPlanApiV1ServicePlansPlanIdSuspendPostResponseError)
-
-export const getSuspendPlanApiV1ServicePlansPlanIdSuspendPostUrl = (planId: string,) => {
-
-
+export const suspendPlanApiV1ServicePlansPlanIdSuspendPost = (
+    planId: string,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<SuspendPlanApiV1ServicePlansPlanIdSuspendPost200>(
+      {url: `/api/v1/service-plans/${planId}/suspend`, method: 'POST', signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/service-plans/${planId}/suspend`
-}
 
-export const suspendPlanApiV1ServicePlansPlanIdSuspendPost = async (planId: string, options?: RequestInit): Promise<suspendPlanApiV1ServicePlansPlanIdSuspendPostResponse> => {
-  
-  return customClient<suspendPlanApiV1ServicePlansPlanIdSuspendPostResponse>(getSuspendPlanApiV1ServicePlansPlanIdSuspendPostUrl(planId),
-  {      
-    ...options,
-    method: 'POST'
+export const getSuspendPlanApiV1ServicePlansPlanIdSuspendPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof suspendPlanApiV1ServicePlansPlanIdSuspendPost>>, TError,{planId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof suspendPlanApiV1ServicePlansPlanIdSuspendPost>>, TError,{planId: string}, TContext> => {
+
+const mutationKey = ['suspendPlanApiV1ServicePlansPlanIdSuspendPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof suspendPlanApiV1ServicePlansPlanIdSuspendPost>>, {planId: string}> = (props) => {
+          const {planId} = props ?? {};
+
+          return  suspendPlanApiV1ServicePlansPlanIdSuspendPost(planId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SuspendPlanApiV1ServicePlansPlanIdSuspendPostMutationResult = NonNullable<Awaited<ReturnType<typeof suspendPlanApiV1ServicePlansPlanIdSuspendPost>>>
     
-    
-  }
-);}
+    export type SuspendPlanApiV1ServicePlansPlanIdSuspendPostMutationError = HTTPValidationError
 
+    /**
+ * @summary Suspend Plan
+ */
+export const useSuspendPlanApiV1ServicePlansPlanIdSuspendPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof suspendPlanApiV1ServicePlansPlanIdSuspendPost>>, TError,{planId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof suspendPlanApiV1ServicePlansPlanIdSuspendPost>>,
+        TError,
+        {planId: string},
+        TContext
+      > => {
 
-/**
+      const mutationOptions = getSuspendPlanApiV1ServicePlansPlanIdSuspendPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Reactivate Plan
  */
-export type reactivatePlanApiV1ServicePlansPlanIdReactivatePostResponse200 = {
-  data: ReactivatePlanApiV1ServicePlansPlanIdReactivatePost200
-  status: 200
-}
-
-export type reactivatePlanApiV1ServicePlansPlanIdReactivatePostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type reactivatePlanApiV1ServicePlansPlanIdReactivatePostResponseSuccess = (reactivatePlanApiV1ServicePlansPlanIdReactivatePostResponse200) & {
-  headers: Headers;
-};
-export type reactivatePlanApiV1ServicePlansPlanIdReactivatePostResponseError = (reactivatePlanApiV1ServicePlansPlanIdReactivatePostResponse422) & {
-  headers: Headers;
-};
-
-export type reactivatePlanApiV1ServicePlansPlanIdReactivatePostResponse = (reactivatePlanApiV1ServicePlansPlanIdReactivatePostResponseSuccess | reactivatePlanApiV1ServicePlansPlanIdReactivatePostResponseError)
-
-export const getReactivatePlanApiV1ServicePlansPlanIdReactivatePostUrl = (planId: string,) => {
-
-
+export const reactivatePlanApiV1ServicePlansPlanIdReactivatePost = (
+    planId: string,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<ReactivatePlanApiV1ServicePlansPlanIdReactivatePost200>(
+      {url: `/api/v1/service-plans/${planId}/reactivate`, method: 'POST', signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/service-plans/${planId}/reactivate`
-}
 
-export const reactivatePlanApiV1ServicePlansPlanIdReactivatePost = async (planId: string, options?: RequestInit): Promise<reactivatePlanApiV1ServicePlansPlanIdReactivatePostResponse> => {
-  
-  return customClient<reactivatePlanApiV1ServicePlansPlanIdReactivatePostResponse>(getReactivatePlanApiV1ServicePlansPlanIdReactivatePostUrl(planId),
-  {      
-    ...options,
-    method: 'POST'
+export const getReactivatePlanApiV1ServicePlansPlanIdReactivatePostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reactivatePlanApiV1ServicePlansPlanIdReactivatePost>>, TError,{planId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof reactivatePlanApiV1ServicePlansPlanIdReactivatePost>>, TError,{planId: string}, TContext> => {
+
+const mutationKey = ['reactivatePlanApiV1ServicePlansPlanIdReactivatePost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reactivatePlanApiV1ServicePlansPlanIdReactivatePost>>, {planId: string}> = (props) => {
+          const {planId} = props ?? {};
+
+          return  reactivatePlanApiV1ServicePlansPlanIdReactivatePost(planId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReactivatePlanApiV1ServicePlansPlanIdReactivatePostMutationResult = NonNullable<Awaited<ReturnType<typeof reactivatePlanApiV1ServicePlansPlanIdReactivatePost>>>
     
+    export type ReactivatePlanApiV1ServicePlansPlanIdReactivatePostMutationError = HTTPValidationError
+
+    /**
+ * @summary Reactivate Plan
+ */
+export const useReactivatePlanApiV1ServicePlansPlanIdReactivatePost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reactivatePlanApiV1ServicePlansPlanIdReactivatePost>>, TError,{planId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reactivatePlanApiV1ServicePlansPlanIdReactivatePost>>,
+        TError,
+        {planId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getReactivatePlanApiV1ServicePlansPlanIdReactivatePostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
     
-  }
-);}
-
-

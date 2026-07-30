@@ -4,10 +4,12 @@
  * Stitch API Gateway
  * OpenAPI spec version: 1.0.0
  */
+import type { LeadResponseEmail } from './leadResponseEmail';
 
 export interface LeadResponse {
   id: string;
   company_name: string;
   contact_name: string;
+  email?: LeadResponseEmail;
   status: string;
 }

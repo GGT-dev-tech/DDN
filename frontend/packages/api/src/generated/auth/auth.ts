@@ -4,6 +4,25 @@
  * Stitch API Gateway
  * OpenAPI spec version: 1.0.0
  */
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
+import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
+} from '@tanstack/react-query';
+
 import type {
   HTTPValidationError,
   TokenResponse,
@@ -14,124 +33,228 @@ import type {
 
 import { customClient } from '../../custom-client';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
 /**
  * @summary Register
  */
-export type registerAuthRegisterPostResponse200 = {
-  data: TokenResponse
-  status: 200
-}
-
-export type registerAuthRegisterPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type registerAuthRegisterPostResponseSuccess = (registerAuthRegisterPostResponse200) & {
-  headers: Headers;
-};
-export type registerAuthRegisterPostResponseError = (registerAuthRegisterPostResponse422) & {
-  headers: Headers;
-};
-
-export type registerAuthRegisterPostResponse = (registerAuthRegisterPostResponseSuccess | registerAuthRegisterPostResponseError)
-
-export const getRegisterAuthRegisterPostUrl = () => {
-
-
+export const registerApiV1AuthRegisterPost = (
+    userRegisterRequest: UserRegisterRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<TokenResponse>(
+      {url: `/api/v1/auth/register`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: userRegisterRequest, signal
+    },
+      options);
+    }
   
 
-  return `/auth/register`
-}
 
-export const registerAuthRegisterPost = async (userRegisterRequest: UserRegisterRequest, options?: RequestInit): Promise<registerAuthRegisterPostResponse> => {
-  
-  return customClient<registerAuthRegisterPostResponse>(getRegisterAuthRegisterPostUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      userRegisterRequest,)
-  }
-);}
+export const getRegisterApiV1AuthRegisterPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerApiV1AuthRegisterPost>>, TError,{data: UserRegisterRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof registerApiV1AuthRegisterPost>>, TError,{data: UserRegisterRequest}, TContext> => {
+
+const mutationKey = ['registerApiV1AuthRegisterPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
 
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof registerApiV1AuthRegisterPost>>, {data: UserRegisterRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  registerApiV1AuthRegisterPost(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RegisterApiV1AuthRegisterPostMutationResult = NonNullable<Awaited<ReturnType<typeof registerApiV1AuthRegisterPost>>>
+    export type RegisterApiV1AuthRegisterPostMutationBody = UserRegisterRequest
+    export type RegisterApiV1AuthRegisterPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Register
+ */
+export const useRegisterApiV1AuthRegisterPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerApiV1AuthRegisterPost>>, TError,{data: UserRegisterRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof registerApiV1AuthRegisterPost>>,
+        TError,
+        {data: UserRegisterRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getRegisterApiV1AuthRegisterPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Login
  */
-export type loginAuthLoginPostResponse200 = {
-  data: TokenResponse
-  status: 200
-}
+export const loginApiV1AuthLoginPost = (
+    userLoginRequest: UserLoginRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<TokenResponse>(
+      {url: `/api/v1/auth/login`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: userLoginRequest, signal
+    },
+      options);
+    }
+  
 
-export type loginAuthLoginPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
+
+export const getLoginApiV1AuthLoginPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginApiV1AuthLoginPost>>, TError,{data: UserLoginRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof loginApiV1AuthLoginPost>>, TError,{data: UserLoginRequest}, TContext> => {
+
+const mutationKey = ['loginApiV1AuthLoginPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof loginApiV1AuthLoginPost>>, {data: UserLoginRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  loginApiV1AuthLoginPost(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type LoginApiV1AuthLoginPostMutationResult = NonNullable<Awaited<ReturnType<typeof loginApiV1AuthLoginPost>>>
+    export type LoginApiV1AuthLoginPostMutationBody = UserLoginRequest
+    export type LoginApiV1AuthLoginPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Login
+ */
+export const useLoginApiV1AuthLoginPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginApiV1AuthLoginPost>>, TError,{data: UserLoginRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof loginApiV1AuthLoginPost>>,
+        TError,
+        {data: UserLoginRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getLoginApiV1AuthLoginPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * @summary Get Me
+ */
+export const getMeApiV1AuthMeGet = (
     
-export type loginAuthLoginPostResponseSuccess = (loginAuthLoginPostResponse200) & {
-  headers: Headers;
-};
-export type loginAuthLoginPostResponseError = (loginAuthLoginPostResponse422) & {
-  headers: Headers;
-};
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<UserResponse>(
+      {url: `/api/v1/auth/me`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export type loginAuthLoginPostResponse = (loginAuthLoginPostResponseSuccess | loginAuthLoginPostResponseError)
 
-export const getLoginAuthLoginPostUrl = () => {
 
+export const getGetMeApiV1AuthMeGetQueryKey = () => {
+    return [
+    `/api/v1/auth/me`
+    ] as const;
+    }
+
+    
+export const getGetMeApiV1AuthMeGetQueryOptions = <TData = Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMeApiV1AuthMeGetQueryKey();
 
   
 
-  return `/auth/login`
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>> = ({ signal }) => getMeApiV1AuthMeGet(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export const loginAuthLoginPost = async (userLoginRequest: UserLoginRequest, options?: RequestInit): Promise<loginAuthLoginPostResponse> => {
-  
-  return customClient<loginAuthLoginPostResponse>(getLoginAuthLoginPostUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      userLoginRequest,)
-  }
-);}
+export type GetMeApiV1AuthMeGetQueryResult = NonNullable<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>>
+export type GetMeApiV1AuthMeGetQueryError = unknown
 
 
+export function useGetMeApiV1AuthMeGet<TData = Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>,
+          TError,
+          Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetMeApiV1AuthMeGet<TData = Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>,
+          TError,
+          Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetMeApiV1AuthMeGet<TData = Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 /**
  * @summary Get Me
  */
-export type getMeAuthMeGetResponse200 = {
-  data: UserResponse
-  status: 200
-}
-    
-export type getMeAuthMeGetResponseSuccess = (getMeAuthMeGetResponse200) & {
-  headers: Headers;
-};
-;
 
-export type getMeAuthMeGetResponse = (getMeAuthMeGetResponseSuccess)
+export function useGetMeApiV1AuthMeGet<TData = Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeApiV1AuthMeGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-export const getGetMeAuthMeGetUrl = () => {
+  const queryOptions = getGetMeApiV1AuthMeGetQueryOptions(options)
 
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 
-  
+  query.queryKey = queryOptions.queryKey ;
 
-  return `/auth/me`
+  return query;
 }
 
-export const getMeAuthMeGet = async ( options?: RequestInit): Promise<getMeAuthMeGetResponse> => {
-  
-  return customClient<getMeAuthMeGetResponse>(getGetMeAuthMeGetUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
+
 
 

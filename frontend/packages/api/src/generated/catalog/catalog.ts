@@ -4,273 +4,701 @@
  * Stitch API Gateway
  * OpenAPI spec version: 1.0.0
  */
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
+import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
+} from '@tanstack/react-query';
+
 import type {
   AttachAttributeRequest,
   DefineServiceAttributeRequest,
   DraftServiceOfferingRequest,
   HTTPValidationError,
-  RegisterUOMRequest,
-  ServiceAttributeResponse,
-  ServiceOfferingResponse,
-  UOMResponse
+  ModulesCatalogApplicationDtoRequestsServiceAttributeResponse,
+  ModulesCatalogApplicationDtoRequestsServiceOfferingResponse,
+  ModulesCatalogApplicationDtoRequestsUOMResponse,
+  ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceAttributeResponse,
+  ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceOfferingResponse,
+  ModulesCatalogApplicationUseCasesListCatalogEntitiesUOMResponse,
+  RegisterUOMRequest
 } from '.././model';
 
 import { customClient } from '../../custom-client';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
+/**
+ * @summary List Uoms
+ */
+export const listUomsApiV1CatalogUomGet = (
+    
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<ModulesCatalogApplicationUseCasesListCatalogEntitiesUOMResponse[]>(
+      {url: `/api/v1/catalog/uom`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getListUomsApiV1CatalogUomGetQueryKey = () => {
+    return [
+    `/api/v1/catalog/uom`
+    ] as const;
+    }
+
+    
+export const getListUomsApiV1CatalogUomGetQueryOptions = <TData = Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListUomsApiV1CatalogUomGetQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>> = ({ signal }) => listUomsApiV1CatalogUomGet(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type ListUomsApiV1CatalogUomGetQueryResult = NonNullable<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>>
+export type ListUomsApiV1CatalogUomGetQueryError = HTTPValidationError
+
+
+export function useListUomsApiV1CatalogUomGet<TData = Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>,
+          TError,
+          Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListUomsApiV1CatalogUomGet<TData = Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>,
+          TError,
+          Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListUomsApiV1CatalogUomGet<TData = Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary List Uoms
+ */
+
+export function useListUomsApiV1CatalogUomGet<TData = Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listUomsApiV1CatalogUomGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getListUomsApiV1CatalogUomGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
 /**
  * @summary Register Uom
  */
-export type registerUomApiV1CatalogUomPostResponse201 = {
-  data: UOMResponse
-  status: 201
-}
+export const registerUomApiV1CatalogUomPost = (
+    registerUOMRequest: RegisterUOMRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<ModulesCatalogApplicationDtoRequestsUOMResponse>(
+      {url: `/api/v1/catalog/uom`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: registerUOMRequest, signal
+    },
+      options);
+    }
+  
 
-export type registerUomApiV1CatalogUomPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
+
+export const getRegisterUomApiV1CatalogUomPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerUomApiV1CatalogUomPost>>, TError,{data: RegisterUOMRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof registerUomApiV1CatalogUomPost>>, TError,{data: RegisterUOMRequest}, TContext> => {
+
+const mutationKey = ['registerUomApiV1CatalogUomPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof registerUomApiV1CatalogUomPost>>, {data: RegisterUOMRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  registerUomApiV1CatalogUomPost(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RegisterUomApiV1CatalogUomPostMutationResult = NonNullable<Awaited<ReturnType<typeof registerUomApiV1CatalogUomPost>>>
+    export type RegisterUomApiV1CatalogUomPostMutationBody = RegisterUOMRequest
+    export type RegisterUomApiV1CatalogUomPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Register Uom
+ */
+export const useRegisterUomApiV1CatalogUomPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerUomApiV1CatalogUomPost>>, TError,{data: RegisterUOMRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof registerUomApiV1CatalogUomPost>>,
+        TError,
+        {data: RegisterUOMRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getRegisterUomApiV1CatalogUomPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * @summary List Attributes
+ */
+export const listAttributesApiV1CatalogAttributesGet = (
     
-export type registerUomApiV1CatalogUomPostResponseSuccess = (registerUomApiV1CatalogUomPostResponse201) & {
-  headers: Headers;
-};
-export type registerUomApiV1CatalogUomPostResponseError = (registerUomApiV1CatalogUomPostResponse422) & {
-  headers: Headers;
-};
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceAttributeResponse[]>(
+      {url: `/api/v1/catalog/attributes`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export type registerUomApiV1CatalogUomPostResponse = (registerUomApiV1CatalogUomPostResponseSuccess | registerUomApiV1CatalogUomPostResponseError)
 
-export const getRegisterUomApiV1CatalogUomPostUrl = () => {
 
+export const getListAttributesApiV1CatalogAttributesGetQueryKey = () => {
+    return [
+    `/api/v1/catalog/attributes`
+    ] as const;
+    }
+
+    
+export const getListAttributesApiV1CatalogAttributesGetQueryOptions = <TData = Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListAttributesApiV1CatalogAttributesGetQueryKey();
 
   
 
-  return `/api/v1/catalog/uom`
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>> = ({ signal }) => listAttributesApiV1CatalogAttributesGet(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export const registerUomApiV1CatalogUomPost = async (registerUOMRequest: RegisterUOMRequest, options?: RequestInit): Promise<registerUomApiV1CatalogUomPostResponse> => {
-  
-  return customClient<registerUomApiV1CatalogUomPostResponse>(getRegisterUomApiV1CatalogUomPostUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      registerUOMRequest,)
-  }
-);}
+export type ListAttributesApiV1CatalogAttributesGetQueryResult = NonNullable<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>>
+export type ListAttributesApiV1CatalogAttributesGetQueryError = HTTPValidationError
+
+
+export function useListAttributesApiV1CatalogAttributesGet<TData = Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>,
+          TError,
+          Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListAttributesApiV1CatalogAttributesGet<TData = Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>,
+          TError,
+          Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListAttributesApiV1CatalogAttributesGet<TData = Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary List Attributes
+ */
+
+export function useListAttributesApiV1CatalogAttributesGet<TData = Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAttributesApiV1CatalogAttributesGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getListAttributesApiV1CatalogAttributesGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
 
 
 /**
  * @summary Define Attribute
  */
-export type defineAttributeApiV1CatalogAttributesPostResponse201 = {
-  data: ServiceAttributeResponse
-  status: 201
-}
+export const defineAttributeApiV1CatalogAttributesPost = (
+    defineServiceAttributeRequest: DefineServiceAttributeRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<ModulesCatalogApplicationDtoRequestsServiceAttributeResponse>(
+      {url: `/api/v1/catalog/attributes`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: defineServiceAttributeRequest, signal
+    },
+      options);
+    }
+  
 
-export type defineAttributeApiV1CatalogAttributesPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
+
+export const getDefineAttributeApiV1CatalogAttributesPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof defineAttributeApiV1CatalogAttributesPost>>, TError,{data: DefineServiceAttributeRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof defineAttributeApiV1CatalogAttributesPost>>, TError,{data: DefineServiceAttributeRequest}, TContext> => {
+
+const mutationKey = ['defineAttributeApiV1CatalogAttributesPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof defineAttributeApiV1CatalogAttributesPost>>, {data: DefineServiceAttributeRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  defineAttributeApiV1CatalogAttributesPost(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DefineAttributeApiV1CatalogAttributesPostMutationResult = NonNullable<Awaited<ReturnType<typeof defineAttributeApiV1CatalogAttributesPost>>>
+    export type DefineAttributeApiV1CatalogAttributesPostMutationBody = DefineServiceAttributeRequest
+    export type DefineAttributeApiV1CatalogAttributesPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Define Attribute
+ */
+export const useDefineAttributeApiV1CatalogAttributesPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof defineAttributeApiV1CatalogAttributesPost>>, TError,{data: DefineServiceAttributeRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof defineAttributeApiV1CatalogAttributesPost>>,
+        TError,
+        {data: DefineServiceAttributeRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getDefineAttributeApiV1CatalogAttributesPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * @summary List Offerings
+ */
+export const listOfferingsApiV1CatalogOfferingsGet = (
     
-export type defineAttributeApiV1CatalogAttributesPostResponseSuccess = (defineAttributeApiV1CatalogAttributesPostResponse201) & {
-  headers: Headers;
-};
-export type defineAttributeApiV1CatalogAttributesPostResponseError = (defineAttributeApiV1CatalogAttributesPostResponse422) & {
-  headers: Headers;
-};
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceOfferingResponse[]>(
+      {url: `/api/v1/catalog/offerings`, method: 'GET', signal
+    },
+      options);
+    }
+  
 
-export type defineAttributeApiV1CatalogAttributesPostResponse = (defineAttributeApiV1CatalogAttributesPostResponseSuccess | defineAttributeApiV1CatalogAttributesPostResponseError)
 
-export const getDefineAttributeApiV1CatalogAttributesPostUrl = () => {
 
+export const getListOfferingsApiV1CatalogOfferingsGetQueryKey = () => {
+    return [
+    `/api/v1/catalog/offerings`
+    ] as const;
+    }
+
+    
+export const getListOfferingsApiV1CatalogOfferingsGetQueryOptions = <TData = Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListOfferingsApiV1CatalogOfferingsGetQueryKey();
 
   
 
-  return `/api/v1/catalog/attributes`
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>> = ({ signal }) => listOfferingsApiV1CatalogOfferingsGet(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
 }
 
-export const defineAttributeApiV1CatalogAttributesPost = async (defineServiceAttributeRequest: DefineServiceAttributeRequest, options?: RequestInit): Promise<defineAttributeApiV1CatalogAttributesPostResponse> => {
-  
-  return customClient<defineAttributeApiV1CatalogAttributesPostResponse>(getDefineAttributeApiV1CatalogAttributesPostUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      defineServiceAttributeRequest,)
-  }
-);}
+export type ListOfferingsApiV1CatalogOfferingsGetQueryResult = NonNullable<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>>
+export type ListOfferingsApiV1CatalogOfferingsGetQueryError = HTTPValidationError
+
+
+export function useListOfferingsApiV1CatalogOfferingsGet<TData = Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>,
+          TError,
+          Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListOfferingsApiV1CatalogOfferingsGet<TData = Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>,
+          TError,
+          Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListOfferingsApiV1CatalogOfferingsGet<TData = Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary List Offerings
+ */
+
+export function useListOfferingsApiV1CatalogOfferingsGet<TData = Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOfferingsApiV1CatalogOfferingsGet>>, TError, TData>>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getListOfferingsApiV1CatalogOfferingsGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
 
 
 /**
  * @summary Draft Offering
  */
-export type draftOfferingApiV1CatalogOfferingsPostResponse201 = {
-  data: ServiceOfferingResponse
-  status: 201
-}
-
-export type draftOfferingApiV1CatalogOfferingsPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type draftOfferingApiV1CatalogOfferingsPostResponseSuccess = (draftOfferingApiV1CatalogOfferingsPostResponse201) & {
-  headers: Headers;
-};
-export type draftOfferingApiV1CatalogOfferingsPostResponseError = (draftOfferingApiV1CatalogOfferingsPostResponse422) & {
-  headers: Headers;
-};
-
-export type draftOfferingApiV1CatalogOfferingsPostResponse = (draftOfferingApiV1CatalogOfferingsPostResponseSuccess | draftOfferingApiV1CatalogOfferingsPostResponseError)
-
-export const getDraftOfferingApiV1CatalogOfferingsPostUrl = () => {
-
-
+export const draftOfferingApiV1CatalogOfferingsPost = (
+    draftServiceOfferingRequest: DraftServiceOfferingRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<ModulesCatalogApplicationDtoRequestsServiceOfferingResponse>(
+      {url: `/api/v1/catalog/offerings`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: draftServiceOfferingRequest, signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/catalog/offerings`
-}
 
-export const draftOfferingApiV1CatalogOfferingsPost = async (draftServiceOfferingRequest: DraftServiceOfferingRequest, options?: RequestInit): Promise<draftOfferingApiV1CatalogOfferingsPostResponse> => {
-  
-  return customClient<draftOfferingApiV1CatalogOfferingsPostResponse>(getDraftOfferingApiV1CatalogOfferingsPostUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      draftServiceOfferingRequest,)
-  }
-);}
+export const getDraftOfferingApiV1CatalogOfferingsPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof draftOfferingApiV1CatalogOfferingsPost>>, TError,{data: DraftServiceOfferingRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof draftOfferingApiV1CatalogOfferingsPost>>, TError,{data: DraftServiceOfferingRequest}, TContext> => {
+
+const mutationKey = ['draftOfferingApiV1CatalogOfferingsPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
 
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof draftOfferingApiV1CatalogOfferingsPost>>, {data: DraftServiceOfferingRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  draftOfferingApiV1CatalogOfferingsPost(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DraftOfferingApiV1CatalogOfferingsPostMutationResult = NonNullable<Awaited<ReturnType<typeof draftOfferingApiV1CatalogOfferingsPost>>>
+    export type DraftOfferingApiV1CatalogOfferingsPostMutationBody = DraftServiceOfferingRequest
+    export type DraftOfferingApiV1CatalogOfferingsPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Draft Offering
+ */
+export const useDraftOfferingApiV1CatalogOfferingsPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof draftOfferingApiV1CatalogOfferingsPost>>, TError,{data: DraftServiceOfferingRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof draftOfferingApiV1CatalogOfferingsPost>>,
+        TError,
+        {data: DraftServiceOfferingRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getDraftOfferingApiV1CatalogOfferingsPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Attach Attribute
  */
-export type attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostResponseSuccess = (attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostResponse200) & {
-  headers: Headers;
-};
-export type attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostResponseError = (attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostResponse422) & {
-  headers: Headers;
-};
-
-export type attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostResponse = (attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostResponseSuccess | attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostResponseError)
-
-export const getAttachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostUrl = (offeringId: string,) => {
-
-
+export const attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPost = (
+    offeringId: string,
+    attachAttributeRequest: AttachAttributeRequest,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<unknown>(
+      {url: `/api/v1/catalog/offerings/${offeringId}/attributes`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: attachAttributeRequest, signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/catalog/offerings/${offeringId}/attributes`
-}
 
-export const attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPost = async (offeringId: string,
-    attachAttributeRequest: AttachAttributeRequest, options?: RequestInit): Promise<attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostResponse> => {
-  
-  return customClient<attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostResponse>(getAttachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostUrl(offeringId),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      attachAttributeRequest,)
-  }
-);}
+export const getAttachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPost>>, TError,{offeringId: string;data: AttachAttributeRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPost>>, TError,{offeringId: string;data: AttachAttributeRequest}, TContext> => {
+
+const mutationKey = ['attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
 
 
-/**
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPost>>, {offeringId: string;data: AttachAttributeRequest}> = (props) => {
+          const {offeringId,data} = props ?? {};
+
+          return  attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPost(offeringId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AttachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostMutationResult = NonNullable<Awaited<ReturnType<typeof attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPost>>>
+    export type AttachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostMutationBody = AttachAttributeRequest
+    export type AttachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Attach Attribute
+ */
+export const useAttachAttributeApiV1CatalogOfferingsOfferingIdAttributesPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPost>>, TError,{offeringId: string;data: AttachAttributeRequest}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPost>>,
+        TError,
+        {offeringId: string;data: AttachAttributeRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getAttachAttributeApiV1CatalogOfferingsOfferingIdAttributesPostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Activate Offering
  */
-export type activateOfferingApiV1CatalogOfferingsOfferingIdActivatePostResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type activateOfferingApiV1CatalogOfferingsOfferingIdActivatePostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type activateOfferingApiV1CatalogOfferingsOfferingIdActivatePostResponseSuccess = (activateOfferingApiV1CatalogOfferingsOfferingIdActivatePostResponse200) & {
-  headers: Headers;
-};
-export type activateOfferingApiV1CatalogOfferingsOfferingIdActivatePostResponseError = (activateOfferingApiV1CatalogOfferingsOfferingIdActivatePostResponse422) & {
-  headers: Headers;
-};
-
-export type activateOfferingApiV1CatalogOfferingsOfferingIdActivatePostResponse = (activateOfferingApiV1CatalogOfferingsOfferingIdActivatePostResponseSuccess | activateOfferingApiV1CatalogOfferingsOfferingIdActivatePostResponseError)
-
-export const getActivateOfferingApiV1CatalogOfferingsOfferingIdActivatePostUrl = (offeringId: string,) => {
-
-
+export const activateOfferingApiV1CatalogOfferingsOfferingIdActivatePost = (
+    offeringId: string,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<unknown>(
+      {url: `/api/v1/catalog/offerings/${offeringId}/activate`, method: 'POST', signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/catalog/offerings/${offeringId}/activate`
-}
 
-export const activateOfferingApiV1CatalogOfferingsOfferingIdActivatePost = async (offeringId: string, options?: RequestInit): Promise<activateOfferingApiV1CatalogOfferingsOfferingIdActivatePostResponse> => {
-  
-  return customClient<activateOfferingApiV1CatalogOfferingsOfferingIdActivatePostResponse>(getActivateOfferingApiV1CatalogOfferingsOfferingIdActivatePostUrl(offeringId),
-  {      
-    ...options,
-    method: 'POST'
+export const getActivateOfferingApiV1CatalogOfferingsOfferingIdActivatePostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof activateOfferingApiV1CatalogOfferingsOfferingIdActivatePost>>, TError,{offeringId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof activateOfferingApiV1CatalogOfferingsOfferingIdActivatePost>>, TError,{offeringId: string}, TContext> => {
+
+const mutationKey = ['activateOfferingApiV1CatalogOfferingsOfferingIdActivatePost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof activateOfferingApiV1CatalogOfferingsOfferingIdActivatePost>>, {offeringId: string}> = (props) => {
+          const {offeringId} = props ?? {};
+
+          return  activateOfferingApiV1CatalogOfferingsOfferingIdActivatePost(offeringId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ActivateOfferingApiV1CatalogOfferingsOfferingIdActivatePostMutationResult = NonNullable<Awaited<ReturnType<typeof activateOfferingApiV1CatalogOfferingsOfferingIdActivatePost>>>
     
-    
-  }
-);}
+    export type ActivateOfferingApiV1CatalogOfferingsOfferingIdActivatePostMutationError = HTTPValidationError
 
+    /**
+ * @summary Activate Offering
+ */
+export const useActivateOfferingApiV1CatalogOfferingsOfferingIdActivatePost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof activateOfferingApiV1CatalogOfferingsOfferingIdActivatePost>>, TError,{offeringId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof activateOfferingApiV1CatalogOfferingsOfferingIdActivatePost>>,
+        TError,
+        {offeringId: string},
+        TContext
+      > => {
 
-/**
+      const mutationOptions = getActivateOfferingApiV1CatalogOfferingsOfferingIdActivatePostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Archive Offering
  */
-export type archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostResponseSuccess = (archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostResponse200) & {
-  headers: Headers;
-};
-export type archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostResponseError = (archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostResponse422) & {
-  headers: Headers;
-};
-
-export type archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostResponse = (archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostResponseSuccess | archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostResponseError)
-
-export const getArchiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostUrl = (offeringId: string,) => {
-
-
+export const archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePost = (
+    offeringId: string,
+ options?: SecondParameter<typeof customClient>,signal?: AbortSignal
+) => {
+      
+      
+      return customClient<unknown>(
+      {url: `/api/v1/catalog/offerings/${offeringId}/archive`, method: 'POST', signal
+    },
+      options);
+    }
   
 
-  return `/api/v1/catalog/offerings/${offeringId}/archive`
-}
 
-export const archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePost = async (offeringId: string, options?: RequestInit): Promise<archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostResponse> => {
-  
-  return customClient<archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostResponse>(getArchiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostUrl(offeringId),
-  {      
-    ...options,
-    method: 'POST'
+export const getArchiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePost>>, TError,{offeringId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePost>>, TError,{offeringId: string}, TContext> => {
+
+const mutationKey = ['archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePost>>, {offeringId: string}> = (props) => {
+          const {offeringId} = props ?? {};
+
+          return  archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePost(offeringId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ArchiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostMutationResult = NonNullable<Awaited<ReturnType<typeof archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePost>>>
     
+    export type ArchiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostMutationError = HTTPValidationError
+
+    /**
+ * @summary Archive Offering
+ */
+export const useArchiveOfferingApiV1CatalogOfferingsOfferingIdArchivePost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePost>>, TError,{offeringId: string}, TContext>, request?: SecondParameter<typeof customClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof archiveOfferingApiV1CatalogOfferingsOfferingIdArchivePost>>,
+        TError,
+        {offeringId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getArchiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
     
-  }
-);}
-
-

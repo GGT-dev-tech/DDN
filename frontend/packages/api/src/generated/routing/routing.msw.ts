@@ -18,54 +18,85 @@ import type {
 } from 'msw';
 
 import type {
+  RequirementDTO,
   RouteResponseDTO
 } from '.././model';
 
 
-export const getCreateRouteRoutingRoutesPostResponseMock = (overrideResponse: Partial< RouteResponseDTO > = {}): RouteResponseDTO => ({id: faker.string.uuid(), execution_date: faker.date.past().toISOString().split('T')[0], status: faker.string.alpha({length: {min: 10, max: 20}}), estimated_volume: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), estimated_weight: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), planned_distance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), planned_duration: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), vehicle_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), driver_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), stops: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), latitude: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), longitude: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), address: faker.string.alpha({length: {min: 10, max: 20}}), order: faker.number.int({min: undefined, max: undefined}), status: faker.string.alpha({length: {min: 10, max: 20}})})), ...overrideResponse})
+export const getCreateRouteApiV1RoutingRoutesPostResponseMock = (overrideResponse: Partial< RouteResponseDTO > = {}): RouteResponseDTO => ({id: faker.string.uuid(), execution_date: faker.date.past().toISOString().split('T')[0], status: faker.string.alpha({length: {min: 10, max: 20}}), estimated_volume: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), estimated_weight: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), planned_distance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), planned_duration: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), vehicle_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), driver_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), stops: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), latitude: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), longitude: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), address: faker.string.alpha({length: {min: 10, max: 20}}), order: faker.number.int({min: undefined, max: undefined}), status: faker.string.alpha({length: {min: 10, max: 20}})})), ...overrideResponse})
 
-export const getAddStopToRouteRoutingRoutesRouteIdStopsPostResponseMock = (overrideResponse: Partial< RouteResponseDTO > = {}): RouteResponseDTO => ({id: faker.string.uuid(), execution_date: faker.date.past().toISOString().split('T')[0], status: faker.string.alpha({length: {min: 10, max: 20}}), estimated_volume: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), estimated_weight: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), planned_distance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), planned_duration: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), vehicle_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), driver_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), stops: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), latitude: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), longitude: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), address: faker.string.alpha({length: {min: 10, max: 20}}), order: faker.number.int({min: undefined, max: undefined}), status: faker.string.alpha({length: {min: 10, max: 20}})})), ...overrideResponse})
+export const getListRoutesApiV1RoutingRoutesGetResponseMock = (): RouteResponseDTO[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), execution_date: faker.date.past().toISOString().split('T')[0], status: faker.string.alpha({length: {min: 10, max: 20}}), estimated_volume: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), estimated_weight: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), planned_distance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), planned_duration: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), vehicle_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), driver_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), stops: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), latitude: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), longitude: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), address: faker.string.alpha({length: {min: 10, max: 20}}), order: faker.number.int({min: undefined, max: undefined}), status: faker.string.alpha({length: {min: 10, max: 20}})}))})))
 
-export const getAssignRouteResourcesRoutingRoutesRouteIdAssignPostResponseMock = (overrideResponse: Partial< RouteResponseDTO > = {}): RouteResponseDTO => ({id: faker.string.uuid(), execution_date: faker.date.past().toISOString().split('T')[0], status: faker.string.alpha({length: {min: 10, max: 20}}), estimated_volume: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), estimated_weight: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), planned_distance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), planned_duration: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), vehicle_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), driver_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), stops: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), latitude: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), longitude: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), address: faker.string.alpha({length: {min: 10, max: 20}}), order: faker.number.int({min: undefined, max: undefined}), status: faker.string.alpha({length: {min: 10, max: 20}})})), ...overrideResponse})
+export const getAddStopToRouteApiV1RoutingRoutesRouteIdStopsPostResponseMock = (overrideResponse: Partial< RouteResponseDTO > = {}): RouteResponseDTO => ({id: faker.string.uuid(), execution_date: faker.date.past().toISOString().split('T')[0], status: faker.string.alpha({length: {min: 10, max: 20}}), estimated_volume: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), estimated_weight: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), planned_distance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), planned_duration: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), vehicle_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), driver_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), stops: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), latitude: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), longitude: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), address: faker.string.alpha({length: {min: 10, max: 20}}), order: faker.number.int({min: undefined, max: undefined}), status: faker.string.alpha({length: {min: 10, max: 20}})})), ...overrideResponse})
+
+export const getAssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostResponseMock = (overrideResponse: Partial< RouteResponseDTO > = {}): RouteResponseDTO => ({id: faker.string.uuid(), execution_date: faker.date.past().toISOString().split('T')[0], status: faker.string.alpha({length: {min: 10, max: 20}}), estimated_volume: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), estimated_weight: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), planned_distance: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), planned_duration: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.number.float({min: undefined, max: undefined, fractionDigits: 2}),null,]), undefined]), vehicle_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), driver_id: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.uuid(),null,]), undefined]), stops: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), latitude: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), longitude: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), address: faker.string.alpha({length: {min: 10, max: 20}}), order: faker.number.int({min: undefined, max: undefined}), status: faker.string.alpha({length: {min: 10, max: 20}})})), ...overrideResponse})
+
+export const getListRequirementsApiV1RoutingRequirementsGetResponseMock = (): RequirementDTO[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.alpha({length: {min: 10, max: 20}}), service_name: faker.string.alpha({length: {min: 10, max: 20}}), address: faker.string.alpha({length: {min: 10, max: 20}}), quantity: faker.number.float({min: undefined, max: undefined, fractionDigits: 2}), unit_of_measure: faker.string.alpha({length: {min: 10, max: 20}}), frequency: faker.string.alpha({length: {min: 10, max: 20}}), start_time: faker.string.alpha({length: {min: 10, max: 20}}), end_time: faker.string.alpha({length: {min: 10, max: 20}}), status: faker.string.alpha({length: {min: 10, max: 20}}), origin_reference: faker.string.alpha({length: {min: 10, max: 20}})})))
 
 
-export const getCreateRouteRoutingRoutesPostMockHandler = (overrideResponse?: RouteResponseDTO | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<RouteResponseDTO> | RouteResponseDTO), options?: RequestHandlerOptions) => {
-  return http.post('*/routing/routes', async (info) => {await delay(1000);
+export const getCreateRouteApiV1RoutingRoutesPostMockHandler = (overrideResponse?: RouteResponseDTO | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<RouteResponseDTO> | RouteResponseDTO), options?: RequestHandlerOptions) => {
+  return http.post('*/api/v1/routing/routes', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
     ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getCreateRouteRoutingRoutesPostResponseMock()),
+    : getCreateRouteApiV1RoutingRoutesPostResponseMock()),
       { status: 201,
         headers: { 'Content-Type': 'application/json' }
       })
   }, options)
 }
 
-export const getAddStopToRouteRoutingRoutesRouteIdStopsPostMockHandler = (overrideResponse?: RouteResponseDTO | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<RouteResponseDTO> | RouteResponseDTO), options?: RequestHandlerOptions) => {
-  return http.post('*/routing/routes/:routeId/stops', async (info) => {await delay(1000);
+export const getListRoutesApiV1RoutingRoutesGetMockHandler = (overrideResponse?: RouteResponseDTO[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<RouteResponseDTO[]> | RouteResponseDTO[]), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/routing/routes', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
     ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getAddStopToRouteRoutingRoutesRouteIdStopsPostResponseMock()),
+    : getListRoutesApiV1RoutingRoutesGetResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   }, options)
 }
 
-export const getAssignRouteResourcesRoutingRoutesRouteIdAssignPostMockHandler = (overrideResponse?: RouteResponseDTO | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<RouteResponseDTO> | RouteResponseDTO), options?: RequestHandlerOptions) => {
-  return http.post('*/routing/routes/:routeId/assign', async (info) => {await delay(1000);
+export const getAddStopToRouteApiV1RoutingRoutesRouteIdStopsPostMockHandler = (overrideResponse?: RouteResponseDTO | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<RouteResponseDTO> | RouteResponseDTO), options?: RequestHandlerOptions) => {
+  return http.post('*/api/v1/routing/routes/:routeId/stops', async (info) => {await delay(1000);
   
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
     ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getAssignRouteResourcesRoutingRoutesRouteIdAssignPostResponseMock()),
+    : getAddStopToRouteApiV1RoutingRoutesRouteIdStopsPostResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  }, options)
+}
+
+export const getAssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostMockHandler = (overrideResponse?: RouteResponseDTO | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<RouteResponseDTO> | RouteResponseDTO), options?: RequestHandlerOptions) => {
+  return http.post('*/api/v1/routing/routes/:routeId/assign', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getAssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  }, options)
+}
+
+export const getListRequirementsApiV1RoutingRequirementsGetMockHandler = (overrideResponse?: RequirementDTO[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<RequirementDTO[]> | RequirementDTO[]), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/routing/requirements', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getListRequirementsApiV1RoutingRequirementsGetResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
   }, options)
 }
 export const getRoutingMock = () => [
-  getCreateRouteRoutingRoutesPostMockHandler(),
-  getAddStopToRouteRoutingRoutesRouteIdStopsPostMockHandler(),
-  getAssignRouteResourcesRoutingRoutesRouteIdAssignPostMockHandler()
+  getCreateRouteApiV1RoutingRoutesPostMockHandler(),
+  getListRoutesApiV1RoutingRoutesGetMockHandler(),
+  getAddStopToRouteApiV1RoutingRoutesRouteIdStopsPostMockHandler(),
+  getAssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostMockHandler(),
+  getListRequirementsApiV1RoutingRequirementsGetMockHandler()
 ]

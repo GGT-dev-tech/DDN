@@ -18,14 +18,31 @@ import type {
 } from 'msw';
 
 import type {
+  CompanyResponse,
   LeadResponse
 } from '.././model';
 
 
-export const getRegisterLeadApiV1CommercialLeadsPostResponseMock = (overrideResponse: Partial< LeadResponse > = {}): LeadResponse => ({id: faker.string.uuid(), company_name: faker.string.alpha({length: {min: 10, max: 20}}), contact_name: faker.string.alpha({length: {min: 10, max: 20}}), status: faker.string.alpha({length: {min: 10, max: 20}}), ...overrideResponse})
+export const getListLeadsApiV1CommercialLeadsGetResponseMock = (): LeadResponse[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), company_name: faker.string.alpha({length: {min: 10, max: 20}}), contact_name: faker.string.alpha({length: {min: 10, max: 20}}), email: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}),null,]), undefined]), status: faker.string.alpha({length: {min: 10, max: 20}})})))
 
-export const getQualifyLeadApiV1CommercialLeadsLeadIdQualifyPostResponseMock = (overrideResponse: Partial< LeadResponse > = {}): LeadResponse => ({id: faker.string.uuid(), company_name: faker.string.alpha({length: {min: 10, max: 20}}), contact_name: faker.string.alpha({length: {min: 10, max: 20}}), status: faker.string.alpha({length: {min: 10, max: 20}}), ...overrideResponse})
+export const getRegisterLeadApiV1CommercialLeadsPostResponseMock = (overrideResponse: Partial< LeadResponse > = {}): LeadResponse => ({id: faker.string.uuid(), company_name: faker.string.alpha({length: {min: 10, max: 20}}), contact_name: faker.string.alpha({length: {min: 10, max: 20}}), email: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}),null,]), undefined]), status: faker.string.alpha({length: {min: 10, max: 20}}), ...overrideResponse})
 
+export const getListCompaniesApiV1CommercialCompaniesGetResponseMock = (): CompanyResponse[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), trade_name: faker.string.alpha({length: {min: 10, max: 20}}), corporate_name: faker.string.alpha({length: {min: 10, max: 20}}), document_number: faker.string.alpha({length: {min: 10, max: 20}}), status: faker.string.alpha({length: {min: 10, max: 20}})})))
+
+export const getQualifyLeadApiV1CommercialLeadsLeadIdQualifyPostResponseMock = (overrideResponse: Partial< LeadResponse > = {}): LeadResponse => ({id: faker.string.uuid(), company_name: faker.string.alpha({length: {min: 10, max: 20}}), contact_name: faker.string.alpha({length: {min: 10, max: 20}}), email: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}),null,]), undefined]), status: faker.string.alpha({length: {min: 10, max: 20}}), ...overrideResponse})
+
+
+export const getListLeadsApiV1CommercialLeadsGetMockHandler = (overrideResponse?: LeadResponse[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<LeadResponse[]> | LeadResponse[]), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/commercial/leads', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getListLeadsApiV1CommercialLeadsGetResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  }, options)
+}
 
 export const getRegisterLeadApiV1CommercialLeadsPostMockHandler = (overrideResponse?: LeadResponse | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<LeadResponse> | LeadResponse), options?: RequestHandlerOptions) => {
   return http.post('*/api/v1/commercial/leads', async (info) => {await delay(1000);
@@ -33,6 +50,18 @@ export const getRegisterLeadApiV1CommercialLeadsPostMockHandler = (overrideRespo
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
     ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
     : getRegisterLeadApiV1CommercialLeadsPostResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  }, options)
+}
+
+export const getListCompaniesApiV1CommercialCompaniesGetMockHandler = (overrideResponse?: CompanyResponse[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<CompanyResponse[]> | CompanyResponse[]), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/commercial/companies', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getListCompaniesApiV1CommercialCompaniesGetResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
@@ -61,7 +90,9 @@ export const getMatchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostMockHandler
   }, options)
 }
 export const getCommercialMock = () => [
+  getListLeadsApiV1CommercialLeadsGetMockHandler(),
   getRegisterLeadApiV1CommercialLeadsPostMockHandler(),
+  getListCompaniesApiV1CommercialCompaniesGetMockHandler(),
   getQualifyLeadApiV1CommercialLeadsLeadIdQualifyPostMockHandler(),
   getMatchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostMockHandler()
 ]

@@ -5,6 +5,10 @@
  * OpenAPI spec version: 1.0.0
  */
 import {
+  faker
+} from '@faker-js/faker';
+
+import {
   HttpResponse,
   delay,
   http
@@ -18,11 +22,14 @@ import type {
   ApproveQuotationApiV1QuotationsQuotationIdApprovePost200,
   CalculateQuotationApiV1QuotationsQuotationIdCalculatePost200,
   CreateQuotationApiV1QuotationsPost200,
+  QuotationResponse,
   SubmitQuotationApiV1QuotationsQuotationIdSubmitPost200
 } from '.././model';
 
 
 export const getCreateQuotationApiV1QuotationsPostResponseMock = (): CreateQuotationApiV1QuotationsPost200 => ({})
+
+export const getListQuotationsApiV1QuotationsGetResponseMock = (): QuotationResponse[] => (Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), company_id: faker.string.uuid(), status: faker.string.alpha({length: {min: 10, max: 20}}), expires_at: faker.string.alpha({length: {min: 10, max: 20}}), created_at: faker.string.alpha({length: {min: 10, max: 20}}), items: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({id: faker.string.uuid(), service_offering_id: faker.string.uuid(), unit_of_measure_id: faker.string.uuid(), quantity: faker.string.alpha({length: {min: 10, max: 20}}), service_name: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}),null,]), undefined]), final_price: faker.helpers.arrayElement([faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}),null,]), undefined])}))})))
 
 export const getAddQuotationItemApiV1QuotationsQuotationIdItemsPostResponseMock = (): AddQuotationItemApiV1QuotationsQuotationIdItemsPost200 => ({})
 
@@ -39,6 +46,18 @@ export const getCreateQuotationApiV1QuotationsPostMockHandler = (overrideRespons
     return new HttpResponse(JSON.stringify(overrideResponse !== undefined
     ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
     : getCreateQuotationApiV1QuotationsPostResponseMock()),
+      { status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      })
+  }, options)
+}
+
+export const getListQuotationsApiV1QuotationsGetMockHandler = (overrideResponse?: QuotationResponse[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<QuotationResponse[]> | QuotationResponse[]), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/quotations', async (info) => {await delay(1000);
+  
+    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getListQuotationsApiV1QuotationsGetResponseMock()),
       { status: 200,
         headers: { 'Content-Type': 'application/json' }
       })
@@ -94,6 +113,7 @@ export const getApproveQuotationApiV1QuotationsQuotationIdApprovePostMockHandler
 }
 export const getQuotationsMock = () => [
   getCreateQuotationApiV1QuotationsPostMockHandler(),
+  getListQuotationsApiV1QuotationsGetMockHandler(),
   getAddQuotationItemApiV1QuotationsQuotationIdItemsPostMockHandler(),
   getCalculateQuotationApiV1QuotationsQuotationIdCalculatePostMockHandler(),
   getSubmitQuotationApiV1QuotationsQuotationIdSubmitPostMockHandler(),
