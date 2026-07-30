@@ -24,3 +24,19 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies: [pydantic, sqlalchemy]
+
+  - repo: local
+    hooks:
+      - id: frontend-format
+        name: format frontend (prettier)
+        entry: bash -c 'cd frontend && npm run format'
+        language: system
+        files: ^frontend/.*\.(ts|tsx|js|jsx|json|md|css)$
+        pass_filenames: false
+
+      - id: frontend-lint
+        name: lint frontend (eslint)
+        entry: bash -c 'cd frontend && npm run lint'
+        language: system
+        files: ^frontend/.*\.(ts|tsx|js|jsx)$
+        pass_filenames: false
