@@ -6,6 +6,8 @@ import { FleetPage } from '../../pages/Fleet/FleetPage'
 import { DriversPage } from '../../pages/Drivers/DriversPage'
 import { SettingsPage } from '../../pages/Settings/SettingsPage'
 import { QuotationsPage } from '../../pages/Quotations/QuotationsPage'
+import { CustomersPage } from '../../pages/Commercial/CustomersPage'
+import { PricingPage } from '../../pages/Pricing/PricingPage'
 import { CatalogPage } from '../../pages/Catalog/CatalogPage'
 import { LoginPage } from '../../pages/Auth/LoginPage'
 import { RegisterPage } from '../../pages/Auth/RegisterPage'
@@ -57,6 +59,14 @@ const router = createBrowserRouter([
           {
             path: 'drivers',
             element: <DriversPage />,
+          },
+          {
+            path: 'customers',
+            element: <CustomersPage />,
+          },
+          {
+            path: 'pricing',
+            element: <PricingPage />,
           },
           {
             path: 'quotations',

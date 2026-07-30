@@ -1,17 +1,19 @@
 import type { HTMLAttributes } from 'react'
-import { LayoutDashboard, Route, Truck, Users, Settings, FileText, Library } from 'lucide-react'
+import { LayoutDashboard, Route, Truck, Users, Settings, FileText, Library, Building2, CircleDollarSign } from 'lucide-react'
 import { cn } from '../../shared/ui/components/Button'
 
 interface SidebarProps extends HTMLAttributes<HTMLDivElement> {}
 
 const NAVIGATION = [
   { name: 'Dashboard', icon: LayoutDashboard, href: '/' },
-  { name: 'Quotations', icon: FileText, href: '/quotations' },
-  { name: 'Catalog', icon: Library, href: '/catalog' },
-  { name: 'Routes', icon: Route, href: '/routes' },
-  { name: 'Fleet', icon: Truck, href: '/fleet' },
-  { name: 'Drivers', icon: Users, href: '/drivers' },
-  { name: 'Settings', icon: Settings, href: '/settings' },
+  { name: 'Catálogo', icon: Library, href: '/catalog' },
+  { name: 'Frota', icon: Truck, href: '/fleet' },
+  { name: 'Motoristas', icon: Users, href: '/drivers' },
+  { name: 'Clientes', icon: Building2, href: '/customers' },
+  { name: 'Tabelas de Preço', icon: CircleDollarSign, href: '/pricing' },
+  { name: 'Cotações', icon: FileText, href: '/quotations' },
+  { name: 'Rotas', icon: Route, href: '/routes' },
+  { name: 'Configurações', icon: Settings, href: '/settings' },
 ]
 
 export function Sidebar({ className, ...props }: SidebarProps) {
