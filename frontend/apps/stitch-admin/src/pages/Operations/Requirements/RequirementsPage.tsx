@@ -5,9 +5,10 @@ import { Button } from '../../../shared/ui/components/Button'
 import { EmptyState } from '../../../shared/ui/components/EmptyState'
 import { Plus, ListChecks } from 'lucide-react'
 
-const MOCK_REQS: any[] = []
+import { useListRequirementsApiV1RoutingRequirementsGet } from '../../../shared/api/generated/routing/routing'
 
 export function RequirementsPage() {
+  const { data: requirements = [], isLoading } = useListRequirementsApiV1RoutingRequirementsGet()
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -33,22 +34,26 @@ export function RequirementsPage() {
           </Button>
         </CardHeader>
         <CardContent>
-          {MOCK_REQS.length > 0 ? (
+          {isLoading ? (
+            <div className="py-8 text-center text-zinc-500">Carregando requisitos de coleta...</div>
+          ) : requirements.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Data Limite</TableHead>
-                  <TableHead>Cliente</TableHead>
+                  <TableHead>Frequência / Horário</TableHead>
+                  <TableHead>Endereço</TableHead>
                   <TableHead>Resíduo/Serviço</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {MOCK_REQS.map((req: any) => (
+                {requirements.map((req: any) => (
                   <TableRow key={req.id}>
-                    <TableCell className="font-medium">{req.due_date}</TableCell>
-                    <TableCell>{req.customer_name}</TableCell>
-                    <TableCell>{req.service_name}</TableCell>
+                    <TableCell className="font-medium">
+                      {req.frequency} ({req.start_time} - {req.end_time})
+                    </TableCell>
+                    <TableCell>{req.address}</TableCell>
+                    <TableCell>{req.quantity} {req.unit_of_measure} - {req.service_name}</TableCell>
                     <TableCell>
                       <Badge variant="outline">{req.status}</Badge>
                     </TableCell>

@@ -23,6 +23,12 @@ router = APIRouter(prefix="/routing", tags=["Routing"])
 def get_routing_repository(db: Session = Depends(get_db)):
     return SQLAlchemyRoutingRepository(db)
 
+def get_requirement_repository(db: Session = Depends(get_db)):
+    from modules.routing.infrastructure.repositories.sqlalchemy_requirement_repository import (
+        SQLAlchemyRequirementRepository,
+    )
+    return SQLAlchemyRequirementRepository(db)
+
 def get_uow(db: Session = Depends(get_db)):
     return SQLAlchemyUnitOfWork(db)
 
@@ -94,7 +100,20 @@ from modules.routing.application.use_cases.list_routes import ListRoutes
 
 @router.get("/routes", response_model=list[RouteResponseDTO])
 def list_routes(
+    tenant_id: uuid.UUID = Depends(require_tenant),
     routing_repo: SQLAlchemyRoutingRepository = Depends(get_routing_repository)
 ):
     use_case = ListRoutes(routing_repo)
-    return use_case.execute()
+    return use_case.execute(tenant_id)
+
+from modules.routing.application.use_cases.list_requirements import ListRequirementsUseCase, RequirementDTO
+from modules.identity.dependencies import require_tenant
+import uuid
+
+@router.get("/requirements", response_model=list[RequirementDTO])
+async def list_requirements(
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    req_repo = Depends(get_requirement_repository)
+):
+    use_case = ListRequirementsUseCase(req_repo)
+    return await use_case.execute(tenant_id)

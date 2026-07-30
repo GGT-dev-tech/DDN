@@ -1,12 +1,14 @@
 from modules.routing.application.dto import RouteResponseDTO, StopResponseDTO
 from modules.routing.application.repositories import RoutingRepository
 
+from uuid import UUID
+
 class ListRoutes:
     def __init__(self, repository: RoutingRepository):
         self.repository = repository
 
-    def execute(self) -> list[RouteResponseDTO]:
-        routes = self.repository.list_routes()
+    def execute(self, tenant_id: UUID) -> list[RouteResponseDTO]:
+        routes = self.repository.list_routes(tenant_id)
         return [
             RouteResponseDTO(
                 id=r.id,

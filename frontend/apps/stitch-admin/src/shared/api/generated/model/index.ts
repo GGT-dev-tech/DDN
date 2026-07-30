@@ -58,6 +58,7 @@ export * from './recurrenceRequest';
 export * from './registerDriverRequestDTO';
 export * from './registerUOMRequest';
 export * from './registerVehicleRequestDTO';
+export * from './requirementDTO';
 export * from './routeResponseDTO';
 export * from './scheduleUpdateRequest';
 export * from './serviceOfferingAttributeResponse';

@@ -28,6 +28,7 @@ import type {
   AssignRouteResourcesRequestDTO,
   CreateRouteRequestDTO,
   HTTPValidationError,
+  RequirementDTO,
   RouteResponseDTO
 } from '../model';
 
@@ -339,3 +340,95 @@ export const useAssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost = <TErro
       > => {
       return useMutation(getAssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPostMutationOptions(options), queryClient);
     }
+    /**
+ * @summary List Requirements
+ */
+export const listRequirementsApiV1RoutingRequirementsGet = (
+
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<RequirementDTO[]>(
+      {url: `/api/v1/routing/requirements`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getListRequirementsApiV1RoutingRequirementsGetQueryKey = () => {
+    return [
+    `/api/v1/routing/requirements`
+    ] as const;
+    }
+
+
+export const getListRequirementsApiV1RoutingRequirementsGetQueryOptions = <TData = Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListRequirementsApiV1RoutingRequirementsGetQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>> = ({ signal }) => listRequirementsApiV1RoutingRequirementsGet(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListRequirementsApiV1RoutingRequirementsGetQueryResult = NonNullable<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>>
+export type ListRequirementsApiV1RoutingRequirementsGetQueryError = HTTPValidationError
+
+
+export function useListRequirementsApiV1RoutingRequirementsGet<TData = Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>,
+          TError,
+          Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListRequirementsApiV1RoutingRequirementsGet<TData = Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>,
+          TError,
+          Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListRequirementsApiV1RoutingRequirementsGet<TData = Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary List Requirements
+ */
+
+export function useListRequirementsApiV1RoutingRequirementsGet<TData = Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listRequirementsApiV1RoutingRequirementsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getListRequirementsApiV1RoutingRequirementsGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+

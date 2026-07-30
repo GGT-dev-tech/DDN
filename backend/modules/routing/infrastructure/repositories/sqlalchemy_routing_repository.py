@@ -99,6 +99,6 @@ class SQLAlchemyRoutingRepository(RoutingRepository):
             return None
         return self._to_domain(model)
 
-    def list_routes(self) -> list[Route]:
-        models = self.session.query(RouteModel).options(selectinload(RouteModel.stops)).all()
+    def list_routes(self, tenant_id: UUID) -> list[Route]:
+        models = self.session.query(RouteModel).options(selectinload(RouteModel.stops)).filter_by(tenant_id=tenant_id).all()
         return [self._to_domain(m) for m in models]
