@@ -15,6 +15,7 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
+from modules.identity.dependencies import require_tenant
 
 from database.session import get_db_session
 from modules.core.application.integration_event_factory import IntegrationEventFactory
@@ -127,6 +128,14 @@ async def get_plan(
         return _plan_response(plan)
     except ServicePlanNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+@router.get("", response_model=list)
+async def list_all_plans(
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    service: ServicePlanService = Depends(get_service_plan_service),
+) -> list:
+    plans = await service.list_all(tenant_id)
+    return [_plan_response(p) for p in plans]
 
 
 @router.get("/contract/{contract_id}", response_model=list)

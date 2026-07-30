@@ -146,6 +146,11 @@ class ServicePlanService:
     ) -> list[ServicePlan]:
         return await self.repository.list_by_contract(contract_id, tenant_id)
 
+    async def list_all(
+        self, tenant_id: uuid.UUID
+    ) -> list[ServicePlan]:
+        return await self.repository.list_all(tenant_id)
+
     # ------------------------------------------------------------------
     # Private helpers
     # ------------------------------------------------------------------

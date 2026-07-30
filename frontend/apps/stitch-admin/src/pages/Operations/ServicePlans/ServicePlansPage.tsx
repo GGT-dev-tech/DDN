@@ -4,11 +4,10 @@ import { Badge } from '../../../shared/ui/components/Badge'
 import { Button } from '../../../shared/ui/components/Button'
 import { EmptyState } from '../../../shared/ui/components/EmptyState'
 import { Plus, CalendarDays } from 'lucide-react'
-
-// TODO: Replace with real hook when available
-const MOCK_PLANS: any[] = []
+import { useListAllPlansApiV1ServicePlansGet } from '../../../shared/api/generated/service-plans/service-plans'
 
 export function ServicePlansPage() {
+  const { data: plans = [], isLoading } = useListAllPlansApiV1ServicePlansGet()
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -34,7 +33,9 @@ export function ServicePlansPage() {
           </Button>
         </CardHeader>
         <CardContent>
-          {MOCK_PLANS.length > 0 ? (
+          {isLoading ? (
+            <div className="py-8 text-center text-zinc-500">Carregando planos de serviço...</div>
+          ) : plans.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -45,10 +46,10 @@ export function ServicePlansPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {MOCK_PLANS.map((plan: any) => (
+                {plans.map((plan: any) => (
                   <TableRow key={plan.id}>
-                    <TableCell className="font-medium">{plan.customer_name}</TableCell>
-                    <TableCell>{plan.contract_reference}</TableCell>
+                    <TableCell className="font-medium">{plan.customer_name || plan.company_id}</TableCell>
+                    <TableCell>{plan.contract_id}</TableCell>
                     <TableCell>{plan.effective_date}</TableCell>
                     <TableCell>
                       <Badge variant="outline">{plan.status}</Badge>

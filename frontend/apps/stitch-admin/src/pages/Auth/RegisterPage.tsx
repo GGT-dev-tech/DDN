@@ -19,7 +19,7 @@ export function RegisterPage() {
     mutation: {
       onSuccess: (data) => {
         login(data.access_token, data.refresh_token);
-        navigate('/');
+        navigate('/admin');
       },
       onError: (error: any) => {
         setErrorMsg(error.response?.data?.detail || 'Erro ao realizar cadastro');

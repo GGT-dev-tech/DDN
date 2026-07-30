@@ -113,6 +113,15 @@ class SQLAlchemyServicePlanRepository:
         result = await self.session.execute(stmt)
         return [self._to_domain(m) for m in result.scalars().all()]
 
+    async def list_all(
+        self, tenant_id: uuid.UUID
+    ) -> list[ServicePlan]:
+        stmt = select(ServicePlanModel).where(
+            ServicePlanModel.tenant_id == tenant_id,
+        )
+        result = await self.session.execute(stmt)
+        return [self._to_domain(m) for m in result.scalars().unique().all()]
+
     # ------------------------------------------------------------------
     # Mapping helpers
     # ------------------------------------------------------------------

@@ -217,6 +217,98 @@ export const useUpdateSchedulesApiV1ServicePlansPlanIdPatch = <TError = HTTPVali
       return useMutation(getUpdateSchedulesApiV1ServicePlansPlanIdPatchMutationOptions(options), queryClient);
     }
     /**
+ * @summary List All Plans
+ */
+export const listAllPlansApiV1ServicePlansGet = (
+
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<unknown[]>(
+      {url: `/api/v1/service-plans`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getListAllPlansApiV1ServicePlansGetQueryKey = () => {
+    return [
+    `/api/v1/service-plans`
+    ] as const;
+    }
+
+
+export const getListAllPlansApiV1ServicePlansGetQueryOptions = <TData = Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListAllPlansApiV1ServicePlansGetQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>> = ({ signal }) => listAllPlansApiV1ServicePlansGet(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListAllPlansApiV1ServicePlansGetQueryResult = NonNullable<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>>
+export type ListAllPlansApiV1ServicePlansGetQueryError = HTTPValidationError
+
+
+export function useListAllPlansApiV1ServicePlansGet<TData = Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>,
+          TError,
+          Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListAllPlansApiV1ServicePlansGet<TData = Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>,
+          TError,
+          Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListAllPlansApiV1ServicePlansGet<TData = Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary List All Plans
+ */
+
+export function useListAllPlansApiV1ServicePlansGet<TData = Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listAllPlansApiV1ServicePlansGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getListAllPlansApiV1ServicePlansGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * @summary List Plans By Contract
  */
 export const listPlansByContractApiV1ServicePlansContractContractIdGet = (
