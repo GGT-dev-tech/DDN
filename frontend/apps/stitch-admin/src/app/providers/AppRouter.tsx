@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom'
 import { AppLayout } from '../../widgets/layout/AppLayout'
 import { DashboardPage } from '../../pages/Dashboard/DashboardPage'
 import { RoutesPage } from '../../pages/Routes/RoutesPage'
@@ -7,44 +7,74 @@ import { DriversPage } from '../../pages/Drivers/DriversPage'
 import { SettingsPage } from '../../pages/Settings/SettingsPage'
 import { QuotationsPage } from '../../pages/Quotations/QuotationsPage'
 import { CatalogPage } from '../../pages/Catalog/CatalogPage'
+import { LoginPage } from '../../pages/Auth/LoginPage'
+import { AuthProvider, useAuth } from './AuthProvider'
+
+function ProtectedRoute() {
+  const { isAuthenticated, isLoading } = useAuth()
+  
+  if (isLoading) {
+    return <div className="flex h-screen items-center justify-center bg-zinc-950 text-white">Carregando...</div>
+  }
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />
+  }
+  
+  return <Outlet />
+}
 
 const router = createBrowserRouter([
   {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
     path: '/',
-    element: <AppLayout />,
+    element: <ProtectedRoute />,
     children: [
       {
-        index: true,
-        element: <DashboardPage />,
-      },
-      {
-        path: 'routes',
-        element: <RoutesPage />,
-      },
-      {
-        path: 'fleet',
-        element: <FleetPage />,
-      },
-      {
-        path: 'drivers',
-        element: <DriversPage />,
-      },
-      {
-        path: 'quotations',
-        element: <QuotationsPage />,
-      },
-      {
-        path: 'catalog',
-        element: <CatalogPage />,
-      },
-      {
-        path: 'settings',
-        element: <SettingsPage />,
+        path: '/',
+        element: <AppLayout />,
+        children: [
+          {
+            index: true,
+            element: <DashboardPage />,
+          },
+          {
+            path: 'routes',
+            element: <RoutesPage />,
+          },
+          {
+            path: 'fleet',
+            element: <FleetPage />,
+          },
+          {
+            path: 'drivers',
+            element: <DriversPage />,
+          },
+          {
+            path: 'quotations',
+            element: <QuotationsPage />,
+          },
+          {
+            path: 'catalog',
+            element: <CatalogPage />,
+          },
+          {
+            path: 'settings',
+            element: <SettingsPage />,
+          },
+        ],
       },
     ],
   },
 ])
 
 export function AppRouterProvider() {
-  return <RouterProvider router={router} />
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  )
 }

@@ -19,10 +19,32 @@ export const axiosInstance = axios.create({
   baseURL: apiBaseUrl,
 })
 
-// Optional interceptors
+// Add token to requests
 axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('stitch_access_token')
+  if (token && config.headers) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
   return config
 })
+
+// Handle 401 Unauthorized globally
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Clear token and redirect to login if not already there
+      localStorage.removeItem('stitch_access_token')
+      localStorage.removeItem('stitch_refresh_token')
+      
+      // Avoid infinite redirects if already on login
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
+    }
+    return Promise.reject(error)
+  }
+)
 
 // Orval Mutator Function
 export const customAxiosInstance = async <T>(
