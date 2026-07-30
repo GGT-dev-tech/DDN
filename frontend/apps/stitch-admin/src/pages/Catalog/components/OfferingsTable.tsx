@@ -1,10 +1,16 @@
+import { useState } from "react";
 import { useListOfferingsApiV1CatalogOfferingsGet } from "../../../shared/api/generated/catalog/catalog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../shared/ui/components/Table";
 import { Badge } from "../../../shared/ui/components/Badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../shared/ui/components/Card";
-import { Tags } from "lucide-react";
+import { Tags, Plus } from "lucide-react";
+import { Button } from "../../../shared/ui/components/Button";
+import { Modal } from "../../../shared/ui/components/Modal";
+import { EmptyState } from "../../../shared/ui/components/EmptyState";
+import { OfferingForm } from "./OfferingForm";
 
 export function OfferingsTable() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: offerings, isLoading, error } = useListOfferingsApiV1CatalogOfferingsGet();
 
   if (isLoading) return <div>Carregando Ofertas de Serviço...</div>;
@@ -12,14 +18,19 @@ export function OfferingsTable() {
 
   return (
     <Card>
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <Tags className="h-5 w-5 text-muted-foreground" />
-          <CardTitle>Ofertas de Serviço</CardTitle>
+      <CardHeader className="flex flex-row items-start justify-between">
+        <div>
+          <div className="flex items-center gap-2">
+            <Tags className="h-5 w-5 text-muted-foreground" />
+            <CardTitle>Ofertas de Serviço</CardTitle>
+          </div>
+          <CardDescription>
+            Gerencie o portfólio de serviços oferecidos pela sua empresa.
+          </CardDescription>
         </div>
-        <CardDescription>
-          Gerencie o portfólio de serviços oferecidos pela sua empresa.
-        </CardDescription>
+        <Button onClick={() => setIsModalOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" /> Nova Oferta
+        </Button>
       </CardHeader>
       <CardContent>
         {offerings && offerings.length > 0 ? (
@@ -55,11 +66,28 @@ export function OfferingsTable() {
             </TableBody>
           </Table>
         ) : (
-          <div className="text-center py-8 text-muted-foreground">
-            Nenhuma oferta de serviço encontrada.
-          </div>
+          <EmptyState
+            title="Nenhuma oferta de serviço encontrada"
+            description="Cadastre sua primeira oferta de serviço para começar a montar propostas comerciais para os seus clientes."
+            action={
+              <Button onClick={() => setIsModalOpen(true)}>
+                <Plus className="mr-2 h-4 w-4" /> Nova Oferta
+              </Button>
+            }
+          />
         )}
       </CardContent>
+      
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        title="Nova Oferta de Serviço"
+      >
+        <OfferingForm 
+          onSuccess={() => setIsModalOpen(false)} 
+          onCancel={() => setIsModalOpen(false)} 
+        />
+      </Modal>
     </Card>
   );
 }
