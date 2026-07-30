@@ -9,6 +9,9 @@ import { QuotationsPage } from '../../pages/Quotations/QuotationsPage'
 import { CustomersPage } from '../../pages/Commercial/CustomersPage'
 import { PricingPage } from '../../pages/Pricing/PricingPage'
 import { CatalogPage } from '../../pages/Catalog/CatalogPage'
+import { ServicePlansPage } from '../../pages/Operations/ServicePlans/ServicePlansPage'
+import { RequirementsPage } from '../../pages/Operations/Requirements/RequirementsPage'
+import { PlannerPage } from '../../pages/Operations/Planner/PlannerPage'
 import { LoginPage } from '../../pages/Auth/LoginPage'
 import { RegisterPage } from '../../pages/Auth/RegisterPage'
 import { LandingPage } from '../../pages/Public/LandingPage'
@@ -52,6 +55,18 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <DashboardPage />,
+          },
+          {
+            path: 'service-plans',
+            element: <ServicePlansPage />,
+          },
+          {
+            path: 'requirements',
+            element: <RequirementsPage />,
+          },
+          {
+            path: 'planner',
+            element: <PlannerPage />,
           },
           {
             path: 'routes',
