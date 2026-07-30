@@ -8,11 +8,11 @@ import { EmptyState } from '../../shared/ui/components/EmptyState'
 import { CustomerForm } from './components/CustomerForm'
 import { Plus, Building2 } from 'lucide-react'
 
-// TODO: Replace with useListLeads hook when backend endpoint is available
-const MOCK_LEADS: any[] = [] 
+import { useListLeadsApiV1CommercialLeadsGet } from '../../shared/api/generated/commercial/commercial'
 
 export function CustomersPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const { data: leads = [], isLoading, refetch } = useListLeadsApiV1CommercialLeadsGet()
 
   return (
     <div className="space-y-6">
@@ -39,7 +39,9 @@ export function CustomersPage() {
           </Button>
         </CardHeader>
         <CardContent>
-          {MOCK_LEADS && MOCK_LEADS.length > 0 ? (
+          {isLoading ? (
+            <div className="py-8 text-center text-zinc-500">Carregando...</div>
+          ) : leads.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -50,14 +52,14 @@ export function CustomersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {MOCK_LEADS.map((lead: any) => (
+                {leads.map((lead: any) => (
                   <TableRow key={lead.id}>
                     <TableCell className="font-medium">{lead.company_name}</TableCell>
                     <TableCell>{lead.contact_name}</TableCell>
                     <TableCell>{lead.email || '-'}</TableCell>
                     <TableCell>
                       <Badge variant="outline">
-                        {lead.status}
+                        {lead.status === 'new' ? 'Novo' : lead.status}
                       </Badge>
                     </TableCell>
                   </TableRow>
@@ -84,7 +86,10 @@ export function CustomersPage() {
         title="Novo Cliente"
       >
         <CustomerForm 
-          onSuccess={() => setIsAddModalOpen(false)} 
+          onSuccess={() => {
+            setIsAddModalOpen(false)
+            refetch()
+          }} 
           onCancel={() => setIsAddModalOpen(false)} 
         />
       </Modal>

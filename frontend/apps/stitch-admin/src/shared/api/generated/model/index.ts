@@ -46,6 +46,7 @@ export * from './priceCalculationRequest';
 export * from './priceCalculationResponse';
 export * from './priceTableCreateRequest';
 export * from './priceTableItemCreateRequest';
+export * from './priceTableResponse';
 export * from './pricingRuleCreateRequest';
 export * from './pricingRuleScope';
 export * from './pricingRuleType';

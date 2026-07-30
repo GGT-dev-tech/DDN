@@ -47,6 +47,7 @@ class LeadResponse(BaseModel):
     id: UUID
     company_name: str
     contact_name: str
+    email: str | None = None
     status: str
 
 class MatchLeadRequest(BaseModel):
@@ -56,6 +57,14 @@ class MatchLeadRequest(BaseModel):
     document_number: str | None = None
 
 # Routes
+@router.get("/leads", response_model=list[LeadResponse])
+async def list_leads(
+    tenant_id: UUID = Depends(require_tenant),
+    lead_service: LeadService = Depends(get_lead_service)
+):
+    leads = await lead_service.list_leads(tenant_id)
+    return leads
+
 @router.post("/leads", response_model=LeadResponse)
 async def register_lead(
     req: LeadRegisterRequest,

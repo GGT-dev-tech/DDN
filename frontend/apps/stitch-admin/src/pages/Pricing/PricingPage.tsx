@@ -8,11 +8,11 @@ import { EmptyState } from '../../shared/ui/components/EmptyState'
 import { PriceTableForm } from './components/PriceTableForm'
 import { Plus, CircleDollarSign } from 'lucide-react'
 
-// TODO: Replace with useListPriceTables hook when backend endpoint is available
-const MOCK_TABLES: any[] = [] 
+import { useListPriceTablesApiV1PricingTablesGet } from '../../shared/api/generated/pricing/pricing'
 
 export function PricingPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const { data: tables = [], isLoading, refetch } = useListPriceTablesApiV1PricingTablesGet()
 
   return (
     <div className="space-y-6">
@@ -39,7 +39,9 @@ export function PricingPage() {
           </Button>
         </CardHeader>
         <CardContent>
-          {MOCK_TABLES && MOCK_TABLES.length > 0 ? (
+          {isLoading ? (
+            <div className="py-8 text-center text-zinc-500">Carregando...</div>
+          ) : tables.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -50,7 +52,7 @@ export function PricingPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {MOCK_TABLES.map((table: any) => (
+                {tables.map((table: any) => (
                   <TableRow key={table.id}>
                     <TableCell className="font-medium">{table.name}</TableCell>
                     <TableCell>
@@ -89,7 +91,10 @@ export function PricingPage() {
         title="Nova Tabela de Preços"
       >
         <PriceTableForm 
-          onSuccess={() => setIsAddModalOpen(false)} 
+          onSuccess={() => {
+            setIsAddModalOpen(false)
+            refetch()
+          }} 
           onCancel={() => setIsAddModalOpen(false)} 
         />
       </Modal>

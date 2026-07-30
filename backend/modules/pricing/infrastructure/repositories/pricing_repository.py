@@ -125,6 +125,13 @@ class PricingRepository:
             return None
         return self._map_to_domain_price_table(model)
 
+    async def list_price_tables(self, tenant_id: UUID) -> List[PriceTable]:
+        stmt = select(PricingPriceTableModel).options(selectinload(PricingPriceTableModel.items)).where(PricingPriceTableModel.tenant_id == tenant_id)
+        result = await self.session.execute(stmt)
+        models = result.scalars().all()
+        return [self._map_to_domain_price_table(m) for m in models]
+
+
     async def get_applicable_price_tables(
         self,
         service_offering_id: UUID,

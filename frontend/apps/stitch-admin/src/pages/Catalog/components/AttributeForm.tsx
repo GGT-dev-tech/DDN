@@ -110,7 +110,7 @@ export function AttributeForm({ onSuccess, onCancel }: AttributeFormProps) {
             }}
             disabled={isPending}
           />
-          <Button type="button" variant="outline" onClick={handleAddValue} disabled={isPending}>
+          <Button type="button" variant="glass" onClick={handleAddValue} disabled={isPending}>
             <Plus className="h-4 w-4" />
           </Button>
         </div>
@@ -135,7 +135,7 @@ export function AttributeForm({ onSuccess, onCancel }: AttributeFormProps) {
 
       <div className="flex justify-end gap-2 pt-4">
         {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isPending}>
+          <Button type="button" variant="glass" onClick={onCancel} disabled={isPending}>
             Cancelar
           </Button>
         )}

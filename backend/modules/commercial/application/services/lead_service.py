@@ -37,6 +37,9 @@ class LeadService:
         await self.lead_repo.add(lead)
         return lead
 
+    async def list_leads(self, tenant_id: UUID) -> list[Lead]:
+        return await self.lead_repo.list_leads(tenant_id)
+
     async def qualify_lead(self, tenant_id: UUID, lead_id: UUID) -> Lead:
         lead = await self.lead_repo.get_by_id(tenant_id, lead_id)
         if not lead:

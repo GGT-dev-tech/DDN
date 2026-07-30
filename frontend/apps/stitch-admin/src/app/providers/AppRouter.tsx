@@ -11,6 +11,7 @@ import { PricingPage } from '../../pages/Pricing/PricingPage'
 import { CatalogPage } from '../../pages/Catalog/CatalogPage'
 import { LoginPage } from '../../pages/Auth/LoginPage'
 import { RegisterPage } from '../../pages/Auth/RegisterPage'
+import { LandingPage } from '../../pages/Public/LandingPage'
 import { AuthProvider, useAuth } from './AuthProvider'
 
 function ProtectedRoute() {
@@ -38,10 +39,14 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
+    element: <LandingPage />,
+  },
+  {
+    path: '/admin',
     element: <ProtectedRoute />,
     children: [
       {
-        path: '/',
+        path: '',
         element: <AppLayout />,
         children: [
           {

@@ -43,6 +43,9 @@ class PricingService:
             
         await self.session.commit()
         return table.id
+
+    async def list_price_tables(self, tenant_id: UUID) -> List[PriceTable]:
+        return await self.repository.list_price_tables(tenant_id)
             
     async def add_price_table_item(
         self,

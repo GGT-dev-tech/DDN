@@ -4,16 +4,41 @@ import { cn } from '../../shared/ui/components/Button'
 
 interface SidebarProps extends HTMLAttributes<HTMLDivElement> {}
 
-const NAVIGATION = [
-  { name: 'Dashboard', icon: LayoutDashboard, href: '/' },
-  { name: 'Catálogo', icon: Library, href: '/catalog' },
-  { name: 'Frota', icon: Truck, href: '/fleet' },
-  { name: 'Motoristas', icon: Users, href: '/drivers' },
-  { name: 'Clientes', icon: Building2, href: '/customers' },
-  { name: 'Tabelas de Preço', icon: CircleDollarSign, href: '/pricing' },
-  { name: 'Cotações', icon: FileText, href: '/quotations' },
-  { name: 'Rotas', icon: Route, href: '/routes' },
-  { name: 'Configurações', icon: Settings, href: '/settings' },
+const GROUPED_NAVIGATION = [
+  {
+    category: 'Geral',
+    items: [
+      { name: 'Dashboard', icon: LayoutDashboard, href: '/admin' },
+    ]
+  },
+  {
+    category: 'CRM',
+    items: [
+      { name: 'Clientes', icon: Building2, href: '/admin/customers' },
+    ]
+  },
+  {
+    category: 'Comercial',
+    items: [
+      { name: 'Catálogo', icon: Library, href: '/admin/catalog' },
+      { name: 'Tabelas de Preço', icon: CircleDollarSign, href: '/admin/pricing' },
+      { name: 'Cotações', icon: FileText, href: '/admin/quotations' },
+    ]
+  },
+  {
+    category: 'Operação',
+    items: [
+      { name: 'Frota', icon: Truck, href: '/admin/fleet' },
+      { name: 'Motoristas', icon: Users, href: '/admin/drivers' },
+      { name: 'Rotas', icon: Route, href: '/admin/routes' },
+    ]
+  },
+  {
+    category: 'Administração',
+    items: [
+      { name: 'Configurações', icon: Settings, href: '/admin/settings' },
+    ]
+  }
 ]
 
 export function Sidebar({ className, ...props }: SidebarProps) {
@@ -31,19 +56,26 @@ export function Sidebar({ className, ...props }: SidebarProps) {
         </h1>
       </div>
 
-      <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-        {NAVIGATION.map((item) => (
-          <a
-            key={item.name}
-            href={item.href}
-            className={cn(
-              'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
-              'text-text-secondary hover:text-text-primary hover:bg-black/5 dark:hover:bg-white/5'
-            )}
-          >
-            <item.icon size={20} />
-            {item.name}
-          </a>
+      <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-6">
+        {GROUPED_NAVIGATION.map((group) => (
+          <div key={group.category} className="space-y-1">
+            <h3 className="px-3 text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">
+              {group.category}
+            </h3>
+            {group.items.map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                className={cn(
+                  'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                  'text-text-secondary hover:text-text-primary hover:bg-black/5 dark:hover:bg-white/5'
+                )}
+              >
+                <item.icon size={20} />
+                {item.name}
+              </a>
+            ))}
+          </div>
         ))}
       </nav>
 

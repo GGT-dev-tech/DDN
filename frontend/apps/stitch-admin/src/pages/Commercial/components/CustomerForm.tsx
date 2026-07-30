@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { useRegisterLeadApiV1CommercialLeadsPost } from '../../../../shared/api/generated/commercial/commercial'
-import { Button } from '../../../../shared/ui/components/Button'
-import { Input } from '../../../../shared/ui/components/Input'
+import { useRegisterLeadApiV1CommercialLeadsPost } from '../../../shared/api/generated/commercial/commercial'
+import { Button } from '../../../shared/ui/components/Button'
+import { Input } from '../../../shared/ui/components/Input'
 import { toast } from 'sonner'
 
 interface CustomerFormProps {
@@ -53,7 +53,7 @@ export function CustomerForm({ onSuccess, onCancel }: CustomerFormProps) {
         <Input 
           placeholder="Ex: Indústria XYZ Ltda" 
           value={companyName}
-          onChange={e => setCompanyName(e.target.value)}
+          onChange={(e: any) => setCompanyName(e.target.value)}
           disabled={isPending}
         />
       </div>
@@ -63,7 +63,7 @@ export function CustomerForm({ onSuccess, onCancel }: CustomerFormProps) {
         <Input 
           placeholder="Ex: Maria Souza" 
           value={contactName}
-          onChange={e => setContactName(e.target.value)}
+          onChange={(e: any) => setContactName(e.target.value)}
           disabled={isPending}
         />
       </div>
@@ -75,7 +75,7 @@ export function CustomerForm({ onSuccess, onCancel }: CustomerFormProps) {
             type="email"
             placeholder="contato@xyz.com" 
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e: any) => setEmail(e.target.value)}
             disabled={isPending}
           />
         </div>
@@ -84,7 +84,7 @@ export function CustomerForm({ onSuccess, onCancel }: CustomerFormProps) {
           <Input 
             placeholder="(11) 99999-9999" 
             value={phone}
-            onChange={e => setPhone(e.target.value)}
+            onChange={(e: any) => setPhone(e.target.value)}
             disabled={isPending}
           />
         </div>
@@ -92,7 +92,7 @@ export function CustomerForm({ onSuccess, onCancel }: CustomerFormProps) {
 
       <div className="flex justify-end gap-2 pt-4">
         {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isPending}>
+          <Button type="button" variant="glass" onClick={onCancel} disabled={isPending}>
             Cancelar
           </Button>
         )}

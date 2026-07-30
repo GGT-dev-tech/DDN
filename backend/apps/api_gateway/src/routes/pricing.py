@@ -12,6 +12,7 @@ from modules.pricing.application.services.pricing_service import PricingService
 from modules.pricing.application.dto.requests import (
     PriceTableCreateRequest,
     PriceTableItemCreateRequest,
+    PriceTableResponse,
     PricingRuleCreateRequest,
     PriceCalculationRequest,
     PriceCalculationResponse,
@@ -24,6 +25,14 @@ def get_pricing_service(session: AsyncSession = Depends(get_db_session)) -> Pric
     repository = PricingRepository(session)
     engine = PriceCalculationEngine()
     return PricingService(session, repository, engine)
+
+@router.get("/tables", response_model=list[PriceTableResponse], status_code=status.HTTP_200_OK)
+async def list_price_tables(
+    tenant_id: UUID = Depends(require_tenant),
+    service: PricingService = Depends(get_pricing_service)
+) -> Any:
+    tables = await service.list_price_tables(tenant_id)
+    return tables
 
 @router.post("/tables", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def create_price_table(

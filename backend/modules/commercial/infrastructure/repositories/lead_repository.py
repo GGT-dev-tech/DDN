@@ -66,3 +66,23 @@ class LeadRepository:
             db_lead.phone = lead.phone
             db_lead.source_id = lead.source_id
             db_lead.updated_at = lead.updated_at
+
+    async def list_leads(self, tenant_id: UUID) -> list[Lead]:
+        stmt = select(CommercialLead).where(CommercialLead.tenant_id == tenant_id)
+        result = await self.session.execute(stmt)
+        models = result.scalars().all()
+        
+        return [
+            Lead(
+                id=db_lead.id,
+                tenant_id=db_lead.tenant_id,
+                company_name=db_lead.company_name,
+                contact_name=db_lead.contact_name,
+                status=db_lead.status,
+                email=db_lead.email,
+                phone=db_lead.phone,
+                source_id=db_lead.source_id,
+                created_at=db_lead.created_at,
+                updated_at=db_lead.updated_at
+            ) for db_lead in models
+        ]

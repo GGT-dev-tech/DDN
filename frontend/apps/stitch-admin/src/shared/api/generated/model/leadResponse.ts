@@ -9,5 +9,6 @@ export interface LeadResponse {
   id: string;
   company_name: string;
   contact_name: string;
+  email?: string | null;
   status: string;
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { useCreatePriceTableApiV1PricingTablesPost } from '../../../../shared/api/generated/pricing/pricing'
-import { Button } from '../../../../shared/ui/components/Button'
-import { Input } from '../../../../shared/ui/components/Input'
+import { useCreatePriceTableApiV1PricingTablesPost } from '../../../shared/api/generated/pricing/pricing'
+import { Button } from '../../../shared/ui/components/Button'
+import { Input } from '../../../shared/ui/components/Input'
 import { toast } from 'sonner'
 
 interface PriceTableFormProps {
@@ -52,7 +52,7 @@ export function PriceTableForm({ onSuccess, onCancel }: PriceTableFormProps) {
         <Input 
           placeholder="Ex: Tabela Padrão 2026" 
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={(e: any) => setName(e.target.value)}
           disabled={isPending}
         />
         <p className="text-xs text-muted-foreground">
@@ -66,7 +66,7 @@ export function PriceTableForm({ onSuccess, onCancel }: PriceTableFormProps) {
           <Input 
             type="date"
             value={effectiveDate}
-            onChange={e => setEffectiveDate(e.target.value)}
+            onChange={(e: any) => setEffectiveDate(e.target.value)}
             disabled={isPending}
           />
         </div>
@@ -75,7 +75,7 @@ export function PriceTableForm({ onSuccess, onCancel }: PriceTableFormProps) {
           <Input 
             type="date"
             value={endDate}
-            onChange={e => setEndDate(e.target.value)}
+            onChange={(e: any) => setEndDate(e.target.value)}
             disabled={isPending}
           />
         </div>
@@ -83,7 +83,7 @@ export function PriceTableForm({ onSuccess, onCancel }: PriceTableFormProps) {
 
       <div className="flex justify-end gap-2 pt-4">
         {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isPending}>
+          <Button type="button" variant="glass" onClick={onCancel} disabled={isPending}>
             Cancelar
           </Button>
         )}

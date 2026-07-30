@@ -20,6 +20,16 @@ class PriceTableCreateRequest(BaseModel):
     customer_id: Optional[UUID] = None
     is_active: bool = False
 
+class PriceTableResponse(BaseModel):
+    id: UUID
+    name: str
+    effective_date: date
+    end_date: Optional[date] = None
+    region_id: Optional[UUID] = None
+    customer_id: Optional[UUID] = None
+    is_active: bool
+
+
 class PricingRuleCreateRequest(BaseModel):
     name: str = Field(..., max_length=255)
     scope: PricingRuleScope

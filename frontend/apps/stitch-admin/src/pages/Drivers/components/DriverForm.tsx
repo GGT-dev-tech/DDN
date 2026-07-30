@@ -82,7 +82,7 @@ export function DriverForm({ onSuccess, onCancel }: DriverFormProps) {
 
       <div className="flex justify-end gap-2 pt-4">
         {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isPending}>
+          <Button type="button" variant="glass" onClick={onCancel} disabled={isPending}>
             Cancelar
           </Button>
         )}
