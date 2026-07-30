@@ -7,8 +7,8 @@ class ListRoutes:
     def __init__(self, repository: RoutingRepository):
         self.repository = repository
 
-    def execute(self, tenant_id: UUID) -> list[RouteResponseDTO]:
-        routes = self.repository.list_routes(tenant_id)
+    async def execute(self, tenant_id: UUID) -> list[RouteResponseDTO]:
+        routes = await self.repository.list_routes(tenant_id)
         return [
             RouteResponseDTO(
                 id=r.id,

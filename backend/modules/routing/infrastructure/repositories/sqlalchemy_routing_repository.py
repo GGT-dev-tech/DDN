@@ -1,6 +1,8 @@
 from uuid import UUID
 
-from sqlalchemy.orm import Session, selectinload
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from modules.routing.application.repositories import RoutingRepository
 from modules.routing.domain.entities.route import Location, Route, Stop
@@ -8,7 +10,7 @@ from modules.routing.infrastructure.orm_models import RouteModel, StopModel
 
 
 class SQLAlchemyRoutingRepository(RoutingRepository):
-    def __init__(self, session: Session):
+    def __init__(self, session: AsyncSession):
         self.session = session
         
     def _to_domain(self, model: RouteModel) -> Route:
@@ -33,8 +35,10 @@ class SQLAlchemyRoutingRepository(RoutingRepository):
         )
         return route
 
-    def save(self, route: Route) -> None:
-        model = self.session.query(RouteModel).filter_by(id=route.id).first()
+    async def save(self, route: Route) -> None:
+        stmt = select(RouteModel).options(selectinload(RouteModel.stops)).where(RouteModel.id == route.id)
+        result = await self.session.execute(stmt)
+        model = result.scalar_one_or_none()
         
         if not model:
             # Create new
@@ -70,7 +74,7 @@ class SQLAlchemyRoutingRepository(RoutingRepository):
         # Remove deleted stops
         for stop_id in list(existing_stops.keys()):
             if stop_id not in current_stops:
-                self.session.delete(existing_stops[stop_id])
+                await self.session.delete(existing_stops[stop_id])
                 
         # Add or update stops
         for stop in route.stops:
@@ -93,12 +97,16 @@ class SQLAlchemyRoutingRepository(RoutingRepository):
                 existing_stop_model.order = stop.order
                 existing_stop_model.status = stop.status
 
-    def get_by_id(self, route_id: UUID) -> Route | None:
-        model = self.session.query(RouteModel).options(selectinload(RouteModel.stops)).filter_by(id=route_id).first()
+    async def get_by_id(self, route_id: UUID) -> Route | None:
+        stmt = select(RouteModel).options(selectinload(RouteModel.stops)).where(RouteModel.id == route_id)
+        result = await self.session.execute(stmt)
+        model = result.scalar_one_or_none()
         if not model:
             return None
         return self._to_domain(model)
 
-    def list_routes(self, tenant_id: UUID) -> list[Route]:
-        models = self.session.query(RouteModel).options(selectinload(RouteModel.stops)).filter_by(tenant_id=tenant_id).all()
+    async def list_routes(self, tenant_id: UUID) -> list[Route]:
+        stmt = select(RouteModel).options(selectinload(RouteModel.stops)).where(RouteModel.tenant_id == tenant_id)
+        result = await self.session.execute(stmt)
+        models = result.scalars().unique().all()
         return [self._to_domain(m) for m in models]

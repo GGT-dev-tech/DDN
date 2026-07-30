@@ -1,5 +1,5 @@
 
-from database.core.unit_of_work import UnitOfWork
+from sqlalchemy.ext.asyncio import AsyncSession
 from modules.core.context import ContextAccessor
 from modules.routing.application.dto import CreateRouteRequestDTO, RouteResponseDTO
 from modules.routing.application.repositories import RoutingRepository
@@ -7,12 +7,12 @@ from modules.routing.domain.entities.route import Route
 
 
 class CreateRouteUseCase:
-    def __init__(self, uow: UnitOfWork, routing_repository: RoutingRepository, context_accessor: ContextAccessor):
-        self.uow = uow
+    def __init__(self, session: AsyncSession, routing_repository: RoutingRepository, context_accessor: ContextAccessor):
+        self.session = session
         self.routing_repository = routing_repository
         self.context_accessor = context_accessor
 
-    def execute(self, dto: CreateRouteRequestDTO) -> RouteResponseDTO:
+    async def execute(self, dto: CreateRouteRequestDTO) -> RouteResponseDTO:
         tenant_ctx = self.context_accessor.tenant()
         if not tenant_ctx or not tenant_ctx.tenant_id:
             raise ValueError("Tenant context is required")
@@ -31,10 +31,9 @@ class CreateRouteUseCase:
         if dto.planned_duration is not None:
             route.planned_duration = dto.planned_duration
         
-        with self.uow.begin():
-            self.routing_repository.save(route)
-            self.uow.collect_events(route)
-            self.uow.commit()
+        await self.routing_repository.save(route)
+        route.clear_events()
+        await self.session.commit()
             
         return RouteResponseDTO(
             id=route.id,

@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, status
-from sqlalchemy.orm import Session
+import uuid
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.session import get_db_session as get_db
 
 
-from database.core.unit_of_work import SQLAlchemyUnitOfWork
 from modules.core.context import accessor as context_accessor_instance
+from modules.identity.dependencies import require_tenant
 from modules.fleet.application.dto import (
     DriverResponseDTO,
     RegisterDriverRequestDTO,
@@ -23,37 +24,43 @@ from modules.fleet.application.use_cases.register_vehicle import RegisterVehicle
 from modules.fleet.application.use_cases.register_driver import RegisterDriverUseCase
 
 @router.post("/vehicles", response_model=VehicleResponseDTO, status_code=status.HTTP_201_CREATED)
-def register_vehicle(
+async def register_vehicle(
     dto: RegisterVehicleRequestDTO,
-    db: Session = Depends(get_db)
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    db: AsyncSession = Depends(get_db)
 ):
     repo = SQLAlchemyFleetRepository(db)
-    uow = SQLAlchemyUnitOfWork(db)
-    use_case = RegisterVehicleUseCase(uow, repo, get_context_accessor())
-    return use_case.execute(dto)
+    use_case = RegisterVehicleUseCase(db, repo, get_context_accessor())
+    return await use_case.execute(dto)
 
 @router.post("/drivers", response_model=DriverResponseDTO, status_code=status.HTTP_201_CREATED)
-def register_driver(
+async def register_driver(
     dto: RegisterDriverRequestDTO,
-    db: Session = Depends(get_db)
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    db: AsyncSession = Depends(get_db)
 ):
     repo = SQLAlchemyFleetRepository(db)
-    uow = SQLAlchemyUnitOfWork(db)
-    use_case = RegisterDriverUseCase(uow, repo, get_context_accessor())
-    return use_case.execute(dto)
+    use_case = RegisterDriverUseCase(db, repo, get_context_accessor())
+    return await use_case.execute(dto)
 
 from modules.fleet.application.use_cases.list_vehicles import ListVehicles
 from modules.fleet.application.use_cases.list_drivers import ListDrivers
 from modules.fleet.infrastructure.repositories.sqlalchemy_fleet_repository import SQLAlchemyFleetRepository
 
 @router.get("/vehicles", response_model=list[VehicleResponseDTO])
-def list_vehicles(db: Session = Depends(get_db)):
+async def list_vehicles(
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    db: AsyncSession = Depends(get_db)
+):
     repo = SQLAlchemyFleetRepository(db)
     use_case = ListVehicles(repo)
-    return use_case.execute()
+    return await use_case.execute(tenant_id)
 
 @router.get("/drivers", response_model=list[DriverResponseDTO])
-def list_drivers(db: Session = Depends(get_db)):
+async def list_drivers(
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    db: AsyncSession = Depends(get_db)
+):
     repo = SQLAlchemyFleetRepository(db)
     use_case = ListDrivers(repo)
-    return use_case.execute()
+    return await use_case.execute(tenant_id)

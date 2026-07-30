@@ -54,98 +54,6 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * @summary List Vehicles
- */
-export const listVehiclesApiV1FleetVehiclesGet = (
-
- options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
-) => {
-
-
-      return customAxiosInstance<VehicleResponseDTO[]>(
-      {url: `/api/v1/fleet/vehicles`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
-
-export const getListVehiclesApiV1FleetVehiclesGetQueryKey = () => {
-    return [
-    `/api/v1/fleet/vehicles`
-    ] as const;
-    }
-
-
-export const getListVehiclesApiV1FleetVehiclesGetQueryOptions = <TData = Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getListVehiclesApiV1FleetVehiclesGetQueryKey();
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>> = ({ signal }) => listVehiclesApiV1FleetVehiclesGet(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ListVehiclesApiV1FleetVehiclesGetQueryResult = NonNullable<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>>
-export type ListVehiclesApiV1FleetVehiclesGetQueryError = unknown
-
-
-export function useListVehiclesApiV1FleetVehiclesGet<TData = Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>,
-          TError,
-          Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customAxiosInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListVehiclesApiV1FleetVehiclesGet<TData = Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>,
-          TError,
-          Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customAxiosInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListVehiclesApiV1FleetVehiclesGet<TData = Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary List Vehicles
- */
-
-export function useListVehiclesApiV1FleetVehiclesGet<TData = Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getListVehiclesApiV1FleetVehiclesGetQueryOptions(options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
-}
-
-
-
-
-
-
-/**
  * @summary Register Vehicle
  */
 export const registerVehicleApiV1FleetVehiclesPost = (
@@ -210,16 +118,16 @@ export const useRegisterVehicleApiV1FleetVehiclesPost = <TError = HTTPValidation
       return useMutation(getRegisterVehicleApiV1FleetVehiclesPostMutationOptions(options), queryClient);
     }
     /**
- * @summary List Drivers
+ * @summary List Vehicles
  */
-export const listDriversApiV1FleetDriversGet = (
+export const listVehiclesApiV1FleetVehiclesGet = (
 
  options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
 ) => {
 
 
-      return customAxiosInstance<DriverResponseDTO[]>(
-      {url: `/api/v1/fleet/drivers`, method: 'GET', signal
+      return customAxiosInstance<VehicleResponseDTO[]>(
+      {url: `/api/v1/fleet/vehicles`, method: 'GET', signal
     },
       options);
     }
@@ -227,69 +135,69 @@ export const listDriversApiV1FleetDriversGet = (
 
 
 
-export const getListDriversApiV1FleetDriversGetQueryKey = () => {
+export const getListVehiclesApiV1FleetVehiclesGetQueryKey = () => {
     return [
-    `/api/v1/fleet/drivers`
+    `/api/v1/fleet/vehicles`
     ] as const;
     }
 
 
-export const getListDriversApiV1FleetDriversGetQueryOptions = <TData = Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export const getListVehiclesApiV1FleetVehiclesGetQueryOptions = <TData = Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getListDriversApiV1FleetDriversGetQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getListVehiclesApiV1FleetVehiclesGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>> = ({ signal }) => listDriversApiV1FleetDriversGet(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>> = ({ signal }) => listVehiclesApiV1FleetVehiclesGet(requestOptions, signal);
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ListDriversApiV1FleetDriversGetQueryResult = NonNullable<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>>
-export type ListDriversApiV1FleetDriversGetQueryError = unknown
+export type ListVehiclesApiV1FleetVehiclesGetQueryResult = NonNullable<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>>
+export type ListVehiclesApiV1FleetVehiclesGetQueryError = HTTPValidationError
 
 
-export function useListDriversApiV1FleetDriversGet<TData = Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError, TData>> & Pick<
+export function useListVehiclesApiV1FleetVehiclesGet<TData = Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>,
+          Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>,
           TError,
-          Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>
+          Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListDriversApiV1FleetDriversGet<TData = Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError, TData>> & Pick<
+export function useListVehiclesApiV1FleetVehiclesGet<TData = Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>,
+          Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>,
           TError,
-          Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>
+          Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListDriversApiV1FleetDriversGet<TData = Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export function useListVehiclesApiV1FleetVehiclesGet<TData = Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary List Drivers
+ * @summary List Vehicles
  */
 
-export function useListDriversApiV1FleetDriversGet<TData = Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export function useListVehiclesApiV1FleetVehiclesGet<TData = Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listVehiclesApiV1FleetVehiclesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getListDriversApiV1FleetDriversGetQueryOptions(options)
+  const queryOptions = getListVehiclesApiV1FleetVehiclesGetQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -365,3 +273,95 @@ export const useRegisterDriverApiV1FleetDriversPost = <TError = HTTPValidationEr
       > => {
       return useMutation(getRegisterDriverApiV1FleetDriversPostMutationOptions(options), queryClient);
     }
+    /**
+ * @summary List Drivers
+ */
+export const listDriversApiV1FleetDriversGet = (
+
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<DriverResponseDTO[]>(
+      {url: `/api/v1/fleet/drivers`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getListDriversApiV1FleetDriversGetQueryKey = () => {
+    return [
+    `/api/v1/fleet/drivers`
+    ] as const;
+    }
+
+
+export const getListDriversApiV1FleetDriversGetQueryOptions = <TData = Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListDriversApiV1FleetDriversGetQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>> = ({ signal }) => listDriversApiV1FleetDriversGet(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListDriversApiV1FleetDriversGetQueryResult = NonNullable<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>>
+export type ListDriversApiV1FleetDriversGetQueryError = HTTPValidationError
+
+
+export function useListDriversApiV1FleetDriversGet<TData = Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>,
+          TError,
+          Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListDriversApiV1FleetDriversGet<TData = Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>,
+          TError,
+          Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListDriversApiV1FleetDriversGet<TData = Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary List Drivers
+ */
+
+export function useListDriversApiV1FleetDriversGet<TData = Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listDriversApiV1FleetDriversGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getListDriversApiV1FleetDriversGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+

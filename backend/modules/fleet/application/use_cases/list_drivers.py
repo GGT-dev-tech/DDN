@@ -1,12 +1,14 @@
 from modules.fleet.application.dto import DriverResponseDTO
 from modules.fleet.application.repositories import FleetRepository
 
+from uuid import UUID
+
 class ListDrivers:
     def __init__(self, repository: FleetRepository):
         self.repository = repository
 
-    def execute(self) -> list[DriverResponseDTO]:
-        drivers = self.repository.list_drivers()
+    async def execute(self, tenant_id: UUID) -> list[DriverResponseDTO]:
+        drivers = await self.repository.list_drivers(tenant_id)
         return [
             DriverResponseDTO(
                 id=d.id,

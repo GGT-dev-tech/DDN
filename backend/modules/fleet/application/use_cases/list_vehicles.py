@@ -1,12 +1,14 @@
 from modules.fleet.application.dto import VehicleResponseDTO
 from modules.fleet.application.repositories import FleetRepository
 
+from uuid import UUID
+
 class ListVehicles:
     def __init__(self, repository: FleetRepository):
         self.repository = repository
 
-    def execute(self) -> list[VehicleResponseDTO]:
-        vehicles = self.repository.list_vehicles()
+    async def execute(self, tenant_id: UUID) -> list[VehicleResponseDTO]:
+        vehicles = await self.repository.list_vehicles(tenant_id)
         return [
             VehicleResponseDTO(
                 id=v.id,

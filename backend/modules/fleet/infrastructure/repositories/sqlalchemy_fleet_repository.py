@@ -1,6 +1,7 @@
 from uuid import UUID
 
-from sqlalchemy.orm import Session
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from modules.fleet.application.repositories import FleetRepository
 from modules.fleet.domain.entities.driver import Driver
@@ -9,11 +10,13 @@ from modules.fleet.infrastructure.orm_models import DriverModel, VehicleModel
 
 
 class SQLAlchemyFleetRepository(FleetRepository):
-    def __init__(self, session: Session):
+    def __init__(self, session: AsyncSession):
         self.session = session
         
-    def save_vehicle(self, vehicle: Vehicle) -> None:
-        model = self.session.query(VehicleModel).filter_by(id=vehicle.id).first()
+    async def save_vehicle(self, vehicle: Vehicle) -> None:
+        stmt = select(VehicleModel).where(VehicleModel.id == vehicle.id)
+        result = await self.session.execute(stmt)
+        model = result.scalar_one_or_none()
         
         if not model:
             model = VehicleModel(
@@ -33,8 +36,10 @@ class SQLAlchemyFleetRepository(FleetRepository):
             model.capacity_volume = vehicle.capacity_volume
             model.capacity_weight = vehicle.capacity_weight
 
-    def get_vehicle_by_id(self, vehicle_id: UUID) -> Vehicle | None:
-        model = self.session.query(VehicleModel).filter_by(id=vehicle_id).first()
+    async def get_vehicle_by_id(self, vehicle_id: UUID) -> Vehicle | None:
+        stmt = select(VehicleModel).where(VehicleModel.id == vehicle_id)
+        result = await self.session.execute(stmt)
+        model = result.scalar_one_or_none()
         if not model:
             return None
         return Vehicle(
@@ -47,8 +52,10 @@ class SQLAlchemyFleetRepository(FleetRepository):
             status=model.status
         )
 
-    def save_driver(self, driver: Driver) -> None:
-        model = self.session.query(DriverModel).filter_by(id=driver.id).first()
+    async def save_driver(self, driver: Driver) -> None:
+        stmt = select(DriverModel).where(DriverModel.id == driver.id)
+        result = await self.session.execute(stmt)
+        model = result.scalar_one_or_none()
         
         if not model:
             model = DriverModel(
@@ -64,8 +71,10 @@ class SQLAlchemyFleetRepository(FleetRepository):
             model.license_number = driver.license_number
             model.status = driver.status
 
-    def get_driver_by_id(self, driver_id: UUID) -> Driver | None:
-        model = self.session.query(DriverModel).filter_by(id=driver_id).first()
+    async def get_driver_by_id(self, driver_id: UUID) -> Driver | None:
+        stmt = select(DriverModel).where(DriverModel.id == driver_id)
+        result = await self.session.execute(stmt)
+        model = result.scalar_one_or_none()
         if not model:
             return None
         return Driver(
@@ -76,8 +85,10 @@ class SQLAlchemyFleetRepository(FleetRepository):
             status=model.status
         )
 
-    def list_vehicles(self) -> list[Vehicle]:
-        models = self.session.query(VehicleModel).all()
+    async def list_vehicles(self, tenant_id: UUID) -> list[Vehicle]:
+        stmt = select(VehicleModel).where(VehicleModel.tenant_id == tenant_id)
+        result = await self.session.execute(stmt)
+        models = result.scalars().all()
         return [
             Vehicle(
                 id=m.id,
@@ -91,8 +102,10 @@ class SQLAlchemyFleetRepository(FleetRepository):
             for m in models
         ]
 
-    def list_drivers(self) -> list[Driver]:
-        models = self.session.query(DriverModel).all()
+    async def list_drivers(self, tenant_id: UUID) -> list[Driver]:
+        stmt = select(DriverModel).where(DriverModel.tenant_id == tenant_id)
+        result = await self.session.execute(stmt)
+        models = result.scalars().all()
         return [
             Driver(
                 id=m.id,
