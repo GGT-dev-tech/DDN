@@ -28,7 +28,6 @@ COPY --from=pruner /app/out/full/ .
 
 # Build env vars
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_OPTIONS="--max-old-space-size=400"
 
 # BACKEND_URL will be passed at Railway build time as a build arg
 ARG BACKEND_URL
