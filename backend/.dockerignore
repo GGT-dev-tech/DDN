@@ -1,0 +1,15 @@
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+*$py.class
+.coverage
+coverage.xml
+htmlcov/
+*.log
+.env*
+!.env.example
+.git/
+test_*.txt
