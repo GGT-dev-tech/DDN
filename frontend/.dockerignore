@@ -1,5 +1,27 @@
+# Ignore node_modules everywhere (critical for Turborepo Docker builds)
+**/node_modules
 node_modules
+
+# Build outputs
+**/.next
 .next
+**/dist
+dist
+**/out
 out
+**/.turbo
 .turbo
+
+# OS
+.DS_Store
+
+# Git
+**/.git
+.git
+
+# Env
+.env*
+!.env.example
+
 *.log
+*.md
