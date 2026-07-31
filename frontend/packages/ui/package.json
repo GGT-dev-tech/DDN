@@ -3,6 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./src/styles.css": "./src/styles.css",
+    "./src/lib/utils": "./src/lib/utils.ts",
+    "./src/components/*": "./src/components/*"
+  },
   "dependencies": {
     "@hookform/resolvers": "^5.5.7",
     "@radix-ui/react-avatar": "^1.2.6",
