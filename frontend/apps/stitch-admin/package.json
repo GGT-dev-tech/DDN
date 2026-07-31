@@ -31,7 +31,7 @@
     "@storybook/addon-mcp": "^0.7.0",
     "@storybook/addon-vitest": "^10.5.4",
     "@storybook/react-vite": "^10.5.4",
-    "@types/node": "^24.13.2",
+    "@types/node": "^26.1.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@types/uuid": "^10.0.0",
