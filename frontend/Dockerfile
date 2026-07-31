@@ -3,7 +3,7 @@
 # Uses Turborepo prune to build only @repo/web and its deps.
 # ============================================================
 
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 RUN apk add --no-cache libc6-compat
 RUN npm install -g turbo@2
 
@@ -21,13 +21,14 @@ COPY --from=pruner /app/out/json/ .
 COPY --from=pruner /app/out/package-lock.json ./package-lock.json
 
 # Install ALL deps (including devDeps needed for build)
-RUN npm ci
+# Using npm install instead of ci to avoid lockfile prune conflicts
+RUN npm install
 
 COPY --from=pruner /app/out/full/ .
 
 # Build env vars
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_OPTIONS="--max-old-space-size=1024"
+ENV NODE_OPTIONS="--max-old-space-size=400"
 
 # BACKEND_URL will be passed at Railway build time as a build arg
 ARG BACKEND_URL
@@ -36,7 +37,7 @@ ENV BACKEND_URL=${BACKEND_URL}
 RUN turbo run build --filter=@repo/web...
 
 # ── Stage 3: Production runner ───────────────────────────────
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
