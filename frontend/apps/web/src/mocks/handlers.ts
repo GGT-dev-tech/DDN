@@ -84,7 +84,7 @@ export const handlers = [
       version: 1
     });
   }),
-  http.get('/api/v1/routes', () => {
+  http.get('/api/v1/routing/routes', () => {
     return HttpResponse.json([
       {
         id: "rt-1234",
@@ -117,7 +117,7 @@ export const handlers = [
       }
     ]);
   }),
-  http.get('/api/v1/routes/:routeId', ({ params }) => {
+  http.get('/api/v1/routing/routes/:routeId', ({ params }) => {
     return HttpResponse.json({
       id: params.routeId,
       execution_date: new Date().toISOString(),
@@ -157,7 +157,7 @@ export const handlers = [
     });
   }),
   // NEW: Mock for creating a route
-  http.post('/api/v1/routes', async ({ request }) => {
+  http.post('/api/v1/routing/routes', async ({ request }) => {
     const data = await request.json() as any;
     return HttpResponse.json({
       id: `rt-${Math.random().toString(36).substr(2, 9)}`,
@@ -170,7 +170,7 @@ export const handlers = [
     });
   }),
   // NEW: Mock for assigning resources to a route
-  http.post('/api/v1/routes/:routeId/assign', async ({ request, params }) => {
+  http.post('/api/v1/routing/routes/:routeId/assign', async ({ request, params }) => {
     const data = await request.json() as any;
     return HttpResponse.json({
       id: params.routeId,
@@ -179,7 +179,7 @@ export const handlers = [
     });
   }),
   // NEW: Mock for adding a stop to a route
-  http.post('/api/v1/routes/:routeId/stops', async ({ request, params }) => {
+  http.post('/api/v1/routing/routes/:routeId/stops', async ({ request, params }) => {
     const data = await request.json() as any;
     return HttpResponse.json({
       id: `stp-${Math.random().toString(36).substr(2, 9)}`,
@@ -187,5 +187,34 @@ export const handlers = [
       ...data,
       status: "PENDING"
     });
+  }),
+  // NEW: Mock for companies
+  http.get('/api/v1/commercial/companies', () => {
+    return HttpResponse.json([
+      { id: "comp-1", trade_name: "Tech Solutions", corporate_name: "Tech Solutions LTDA", document_number: "00.000.000/0001-01", status: "ACTIVE" },
+      { id: "comp-2", trade_name: "Eco Clean", corporate_name: "Eco Clean SA", document_number: "11.111.111/0001-11", status: "ACTIVE" }
+    ]);
+  }),
+  // NEW: Mock for UOM
+  http.get('/api/v1/catalog/uom', () => {
+    return HttpResponse.json([
+      { id: "uom-1", name: "Tonelada", symbol: "t" },
+      { id: "uom-2", name: "Litro", symbol: "L" }
+    ]);
+  }),
+  http.post('/api/v1/catalog/uom', async ({ request }) => {
+    const data = await request.json() as any;
+    return HttpResponse.json({ id: `uom-${Math.random().toString(36).substr(2, 9)}`, ...data });
+  }),
+  // NEW: Mock for Offerings
+  http.get('/api/v1/catalog/offerings', () => {
+    return HttpResponse.json([
+      { id: "off-1", name: "Coleta Comum", internal_code: "COL-COMUM", status: "ACTIVE" },
+      { id: "off-2", name: "Reciclagem Papel", internal_code: "REC-PAPEL", status: "ACTIVE" }
+    ]);
+  }),
+  http.post('/api/v1/catalog/offerings', async ({ request }) => {
+    const data = await request.json() as any;
+    return HttpResponse.json({ id: `off-${Math.random().toString(36).substr(2, 9)}`, status: "ACTIVE", ...data });
   }),
 ];

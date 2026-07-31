@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { 
-  createRouteRoutingRoutesPost,
-  assignRouteResourcesRoutingRoutesRouteIdAssignPost,
-  addStopToRouteRoutingRoutesRouteIdStopsPost
+  createRouteApiV1RoutingRoutesPost,
+  assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost,
+  addStopToRouteApiV1RoutingRoutesRouteIdStopsPost
 } from "@repo/api";
 import { RouteCreateFormValues } from "../model/schemas";
 
@@ -12,7 +12,7 @@ export function useCreateRouteMutation() {
   return useMutation({
     mutationFn: async (data: RouteCreateFormValues) => {
       // Step 1: Create the base route
-      const createResponse = await createRouteRoutingRoutesPost({
+      const createResponse = await createRouteApiV1RoutingRoutesPost({
         execution_date: data.execution_date,
         estimated_volume: data.estimated_volume,
         estimated_weight: data.estimated_weight,
@@ -28,7 +28,7 @@ export function useCreateRouteMutation() {
       }
 
       // Step 2: Assign resources
-      await assignRouteResourcesRoutingRoutesRouteIdAssignPost(routeId, {
+      await assignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost(routeId, {
         route_id: routeId,
         vehicle_id: data.vehicle_id,
         driver_id: data.driver_id,
@@ -36,7 +36,7 @@ export function useCreateRouteMutation() {
 
       // Step 3: Add stops
       for (const stop of data.stops) {
-        await addStopToRouteRoutingRoutesRouteIdStopsPost(routeId, {
+        await addStopToRouteApiV1RoutingRoutesRouteIdStopsPost(routeId, {
           route_id: routeId,
           location: {
             latitude: stop.latitude,

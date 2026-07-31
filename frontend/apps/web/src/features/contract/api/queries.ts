@@ -28,11 +28,11 @@ export function useContractsQuery() {
   return useQuery({
     queryKey: ["contracts"],
     queryFn: async () => {
-      // Direct fetch call since backend SDK doesn't have the GET /contracts endpoint yet
-      const response = await fetch("http://localhost:3000/api/v1/contracts", {
+      // Use relative URL — Next.js proxy rewrites /api/* → http://localhost:8000/api/*
+      const response = await fetch("/api/v1/contracts", {
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
       
       if (!response.ok) {
@@ -50,9 +50,10 @@ export function useCreateContractMutation() {
   
   return useMutation({
     mutationFn: async (data: import("@repo/api").ContractCreateRequest) => {
+      // customClient returns JSON directly (not Axios), so no .data wrapping needed
       const { createContractApiV1ContractsPost } = await import("@repo/api");
       const response = await createContractApiV1ContractsPost(data);
-      return response.data;
+      return response; // customClient already unwraps JSON
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["contracts"] });

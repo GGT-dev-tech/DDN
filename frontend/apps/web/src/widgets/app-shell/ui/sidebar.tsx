@@ -17,7 +17,7 @@ const GROUPED_NAVIGATION = [
     category: "CRM",
     items: [
       { name: "Leads", icon: Users, href: "/crm/leads" },
-      { name: "Clientes", icon: Building2, href: "/crm/customers" },
+      { name: "Empresas", icon: Building2, href: "/companies" },
     ],
   },
   {
@@ -26,6 +26,7 @@ const GROUPED_NAVIGATION = [
       { name: "Catálogo", icon: Library, href: "/catalog" },
       { name: "Tabelas de Preço", icon: CircleDollarSign, href: "/pricing" },
       { name: "Cotações", icon: FileText, href: "/quotations" },
+      { name: "Contratos", icon: FileText, href: "/contracts" },
     ],
   },
   {
@@ -33,8 +34,7 @@ const GROUPED_NAVIGATION = [
     items: [
       { name: "Planos de Serviço", icon: CalendarDays, href: "/service-plans" },
       { name: "Requisitos", icon: ListChecks, href: "/requirements" },
-      { name: "Planejador", icon: Map, href: "/planner" },
-      { name: "Rotas", icon: Route, href: "/routes" },
+      { name: "Rotas", icon: Route, href: "/routing" },
       { name: "Frota", icon: Truck, href: "/fleet" },
       { name: "Motoristas", icon: Users, href: "/drivers" },
     ],
