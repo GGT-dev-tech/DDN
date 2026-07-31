@@ -5,7 +5,7 @@ import { Badge } from "@repo/ui/src/components/ui/badge";
 import { Button } from "@repo/ui/src/components/ui/button";
 import { ArrowLeft, CheckCircle2, Clock, MapPin, Navigation } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@repo/ui/src/lib/utils";
+import { cn } from "@repo/ui";
 import { useParams } from "next/navigation";
 
 export default function RouteDetailsPage() {

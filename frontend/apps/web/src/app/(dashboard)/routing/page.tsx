@@ -13,7 +13,7 @@ import { Badge } from "@repo/ui/src/components/ui/badge";
 import { Button } from "@repo/ui/src/components/ui/button";
 import { ArrowRight, Map as MapIcon, Plus } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@repo/ui/src/lib/utils";
+import { cn } from "@repo/ui";
 
 export default function RoutingPage() {
   const { data: routes, isLoading } = useRoutesQuery();

@@ -14,9 +14,6 @@ const nextConfig: NextConfig = {
 
   // Required for Railway Docker standalone deploy
   output: "standalone",
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
