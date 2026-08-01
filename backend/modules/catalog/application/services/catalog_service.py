@@ -48,6 +48,7 @@ class CatalogService:
 
         await self._repo.add_uom(uom)
         uom.clear_events()
+        await self._session.commit()
         
         return uom.id
 
@@ -83,6 +84,7 @@ class CatalogService:
 
         await self._repo.add_service_attribute(attr)
         attr.clear_events()
+        await self._session.commit()
         
         return attr.id
 
@@ -127,6 +129,7 @@ class CatalogService:
 
         await self._repo.add_service_offering(offering)
         offering.clear_events()
+        await self._session.commit()
         
         return offering.id
 
@@ -162,6 +165,7 @@ class CatalogService:
         
         await self._repo.update_service_offering(offering)
         offering.clear_events()
+        await self._session.commit()
 
     async def activate_service_offering(self, offering_id: uuid.UUID) -> None:
         offering = await self._repo.get_service_offering_by_id(offering_id)
@@ -178,6 +182,7 @@ class CatalogService:
         
         await self._repo.update_service_offering(offering)
         offering.clear_events()
+        await self._session.commit()
 
     async def archive_service_offering(self, offering_id: uuid.UUID) -> None:
         offering = await self._repo.get_service_offering_by_id(offering_id)
@@ -194,3 +199,4 @@ class CatalogService:
         
         await self._repo.update_service_offering(offering)
         offering.clear_events()
+        await self._session.commit()
