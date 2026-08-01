@@ -21,6 +21,7 @@ from modules.quotations.infrastructure.orm_models import QuotationModel, Quotati
 from modules.contracts.infrastructure.orm_models import ContractModel, ContractVersionModel, ContractItemModel, ContractItemSnapshotModel
 from modules.logistics.infrastructure.orm_models import ORMServiceOrder, ORMServiceOrderItem
 from modules.compliance.infrastructure.orm_models import ORMWasteManifest, ORMWasteItem
+from modules.billing.infrastructure.orm_models import ORMInvoice, ORMInvoiceItem
 
 target_metadata = Base.metadata
 

@@ -40,6 +40,12 @@ const GROUPED_NAVIGATION = [
     ]
   },
   {
+    category: 'Financeiro',
+    items: [
+      { name: 'Faturamento', icon: CircleDollarSign, href: '/admin/billing' },
+    ]
+  },
+  {
     category: 'Administração',
     items: [
       { name: 'Configurações', icon: Settings, href: '/admin/settings' },

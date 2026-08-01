@@ -20,6 +20,7 @@ import { MTRsPage } from '../../pages/Operations/MTRs/MTRsPage'
 import { LoginPage } from '../../pages/Auth/LoginPage'
 import { RegisterPage } from '../../pages/Auth/RegisterPage'
 import { LandingPage } from '../../pages/Public/LandingPage'
+import { BillingPage } from '../../pages/Billing/BillingPage'
 import { AuthProvider, useAuth } from './AuthProvider'
 
 function ProtectedRoute() {
@@ -124,6 +125,10 @@ const router = createBrowserRouter([
           {
             path: 'settings',
             element: <SettingsPage />,
+          },
+          {
+            path: 'billing',
+            element: <BillingPage />,
           },
         ],
       },

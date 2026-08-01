@@ -15,6 +15,7 @@ from apps.api_gateway.src.routes.contracts import router as contracts_router
 from apps.api_gateway.src.routes.service_plan import router as service_plan_router
 from modules.logistics.presentation.routes import router as logistics_router
 from modules.compliance.presentation.routes import router as compliance_router
+from modules.billing.presentation.routes import router as billing_router
 
 from modules.core.logging.logger import setup_logging
 from modules.core.observability.middleware import CorrelationMiddleware
@@ -51,6 +52,7 @@ api_v1.include_router(contracts_router)
 api_v1.include_router(service_plan_router)
 api_v1.include_router(logistics_router)
 api_v1.include_router(compliance_router)
+api_v1.include_router(billing_router)
 
 app.include_router(api_v1)
 
