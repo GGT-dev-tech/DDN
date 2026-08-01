@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Annotated
 from uuid import UUID
 
@@ -36,7 +36,7 @@ async def get_current_user_id(request: Request, token: Annotated[str, Depends(oa
             user_id=user_id,
             session_id=None, # To be populated if payload contains session_id
             authentication_method=AuthenticationMethod.JWT,
-            authenticated_at=datetime.now(datetime.UTC)
+            authenticated_at=datetime.now(UTC)
         )
         set_auth_context(auth_ctx)
         

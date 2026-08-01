@@ -1,5 +1,5 @@
 from dataclasses import asdict, dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 from uuid import UUID
 
@@ -54,7 +54,7 @@ class EventEnvelopeFactory:
             id=IdGenerator.generate(),
             name=event.__class__.__name__,
             version=version,
-            occurred_at=datetime.now(datetime.UTC),
+            occurred_at=datetime.now(UTC),
             metadata=metadata,
             payload=asdict(event)
         )
