@@ -5,9 +5,13 @@
   "main": "src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./styles.css": "./src/styles.css",
     "./src/styles.css": "./src/styles.css",
+    "./lib/utils": "./src/lib/utils.ts",
     "./src/lib/utils": "./src/lib/utils.ts",
-    "./src/components/*": "./src/components/*"
+    "./components/*": "./src/components/*",
+    "./src/components/*": "./src/components/*",
+    "./*": "./src/*"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.5.7",
