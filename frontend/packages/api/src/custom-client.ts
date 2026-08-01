@@ -24,15 +24,8 @@ export const customClient = async <T>(
 ): Promise<T> => {
   const { url, method, headers: configHeaders, params, data, signal } = config;
 
-  const API_BASE_URL = typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL
-    ? process.env.NEXT_PUBLIC_API_URL
-    : 'https://backend-production-946f.up.railway.app';
-
-  // Prepend backend URL if relative path
-  let targetUrl = url;
-  if (url.startsWith('/')) {
-    targetUrl = `${API_BASE_URL.replace(/\/$/, '')}${url}`;
-  }
+  const API_BASE_URL = 'https://backend-production-946f.up.railway.app';
+  const targetUrl = url.startsWith('/') ? `${API_BASE_URL}${url}` : url;
 
   // Build query string from params
   let fullUrl = targetUrl;

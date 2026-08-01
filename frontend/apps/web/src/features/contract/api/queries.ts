@@ -28,8 +28,7 @@ export function useContractsQuery() {
   return useQuery({
     queryKey: ["contracts"],
     queryFn: async () => {
-      // Use relative URL — Next.js proxy rewrites /api/* → http://localhost:8000/api/*
-      const response = await fetch("/api/v1/contracts", {
+      const response = await fetch("https://backend-production-946f.up.railway.app/api/v1/contracts", {
         headers: {
           "Content-Type": "application/json",
         },

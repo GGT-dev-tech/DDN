@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const DEFAULT_BACKEND_URL = 'https://backend-production-946f.up.railway.app'
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
