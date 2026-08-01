@@ -15,6 +15,8 @@ import { CatalogPage } from '../../pages/Catalog/CatalogPage'
 import { ServicePlansPage } from '../../pages/Operations/ServicePlans/ServicePlansPage'
 import { RequirementsPage } from '../../pages/Operations/Requirements/RequirementsPage'
 import { PlannerPage } from '../../pages/Operations/Planner/PlannerPage'
+import { ServiceOrdersPage } from '../../pages/Operations/ServiceOrders/ServiceOrdersPage'
+import { MTRsPage } from '../../pages/Operations/MTRs/MTRsPage'
 import { LoginPage } from '../../pages/Auth/LoginPage'
 import { RegisterPage } from '../../pages/Auth/RegisterPage'
 import { LandingPage } from '../../pages/Public/LandingPage'
@@ -62,6 +64,14 @@ const router = createBrowserRouter([
           {
             path: 'service-plans',
             element: <ServicePlansPage />,
+          },
+          {
+            path: 'service-orders',
+            element: <ServiceOrdersPage />,
+          },
+          {
+            path: 'mtrs',
+            element: <MTRsPage />,
           },
           {
             path: 'requirements',

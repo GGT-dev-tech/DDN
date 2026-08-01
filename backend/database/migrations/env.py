@@ -19,6 +19,8 @@ from modules.core.config.settings import settings
 from modules.pricing.infrastructure.orm_models import PricingPriceTableModel, PricingPriceTableItemModel, PricingRuleModel
 from modules.quotations.infrastructure.orm_models import QuotationModel, QuotationItemModel, QuotationItemSnapshotModel
 from modules.contracts.infrastructure.orm_models import ContractModel, ContractVersionModel, ContractItemModel, ContractItemSnapshotModel
+from modules.logistics.infrastructure.orm_models import ORMServiceOrder, ORMServiceOrderItem
+from modules.compliance.infrastructure.orm_models import ORMWasteManifest, ORMWasteItem
 
 target_metadata = Base.metadata
 

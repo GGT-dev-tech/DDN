@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react'
-import { LayoutDashboard, Route, Truck, Users, Settings, FileText, Library, Building2, CircleDollarSign, CalendarDays, ListChecks, Map, BriefcaseBusiness } from 'lucide-react'
+import { LayoutDashboard, Route, Truck, Users, Settings, FileText, Library, Building2, CircleDollarSign, CalendarDays, ListChecks, Map, BriefcaseBusiness, ClipboardList } from 'lucide-react'
 import { cn } from '../../shared/ui/components/Button'
 
 interface SidebarProps extends HTMLAttributes<HTMLDivElement> {}
@@ -30,6 +30,8 @@ const GROUPED_NAVIGATION = [
     category: 'Operação',
     items: [
       { name: 'Planos de Serviço', icon: CalendarDays, href: '/admin/service-plans' },
+      { name: 'Ordens de Serviço', icon: ClipboardList, href: '/admin/service-orders' },
+      { name: 'MTRs', icon: FileText, href: '/admin/mtrs' },
       { name: 'Requisitos', icon: ListChecks, href: '/admin/requirements' },
       { name: 'Planejador', icon: Map, href: '/admin/planner' },
       { name: 'Rotas', icon: Route, href: '/admin/routes' },

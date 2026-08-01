@@ -76,7 +76,7 @@ export function QuotationDetailsPage() {
             } catch (error) {
               console.error('Failed to calculate quotation:', error);
             }
-          }} disabled={isCalculating} variant="secondary" className="gap-2">
+          }} disabled={isCalculating} variant="liquid" className="gap-2">
             <Calculator className="h-4 w-4" />
             {isCalculating ? 'Calculando...' : 'Calcular Preços'}
           </Button>
@@ -100,7 +100,7 @@ export function QuotationDetailsPage() {
               <CardDescription>Serviços cotados para este cliente.</CardDescription>
             </div>
             {quotation.status !== 'APPROVED' && (
-              <Button variant="glass" onClick={() => setIsAddItemModalOpen(true)}>
+              <Button variant="liquid" onClick={() => setIsAddItemModalOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" /> Adicionar Serviço
               </Button>
             )}

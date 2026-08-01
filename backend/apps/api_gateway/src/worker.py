@@ -21,4 +21,5 @@ celery_app.conf.update(
 # Auto-discover tasks in modules
 celery_app.autodiscover_tasks([
     "modules.routing.infrastructure.tasks",
+    "modules.logistics.infrastructure.tasks",
 ])

@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { Button } from '../../../../../shared/ui/components/Button'
-import { Input } from '../../../../../shared/ui/components/Input'
+import { Button } from '../../../shared/ui/components/Button'
+import { Input } from '../../../shared/ui/components/Input'
 import { toast } from 'sonner'
-import { useCreatePricingRuleApiV1PricingRulesPost } from '../../../../../shared/api/generated/pricing/pricing'
+import { useCreatePricingRuleApiV1PricingRulesPost } from '../../../shared/api/generated/pricing/pricing'
 
 interface PricingRuleFormProps {
   onSuccess: () => void
@@ -10,21 +10,21 @@ interface PricingRuleFormProps {
 }
 
 export function PricingRuleForm({ onSuccess, onCancel }: PricingRuleFormProps) {
-  const [name, setName] = useState('')
-  const [value, setValue] = useState('')
+  const [formData, setFormData] = useState<any>({
+    description: '',
+    scope: 'GLOBAL',
+    rule_type: 'PERCENTAGE',
+    unit_price: 0,
+    priority: 1,
+  })
+  
   const { mutateAsync: createRule, isPending } = useCreatePricingRuleApiV1PricingRulesPost()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
       await createRule({
-        data: {
-          name,
-          scope: 'GLOBAL',
-          rule_type: 'PERCENTAGE',
-          value: parseFloat(value),
-          priority: 1,
-        }
+        data: formData
       })
       toast.success('Regra criada com sucesso!')
       onSuccess()
@@ -39,8 +39,8 @@ export function PricingRuleForm({ onSuccess, onCancel }: PricingRuleFormProps) {
         <label className="text-sm font-medium">Nome da Regra</label>
         <Input 
           required 
-          value={name} 
-          onChange={(e) => setName(e.target.value)} 
+          value={formData.description} 
+          onChange={(e: any) => setFormData((prev: any) => ({ ...prev, description: e.target.value }))} 
           placeholder="ex: Desconto de Volume"
         />
       </div>
@@ -50,13 +50,13 @@ export function PricingRuleForm({ onSuccess, onCancel }: PricingRuleFormProps) {
           type="number"
           step="0.01"
           required 
-          value={value} 
-          onChange={(e) => setValue(e.target.value)} 
+          value={formData.unit_price} 
+          onChange={(e: any) => setFormData((prev: any) => ({ ...prev, unit_price: parseFloat(e.target.value) }))} 
           placeholder="ex: -10 para desconto, 15 para acréscimo"
         />
       </div>
       <div className="flex justify-end gap-2 pt-4">
-        <Button type="button" variant="outline" onClick={onCancel}>Cancelar</Button>
+        <Button type="button" variant="liquid" onClick={onCancel}>Cancelar</Button>
         <Button type="submit" disabled={isPending}>
           {isPending ? 'Salvando...' : 'Salvar Regra'}
         </Button>
