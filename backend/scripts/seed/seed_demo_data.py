@@ -68,12 +68,12 @@ async def seed(session: AsyncSession):
     # ------------------------------------------------------------------
     r = await session.execute(text("SELECT id FROM users WHERE id = :id"), {"id": USER_ID})
     if not r.fetchone():
-        pw_hash = hash_password("Admin@123")
+        pw_hash = hash_password("stitchadmin")
         await session.execute(text("""
             INSERT INTO users (id, email, password_hash, status, created_at, updated_at, email_verified_at)
             VALUES (:id, :email, :password_hash, 'ACTIVE', NOW(), NOW(), NOW())
-        """), {"id": USER_ID, "email": "admin@ddn.com.br", "password_hash": pw_hash})
-        print("  ✅ Usuário admin criado  →  admin@ddn.com.br / Admin@123")
+        """), {"id": USER_ID, "email": "admin@stitch.com", "password_hash": pw_hash})
+        print("  ✅ Usuário admin criado  →  admin@stitch.com / stitchadmin")
     else:
         print("  ⏭️  Usuário já existe")
 
@@ -254,8 +254,8 @@ async def seed(session: AsyncSession):
     print("✅  Seed concluído com sucesso!")
     print("="*55)
     print("\n📋 Credenciais de acesso:")
-    print(f"   Email:     admin@ddn.com.br")
-    print(f"   Senha:     Admin@123")
+    print(f"   Email:     admin@stitch.com")
+    print(f"   Senha:     stitchadmin")
     print(f"\n   Tenant ID: {TENANT_ID}")
     print(f"   User ID:   {USER_ID}")
 
