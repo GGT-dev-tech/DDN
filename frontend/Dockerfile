@@ -16,8 +16,9 @@ COPY . .
 RUN npm install
 
 # Build web application
+WORKDIR /app/apps/web
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build --filter=@repo/web...
+RUN npm run build
 
 # ── Stage 2: Production runner ───────────────────────────────
 FROM node:22-alpine AS runner
