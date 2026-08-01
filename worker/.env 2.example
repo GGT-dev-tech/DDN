@@ -1,0 +1,35 @@
+# ==========================================
+# DDN Management - Worker Environment Variables
+# ==========================================
+
+# ------------------------------------------
+# [1] Core Application Info
+# ------------------------------------------
+APP_NAME="DDN Management Worker"
+APP_ENV="development" # development | staging | production
+LOG_LEVEL="INFO" # DEBUG | INFO | WARNING | ERROR
+WORKER_NAME="celery-outbox-worker"
+
+# ------------------------------------------
+# [2] Worker Concurrency & Batching
+# ------------------------------------------
+WORKER_CONCURRENCY=4
+OUTBOX_BATCH_SIZE=100
+OUTBOX_POLL_INTERVAL=1.5
+
+# ------------------------------------------
+# [3] Infrastructure
+# ------------------------------------------
+# Database Connection (PostgreSQL)
+# Note: In Railway, DATABASE_URL is shared and injected automatically.
+DATABASE_URL="postgresql://stitch_admin:secret_postgres@localhost:5432/stitch_db"
+
+# Redis Connection (Celery Broker & Result Backend)
+# Note: In Railway, REDIS_URL is shared and injected automatically.
+REDIS_URL="redis://localhost:6379/0"
+BROKER_URL="redis://localhost:6379/0"
+
+# ------------------------------------------
+# [4] Observability
+# ------------------------------------------
+SENTRY_DSN=""

@@ -3,7 +3,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Modal } from '../../../shared/ui/components/Modal';
 import { Input } from '../../../shared/ui/components/Input';
 import { Button } from '../../../shared/ui/components/Button';
+import { Select } from '../../../shared/ui/components/Select';
 import { useCreateQuotationApiV1QuotationsPost, getListQuotationsApiV1QuotationsGetQueryKey } from '../../../shared/api/generated/quotations/quotations';
+import { useListLeadsApiV1CommercialLeadsGet } from '../../../shared/api/generated/commercial/commercial';
 
 interface AddQuotationModalProps {
   isOpen: boolean;
@@ -12,6 +14,7 @@ interface AddQuotationModalProps {
 
 export function AddQuotationModal({ isOpen, onClose }: AddQuotationModalProps) {
   const queryClient = useQueryClient();
+  const { data: leads = [], isLoading: isLeadsLoading } = useListLeadsApiV1CommercialLeadsGet({ query: { enabled: isOpen } });
   const { mutateAsync: createQuotation, isPending } = useCreateQuotationApiV1QuotationsPost();
   
   const [companyId, setCompanyId] = useState('');
@@ -42,19 +45,25 @@ export function AddQuotationModal({ isOpen, onClose }: AddQuotationModalProps) {
     <Modal isOpen={isOpen} onClose={onClose} title="Create New Quotation">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="space-y-2">
-          <label htmlFor="companyId" className="text-sm font-medium">Company ID (UUID)</label>
-          <Input 
+          <label htmlFor="companyId" className="text-sm font-medium">Cliente</label>
+          <Select 
             id="companyId"
-            type="text"
-            placeholder="e.g. 123e4567-e89b-12d3-a456-426614174000"
             value={companyId}
             onChange={(e) => setCompanyId(e.target.value)}
+            disabled={isLeadsLoading}
+            options={[
+              { label: 'Selecione um cliente...', value: '' },
+              ...leads.map((lead: any) => ({
+                label: lead.company_name,
+                value: lead.id
+              }))
+            ]}
             required
           />
         </div>
         
         <div className="space-y-2">
-          <label htmlFor="validityDays" className="text-sm font-medium">Validity (Days)</label>
+          <label htmlFor="validityDays" className="text-sm font-medium">Validade (Dias)</label>
           <Input 
             id="validityDays"
             type="number"
@@ -67,10 +76,10 @@ export function AddQuotationModal({ isOpen, onClose }: AddQuotationModalProps) {
         
         <div className="flex justify-end gap-2 mt-4">
           <Button type="button" variant="ghost" onClick={onClose}>
-            Cancel
+            Cancelar
           </Button>
           <Button type="submit" disabled={isPending || !companyId || !validityDays}>
-            {isPending ? 'Creating...' : 'Create Quotation'}
+            {isPending ? 'Criando...' : 'Criar Cotação'}
           </Button>
         </div>
       </form>

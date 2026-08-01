@@ -6,7 +6,9 @@ import { FleetPage } from '../../pages/Fleet/FleetPage'
 import { DriversPage } from '../../pages/Drivers/DriversPage'
 import { SettingsPage } from '../../pages/Settings/SettingsPage'
 import { QuotationsPage } from '../../pages/Quotations/QuotationsPage'
+import { QuotationDetailsPage } from '../../pages/Quotations/QuotationDetailsPage'
 import { CustomersPage } from '../../pages/Commercial/CustomersPage'
+import { CustomerDetailsPage } from '../../pages/Commercial/CustomerDetailsPage'
 import { PricingPage } from '../../pages/Pricing/PricingPage'
 import { CatalogPage } from '../../pages/Catalog/CatalogPage'
 import { ServicePlansPage } from '../../pages/Operations/ServicePlans/ServicePlansPage'
@@ -85,12 +87,20 @@ const router = createBrowserRouter([
             element: <CustomersPage />,
           },
           {
+            path: 'customers/:id',
+            element: <CustomerDetailsPage />,
+          },
+          {
             path: 'pricing',
             element: <PricingPage />,
           },
           {
             path: 'quotations',
             element: <QuotationsPage />,
+          },
+          {
+            path: 'quotations/:id',
+            element: <QuotationDetailsPage />,
           },
           {
             path: 'catalog',

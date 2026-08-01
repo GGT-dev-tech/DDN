@@ -4,20 +4,29 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Badge } from '../../shared/ui/components/Badge';
 import { Button } from '../../shared/ui/components/Button';
 import { useListQuotationsApiV1QuotationsGet } from '../../shared/api/generated/quotations/quotations';
+import { useListLeadsApiV1CommercialLeadsGet } from '../../shared/api/generated/commercial/commercial';
 import { AddQuotationModal } from './components/AddQuotationModal';
+import { useNavigate } from 'react-router-dom';
 
 export function QuotationsPage() {
+  const navigate = useNavigate();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { data: quotations, isLoading, isError } = useListQuotationsApiV1QuotationsGet();
+  const { data: leads } = useListLeadsApiV1CommercialLeadsGet();
 
-  if (isLoading) return <div className="p-4">Loading quotations...</div>;
-  if (isError) return <div className="p-4 text-red-500">Error loading quotations.</div>;
+  const getCompanyName = (id: string) => {
+    const lead = leads?.find((l: any) => l.id === id);
+    return lead ? lead.company_name : id;
+  };
+
+  if (isLoading) return <div className="p-4">Carregando cotações...</div>;
+  if (isError) return <div className="p-4 text-red-500">Erro ao carregar cotações.</div>;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Quotations</h1>
-        <Button onClick={() => setIsAddModalOpen(true)}>Create Quotation</Button>
+        <h1 className="text-3xl font-bold tracking-tight">Cotações</h1>
+        <Button onClick={() => setIsAddModalOpen(true)}>Nova Cotação</Button>
       </div>
 
       <AddQuotationModal 
@@ -27,38 +36,38 @@ export function QuotationsPage() {
       
       <Card>
         <CardHeader>
-          <CardTitle>Commercial Proposals</CardTitle>
+          <CardTitle>Propostas Comerciais</CardTitle>
           <CardDescription>
-            Manage and track all customer quotations.
+            Gerencie e acompanhe todas as cotações enviadas aos clientes.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Quotation ID</TableHead>
-                <TableHead>Company ID</TableHead>
+                <TableHead>ID da Cotação</TableHead>
+                <TableHead>Cliente</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Validity</TableHead>
-                <TableHead>Created At</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>Validade</TableHead>
+                <TableHead>Data de Criação</TableHead>
+                <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {quotations?.map((q) => (
                 <TableRow key={q.id}>
-                  <TableCell className="font-medium text-xs font-mono">{q.id}</TableCell>
-                  <TableCell className="text-xs font-mono text-text-secondary">{q.company_id}</TableCell>
+                  <TableCell className="font-medium text-xs font-mono">{q.id.split('-')[0]}</TableCell>
+                  <TableCell className="text-sm">{getCompanyName(q.company_id)}</TableCell>
                   <TableCell>
                     <Badge variant={q.status === 'APPROVED' ? 'default' : 'outline'}>
-                      {q.status}
+                      {q.status === 'DRAFT' ? 'Rascunho' : q.status === 'APPROVED' ? 'Aprovada' : q.status}
                     </Badge>
                   </TableCell>
-                  <TableCell>{q.expires_at ? new Date(q.expires_at).toLocaleDateString() : 'N/A'}</TableCell>
-                  <TableCell>{q.created_at ? new Date(q.created_at).toLocaleDateString() : 'N/A'}</TableCell>
+                  <TableCell>{q.expires_at ? new Date(q.expires_at).toLocaleDateString() : '-'}</TableCell>
+                  <TableCell>{q.created_at ? new Date(q.created_at).toLocaleDateString() : '-'}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost">
-                      View
+                    <Button variant="ghost" onClick={() => navigate(`/admin/quotations/${q.id}`)}>
+                      Ver Detalhes
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -66,7 +75,7 @@ export function QuotationsPage() {
               {!quotations?.length && (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center py-6 text-text-secondary">
-                    No quotations found. Create one to get started.
+                    Nenhuma cotação encontrada. Crie uma para começar.
                   </TableCell>
                 </TableRow>
               )}

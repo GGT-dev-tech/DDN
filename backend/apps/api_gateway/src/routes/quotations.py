@@ -64,6 +64,7 @@ async def create_quotation(
 
 
 from modules.quotations.application.use_cases.list_quotations import ListQuotations, QuotationResponse
+from modules.quotations.application.use_cases.get_quotation import GetQuotation
 
 @router.get("", response_model=list[QuotationResponse])
 async def list_quotations(
@@ -73,6 +74,20 @@ async def list_quotations(
     repo = QuotationRepository(session)
     use_case = ListQuotations(repo)
     return await use_case.execute(tenant_id)
+
+
+@router.get("/{quotation_id}", response_model=QuotationResponse)
+async def get_quotation(
+    quotation_id: uuid.UUID,
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    session = Depends(get_db_session)
+) -> QuotationResponse:
+    repo = QuotationRepository(session)
+    use_case = GetQuotation(repo)
+    quotation = await use_case.execute(tenant_id, quotation_id)
+    if not quotation:
+        raise HTTPException(status_code=404, detail="Quotation not found")
+    return quotation
 
 
 @router.post("/{quotation_id}/items")

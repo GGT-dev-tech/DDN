@@ -215,6 +215,98 @@ export function useListQuotationsApiV1QuotationsGet<TData = Awaited<ReturnType<t
 
 
 /**
+ * @summary Get Quotation
+ */
+export const getQuotationApiV1QuotationsQuotationIdGet = (
+    quotationId: string,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<QuotationResponse>(
+      {url: `/api/v1/quotations/${quotationId}`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetQuotationApiV1QuotationsQuotationIdGetQueryKey = (quotationId: string,) => {
+    return [
+    `/api/v1/quotations/${quotationId}`
+    ] as const;
+    }
+
+
+export const getGetQuotationApiV1QuotationsQuotationIdGetQueryOptions = <TData = Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>, TError = HTTPValidationError>(quotationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetQuotationApiV1QuotationsQuotationIdGetQueryKey(quotationId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>> = ({ signal }) => getQuotationApiV1QuotationsQuotationIdGet(quotationId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: quotationId !== null && quotationId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetQuotationApiV1QuotationsQuotationIdGetQueryResult = NonNullable<Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>>
+export type GetQuotationApiV1QuotationsQuotationIdGetQueryError = HTTPValidationError
+
+
+export function useGetQuotationApiV1QuotationsQuotationIdGet<TData = Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>, TError = HTTPValidationError>(
+ quotationId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>,
+          TError,
+          Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetQuotationApiV1QuotationsQuotationIdGet<TData = Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>, TError = HTTPValidationError>(
+ quotationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>,
+          TError,
+          Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetQuotationApiV1QuotationsQuotationIdGet<TData = Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>, TError = HTTPValidationError>(
+ quotationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Quotation
+ */
+
+export function useGetQuotationApiV1QuotationsQuotationIdGet<TData = Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>, TError = HTTPValidationError>(
+ quotationId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getQuotationApiV1QuotationsQuotationIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetQuotationApiV1QuotationsQuotationIdGetQueryOptions(quotationId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * @summary Add Quotation Item
  */
 export const addQuotationItemApiV1QuotationsQuotationIdItemsPost = (

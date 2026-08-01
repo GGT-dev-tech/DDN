@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../shared/ui/components/Card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../shared/ui/components/Table'
 import { Badge } from '../../shared/ui/components/Badge'
@@ -11,6 +12,7 @@ import { Plus, Building2 } from 'lucide-react'
 import { useListLeadsApiV1CommercialLeadsGet } from '../../shared/api/generated/commercial/commercial'
 
 export function CustomersPage() {
+  const navigate = useNavigate()
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const { data: leads = [], isLoading, refetch } = useListLeadsApiV1CommercialLeadsGet()
 
@@ -49,6 +51,7 @@ export function CustomersPage() {
                   <TableHead>Contato</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -61,6 +64,11 @@ export function CustomersPage() {
                       <Badge variant="outline">
                         {lead.status === 'new' ? 'Novo' : lead.status}
                       </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button variant="ghost" size="sm" onClick={() => navigate(`/admin/customers/${lead.id}`)}>
+                        Ver Perfil
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
