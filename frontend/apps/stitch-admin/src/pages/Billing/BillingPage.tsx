@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../shared/ui/components/Card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../shared/ui/components/Table'
 import { Badge } from '../../shared/ui/components/Badge'
-import { Button } from '../../../../shared/ui/components/Button' // using proper path later if needed, we'll use relative
+import { Button } from '../../shared/ui/components/Button'
 import { EmptyState } from '../../shared/ui/components/EmptyState'
 import { useListInvoicesApiV1BillingInvoicesGet, useGenerateDailyBillingApiV1BillingGenerateDailyPost } from '../../shared/api/generated/billing/billing'
-import { FileText, Play, CheckCircle2, ChevronDown, ChevronRight, DollarSign } from 'lucide-react'
+import { FileText, Play, CheckCircle2, ChevronDown, ChevronRight } from 'lucide-react'
 import { toast } from 'sonner'
 import { format } from 'date-fns'
 
@@ -36,7 +36,7 @@ export function BillingPage() {
         reference_date: format(new Date(), 'yyyy-MM-dd')
       }
     }, {
-      onSuccess: (res) => {
+      onSuccess: (res: any) => {
         toast.success(`Faturamento diário executado! ${res.invoice_ids.length} faturas geradas.`)
         refetch()
       },

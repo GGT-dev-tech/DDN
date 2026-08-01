@@ -1,12 +1,10 @@
 import { useState } from 'react'
-import { Modal } from '../../../../shared/ui/components/Modal'
-import { Button } from '../../../../shared/ui/components/Button'
-import { Input } from '../../../../shared/ui/components/Input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../shared/ui/components/Select'
-import { Card, CardContent } from '../../../../shared/ui/components/Card'
-import { MapPin, Truck, CheckCircle2, ChevronRight, AlertCircle, PackageSearch } from 'lucide-react'
+import { Modal } from '../../../shared/ui/components/Modal'
+import { Button } from '../../../shared/ui/components/Button'
+import { Card, CardContent } from '../../../shared/ui/components/Card'
+import { MapPin, Truck, CheckCircle2, ChevronRight, PackageSearch } from 'lucide-react'
 import { toast } from 'sonner'
-import { Badge } from '../../../../shared/ui/components/Badge'
+import { Badge } from '../../../shared/ui/components/Badge'
 
 interface DispatchWizardProps {
   isOpen: boolean
@@ -96,7 +94,7 @@ export function DispatchWizard({ isOpen, onClose, route }: DispatchWizardProps) 
                       <p className="text-xs text-muted-foreground">{lead.distance}</p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="sm">Adicionar à Rota</Button>
+                  <Button variant="ghost">Adicionar à Rota</Button>
                 </div>
               ))}
             </div>

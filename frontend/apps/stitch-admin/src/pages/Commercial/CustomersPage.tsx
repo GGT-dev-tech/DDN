@@ -64,7 +64,7 @@ export function CustomersPage() {
                     <TableCell>{lead.email || '-'}</TableCell>
                     <TableCell>{lead.address || '-'}</TableCell>
                     <TableCell>
-                      {lead.source_id ? <Badge variant="secondary">{lead.source_id}</Badge> : '-'}
+                      {lead.source_id ? <Badge variant="outline">{lead.source_id}</Badge> : '-'}
                     </TableCell>
                     <TableCell>
                       <Badge variant="outline">

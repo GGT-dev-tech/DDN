@@ -158,7 +158,7 @@ export function RoutesPage() {
                           <div className="flex items-center justify-between gap-4">
                             {routeStatusBadge(route.status)}
                             {route.status === 'PLANNED' && (
-                                <Button size="sm" variant="outline" className="h-7 text-xs" onClick={(e) => { e.stopPropagation(); setDispatchRoute(route); }}>
+                                <Button variant="glass" className="h-7 text-xs" onClick={(e) => { e.stopPropagation(); setDispatchRoute(route); }}>
                                     <Send className="mr-1.5 h-3 w-3" />
                                     Despachar
                                 </Button>
