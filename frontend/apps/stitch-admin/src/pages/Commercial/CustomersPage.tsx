@@ -50,6 +50,8 @@ export function CustomersPage() {
                   <TableHead>Empresa</TableHead>
                   <TableHead>Contato</TableHead>
                   <TableHead>Email</TableHead>
+                  <TableHead>Endereço</TableHead>
+                  <TableHead>Origem</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
@@ -60,6 +62,10 @@ export function CustomersPage() {
                     <TableCell className="font-medium">{lead.company_name}</TableCell>
                     <TableCell>{lead.contact_name}</TableCell>
                     <TableCell>{lead.email || '-'}</TableCell>
+                    <TableCell>{lead.address || '-'}</TableCell>
+                    <TableCell>
+                      {lead.source_id ? <Badge variant="secondary">{lead.source_id}</Badge> : '-'}
+                    </TableCell>
                     <TableCell>
                       <Badge variant="outline">
                         {lead.status === 'new' ? 'Novo' : lead.status}
