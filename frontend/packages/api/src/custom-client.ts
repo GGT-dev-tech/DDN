@@ -24,8 +24,18 @@ export const customClient = async <T>(
 ): Promise<T> => {
   const { url, method, headers: configHeaders, params, data, signal } = config;
 
+  const API_BASE_URL = typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL
+    ? process.env.NEXT_PUBLIC_API_URL
+    : 'https://backend-production-946f.up.railway.app';
+
+  // Prepend backend URL if relative path
+  let targetUrl = url;
+  if (url.startsWith('/')) {
+    targetUrl = `${API_BASE_URL.replace(/\/$/, '')}${url}`;
+  }
+
   // Build query string from params
-  let fullUrl = url;
+  let fullUrl = targetUrl;
   if (params && Object.keys(params).length > 0) {
     const searchParams = new URLSearchParams();
     for (const [key, value] of Object.entries(params)) {
@@ -33,7 +43,7 @@ export const customClient = async <T>(
         searchParams.append(key, String(value));
       }
     }
-    fullUrl = `${url}?${searchParams.toString()}`;
+    fullUrl = `${targetUrl}?${searchParams.toString()}`;
   }
 
   const headers = new Headers(configHeaders as HeadersInit | undefined);
