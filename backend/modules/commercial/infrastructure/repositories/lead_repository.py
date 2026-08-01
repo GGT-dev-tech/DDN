@@ -21,6 +21,9 @@ class LeadRepository:
             email=lead.email,
             phone=lead.phone,
             source_id=lead.source_id,
+            address=lead.address,
+            latitude=lead.latitude,
+            longitude=lead.longitude,
             created_at=lead.created_at,
             updated_at=lead.updated_at
         )
@@ -47,6 +50,9 @@ class LeadRepository:
             email=db_lead.email,
             phone=db_lead.phone,
             source_id=db_lead.source_id,
+            address=db_lead.address,
+            latitude=db_lead.latitude,
+            longitude=db_lead.longitude,
             created_at=db_lead.created_at,
             updated_at=db_lead.updated_at
         )
@@ -65,6 +71,9 @@ class LeadRepository:
             db_lead.email = lead.email
             db_lead.phone = lead.phone
             db_lead.source_id = lead.source_id
+            db_lead.address = lead.address
+            db_lead.latitude = lead.latitude
+            db_lead.longitude = lead.longitude
             db_lead.updated_at = lead.updated_at
 
     async def list_leads(self, tenant_id: UUID) -> list[Lead]:
@@ -82,6 +91,9 @@ class LeadRepository:
                 email=db_lead.email,
                 phone=db_lead.phone,
                 source_id=db_lead.source_id,
+                address=db_lead.address,
+                latitude=db_lead.latitude,
+                longitude=db_lead.longitude,
                 created_at=db_lead.created_at,
                 updated_at=db_lead.updated_at
             ) for db_lead in models

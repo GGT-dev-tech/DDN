@@ -24,7 +24,10 @@ class LeadService:
         contact_name: str,
         email: str | None = None,
         phone: str | None = None,
-        source_id: str | None = None
+        source_id: str | None = None,
+        address: str | None = None,
+        latitude: float | None = None,
+        longitude: float | None = None
     ) -> Lead:
         lead = Lead.register(
             tenant_id=tenant_id,
@@ -32,13 +35,17 @@ class LeadService:
             contact_name=contact_name,
             email=email,
             phone=phone,
-            source_id=source_id
+            source_id=source_id,
+            address=address,
+            latitude=latitude,
+            longitude=longitude
         )
         await self.lead_repo.add(lead)
         await self.lead_repo.session.commit()
         return lead
 
     async def list_leads(self, tenant_id: UUID) -> list[Lead]:
+        return await self.lead_repo.list_leads(tenant_id)
 
     async def qualify_lead(self, tenant_id: UUID, lead_id: UUID) -> Lead:
         lead = await self.lead_repo.get_by_id(tenant_id, lead_id)

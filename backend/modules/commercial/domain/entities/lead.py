@@ -29,11 +29,14 @@ class Lead(AggregateRoot):
     email: str | None = None
     phone: str | None = None
     source_id: str | None = None
+    address: str | None = None
+    latitude: float | None = None
+    longitude: float | None = None
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
     @classmethod
-    def register(cls, tenant_id: UUID, company_name: str, contact_name: str, email: str | None = None, phone: str | None = None, source_id: str | None = None) -> "Lead":
+    def register(cls, tenant_id: UUID, company_name: str, contact_name: str, email: str | None = None, phone: str | None = None, source_id: str | None = None, address: str | None = None, latitude: float | None = None, longitude: float | None = None) -> "Lead":
         lead = cls(
             id=IdGenerator.generate(),
             tenant_id=tenant_id,
@@ -42,7 +45,10 @@ class Lead(AggregateRoot):
             status=LeadStatus.NEW,
             email=email,
             phone=phone,
-            source_id=source_id
+            source_id=source_id,
+            address=address,
+            latitude=latitude,
+            longitude=longitude
         )
         lead.add_event(LeadRegistered(lead_id=lead.id, tenant_id=lead.tenant_id))
         return lead

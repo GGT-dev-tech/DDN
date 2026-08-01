@@ -22,6 +22,9 @@ class CommercialLead(TenantScopedEntity):
     email: Mapped[str | None] = mapped_column(String(255), nullable=True)
     phone: Mapped[str | None] = mapped_column(String(50), nullable=True)
     source_id: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    address: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    latitude: Mapped[float | None] = mapped_column(Float, nullable=True)
+    longitude: Mapped[float | None] = mapped_column(Float, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 

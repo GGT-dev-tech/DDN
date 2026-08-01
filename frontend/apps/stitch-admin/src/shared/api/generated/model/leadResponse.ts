@@ -10,5 +10,9 @@ export interface LeadResponse {
   company_name: string;
   contact_name: string;
   email?: string | null;
+  phone?: string | null;
   status: string;
+  address?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
 }

@@ -41,6 +41,9 @@ class LeadRegisterRequest(BaseModel):
     email: str | None = None
     phone: str | None = None
     source_id: str | None = None
+    address: str | None = None
+    latitude: float | None = None
+    longitude: float | None = None
 
 class LeadResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -48,7 +51,11 @@ class LeadResponse(BaseModel):
     company_name: str
     contact_name: str
     email: str | None = None
+    phone: str | None = None
     status: str
+    address: str | None = None
+    latitude: float | None = None
+    longitude: float | None = None
 
 class MatchLeadRequest(BaseModel):
     company_id: UUID | None = None
@@ -77,7 +84,10 @@ async def register_lead(
         contact_name=req.contact_name,
         email=req.email,
         phone=req.phone,
-        source_id=req.source_id
+        source_id=req.source_id,
+        address=req.address,
+        latitude=req.latitude,
+        longitude=req.longitude
     )
     return lead
 

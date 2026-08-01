@@ -11,4 +11,7 @@ export interface LeadRegisterRequest {
   email?: string | null;
   phone?: string | null;
   source_id?: string | null;
+  address?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
 }

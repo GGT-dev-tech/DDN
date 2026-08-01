@@ -14,6 +14,9 @@ export function CustomerForm({ onSuccess, onCancel }: CustomerFormProps) {
   const [contactName, setContactName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const [address, setAddress] = useState('')
+  const [latitude, setLatitude] = useState('')
+  const [longitude, setLongitude] = useState('')
   
   const { mutate, isPending } = useRegisterLeadApiV1CommercialLeadsPost()
 
@@ -31,7 +34,10 @@ export function CustomerForm({ onSuccess, onCancel }: CustomerFormProps) {
           company_name: companyName,
           contact_name: contactName,
           email: email || undefined,
-          phone: phone || undefined
+          phone: phone || undefined,
+          address: address || undefined,
+          latitude: latitude ? parseFloat(latitude) : undefined,
+          longitude: longitude ? parseFloat(longitude) : undefined
         } 
       },
       {
@@ -85,6 +91,41 @@ export function CustomerForm({ onSuccess, onCancel }: CustomerFormProps) {
             placeholder="(11) 99999-9999" 
             value={phone}
             onChange={(e: any) => setPhone(e.target.value)}
+            disabled={isPending}
+          />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium">Endereço Completo</label>
+        <Input 
+          placeholder="Rua Exemplo, 123, Bairro, Cidade - Estado" 
+          value={address}
+          onChange={(e: any) => setAddress(e.target.value)}
+          disabled={isPending}
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Latitude</label>
+          <Input 
+            type="number"
+            step="any"
+            placeholder="-23.5505" 
+            value={latitude}
+            onChange={(e: any) => setLatitude(e.target.value)}
+            disabled={isPending}
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Longitude</label>
+          <Input 
+            type="number"
+            step="any"
+            placeholder="-46.6333" 
+            value={longitude}
+            onChange={(e: any) => setLongitude(e.target.value)}
             disabled={isPending}
           />
         </div>
