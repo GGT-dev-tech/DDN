@@ -66,7 +66,7 @@ export function CustomersPage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="sm" onClick={() => navigate(`/admin/customers/${lead.id}`)}>
+                      <Button variant="ghost" onClick={() => navigate(`/admin/customers/${lead.id}`)}>
                         Ver Perfil
                       </Button>
                     </TableCell>

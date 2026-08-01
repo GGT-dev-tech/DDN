@@ -54,7 +54,7 @@ export function QuotationDetailsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={() => navigate('/admin/quotations')}>
+        <Button variant="ghost" onClick={() => navigate('/admin/quotations')} className="p-2">
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div className="flex-1">
@@ -85,7 +85,7 @@ export function QuotationDetailsPage() {
               <CardDescription>Serviços cotados para este cliente.</CardDescription>
             </div>
             {quotation.status !== 'APPROVED' && (
-              <Button variant="outline" onClick={() => setIsAddItemModalOpen(true)}>
+              <Button variant="glass" onClick={() => setIsAddItemModalOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" /> Adicionar Serviço
               </Button>
             )}

@@ -5,7 +5,7 @@ import { Input } from '../../../shared/ui/components/Input';
 import { Button } from '../../../shared/ui/components/Button';
 import { Select } from '../../../shared/ui/components/Select';
 import { useAddQuotationItemApiV1QuotationsQuotationIdItemsPost, getGetQuotationApiV1QuotationsQuotationIdGetQueryKey } from '../../../shared/api/generated/quotations/quotations';
-import { useListCatalogEntitiesApiV1CatalogGet } from '../../../shared/api/generated/catalog/catalog';
+import { useListOfferingsApiV1CatalogOfferingsGet, useListUomsApiV1CatalogUomGet } from '../../../shared/api/generated/catalog/catalog';
 
 interface AddQuotationItemModalProps {
   isOpen: boolean;
@@ -15,7 +15,9 @@ interface AddQuotationItemModalProps {
 
 export function AddQuotationItemModal({ isOpen, onClose, quotationId }: AddQuotationItemModalProps) {
   const queryClient = useQueryClient();
-  const { data: catalog, isLoading: isCatalogLoading } = useListCatalogEntitiesApiV1CatalogGet({ query: { enabled: isOpen } });
+  const { data: offerings, isLoading: isOfferingsLoading } = useListOfferingsApiV1CatalogOfferingsGet({ query: { enabled: isOpen } });
+  const { data: uomData, isLoading: isUomLoading } = useListUomsApiV1CatalogUomGet({ query: { enabled: isOpen } });
+  const isCatalogLoading = isOfferingsLoading || isUomLoading;
   const { mutateAsync: addItem, isPending } = useAddQuotationItemApiV1QuotationsQuotationIdItemsPost();
   
   const [serviceOfferingId, setServiceOfferingId] = useState('');
@@ -44,8 +46,8 @@ export function AddQuotationItemModal({ isOpen, onClose, quotationId }: AddQuota
     }
   };
 
-  const services = catalog?.services || [];
-  const uoms = catalog?.uoms || [];
+  const services = offerings || [];
+  const uoms = uomData || [];
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Adicionar Serviço">

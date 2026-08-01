@@ -8,7 +8,6 @@ import { SettingsPage } from '../../pages/Settings/SettingsPage'
 import { QuotationsPage } from '../../pages/Quotations/QuotationsPage'
 import { QuotationDetailsPage } from '../../pages/Quotations/QuotationDetailsPage'
 import { ContractsPage } from '../../pages/Contracts/ContractsPage'
-import { ServicePlansPage } from '../../pages/ServicePlans/ServicePlansPage'
 import { CustomersPage } from '../../pages/Commercial/CustomersPage'
 import { CustomerDetailsPage } from '../../pages/Commercial/CustomerDetailsPage'
 import { PricingPage } from '../../pages/Pricing/PricingPage'
@@ -111,14 +110,6 @@ const router = createBrowserRouter([
           {
             path: 'catalog',
             element: <CatalogPage />,
-          },
-          {
-            path: 'service-plans',
-            element: <ServicePlansPage />,
-          },
-          {
-            path: 'drivers',
-            element: <SettingsPage />,
           },
           {
             path: 'settings',

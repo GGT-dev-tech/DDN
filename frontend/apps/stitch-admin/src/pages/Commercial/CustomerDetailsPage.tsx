@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useGetLeadApiV1CommercialLeadsLeadIdGet } from '../../shared/api/generated/commercial/commercial';
+import { useListLeadsApiV1CommercialLeadsGet } from '../../shared/api/generated/commercial/commercial';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../shared/ui/components/Card';
 import { Badge } from '../../shared/ui/components/Badge';
 import { Button } from '../../shared/ui/components/Button';
@@ -12,10 +12,10 @@ export function CustomerDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  // Fetch customer details
-  const { data: customer, isLoading, isError } = useGetLeadApiV1CommercialLeadsLeadIdGet(id as string, {
-    query: { enabled: !!id }
-  });
+  // Fetch customer details from the list
+  const { data: leads, isLoading, isError } = useListLeadsApiV1CommercialLeadsGet();
+  const customerResult = leads?.find(l => l.id === id);
+  const customer = customerResult as any;
 
   // Fetch quotations for this customer
   // Since the generated hook might not have a company_id filter yet, we fetch all and filter in frontend for now.
@@ -43,7 +43,7 @@ export function CustomerDetailsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={() => navigate('/admin/customers')}>
+        <Button variant="ghost" onClick={() => navigate('/admin/customers')} className="p-2">
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div>
@@ -143,7 +143,7 @@ export function CustomerDetailsPage() {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="sm" onClick={() => navigate(`/admin/quotations/${quotation.id}`)}>
+                        <Button variant="ghost" onClick={() => navigate(`/admin/quotations/${quotation.id}`)}>
                           Ver Detalhes
                         </Button>
                       </TableCell>
