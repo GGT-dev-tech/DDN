@@ -17,6 +17,18 @@ def get_contract_service(session: AsyncSession = Depends(get_db_session)) -> Con
     outbox = OutboxRepository(session)
     return ContractService(session, repo, outbox)
 
+from modules.contracts.application.use_cases.list_contracts import ListContracts, ContractResponse
+from modules.identity.dependencies import require_tenant
+
+@router.get("", response_model=list[ContractResponse])
+async def list_contracts(
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    session: AsyncSession = Depends(get_db_session)
+) -> list[ContractResponse]:
+    repo = ContractRepository(session)
+    use_case = ListContracts(repo)
+    return await use_case.execute(tenant_id)
+
 class ContractCreateRequest(BaseModel):
     tenant_id: uuid.UUID
     company_id: uuid.UUID

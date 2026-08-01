@@ -18,6 +18,8 @@ export * from './calculateQuotationRequest';
 export * from './collectionPointRequest';
 export * from './contractCreateRequest';
 export * from './contractCreateRequestItemsItem';
+export * from './contractItemResponse';
+export * from './contractResponse';
 export * from './createContractApiV1ContractsPost200';
 export * from './createPriceTableApiV1PricingTablesPost201';
 export * from './createPricingRuleApiV1PricingRulesPost201';

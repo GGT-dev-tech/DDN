@@ -25,6 +25,77 @@ class ContractRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
+    async def list_contracts(self, tenant_id: uuid.UUID) -> list[Contract]:
+        stmt = (
+            select(ContractModel)
+            .options(
+                selectinload(ContractModel.versions)
+                .selectinload(ContractVersionModel.items)
+                .selectinload(ContractItemModel.snapshot)
+            )
+            .where(ContractModel.tenant_id == tenant_id)
+            .order_by(ContractModel.created_at.desc())
+        )
+        
+        result = await self.session.execute(stmt)
+        models = result.scalars().all()
+        
+        contracts = []
+        for model in models:
+            terms = ContractTerm(
+                effective_date=model.effective_date,
+                expiration_date=model.expiration_date,
+                renewal_rule=model.renewal_rule,
+                adjustment_rule=model.adjustment_rule
+            )
+                
+            contract = Contract(  # type: ignore 
+                company_id=model.company_id,
+                tenant_id=model.tenant_id,
+                terms=terms,
+                quotation_id=model.quotation_id,
+                id=model.id,
+                status=model.status,
+                created_at=model.created_at,
+                updated_at=model.updated_at
+            )
+            
+            for version_model in model.versions:
+                version = ContractVersion(
+                    version_number=version_model.version_number,
+                    id=version_model.id,
+                    created_at=version_model.created_at
+                )
+                
+                for item_model in version_model.items:
+                    snapshot = None
+                    if item_model.snapshot:
+                        snapshot = ContractItemSnapshot(  # type: ignore 
+                            service_name=item_model.snapshot.service_name,
+                            unit_name=item_model.snapshot.unit_name,
+                            base_unit_price=Money(item_model.snapshot.base_unit_price, item_model.snapshot.currency),
+                            total_base_price=Money(item_model.snapshot.total_base_price, item_model.snapshot.currency),
+                            surcharges_total=Money(item_model.snapshot.surcharges_total, item_model.snapshot.currency),
+                            discounts_total=Money(item_model.snapshot.discounts_total, item_model.snapshot.currency),
+                            final_price=Money(item_model.snapshot.final_price, item_model.snapshot.currency),
+                            pricing_reference=item_model.snapshot.pricing_reference
+                        )
+                        
+                    item = ContractItem(
+                        id=item_model.id,
+                        service_offering_id=item_model.service_offering_id,
+                        unit_of_measure_id=item_model.unit_of_measure_id,
+                        quantity=item_model.quantity,
+                        snapshot=snapshot
+                    )
+                    version.items.append(item)
+                    
+                contract.versions.append(version)
+            
+            contracts.append(contract)
+            
+        return contracts
+
     async def get_contract_by_id(self, contract_id: uuid.UUID) -> Contract | None:
         stmt = (
             select(ContractModel)
