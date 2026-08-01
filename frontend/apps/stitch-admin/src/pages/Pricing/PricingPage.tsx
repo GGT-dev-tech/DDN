@@ -6,12 +6,14 @@ import { Button } from '../../shared/ui/components/Button'
 import { Modal } from '../../shared/ui/components/Modal'
 import { EmptyState } from '../../shared/ui/components/EmptyState'
 import { PriceTableForm } from './components/PriceTableForm'
+import { PricingRuleForm } from './components/PricingRuleForm'
 import { Plus, CircleDollarSign } from 'lucide-react'
 
 import { useListPriceTablesApiV1PricingTablesGet } from '../../shared/api/generated/pricing/pricing'
 
 export function PricingPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [isAddRuleModalOpen, setIsAddRuleModalOpen] = useState(false)
   const { data: tables = [], isLoading, refetch } = useListPriceTablesApiV1PricingTablesGet()
 
   return (
@@ -84,6 +86,33 @@ export function PricingPage() {
           )}
         </CardContent>
       </Card>
+      <Card>
+        <CardHeader className="flex flex-row items-start justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <CircleDollarSign className="h-5 w-5 text-muted-foreground" />
+              <CardTitle>Regras de Preços</CardTitle>
+            </div>
+            <CardDescription>
+              Regras que aplicam descontos ou acréscimos dinamicamente.
+            </CardDescription>
+          </div>
+          <Button onClick={() => setIsAddRuleModalOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" /> Nova Regra
+          </Button>
+        </CardHeader>
+        <CardContent>
+          <EmptyState
+            title="Nenhuma regra configurada"
+            description="Crie regras de precificação para aplicar multiplicadores automaticamente nas cotações."
+            action={
+              <Button onClick={() => setIsAddRuleModalOpen(true)}>
+                <Plus className="mr-2 h-4 w-4" /> Nova Regra
+              </Button>
+            }
+          />
+        </CardContent>
+      </Card>
 
       <Modal 
         isOpen={isAddModalOpen} 
@@ -96,6 +125,17 @@ export function PricingPage() {
             refetch()
           }} 
           onCancel={() => setIsAddModalOpen(false)} 
+        />
+      </Modal>
+
+      <Modal 
+        isOpen={isAddRuleModalOpen} 
+        onClose={() => setIsAddRuleModalOpen(false)}
+        title="Nova Regra de Precificação"
+      >
+        <PricingRuleForm 
+          onSuccess={() => setIsAddRuleModalOpen(false)} 
+          onCancel={() => setIsAddRuleModalOpen(false)} 
         />
       </Modal>
     </div>
