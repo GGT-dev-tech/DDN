@@ -30,6 +30,8 @@ DATABASE_URL = os.getenv(
     "DATABASE_URL",
     "postgresql+asyncpg://postgres:postgres@localhost:5432/ddn_management"
 )
+if DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
 
 # IDs fixos para facilitar reprodutibilidade
 TENANT_ID = "00000000-0000-0000-0000-000000000001"
