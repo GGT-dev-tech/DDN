@@ -4,15 +4,7 @@ import type { NextRequest } from 'next/server'
 const DEFAULT_BACKEND_URL = 'https://backend-production-946f.up.railway.app'
 
 export function middleware(request: NextRequest) {
-  const { pathname, search } = request.nextUrl
-
-  // Dynamic runtime proxy for API routes
-  if (pathname.startsWith('/api')) {
-    const backendHost = process.env.BACKEND_URL || DEFAULT_BACKEND_URL
-    const targetUrl = new URL(`${pathname}${search}`, backendHost)
-    return NextResponse.rewrite(targetUrl)
-  }
-
+  const { pathname } = request.nextUrl
   const token = request.cookies.get('access_token')?.value
   const isLoginPage = pathname === '/login'
 
@@ -29,10 +21,9 @@ export function middleware(request: NextRequest) {
   return NextResponse.next()
 }
 
-// Match API routes and protected page routes
+// Match all routes except static assets and API routes
 export const config = {
   matcher: [
-    '/api/:path*',
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 }
