@@ -28,6 +28,7 @@ import type {
   AssignRouteResourcesRequestDTO,
   CreateRouteRequestDTO,
   HTTPValidationError,
+  OptimizeRoutesRequest,
   RequirementDTO,
   RouteResponseDTO
 } from '../model';
@@ -432,3 +433,69 @@ export function useListRequirementsApiV1RoutingRequirementsGet<TData = Awaited<R
 
 
 
+/**
+ * Triggers asynchronous routing optimization via Celery Worker.
+ * Returns 202 Accepted.
+ * @summary Trigger Route Optimization
+ */
+export const triggerRouteOptimizationApiV1RoutingOptimizePost = (
+    optimizeRoutesRequest: OptimizeRoutesRequest,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<unknown>(
+      {url: `/api/v1/routing/optimize`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: optimizeRoutesRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getTriggerRouteOptimizationApiV1RoutingOptimizePostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof triggerRouteOptimizationApiV1RoutingOptimizePost>>, TError,{data: OptimizeRoutesRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof triggerRouteOptimizationApiV1RoutingOptimizePost>>, TError,{data: OptimizeRoutesRequest}, TContext> => {
+
+const mutationKey = ['triggerRouteOptimizationApiV1RoutingOptimizePost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof triggerRouteOptimizationApiV1RoutingOptimizePost>>, {data: OptimizeRoutesRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  triggerRouteOptimizationApiV1RoutingOptimizePost(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TriggerRouteOptimizationApiV1RoutingOptimizePostMutationResult = NonNullable<Awaited<ReturnType<typeof triggerRouteOptimizationApiV1RoutingOptimizePost>>>
+    export type TriggerRouteOptimizationApiV1RoutingOptimizePostMutationBody = OptimizeRoutesRequest
+    export type TriggerRouteOptimizationApiV1RoutingOptimizePostMutationError = HTTPValidationError
+
+    /**
+ * @summary Trigger Route Optimization
+ */
+export const useTriggerRouteOptimizationApiV1RoutingOptimizePost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof triggerRouteOptimizationApiV1RoutingOptimizePost>>, TError,{data: OptimizeRoutesRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof triggerRouteOptimizationApiV1RoutingOptimizePost>>,
+        TError,
+        {data: OptimizeRoutesRequest},
+        TContext
+      > => {
+      return useMutation(getTriggerRouteOptimizationApiV1RoutingOptimizePostMutationOptions(options), queryClient);
+    }

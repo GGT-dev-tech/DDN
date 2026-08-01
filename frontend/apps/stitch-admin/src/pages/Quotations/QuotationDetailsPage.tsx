@@ -1,10 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useGetQuotationApiV1QuotationsQuotationIdGet, useApproveQuotationApiV1QuotationsQuotationIdApprovePost, getGetQuotationApiV1QuotationsQuotationIdGetQueryKey } from '../../shared/api/generated/quotations/quotations';
+import { useGetQuotationApiV1QuotationsQuotationIdGet, useApproveQuotationApiV1QuotationsQuotationIdApprovePost, getGetQuotationApiV1QuotationsQuotationIdGetQueryKey, useCalculateQuotationApiV1QuotationsQuotationIdCalculatePost } from '../../shared/api/generated/quotations/quotations';
 import { useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../shared/ui/components/Card';
 import { Badge } from '../../shared/ui/components/Badge';
 import { Button } from '../../shared/ui/components/Button';
-import { ArrowLeft, CheckCircle, FileText, Plus } from 'lucide-react';
+import { ArrowLeft, CheckCircle, FileText, Plus, Calculator } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../shared/ui/components/Table';
 import { EmptyState } from '../../shared/ui/components/EmptyState';
 import { useState } from 'react';
@@ -23,6 +23,7 @@ export function QuotationDetailsPage() {
   });
 
   const { mutateAsync: approveQuotation, isPending: isApproving } = useApproveQuotationApiV1QuotationsQuotationIdApprovePost();
+  const { mutateAsync: calculateQuotation, isPending: isCalculating } = useCalculateQuotationApiV1QuotationsQuotationIdCalculatePost();
 
   const handleApprove = async () => {
     if (!id) return;
@@ -67,8 +68,22 @@ export function QuotationDetailsPage() {
           </div>
         </div>
         
+        {quotation.status === 'DRAFT' && quotation.items.length > 0 && (
+          <Button onClick={async () => {
+            try {
+              await calculateQuotation({ quotationId: id!, data: { reference_date: new Date().toISOString().split('T')[0] } });
+              queryClient.invalidateQueries({ queryKey: getGetQuotationApiV1QuotationsQuotationIdGetQueryKey(id!) });
+            } catch (error) {
+              console.error('Failed to calculate quotation:', error);
+            }
+          }} disabled={isCalculating} variant="secondary" className="gap-2">
+            <Calculator className="h-4 w-4" />
+            {isCalculating ? 'Calculando...' : 'Calcular Preços'}
+          </Button>
+        )}
+        
         {quotation.status !== 'APPROVED' && (
-          <Button onClick={handleApprove} disabled={isApproving || quotation.items.length === 0} className="gap-2">
+          <Button onClick={handleApprove} disabled={isApproving || quotation.items.length === 0 || quotation.status === 'DRAFT'} className="gap-2">
             <CheckCircle className="h-4 w-4" />
             {isApproving ? 'Aprovando...' : 'Aprovar Cotação'}
           </Button>

@@ -5,10 +5,11 @@ import { EmptyState } from '../../../shared/ui/components/EmptyState'
 import { Badge } from '../../../shared/ui/components/Badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../shared/ui/components/Table'
 import { Map, Zap, RefreshCw, CalendarCheck, Truck, Users, AlertCircle } from 'lucide-react'
-import { useListRoutesApiV1RoutingRoutesGet, useListRequirementsApiV1RoutingRequirementsGet } from '../../../shared/api/generated/routing/routing'
+import { useListRoutesApiV1RoutingRoutesGet, useListRequirementsApiV1RoutingRequirementsGet, useTriggerRouteOptimizationApiV1RoutingOptimizePost, getListRoutesApiV1RoutingRoutesGetQueryKey, getListRequirementsApiV1RoutingRequirementsGetQueryKey } from '../../../shared/api/generated/routing/routing'
 import { useListVehiclesApiV1FleetVehiclesGet, useListDriversApiV1FleetDriversGet } from '../../../shared/api/generated/fleet/fleet'
 import { AddRouteModal } from '../../Routes/components/AddRouteModal'
 import { toast } from 'sonner'
+import { useQueryClient } from '@tanstack/react-query'
 
 function requirementStatusBadge(status: string) {
   switch (status) {
@@ -37,14 +38,34 @@ export function PlannerPage() {
   const { data: requirements = [], isLoading: loadingRequirements } = useListRequirementsApiV1RoutingRequirementsGet()
   const { data: vehicles     = [] }                                  = useListVehiclesApiV1FleetVehiclesGet()
   const { data: drivers      = [] }                                  = useListDriversApiV1FleetDriversGet()
+  
+  const queryClient = useQueryClient()
+  const { mutateAsync: optimizeRoutes, isPending: isOptimizing } = useTriggerRouteOptimizationApiV1RoutingOptimizePost()
 
   const pendingRequirements  = (requirements as any[]).filter(r => r.status === 'PENDING')
   const availableVehicles    = (vehicles     as any[]).filter(v => v.status === 'ACTIVE')
   const availableDrivers     = (drivers      as any[]).filter(d => d.status === 'AVAILABLE')
   const todayRoutes          = (routes       as any[]).filter(r => r.status !== 'COMPLETED' && r.status !== 'CANCELLED')
 
-  const handleAutoRoute = () => {
-    toast.info('Roteirização automática estará disponível em breve. Por enquanto, crie rotas manualmente.')
+  const handleAutoRoute = async () => {
+    if (pendingRequirements.length === 0) {
+      toast.info('Não há requisitos pendentes para otimizar.')
+      return
+    }
+    try {
+      const today = new Date().toISOString().split('T')[0]
+      await optimizeRoutes({ data: { target_date: today } })
+      toast.success('Otimização de rotas iniciada com sucesso! As rotas aparecerão em breve.')
+      
+      // Optativamente invalidar depois de um tempo
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: getListRoutesApiV1RoutingRoutesGetQueryKey() })
+        queryClient.invalidateQueries({ queryKey: getListRequirementsApiV1RoutingRequirementsGetQueryKey() })
+      }, 5000)
+    } catch (error) {
+      console.error(error)
+      toast.error('Erro ao iniciar a roteirização automática.')
+    }
   }
 
   return (
@@ -56,8 +77,9 @@ export function PlannerPage() {
           <p className="text-muted-foreground mt-1">Geração automática e manual de rotas para execução.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="glass" onClick={handleAutoRoute}>
-            <Zap className="mr-2 h-4 w-4" /> Roteirização Automática
+          <Button variant="glass" onClick={handleAutoRoute} disabled={isOptimizing || pendingRequirements.length === 0}>
+            {isOptimizing ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <Zap className="mr-2 h-4 w-4" />} 
+            {isOptimizing ? 'Roteirizando...' : 'Roteirização Automática'}
           </Button>
           <Button onClick={() => setIsAddRouteOpen(true)}>
             <Map className="mr-2 h-4 w-4" /> Nova Rota Manual

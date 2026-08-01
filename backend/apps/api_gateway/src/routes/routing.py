@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 import uuid
+from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from database.session import get_db_session as get_db
 from modules.core.context import ContextAccessor
@@ -113,3 +114,22 @@ async def list_requirements(
 ):
     use_case = ListRequirementsUseCase(req_repo)
     return await use_case.execute(tenant_id)
+
+
+class OptimizeRoutesRequest(BaseModel):
+    target_date: str
+
+from modules.routing.infrastructure.tasks.routing_optimizer import optimize_routes_task
+
+@router.post("/optimize", status_code=status.HTTP_202_ACCEPTED)
+async def trigger_route_optimization(
+    request: OptimizeRoutesRequest,
+    tenant_id: uuid.UUID = Depends(require_tenant)
+):
+    """
+    Triggers asynchronous routing optimization via Celery Worker.
+    Returns 202 Accepted.
+    """
+    # Enqueue task in Celery
+    task = optimize_routes_task.delay(str(tenant_id), request.target_date)
+    return {"message": "Route optimization started", "task_id": task.id}

@@ -44,6 +44,7 @@ export * from './modulesCatalogApplicationUseCasesListCatalogEntitiesServiceAttr
 export * from './modulesCatalogApplicationUseCasesListCatalogEntitiesServiceOfferingResponse';
 export * from './modulesCatalogApplicationUseCasesListCatalogEntitiesUOMResponse';
 export * from './moneyResponse';
+export * from './optimizeRoutesRequest';
 export * from './priceCalculationRequest';
 export * from './priceCalculationResponse';
 export * from './priceTableCreateRequest';
