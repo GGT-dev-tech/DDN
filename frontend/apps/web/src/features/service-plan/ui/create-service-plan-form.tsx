@@ -46,7 +46,7 @@ export function CreateServicePlanForm({
 
   const mutation = useMutation({
     mutationFn: async (data: ServicePlanFormValues) => {
-      const response = await fetch("/api/v1/service-plans", {
+      const response = await fetch("https://backend-production-946f.up.railway.app/api/v1/service-plans", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
