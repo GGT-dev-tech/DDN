@@ -84,8 +84,8 @@ async def seed(session: AsyncSession):
     )
     if not r.fetchone():
         await session.execute(text("""
-            INSERT INTO tenant_users (id, user_id, tenant_id, role, created_at, updated_at)
-            VALUES (:id, :user_id, :tenant_id, 'ADMIN', NOW(), NOW())
+            INSERT INTO tenant_users (id, user_id, tenant_id, role, created_at)
+            VALUES (:id, :user_id, :tenant_id, 'ADMIN', NOW())
         """), {"id": str(uuid7()), "user_id": USER_ID, "tenant_id": TENANT_ID})
         print("  ✅ TenantUser vinculado")
     else:
@@ -167,8 +167,7 @@ async def seed(session: AsyncSession):
                 INSERT INTO commercial_leads
                   (id, tenant_id, company_name, contact_name, email, phone, status, created_at, updated_at)
                 VALUES
-                  (:id, :tid, :company, :contact, :email, :phone,
-                   CAST(:status AS commercial_lead_status), NOW(), NOW())
+                  (:id, :tid, :company, :contact, :email, :phone, :status, NOW(), NOW())
             """), {
                 "id": str(uuid7()), "tid": TENANT_ID,
                 "company": company, "contact": contact,
@@ -200,7 +199,7 @@ async def seed(session: AsyncSession):
             uom_ids[symbol] = uid
             await session.execute(text("""
                 INSERT INTO catalog_units_of_measure (id, tenant_id, symbol, name, base_type, created_at, updated_at)
-                VALUES (:id, :tid, :symbol, :name, CAST(:base_type AS catalog_uom_base_type), NOW(), NOW())
+                VALUES (:id, :tid, :symbol, :name, :base_type, NOW(), NOW())
             """), {
                 "id": uid, "tid": TENANT_ID,
                 "symbol": symbol, "name": name, "base_type": base_type
@@ -238,9 +237,7 @@ async def seed(session: AsyncSession):
                     INSERT INTO catalog_service_offerings
                       (id, tenant_id, name, description, category, status, default_uom_id, effective_date, created_at, updated_at)
                     VALUES
-                      (:id, :tid, :name, :desc, :category,
-                       CAST('ACTIVE' AS catalog_service_status),
-                       :uom_id, CURRENT_DATE, NOW(), NOW())
+                      (:id, :tid, :name, :desc, :category, 'ACTIVE', :uom_id, CURRENT_DATE, NOW(), NOW())
                 """), {
                     "id": str(uuid7()), "tid": TENANT_ID,
                     "name": name, "desc": desc, "category": category,
