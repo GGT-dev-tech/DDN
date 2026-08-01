@@ -10,7 +10,7 @@ import type { NextConfig } from "next";
 const BACKEND_URL = process.env.BACKEND_URL || "https://backend-production-946f.up.railway.app";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@repo/api", "@repo/ui"],
+  transpilePackages: ["@repo/api"],
 
   // Required for Railway Docker standalone deploy
   output: "standalone",

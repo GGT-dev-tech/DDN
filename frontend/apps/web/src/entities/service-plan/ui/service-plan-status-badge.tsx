@@ -1,4 +1,4 @@
-import { Badge } from "@repo/ui/src/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { ServicePlanStatus } from "../model/types";
 
 interface Props {

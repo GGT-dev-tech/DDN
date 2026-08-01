@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import { Search, Bell } from "lucide-react";
 import { useWorkspaceStore } from "../../../entities/workspace/model/store";
-import { Button } from "@repo/ui/src/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { AppBreadcrumbs } from "./breadcrumbs";
 import { UserMenu } from "./user-menu";
 import { CommandPalette } from "./command-palette";

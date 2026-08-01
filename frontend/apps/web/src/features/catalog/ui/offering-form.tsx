@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { Button } from '@repo/ui/src/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -12,8 +12,8 @@ import {
   FormLabel,
   FormMessage,
   FormDescription,
-} from '@repo/ui/src/components/ui/form';
-import { Input } from '@repo/ui/src/components/ui/input';
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import { useCreateOffering } from '../../../entities/catalog/api/use-create-offering';
 import { useUomList } from '../../../entities/catalog/api/use-uom-list';
 import { toast } from 'sonner';

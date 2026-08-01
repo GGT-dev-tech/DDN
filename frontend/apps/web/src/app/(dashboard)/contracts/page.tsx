@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useContractsQuery } from "../../../features/contract/api/queries";
 import { ContractTable } from "../../../entities/contract/ui/contract-table";
 import { CreateContractForm } from "../../../features/contract/ui/create-contract-form";
-import { Button } from "@repo/ui/src/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -13,7 +13,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@repo/ui/src/components/ui/sheet";
+} from "@/components/ui/sheet";
 import { Plus } from "lucide-react";
 
 export default function ContractsPage() {

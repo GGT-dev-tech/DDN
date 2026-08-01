@@ -8,7 +8,7 @@ import { ServicePlanTable } from "../../../entities/service-plan/ui/service-plan
 import { ServicePlanDrawer } from "../../../entities/service-plan/ui/service-plan-drawer";
 import { CreateServicePlanForm } from "../../../features/service-plan/ui/create-service-plan-form";
 import { ServicePlan } from "../../../entities/service-plan/model/types";
-import { Button } from "@repo/ui/src/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -16,7 +16,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@repo/ui/src/components/ui/sheet";
+} from "@/components/ui/sheet";
 
 function ServicePlansContent() {
   const searchParams = useSearchParams();

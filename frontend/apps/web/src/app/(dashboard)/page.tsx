@@ -10,12 +10,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/ui/src/components/ui/card";
-import { Badge } from "@repo/ui/src/components/ui/badge";
-import { Button } from "@repo/ui/src/components/ui/button";
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Skeleton,
-} from "@repo/ui/src/components/ui/skeleton";
+} from "@/components/ui/skeleton";
 import {
   Building2,
   FileText,

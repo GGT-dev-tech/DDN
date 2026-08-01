@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Route, Truck, Users, Settings, FileText, Library, Building2, CircleDollarSign, CalendarDays, ListChecks, Map, ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import { useWorkspaceStore } from "../../../entities/workspace/model/store";
-import { Button } from "@repo/ui/src/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 const GROUPED_NAVIGATION = [
   {

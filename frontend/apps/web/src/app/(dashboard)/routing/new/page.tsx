@@ -1,7 +1,7 @@
 import { CreateRouteForm } from "@/features/routing/ui/create-route-form";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@repo/ui/src/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 export default function NewRoutePage() {
   return (

@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { useUomList } from '../../../entities/catalog/api/use-uom-list';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/src/components/ui/table';
-import { Button } from '@repo/ui/src/components/ui/button';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@repo/ui/src/components/ui/sheet';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Plus } from 'lucide-react';
 import { UomForm } from './uom-form';
 

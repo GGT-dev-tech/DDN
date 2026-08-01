@@ -1,7 +1,7 @@
 "use client";
 
 import { CreateContractForm } from "../../../../features/contract/ui/create-contract-form";
-import { Button } from "@repo/ui/src/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 

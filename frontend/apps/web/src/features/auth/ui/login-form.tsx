@@ -11,9 +11,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@repo/ui/src/components/ui/form";
-import { Input } from "@repo/ui/src/components/ui/input"; // Wait, I didn't add the Input component to shadcn yet! I will just use standard HTML input for now.
-import { Button } from "@repo/ui/src/components/ui/button";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input"; // Wait, I didn't add the Input component to shadcn yet! I will just use standard HTML input for now.
+import { Button } from "@/components/ui/button";
 import { useLoginMutation } from "../api/queries";
 
 const loginSchema = z.object({

@@ -1,5 +1,5 @@
 import { MoreHorizontal, Play, Pause } from "lucide-react";
-import { Button } from "@repo/ui/src/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,7 +7,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@repo/ui/src/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import { ServicePlan } from "../../../entities/service-plan/model/types";
 import { usePublishPlanMutation, useSuspendPlanMutation } from "../api/queries";
 import { toast } from "sonner"; // We added sonner in sprint 2

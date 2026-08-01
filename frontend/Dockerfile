@@ -1,48 +1,31 @@
 # ============================================================
-# DDN OS — Frontend (Next.js) — Docker for Railway
-# Uses Turborepo prune to build only @repo/web and its deps.
+# DDN OS — Frontend (Next.js) — Clean Standalone Docker for Railway
 # ============================================================
 
 FROM node:22-alpine AS base
 RUN apk add --no-cache libc6-compat
-RUN npm install -g turbo@2
 
-# ── Stage 1: Prune workspace ─────────────────────────────────
-FROM base AS pruner
-WORKDIR /app
-COPY . .
-RUN turbo prune @repo/web --docker
-
-# ── Stage 2: Install deps & build ───────────────────────────
+# ── Stage 1: Build application ─────────────────────────────
 FROM base AS builder
 WORKDIR /app
 
-COPY --from=pruner /app/out/json/ .
-COPY --from=pruner /app/out/package-lock.json ./package-lock.json
+# Copy full source
+COPY . .
 
-# Install ALL deps (including devDeps needed for build)
-# Using npm install instead of ci to avoid lockfile prune conflicts
+# Install dependencies cleanly
 RUN npm install
 
-COPY --from=pruner /app/out/full/ .
-
-# Build env vars
+# Build web application
 ENV NEXT_TELEMETRY_DISABLED=1
+RUN npm run build --filter=@repo/web...
 
-# BACKEND_URL will be passed at Railway build time as a build arg
-ARG BACKEND_URL
-ENV BACKEND_URL=${BACKEND_URL}
-
-RUN turbo run build --filter=@repo/web...
-
-# ── Stage 3: Production runner ───────────────────────────────
+# ── Stage 2: Production runner ───────────────────────────────
 FROM node:22-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Non-root user for security
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 USER nextjs

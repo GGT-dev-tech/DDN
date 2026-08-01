@@ -1,11 +1,11 @@
 "use client";
 
 import { useRouteQuery } from "../../../../features/routing/api/queries";
-import { Badge } from "@repo/ui/src/components/ui/badge";
-import { Button } from "@repo/ui/src/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle2, Clock, MapPin, Navigation } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@repo/ui";
+import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
 
 export default function RouteDetailsPage() {

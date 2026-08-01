@@ -4,7 +4,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@repo/ui/src/components/ui/sheet";
+} from "@/components/ui/sheet";
 import { ServicePlan } from "../model/types";
 import { ServicePlanStatusBadge } from "./service-plan-status-badge";
 import { ServicePlanActions } from "../../../features/service-plan/ui/service-plan-actions";

@@ -5,7 +5,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@repo/ui/src/components/ui/table";
+} from "@/components/ui/table";
 import { Contract } from "../model/types";
 import { ContractStatusBadge } from "./contract-status-badge";
 

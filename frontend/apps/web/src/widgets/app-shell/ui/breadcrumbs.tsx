@@ -8,7 +8,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@repo/ui/src/components/ui/breadcrumb";
+} from "@/components/ui/breadcrumb";
 import React from "react";
 import Link from "next/link";
 

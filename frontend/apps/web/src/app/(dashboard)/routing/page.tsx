@@ -8,12 +8,12 @@ import {
   TableHead, 
   TableHeader, 
   TableRow 
-} from "@repo/ui/src/components/ui/table";
-import { Badge } from "@repo/ui/src/components/ui/badge";
-import { Button } from "@repo/ui/src/components/ui/button";
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { ArrowRight, Map as MapIcon, Plus } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@repo/ui";
+import { cn } from "@/lib/utils";
 
 export default function RoutingPage() {
   const { data: routes, isLoading } = useRoutesQuery();
