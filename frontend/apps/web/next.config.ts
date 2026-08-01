@@ -7,7 +7,7 @@ import type { NextConfig } from "next";
  * Set this as a Railway variable:
  *   BACKEND_URL = https://<your-backend-service>.up.railway.app
  */
-const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:8000";
+const BACKEND_URL = process.env.BACKEND_URL || "https://backend-production-946f.up.railway.app";
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@repo/api", "@repo/ui"],
