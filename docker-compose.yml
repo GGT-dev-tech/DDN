@@ -49,6 +49,13 @@ services:
     restart: unless-stopped
     env_file:
       - backend/.env.local
+    environment:
+      DATABASE_URL: postgresql+asyncpg://stitch_admin:secret_postgres@postgres:5432/stitch_db
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_HOST: postgres
+      REDIS_HOST: redis
+      DATABASE_PORT: "5432"
+      REDIS_PORT: "6379"
     ports:
       - "8000:8000"
     depends_on:
@@ -67,6 +74,13 @@ services:
     restart: unless-stopped
     env_file:
       - worker/.env.example
+    environment:
+      DATABASE_URL: postgresql+asyncpg://stitch_admin:secret_postgres@postgres:5432/stitch_db
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_HOST: postgres
+      REDIS_HOST: redis
+      DATABASE_PORT: "5432"
+      REDIS_PORT: "6379"
     depends_on:
       postgres:
         condition: service_healthy
