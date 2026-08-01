@@ -3,6 +3,8 @@ from decimal import Decimal
 from typing import Optional, List
 from uuid import UUID
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from modules.pricing.domain.entities.price_table import PriceTable
 from modules.pricing.domain.entities.pricing_rule import PricingRule
 from modules.pricing.domain.value_objects import Money, PricingRuleScope, PricingRuleType, PriceCalculationResult
