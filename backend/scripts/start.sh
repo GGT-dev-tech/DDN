@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 
 echo "Running Database Migrations..."
 uv run alembic upgrade head

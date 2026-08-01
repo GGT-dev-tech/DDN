@@ -16,6 +16,7 @@ RUN chmod +x scripts/start.sh
 
 ENV PYTHONPATH=/app
 ENV ENVIRONMENT=production
+ENV PYTHONUNBUFFERED=1
 
 # Run the application through the start script
 CMD ["./scripts/start.sh"]
