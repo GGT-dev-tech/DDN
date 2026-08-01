@@ -78,12 +78,19 @@ export function VehicleForm({ onSuccess, onCancel }: VehicleFormProps) {
         
         <div className="space-y-2">
           <label className="text-sm font-medium">Tipo de Veículo *</label>
-          <Input 
-            placeholder="Ex: Caminhão Compactador, Furgão..." 
+          <select
+            className="flex h-10 w-full rounded-md border border-zinc-800 bg-zinc-900/50 px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             value={vehicleType}
             onChange={e => setVehicleType(e.target.value)}
             disabled={isPending}
-          />
+            required
+          >
+            <option value="" disabled>Selecione um tipo...</option>
+            <option value="COMPACTOR_TRUCK">Caminhão Compactador</option>
+            <option value="ROLL_OFF_TRUCK">Roll-Off</option>
+            <option value="VACUUM_TRUCK">Caminhão Vácuo</option>
+            <option value="VAN">Furgão / Van</option>
+          </select>
         </div>
       </div>
 
