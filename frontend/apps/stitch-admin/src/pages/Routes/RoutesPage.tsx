@@ -6,7 +6,8 @@ import { Button } from '../../shared/ui/components/Button';
 import { EmptyState } from '../../shared/ui/components/EmptyState';
 import { useListRoutesApiV1RoutingRoutesGet } from '../../shared/api/generated/routing/routing';
 import { AddRouteModal } from './components/AddRouteModal';
-import { Route, Plus, MapPin, Calendar, Truck, ChevronDown, ChevronRight } from 'lucide-react';
+import { DispatchWizard } from './components/DispatchWizard';
+import { Route, Plus, MapPin, Calendar, Truck, ChevronDown, ChevronRight, Send } from 'lucide-react';
 
 function routeStatusBadge(status: string) {
   switch (status) {
@@ -37,6 +38,7 @@ function formatDate(dateStr: string) {
 export function RoutesPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [expandedRouteId, setExpandedRouteId] = useState<string | null>(null);
+  const [dispatchRoute, setDispatchRoute] = useState<any | null>(null);
   const { data: routes = [], isLoading, isError, refetch } = useListRoutesApiV1RoutingRoutesGet();
 
   if (isLoading) return (
@@ -152,7 +154,17 @@ export function RoutesPage() {
                             : '—'
                           }
                         </TableCell>
-                        <TableCell>{routeStatusBadge(route.status)}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center justify-between gap-4">
+                            {routeStatusBadge(route.status)}
+                            {route.status === 'PLANNED' && (
+                                <Button size="sm" variant="outline" className="h-7 text-xs" onClick={(e) => { e.stopPropagation(); setDispatchRoute(route); }}>
+                                    <Send className="mr-1.5 h-3 w-3" />
+                                    Despachar
+                                </Button>
+                            )}
+                          </div>
+                        </TableCell>
                       </TableRow>
 
                       {/* Expanded stops */}
@@ -210,6 +222,12 @@ export function RoutesPage() {
       <AddRouteModal
         isOpen={isAddModalOpen}
         onClose={() => { setIsAddModalOpen(false); refetch(); }}
+      />
+      
+      <DispatchWizard
+        isOpen={!!dispatchRoute}
+        onClose={() => { setDispatchRoute(null); refetch(); }}
+        route={dispatchRoute}
       />
     </div>
   );
