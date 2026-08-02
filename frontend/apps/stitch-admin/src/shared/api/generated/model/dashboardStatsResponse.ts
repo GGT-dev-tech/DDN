@@ -9,4 +9,8 @@ export interface DashboardStatsResponse {
   active_routes: number;
   available_vehicles: number;
   pending_deliveries: number;
+  open_leads?: number;
+  pending_quotations?: number;
+  active_contracts?: number;
+  invoices_today?: number;
 }

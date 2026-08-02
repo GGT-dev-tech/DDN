@@ -7,14 +7,23 @@ import { Modal } from '../../shared/ui/components/Modal'
 import { EmptyState } from '../../shared/ui/components/EmptyState'
 import { PriceTableForm } from './components/PriceTableForm'
 import { PricingRuleForm } from './components/PricingRuleForm'
-import { Plus, CircleDollarSign } from 'lucide-react'
+import { PriceTableItemForm } from './components/PriceTableItemForm'
+import { Plus, CircleDollarSign, ChevronDown, ChevronRight, Package } from 'lucide-react'
 
-import { useListPriceTablesApiV1PricingTablesGet } from '../../shared/api/generated/pricing/pricing'
+import {
+  useListPriceTablesApiV1PricingTablesGet,
+} from '../../shared/api/generated/pricing/pricing'
 
 export function PricingPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isAddRuleModalOpen, setIsAddRuleModalOpen] = useState(false)
+  const [addItemTableId, setAddItemTableId] = useState<string | null>(null)
+  const [expandedTableId, setExpandedTableId] = useState<string | null>(null)
   const { data: tables = [], isLoading, refetch } = useListPriceTablesApiV1PricingTablesGet()
+
+  const toggleExpand = (id: string) => {
+    setExpandedTableId(prev => prev === id ? null : id)
+  }
 
   return (
     <div className="space-y-6">
@@ -25,6 +34,7 @@ export function PricingPage() {
         </div>
       </div>
 
+      {/* Price Tables */}
       <Card>
         <CardHeader className="flex flex-row items-start justify-between">
           <div>
@@ -33,7 +43,7 @@ export function PricingPage() {
               <CardTitle>Tabelas de Preços</CardTitle>
             </div>
             <CardDescription>
-              Crie tabelas padrão ou específicas por cliente.
+              Defina o preço unitário de cada serviço por tabela. Você pode criar tabelas globais ou por cliente.
             </CardDescription>
           </div>
           <Button onClick={() => setIsAddModalOpen(true)}>
@@ -44,35 +54,83 @@ export function PricingPage() {
           {isLoading ? (
             <div className="py-8 text-center text-zinc-500">Carregando...</div>
           ) : tables.length > 0 ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Nome</TableHead>
-                  <TableHead>Validade</TableHead>
-                  <TableHead>Escopo</TableHead>
-                  <TableHead>Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {tables.map((table: any) => (
-                  <TableRow key={table.id}>
-                    <TableCell className="font-medium">{table.name}</TableCell>
-                    <TableCell>
-                      {table.effective_date} 
-                      {table.end_date ? ` até ${table.end_date}` : ' (Atual)'}
-                    </TableCell>
-                    <TableCell>
-                      {table.customer_id ? 'Cliente Específico' : 'Global'}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={table.is_active ? 'default' : 'outline'}>
+            <div className="space-y-2">
+              {tables.map((table: any) => (
+                <div key={table.id} className="border border-border rounded-xl overflow-hidden">
+                  {/* Table row header */}
+                  <div
+                    className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                    onClick={() => toggleExpand(table.id)}
+                  >
+                    <div className="flex items-center gap-3">
+                      {expandedTableId === table.id
+                        ? <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                        : <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                      }
+                      <span className="font-medium text-sm">{table.name}</span>
+                      <Badge variant={table.is_active ? 'default' : 'outline'} className="text-xs">
                         {table.is_active ? 'Ativa' : 'Inativa'}
                       </Badge>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                      {table.customer_id && (
+                        <Badge variant="liquid" className="text-xs">Cliente Específico</Badge>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Package className="h-3.5 w-3.5" />
+                        {table.items?.length ?? 0} itens
+                      </span>
+                      <span>{table.effective_date}</span>
+                      <Button
+                        variant="liquid"
+                        className="h-7 px-2 text-xs"
+                        onClick={(e) => { e.stopPropagation(); setAddItemTableId(table.id); }}
+                      >
+                        <Plus className="h-3 w-3 mr-1" /> Item
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Expanded items */}
+                  {expandedTableId === table.id && (
+                    <div className="border-t border-border bg-black/2 dark:bg-white/2 px-4 py-3">
+                      {table.items && table.items.length > 0 ? (
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Serviço</TableHead>
+                              <TableHead>Unidade</TableHead>
+                              <TableHead className="text-right">Preço Unitário</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {table.items.map((item: any) => (
+                              <TableRow key={item.id}>
+                                <TableCell className="text-sm">{item.service_offering_id}</TableCell>
+                                <TableCell className="text-sm">{item.unit_of_measure_id}</TableCell>
+                                <TableCell className="text-right font-mono text-sm">
+                                  R$ {parseFloat(item.unit_price_amount || item.unit_price?.amount || 0).toFixed(2)}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      ) : (
+                        <div className="text-sm text-muted-foreground text-center py-4">
+                          Nenhum item nesta tabela.{' '}
+                          <button
+                            className="text-brand-400 underline"
+                            onClick={() => setAddItemTableId(table.id)}
+                          >
+                            Adicionar item
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           ) : (
             <EmptyState
               title="Nenhuma tabela de preços"
@@ -86,6 +144,8 @@ export function PricingPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Pricing Rules */}
       <Card>
         <CardHeader className="flex flex-row items-start justify-between">
           <div>
@@ -114,29 +174,41 @@ export function PricingPage() {
         </CardContent>
       </Card>
 
-      <Modal 
-        isOpen={isAddModalOpen} 
+      {/* Modals */}
+      <Modal
+        isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         title="Nova Tabela de Preços"
       >
-        <PriceTableForm 
-          onSuccess={() => {
-            setIsAddModalOpen(false)
-            refetch()
-          }} 
-          onCancel={() => setIsAddModalOpen(false)} 
+        <PriceTableForm
+          onSuccess={() => { setIsAddModalOpen(false); refetch(); }}
+          onCancel={() => setIsAddModalOpen(false)}
         />
       </Modal>
 
-      <Modal 
-        isOpen={isAddRuleModalOpen} 
+      <Modal
+        isOpen={isAddRuleModalOpen}
         onClose={() => setIsAddRuleModalOpen(false)}
         title="Nova Regra de Precificação"
       >
-        <PricingRuleForm 
-          onSuccess={() => setIsAddRuleModalOpen(false)} 
-          onCancel={() => setIsAddRuleModalOpen(false)} 
+        <PricingRuleForm
+          onSuccess={() => setIsAddRuleModalOpen(false)}
+          onCancel={() => setIsAddRuleModalOpen(false)}
         />
+      </Modal>
+
+      <Modal
+        isOpen={!!addItemTableId}
+        onClose={() => setAddItemTableId(null)}
+        title="Adicionar Item à Tabela"
+      >
+        {addItemTableId && (
+          <PriceTableItemForm
+            tableId={addItemTableId}
+            onSuccess={() => { setAddItemTableId(null); refetch(); }}
+            onCancel={() => setAddItemTableId(null)}
+          />
+        )}
       </Modal>
     </div>
   )

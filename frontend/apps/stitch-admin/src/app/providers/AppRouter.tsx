@@ -8,6 +8,7 @@ import { SettingsPage } from '../../pages/Settings/SettingsPage'
 import { QuotationsPage } from '../../pages/Quotations/QuotationsPage'
 import { QuotationDetailsPage } from '../../pages/Quotations/QuotationDetailsPage'
 import { ContractsPage } from '../../pages/Contracts/ContractsPage'
+import { ContractDetailsPage } from '../../pages/Contracts/ContractDetailsPage'
 import { CustomersPage } from '../../pages/Commercial/CustomersPage'
 import { CustomerDetailsPage } from '../../pages/Commercial/CustomerDetailsPage'
 import { PricingPage } from '../../pages/Pricing/PricingPage'
@@ -117,6 +118,10 @@ const router = createBrowserRouter([
           {
             path: 'contracts',
             element: <ContractsPage />,
+          },
+          {
+            path: 'contracts/:id',
+            element: <ContractDetailsPage />,
           },
           {
             path: 'catalog',
