@@ -17,10 +17,23 @@ export default {
         background: {
           primary: 'var(--color-bg-primary)',
           secondary: 'var(--color-bg-secondary)',
+          DEFAULT: 'var(--color-bg-primary)',
         },
+        text: {
+          primary: 'var(--color-text-primary)',
+          secondary: 'var(--color-text-secondary)',
+        },
+        border: 'var(--color-border)',
         surface: {
           glass: 'rgba(255, 255, 255, 0.7)',
           liquid: 'rgba(255, 255, 255, 0.4)',
+          DEFAULT: 'var(--color-bg-secondary)',
+        },
+        card: {
+          DEFAULT: 'var(--color-bg-primary)',
+        },
+        muted: {
+          foreground: 'var(--color-text-secondary)',
         }
       },
       boxShadow: {

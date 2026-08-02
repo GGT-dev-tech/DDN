@@ -40,10 +40,9 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
       onClose={onClose}
       className={cn(
         'backdrop:bg-black/50 backdrop:backdrop-blur-sm',
-        'fixed inset-0 m-auto w-full max-w-lg rounded-2xl bg-background-primary p-0 shadow-lg text-text-primary',
+        'fixed inset-0 m-auto w-full max-w-lg rounded-2xl bg-white dark:bg-zinc-900 p-0 shadow-xl border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100',
         'transition-all duration-300 ease-out',
         'open:animate-in open:fade-in-0 open:zoom-in-95',
-        'closed:animate-out closed:fade-out-0 closed:zoom-out-95',
         className
       )}
     >
