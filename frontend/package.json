@@ -21,5 +21,8 @@
     "workerDirectory": [
       "apps/web/public"
     ]
+  },
+  "dependencies": {
+    "date-fns": "^4.4.0"
   }
 }

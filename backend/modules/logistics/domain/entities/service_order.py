@@ -4,7 +4,7 @@ from typing import Any
 
 from modules.core.domain.aggregate import AggregateRoot
 from modules.core.domain.id_generator import IdGenerator
-from modules.logistics.domain.value_objects.status import ServiceOrderStatus
+from modules.logistics.domain.value_objects.status import ServiceOrderStatus, ServiceOrderWorkflowType
 
 
 class ServiceOrderItem:
@@ -34,10 +34,12 @@ class ServiceOrder(AggregateRoot):
         company_id: uuid.UUID,
         scheduled_date: date,
         status: ServiceOrderStatus,
+        workflow_type: ServiceOrderWorkflowType = ServiceOrderWorkflowType.WAREHOUSE_STORAGE,
         items: list[ServiceOrderItem] | None = None,
         vehicle_id: uuid.UUID | None = None,
         driver_id: uuid.UUID | None = None,
         route_id: uuid.UUID | None = None,
+        destination_id: uuid.UUID | None = None,
         completed_at: datetime | None = None,
         created_at: datetime | None = None,
         updated_at: datetime | None = None,
@@ -49,10 +51,12 @@ class ServiceOrder(AggregateRoot):
         self.company_id = company_id
         self.scheduled_date = scheduled_date
         self.status = status
+        self.workflow_type = workflow_type
         self.items = items or []
         self.vehicle_id = vehicle_id
         self.driver_id = driver_id
         self.route_id = route_id
+        self.destination_id = destination_id
         self.completed_at = completed_at
         self.created_at = created_at or datetime.now(UTC)
         self.updated_at = updated_at or datetime.now(UTC)
@@ -87,7 +91,9 @@ class ServiceOrder(AggregateRoot):
             company_id=company_id,
             scheduled_date=scheduled_date,
             status=ServiceOrderStatus.PENDING,
+            workflow_type=ServiceOrderWorkflowType.WAREHOUSE_STORAGE,
             items=order_items,
+            destination_id=None
         )
 
     def mark_as_scheduled(self, route_id: uuid.UUID, vehicle_id: uuid.UUID | None = None, driver_id: uuid.UUID | None = None) -> None:

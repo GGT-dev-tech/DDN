@@ -26,7 +26,8 @@ import type {
 import type {
   HTTPValidationError,
   ListServiceOrdersApiV1LogisticsOrdersGetParams,
-  ServiceOrderSchema
+  ServiceOrderSchema,
+  UpdateServiceOrderSchema
 } from '../model';
 
 import { customAxiosInstance } from '../../axios';
@@ -207,4 +208,69 @@ export const useTriggerGenerateDailyOrdersApiV1LogisticsOrdersGenerateDailyPost 
         TContext
       > => {
       return useMutation(getTriggerGenerateDailyOrdersApiV1LogisticsOrdersGenerateDailyPostMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary Update Service Order
+ */
+export const updateServiceOrderApiV1LogisticsOrdersOrderIdPatch = (
+    orderId: string,
+    updateServiceOrderSchema: UpdateServiceOrderSchema,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<ServiceOrderSchema>(
+      {url: `/api/v1/logistics/orders/${orderId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateServiceOrderSchema, signal
+    },
+      options);
+    }
+
+
+
+
+export const getUpdateServiceOrderApiV1LogisticsOrdersOrderIdPatchMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateServiceOrderApiV1LogisticsOrdersOrderIdPatch>>, TError,{orderId: string;data: UpdateServiceOrderSchema}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateServiceOrderApiV1LogisticsOrdersOrderIdPatch>>, TError,{orderId: string;data: UpdateServiceOrderSchema}, TContext> => {
+
+const mutationKey = ['updateServiceOrderApiV1LogisticsOrdersOrderIdPatch'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateServiceOrderApiV1LogisticsOrdersOrderIdPatch>>, {orderId: string;data: UpdateServiceOrderSchema}> = (props) => {
+          const {orderId,data} = props ?? {};
+
+          return  updateServiceOrderApiV1LogisticsOrdersOrderIdPatch(orderId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateServiceOrderApiV1LogisticsOrdersOrderIdPatchMutationResult = NonNullable<Awaited<ReturnType<typeof updateServiceOrderApiV1LogisticsOrdersOrderIdPatch>>>
+    export type UpdateServiceOrderApiV1LogisticsOrdersOrderIdPatchMutationBody = UpdateServiceOrderSchema
+    export type UpdateServiceOrderApiV1LogisticsOrdersOrderIdPatchMutationError = HTTPValidationError
+
+    /**
+ * @summary Update Service Order
+ */
+export const useUpdateServiceOrderApiV1LogisticsOrdersOrderIdPatch = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateServiceOrderApiV1LogisticsOrdersOrderIdPatch>>, TError,{orderId: string;data: UpdateServiceOrderSchema}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateServiceOrderApiV1LogisticsOrdersOrderIdPatch>>,
+        TError,
+        {orderId: string;data: UpdateServiceOrderSchema},
+        TContext
+      > => {
+      return useMutation(getUpdateServiceOrderApiV1LogisticsOrdersOrderIdPatchMutationOptions(options), queryClient);
     }

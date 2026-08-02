@@ -5,7 +5,7 @@ from sqlalchemy import Date, DateTime, Enum, ForeignKey, Numeric, String, Text, 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database.core.base import Base
-from modules.logistics.domain.value_objects.status import ServiceOrderStatus
+from modules.logistics.domain.value_objects.status import ServiceOrderStatus, ServiceOrderWorkflowType
 
 
 class ORMServiceOrder(Base):
@@ -18,10 +18,12 @@ class ORMServiceOrder(Base):
     
     scheduled_date: Mapped[date] = mapped_column(Date, index=True)
     status: Mapped[ServiceOrderStatus] = mapped_column(Enum(ServiceOrderStatus, name="serviceorderstatus"))
+    workflow_type: Mapped[ServiceOrderWorkflowType] = mapped_column(Enum(ServiceOrderWorkflowType, name="serviceorderworkflowtype"), server_default="WAREHOUSE_STORAGE")
     
     vehicle_id: Mapped[uuid.UUID | None] = mapped_column(Uuid, nullable=True)
     driver_id: Mapped[uuid.UUID | None] = mapped_column(Uuid, nullable=True)
     route_id: Mapped[uuid.UUID | None] = mapped_column(Uuid, nullable=True)
+    destination_id: Mapped[uuid.UUID | None] = mapped_column(Uuid, nullable=True)
     
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))

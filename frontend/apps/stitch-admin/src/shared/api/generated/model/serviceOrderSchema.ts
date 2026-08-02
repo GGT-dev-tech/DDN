@@ -13,8 +13,10 @@ export interface ServiceOrderSchema {
   company_id: string;
   scheduled_date: string;
   status: string;
-  vehicle_id: string | null;
-  driver_id: string | null;
-  route_id: string | null;
+  vehicle_id?: string | null;
+  driver_id?: string | null;
+  route_id?: string | null;
+  workflow_type?: string;
+  destination_id?: string | null;
   items: ServiceOrderItemSchema[];
 }

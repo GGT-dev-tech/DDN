@@ -29,9 +29,11 @@ class ServiceOrderSchema(BaseModel):
     company_id: uuid.UUID
     scheduled_date: date
     status: str
-    vehicle_id: uuid.UUID | None
-    driver_id: uuid.UUID | None
-    route_id: uuid.UUID | None
+    vehicle_id: uuid.UUID | None = None
+    driver_id: uuid.UUID | None = None
+    route_id: uuid.UUID | None = None
+    workflow_type: str = "WAREHOUSE_STORAGE"
+    destination_id: uuid.UUID | None = None
     items: list[ServiceOrderItemSchema]
     model_config = ConfigDict(from_attributes=True)
 
@@ -65,3 +67,48 @@ async def trigger_generate_daily_orders():
     """
     task = generate_daily_service_orders_task.delay()
     return {"message": "Task triggered", "task_id": task.id}
+
+class UpdateServiceOrderSchema(BaseModel):
+    status: str | None = None
+    workflow_type: str | None = None
+    destination_id: uuid.UUID | None = None
+
+@router.patch("/orders/{order_id}", response_model=ServiceOrderSchema)
+async def update_service_order(
+    order_id: uuid.UUID,
+    data: UpdateServiceOrderSchema,
+    tenant_id: Annotated[uuid.UUID, Depends(require_tenant)],
+    session: Annotated[AsyncSession, Depends(get_db_session)]
+):
+    from modules.logistics.domain.value_objects.status import ServiceOrderStatus, ServiceOrderWorkflowType
+    
+    stmt = (
+        select(ORMServiceOrder)
+        .where(ORMServiceOrder.id == order_id, ORMServiceOrder.tenant_id == tenant_id)
+        .options(selectinload(ORMServiceOrder.items))
+    )
+    result = await session.execute(stmt)
+    order = result.scalar_one_or_none()
+    
+    if not order:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Service Order not found")
+        
+    if data.status:
+        try:
+            order.status = ServiceOrderStatus(data.status)
+        except ValueError:
+            pass
+            
+    if data.workflow_type:
+        try:
+            order.workflow_type = ServiceOrderWorkflowType(data.workflow_type)
+        except ValueError:
+            pass
+            
+    if data.destination_id is not None:
+        order.destination_id = data.destination_id
+        
+    await session.commit()
+    await session.refresh(order)
+    return order

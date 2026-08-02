@@ -22,6 +22,8 @@ from modules.contracts.infrastructure.orm_models import ContractModel, ContractV
 from modules.logistics.infrastructure.orm_models import ORMServiceOrder, ORMServiceOrderItem
 from modules.compliance.infrastructure.orm_models import ORMWasteManifest, ORMWasteItem
 from modules.billing.infrastructure.orm_models import ORMInvoice, ORMInvoiceItem
+from modules.commercial.infrastructure.models import CommercialLead, CommercialCompany, CommercialContact, CommercialServiceLocation, CommercialOpportunity
+from modules.fleet.infrastructure.orm_models import VehicleModel, DriverModel
 
 target_metadata = Base.metadata
 

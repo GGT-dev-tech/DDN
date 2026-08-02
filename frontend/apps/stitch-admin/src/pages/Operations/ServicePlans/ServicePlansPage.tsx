@@ -1,9 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../shared/ui/components/Card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../shared/ui/components/Table'
 import { Badge } from '../../../shared/ui/components/Badge'
-import { Button } from '../../../shared/ui/components/Button'
 import { EmptyState } from '../../../shared/ui/components/EmptyState'
-import { Plus, CalendarDays } from 'lucide-react'
+import { CalendarDays } from 'lucide-react'
 import { useListAllPlansApiV1ServicePlansGet } from '../../../shared/api/generated/service-plans/service-plans'
 
 export function ServicePlansPage() {
@@ -28,9 +27,6 @@ export function ServicePlansPage() {
               Planos gerados a partir de contratos para definir as regras de coleta.
             </CardDescription>
           </div>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" /> Novo Plano Manual
-          </Button>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -61,12 +57,7 @@ export function ServicePlansPage() {
           ) : (
             <EmptyState
               title="Nenhum plano de serviço"
-              description="Os planos de serviço são gerados automaticamente quando um contrato é fechado, ou podem ser criados manualmente."
-              action={
-                <Button>
-                  <Plus className="mr-2 h-4 w-4" /> Criar Plano Manualmente
-                </Button>
-              }
+              description="Os planos de serviço são gerados automaticamente quando um contrato é fechado e aprovado."
             />
           )}
         </CardContent>

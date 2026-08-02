@@ -65,3 +65,4 @@ htmlcov/
 # Knowledge Base
 knowledge/*
 !knowledge/README.md
+.turbo
