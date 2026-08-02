@@ -13,7 +13,8 @@ import { CustomersPage } from '../../pages/Commercial/CustomersPage'
 import { CustomerDetailsPage } from '../../pages/Commercial/CustomerDetailsPage'
 import { PricingPage } from '../../pages/Pricing/PricingPage'
 import { CatalogPage } from '../../pages/Catalog/CatalogPage'
-import { ServicePlansPage } from '../../pages/Operations/ServicePlans/ServicePlansPage'
+import { ServicePlansPage } from '../../pages/Operations/ServicePlansPage'
+import { ServicePlanDetailsPage } from '../../pages/Operations/ServicePlanDetailsPage'
 import { RequirementsPage } from '../../pages/Operations/Requirements/RequirementsPage'
 import { PlannerPage } from '../../pages/Operations/Planner/PlannerPage'
 import { ServiceOrdersPage } from '../../pages/Operations/ServiceOrders/ServiceOrdersPage'
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
           {
             path: 'service-plans',
             element: <ServicePlansPage />,
+          },
+          {
+            path: 'service-plans/:id',
+            element: <ServicePlanDetailsPage />,
           },
           {
             path: 'service-orders',

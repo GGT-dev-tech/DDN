@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react'
-import { LayoutDashboard, Route, Truck, Users, Settings, FileText, Library, Building2, CircleDollarSign, CalendarDays, ListChecks, Map, BriefcaseBusiness, ClipboardList } from 'lucide-react'
+import { LayoutDashboard, Route, Truck, Users, Settings, FileText, Library, Building2, CircleDollarSign, CalendarDays, ListChecks, Map, BriefcaseBusiness, ClipboardList, LogOut } from 'lucide-react'
 import { cn } from '../../shared/ui/components/Button'
 
 interface SidebarProps extends HTMLAttributes<HTMLDivElement> {}
@@ -91,15 +91,28 @@ export function Sidebar({ className, ...props }: SidebarProps) {
         ))}
       </nav>
 
-      <div className="p-4 border-t border-border">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-brand-500/20 flex items-center justify-center text-brand-500 font-bold">
-            G
+
+      <div className="p-4 border-t border-border flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-brand-500/20 flex items-center justify-center text-brand-500 font-bold">
+              G
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium text-text-primary">Gustavo</span>
+              <span className="text-xs text-text-secondary">Admin</span>
+            </div>
           </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-text-primary">Gustavo</span>
-            <span className="text-xs text-text-secondary">Admin</span>
-          </div>
+          <button 
+            onClick={() => {
+              // Add real logout logic here when Auth is fully integrated
+              window.location.href = '/login'
+            }}
+            className="p-2 text-text-secondary hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+            title="Sair"
+          >
+            <LogOut size={18} />
+          </button>
         </div>
       </div>
     </aside>
