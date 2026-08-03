@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useListOfferingsApiV1CatalogOfferingsGet } from "../../../shared/api/generated/catalog/catalog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../shared/ui/components/Table";
 import { Badge } from "../../../shared/ui/components/Badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../shared/ui/components/Card";
-import { Tags, Plus } from "lucide-react";
+import { Tags, Plus, RefreshCw, Layers } from "lucide-react";
 import { Button } from "../../../shared/ui/components/Button";
 import { Modal } from "../../../shared/ui/components/Modal";
 import { EmptyState } from "../../../shared/ui/components/EmptyState";
@@ -11,83 +9,94 @@ import { OfferingForm } from "./OfferingForm";
 
 export function OfferingsTable() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data: offerings, isLoading, error } = useListOfferingsApiV1CatalogOfferingsGet();
-
-  if (isLoading) return <div>Carregando Ofertas de Serviço...</div>;
-  if (error) return <div className="text-red-500">Erro ao carregar Ofertas: {(error as Error).message}</div>;
+  const { data: offerings, isLoading, error, refetch } = useListOfferingsApiV1CatalogOfferingsGet();
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-start justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <Tags className="h-5 w-5 text-muted-foreground" />
-            <CardTitle>Ofertas de Serviço</CardTitle>
-          </div>
-          <CardDescription>
-            Gerencie o portfólio de serviços oferecidos pela sua empresa.
-          </CardDescription>
+    <div className="glass-panel rounded-xl border border-border overflow-hidden">
+      <div className="p-5 border-b border-border bg-black/5 dark:bg-white/5 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-text-primary font-semibold">
+          <Tags size={18} className="text-brand-500" />
+          Ofertas de Serviço
         </div>
-        <Button onClick={() => setIsModalOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" /> Nova Oferta
-        </Button>
-      </CardHeader>
-      <CardContent>
-        {offerings && offerings.length > 0 ? (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead>Categoria</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Atributos Vinculados</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+        <div className="flex gap-2">
+          {offerings && offerings.length > 0 && (
+            <Button variant="ghost" onClick={() => refetch()} className="gap-2 h-8 text-xs">
+              <RefreshCw size={14} /> Atualizar
+            </Button>
+          )}
+          <Button variant="liquid" onClick={() => setIsModalOpen(true)} className="gap-2 h-8 text-xs">
+            <Plus size={14} /> Nova Oferta
+          </Button>
+        </div>
+      </div>
+
+      <div className="p-0 overflow-x-auto">
+        {isLoading ? (
+          <div className="p-12 text-center text-text-secondary">Carregando Ofertas de Serviço...</div>
+        ) : error ? (
+          <div className="p-8 text-center text-red-500">Erro ao carregar Ofertas: {(error as Error).message}</div>
+        ) : offerings && offerings.length > 0 ? (
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-border bg-black/5 dark:bg-white/5">
+                <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Nome</th>
+                <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Categoria</th>
+                <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Status</th>
+                <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider text-right">Atributos Vinculados</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
               {offerings.map((offering: any) => (
-                <TableRow key={offering.id}>
-                  <TableCell className="font-medium">
-                    <div>{offering.name}</div>
+                <tr key={offering.id} className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                  <td className="p-4">
+                    <div className="font-medium text-text-primary">{offering.name}</div>
                     {offering.description && (
-                      <div className="text-xs text-muted-foreground">{offering.description}</div>
+                      <div className="text-xs text-text-secondary mt-1 max-w-sm truncate">{offering.description}</div>
                     )}
-                  </TableCell>
-                  <TableCell>{offering.category}</TableCell>
-                  <TableCell>
-                    <Badge variant={offering.status === 'Active' ? 'default' : 'outline'}>
+                  </td>
+                  <td className="p-4 text-sm text-text-secondary">
+                    {offering.category}
+                  </td>
+                  <td className="p-4">
+                    <Badge variant={offering.status === 'Active' ? 'success' : 'outline'} className="variant-glass">
                       {offering.status}
                     </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {offering.attributes.length} atributo(s)
-                  </TableCell>
-                </TableRow>
+                  </td>
+                  <td className="p-4 text-right">
+                    <div className="flex items-center justify-end gap-1.5 text-sm text-text-secondary">
+                      <Layers size={14} />
+                      {offering.attributes.length} atributo(s)
+                    </div>
+                  </td>
+                </tr>
               ))}
-            </TableBody>
-          </Table>
+            </tbody>
+          </table>
         ) : (
-          <EmptyState
-            title="Nenhuma oferta de serviço encontrada"
-            description="Cadastre sua primeira oferta de serviço para começar a montar propostas comerciais para os seus clientes."
-            action={
-              <Button onClick={() => setIsModalOpen(true)}>
-                <Plus className="mr-2 h-4 w-4" /> Nova Oferta
-              </Button>
-            }
-          />
+          <div className="p-8">
+            <EmptyState
+              title="Nenhuma oferta de serviço encontrada"
+              description="Cadastre sua primeira oferta de serviço para começar a montar propostas comerciais para os seus clientes."
+              action={
+                <Button onClick={() => setIsModalOpen(true)} className="gap-2 mt-4">
+                  <Plus size={16} /> Nova Oferta
+                </Button>
+              }
+            />
+          </div>
         )}
-      </CardContent>
-      
+      </div>
+
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)}
         title="Nova Oferta de Serviço"
       >
         <OfferingForm 
-          onSuccess={() => setIsModalOpen(false)} 
+          onSuccess={() => { setIsModalOpen(false); refetch(); }} 
           onCancel={() => setIsModalOpen(false)} 
         />
       </Modal>
-    </Card>
+    </div>
   );
 }
