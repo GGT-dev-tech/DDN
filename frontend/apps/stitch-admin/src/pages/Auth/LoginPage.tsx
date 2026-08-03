@@ -12,6 +12,16 @@ export function LoginPage() {
   const [password, setPassword] = useState('stitchadmin');
   const [errorMsg, setErrorMsg] = useState('');
   
+  const [lights] = useState(() => 
+    Array.from({ length: 25 }).map(() => ({
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      size: Math.random() * 8 + 4,
+      delay: Math.random() * 5,
+      duration: 3 + Math.random() * 4
+    }))
+  );
+  
   const navigate = useNavigate();
   const { login } = useAuth();
   
@@ -49,6 +59,23 @@ export function LoginPage() {
 
       {/* Decorative Background */}
       <div className="absolute inset-0 bg-[radial-gradient(#e2e2e2_1px,transparent_1px)] [background-size:24px_24px] opacity-50"></div>
+      
+      {/* Blinking Lights Effect */}
+      {lights.map((light, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full bg-brand-500 blur-[2px]"
+          style={{
+            top: `${light.top}%`,
+            left: `${light.left}%`,
+            width: `${light.size}px`,
+            height: `${light.size}px`,
+            opacity: 0.15,
+            animation: `pulse ${light.duration}s cubic-bezier(0.4, 0, 0.6, 1) infinite`,
+            animationDelay: `${light.delay}s`
+          }}
+        />
+      ))}
       
       <div className="absolute top-1/4 -left-32 w-96 h-96 bg-brand-500 rounded-full blur-[120px] opacity-10 animate-pulse"></div>
       <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-data-blue rounded-full blur-[120px] opacity-10 animate-pulse"></div>
