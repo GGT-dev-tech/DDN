@@ -5,6 +5,7 @@ import { useLoginApiV1AuthLoginPost } from '../../shared/api/generated/auth/auth
 import { Button } from '../../shared/ui/components/Button';
 import { Input } from '../../shared/ui/components/Input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../shared/ui/components/Card';
+import { Leaf, ArrowLeft } from 'lucide-react';
 
 export function LoginPage() {
   const [email, setEmail] = useState('admin@stitch.com');
@@ -38,59 +39,79 @@ export function LoginPage() {
   };
 
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-zinc-950 p-4">
-      <div className="w-full max-w-md relative">
-        {/* Glow effect */}
-        <div className="absolute -inset-0.5 bg-brand-500 rounded-xl blur opacity-30 animate-pulse"></div>
-        
-        <Card className="relative bg-zinc-950/80 backdrop-blur-xl border-zinc-800">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center tracking-tight">Stitch</CardTitle>
-            <CardDescription className="text-center">
-              Entre com suas credenciais para acessar o painel
+    <div className="flex min-h-screen w-full items-center justify-center bg-surface-bright p-4 relative overflow-hidden font-sans">
+      
+      <div className="absolute top-8 left-8 z-10">
+        <Link to="/" className="flex items-center text-sm font-medium text-on-surface-variant hover:text-brand-500 transition-colors">
+          <ArrowLeft className="w-4 h-4 mr-2" /> Voltar ao site
+        </Link>
+      </div>
+
+      {/* Decorative Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(#e2e2e2_1px,transparent_1px)] [background-size:24px_24px] opacity-50"></div>
+      
+      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-brand-500 rounded-full blur-[120px] opacity-10 animate-pulse"></div>
+      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-data-blue rounded-full blur-[120px] opacity-10 animate-pulse"></div>
+      
+      <div className="w-full max-w-md relative z-10">
+        <Card className="relative bg-surface-white/70 backdrop-blur-xl border-surface-variant shadow-soft overflow-hidden">
+          
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-500 to-waste-green"></div>
+
+          <CardHeader className="space-y-3 pt-8 pb-4 flex flex-col items-center">
+            <div className="w-16 h-16 bg-brand-50 rounded-2xl flex items-center justify-center text-brand-500 mb-2">
+              <Leaf className="w-8 h-8" />
+            </div>
+            <CardTitle className="text-2xl font-bold text-center tracking-tight text-on-surface">Acesso Restrito</CardTitle>
+            <CardDescription className="text-center text-on-surface-variant px-4">
+              Faça login com suas credenciais de administrador para acessar o painel de operações da DDN.
             </CardDescription>
           </CardHeader>
+
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
               {errorMsg && (
-                <div className="p-3 text-sm text-red-500 bg-red-500/10 border border-red-500/20 rounded-md">
-                  {errorMsg}
+                <div className="p-3 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
+                  <span className="font-bold shrink-0">Erro:</span> {errorMsg}
                 </div>
               )}
+              
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-300" htmlFor="email">Email</label>
+                <label className="text-sm font-semibold text-on-surface" htmlFor="email">E-mail Corporativo</label>
                 <Input 
                   id="email" 
                   type="email" 
-                  placeholder="admin@stitch.com"
+                  placeholder="admin@ddn.ind.br"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="bg-zinc-900/50"
+                  className="bg-surface-white border-surface-variant focus:border-brand-500 focus:ring-brand-500/20"
                 />
               </div>
+              
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-300" htmlFor="password">Senha</label>
+                <label className="text-sm font-semibold text-on-surface" htmlFor="password">Senha</label>
                 <Input 
                   id="password" 
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="bg-zinc-900/50"
+                  className="bg-surface-white border-surface-variant focus:border-brand-500 focus:ring-brand-500/20"
                 />
               </div>
             </CardContent>
-            <div className="flex flex-col gap-4 p-6 pt-0">
+            
+            <div className="flex flex-col gap-4 p-6 pt-4 pb-8">
               <Button 
                 type="submit" 
-                className="w-full font-semibold"
+                className="w-full font-semibold bg-brand-500 text-white hover:bg-waste-green h-12 shadow-md hover:shadow-lg transition-all"
                 disabled={isPending}
               >
-                {isPending ? 'Entrando...' : 'Entrar'}
+                {isPending ? 'Autenticando...' : 'Acessar Painel'}
               </Button>
-              <div className="text-center text-sm text-zinc-400">
-                Não tem uma conta? <Link to="/register" className="text-brand-500 hover:underline">Criar Conta</Link>
+              <div className="text-center text-xs text-on-surface-variant mt-2">
+                Acesso exclusivo para colaboradores DDN.
               </div>
             </div>
           </form>

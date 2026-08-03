@@ -22,7 +22,14 @@ import { MTRsPage } from '../../pages/Operations/MTRs/MTRsPage'
 import { LoginPage } from '../../pages/Auth/LoginPage'
 import { RegisterPage } from '../../pages/Auth/RegisterPage'
 import { LandingPage } from '../../pages/Public/LandingPage'
+import { AboutPage } from '../../pages/Public/AboutPage'
+import { ServicesPage } from '../../pages/Public/ServicesPage'
+import { CompliancePage } from '../../pages/Public/CompliancePage'
+import { PrivacyPage } from '../../pages/Public/PrivacyPage'
+import { TermsPage } from '../../pages/Public/TermsPage'
+import { WorkWithUsPage } from '../../pages/Public/WorkWithUsPage'
 import { BillingPage } from '../../pages/Billing/BillingPage'
+import { PublicLayout } from '../../widgets/layout/PublicLayout'
 import { AuthProvider, useAuth } from './AuthProvider'
 
 function ProtectedRoute() {
@@ -50,7 +57,37 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <LandingPage />,
+    element: <PublicLayout />,
+    children: [
+      {
+        index: true,
+        element: <LandingPage />,
+      },
+      {
+        path: 'sobre',
+        element: <AboutPage />,
+      },
+      {
+        path: 'servicos',
+        element: <ServicesPage />,
+      },
+      {
+        path: 'compliance',
+        element: <CompliancePage />,
+      },
+      {
+        path: 'privacidade',
+        element: <PrivacyPage />,
+      },
+      {
+        path: 'termos',
+        element: <TermsPage />,
+      },
+      {
+        path: 'trabalhe-conosco',
+        element: <WorkWithUsPage />,
+      }
+    ]
   },
   {
     path: '/admin',

@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+
 import { Button } from '../../shared/ui/components/Button'
 import { Input } from '../../shared/ui/components/Input'
 import { toast } from 'sonner'
 import { Leaf, ArrowRight, CheckCircle2, ShieldCheck, Factory, Recycle, FileCheck2, ArrowLeftRight } from 'lucide-react'
 
 export function LandingPage() {
-  const navigate = useNavigate()
   const [companyName, setCompanyName] = useState('')
   const [contactName, setContactName] = useState('')
   const [email, setEmail] = useState('')
@@ -52,24 +51,8 @@ export function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-white text-on-surface flex flex-col font-sans selection:bg-brand-100 selection:text-brand-900">
-      {/* Header */}
-      <header className="fixed top-0 w-full z-50 px-8 py-4 flex items-center justify-between bg-surface-white/90 backdrop-blur-md shadow-sm border-b border-surface-variant">
-        <div className="flex items-center gap-2 text-brand-500 font-bold text-2xl tracking-tighter">
-          <Leaf className="w-8 h-8" />
-          DDN Resíduos
-        </div>
-        <nav className="hidden md:flex items-center gap-8">
-          <a href="#servicos" className="text-sm font-medium text-on-surface-variant hover:text-brand-500 transition-colors">Serviços</a>
-          <a href="#compliance" className="text-sm font-medium text-on-surface-variant hover:text-brand-500 transition-colors">Compliance</a>
-          <a href="#contato" className="text-sm font-medium text-on-surface-variant hover:text-brand-500 transition-colors">Contato</a>
-          <Button className="bg-brand-500 text-white hover:bg-waste-green shadow-soft" onClick={() => navigate('/login')}>
-            Acesso Cliente
-          </Button>
-        </nav>
-      </header>
-
-      <main className="flex-1 pt-24 pb-20">
+    <div className="w-full flex flex-col font-sans">
+      <main className="flex-1 pb-20">
         
         {/* Hero Section */}
         <section className="relative min-h-[85vh] flex items-center px-8 max-w-7xl mx-auto overflow-hidden">
@@ -317,24 +300,6 @@ export function LandingPage() {
         </section>
 
       </main>
-
-      {/* Footer */}
-      <footer className="bg-inverse-surface py-12 px-8 text-inverse-on-surface">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2 font-bold text-xl">
-            <Leaf className="w-6 h-6" />
-            DDN Resíduos
-          </div>
-          <nav className="flex gap-6 text-sm text-surface-dim">
-            <a href="#" className="hover:text-white transition-colors">Privacidade</a>
-            <a href="#" className="hover:text-white transition-colors">Termos de Uso</a>
-            <a href="#" className="hover:text-white transition-colors">Trabalhe Conosco</a>
-          </nav>
-          <div className="text-sm text-surface-dim">
-            &copy; {new Date().getFullYear()} DDN Destinação de Resíduos. Todos os direitos reservados.
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }
