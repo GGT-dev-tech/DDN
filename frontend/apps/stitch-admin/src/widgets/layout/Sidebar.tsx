@@ -76,6 +76,7 @@ export function Sidebar({ className, ...props }: SidebarProps) {
               <a
                 key={item.name}
                 href={item.href}
+                data-tour={item.name.toLowerCase().replace(/\s+/g, '-')}
                 className={cn(
                   'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
                   'text-text-secondary hover:text-text-primary hover:bg-black/5 dark:hover:bg-white/5'

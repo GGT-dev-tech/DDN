@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom'
+import { TourProvider } from './TourProvider'
 import { AppLayout } from '../../widgets/layout/AppLayout'
 import { DashboardPage } from '../../pages/Dashboard/DashboardPage'
 import { RoutesPage } from '../../pages/Operations/RoutesPage'
@@ -191,7 +192,9 @@ const router = createBrowserRouter([
 export function AppRouterProvider() {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <TourProvider>
+        <RouterProvider router={router} />
+      </TourProvider>
     </AuthProvider>
   )
 }
