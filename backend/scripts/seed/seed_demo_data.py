@@ -30,7 +30,6 @@ DATABASE_URL = os.getenv(
 if DATABASE_URL.startswith("postgresql://"):
     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
 
-# IDs fixos para facilitar reprodutibilidade
 TENANT_ID = "00000000-0000-0000-0000-000000000001"
 USER_ID   = "00000000-0000-0000-0000-000000000002"
 COMPANY_1_ID = "00000000-0000-0000-0001-000000000001"
@@ -40,7 +39,6 @@ def hash_password(plain: str) -> str:
     salt = bcrypt.gensalt()
     return bcrypt.hashpw(plain.encode("utf-8"), salt).decode("utf-8")
 
-# ---------------------------------------------------------------------------
 async def seed(session: AsyncSession):
     print("🌱 Iniciando seed de dados de demonstração (Full Modules)...\n")
 
@@ -88,8 +86,6 @@ async def seed(session: AsyncSession):
         vehicles = [
             ("ABC1234", "COMPACTOR_TRUCK", 15.0, 10.0, "ACTIVE"),
             ("DEF5678", "COMPACTOR_TRUCK", 12.0,  8.0, "ACTIVE"),
-            ("GHI9012", "ROLL_OFF_TRUCK",  30.0, 20.0, "MAINTENANCE"),
-            ("JKL3456", "VAN",              5.0,  2.5, "ACTIVE"),
         ]
         for plate, vtype, vol, wgt, status in vehicles:
             await session.execute(text("""
@@ -130,9 +126,9 @@ async def seed(session: AsyncSession):
         for cid, company, contact, email, status in companies:
             await session.execute(text("""
                 INSERT INTO commercial_companies
-                  (id, tenant_id, name, legal_name, document_number, status, created_at, updated_at)
+                  (id, tenant_id, trade_name, corporate_name, document_number, status, created_at)
                 VALUES
-                  (:id, :tid, :company, :company, :doc, :status, NOW(), NOW())
+                  (:id, :tid, :company, :company, :doc, :status, NOW())
             """), {
                 "id": cid, "tid": TENANT_ID, "company": company, "doc": f"111222333{cid[:4]}", "status": status
             })
@@ -204,16 +200,32 @@ async def seed(session: AsyncSession):
     if not r.fetchone():
         contract_id = str(uuid7())
         await session.execute(text("""
-            INSERT INTO contracts_contracts (id, tenant_id, company_id, status, start_date, end_date, total_value, currency, created_at, updated_at)
-            VALUES (:id, :tid, :cid, 'ACTIVE', CURRENT_DATE, CURRENT_DATE + interval '1 year', 15000.0, 'BRL', NOW(), NOW())
+            INSERT INTO contracts_contracts (id, tenant_id, company_id, status, effective_date, expiration_date, created_at, updated_at)
+            VALUES (:id, :tid, :cid, 'ACTIVE', CURRENT_DATE, CURRENT_DATE + interval '1 year', NOW(), NOW())
         """), {"id": contract_id, "tid": TENANT_ID, "cid": COMPANY_1_ID})
         
+        # Contract Version
+        version_id = str(uuid7())
+        await session.execute(text("""
+            INSERT INTO contracts_contract_versions (id, tenant_id, contract_id, version_number, created_at)
+            VALUES (:id, :tid, :cid, 1, NOW())
+        """), {"id": version_id, "tid": TENANT_ID, "cid": contract_id})
+
         # Contract item
         offering_id = offering_ids.get("Coleta de RSU") or next(iter(offering_ids.values()))
+        item_id = str(uuid7())
+        uom_id = uom_ids.get("t") or next(iter(uom_ids.values()))
         await session.execute(text("""
-            INSERT INTO contracts_contract_items (id, contract_id, service_offering_id, unit_price, quantity, total_price)
-            VALUES (:id, :contract_id, :service_offering_id, 150.0, 100, 15000.0)
-        """), {"id": str(uuid7()), "contract_id": contract_id, "service_offering_id": offering_id})
+            INSERT INTO contracts_contract_items (id, tenant_id, version_id, service_offering_id, unit_of_measure_id, quantity)
+            VALUES (:id, :tid, :version_id, :service_offering_id, :uom_id, 100)
+        """), {"id": item_id, "tid": TENANT_ID, "version_id": version_id, "service_offering_id": offering_id, "uom_id": uom_id})
+        
+        # Contract item snapshot
+        await session.execute(text("""
+            INSERT INTO contracts_contract_item_snapshots 
+            (id, tenant_id, contract_item_id, service_name, unit_name, base_unit_price, total_base_price, surcharges_total, discounts_total, final_price, currency, created_at)
+            VALUES (:id, :tid, :item_id, 'Coleta', 't', 150.0, 15000.0, 0, 0, 15000.0, 'BRL', NOW())
+        """), {"id": str(uuid7()), "tid": TENANT_ID, "item_id": item_id})
         
         await session.commit()
         print("  ✅ Contrato criado")
@@ -221,14 +233,21 @@ async def seed(session: AsyncSession):
         contract_id = str(r.fetchone()[0])
 
     # 11. Logistics Service Plans
-    r = await session.execute(text("SELECT id FROM logistics_service_plans WHERE tenant_id = :tid"), {"tid": TENANT_ID})
+    r = await session.execute(text("SELECT id FROM service_plan_plans WHERE tenant_id = :tid"), {"tid": TENANT_ID})
     service_plan_id = None
     if not r.fetchone():
         service_plan_id = str(uuid7())
         await session.execute(text("""
-            INSERT INTO logistics_service_plans (id, tenant_id, contract_id, name, schedule_expression, status, created_at, updated_at)
-            VALUES (:id, :tid, :cid, 'Coleta Semanal Supermercado', 'FREQ=WEEKLY;BYDAY=MO,WE,FR', 'ACTIVE', NOW(), NOW())
-        """), {"id": service_plan_id, "tid": TENANT_ID, "cid": contract_id})
+            INSERT INTO service_plan_plans (id, version, tenant_id, company_id, contract_id, status, effective_date, expiration_date, created_at, updated_at)
+            VALUES (:id, 1, :tid, :cid, :contract_id, 'ACTIVE', CURRENT_DATE, CURRENT_DATE + interval '1 year', NOW(), NOW())
+        """), {"id": service_plan_id, "tid": TENANT_ID, "cid": COMPANY_1_ID, "contract_id": contract_id})
+        
+        offering_id = offering_ids.get("Coleta de RSU") or next(iter(offering_ids.values()))
+        await session.execute(text("""
+            INSERT INTO service_plan_schedules (id, plan_id, service_offering_id, service_name, quantity_snapshot, status)
+            VALUES (:id, :plan_id, :offering_id, 'Coleta Semanal', 1.0, 'ACTIVE')
+        """), {"id": str(uuid7()), "plan_id": service_plan_id, "offering_id": offering_id})
+        
         await session.commit()
         print("  ✅ Planos de Serviço criados")
     else:
@@ -252,8 +271,8 @@ async def seed(session: AsyncSession):
             # Service order item
             offering_id = offering_ids.get("Coleta de RSU") or next(iter(offering_ids.values()))
             await session.execute(text("""
-                INSERT INTO logistics_service_order_items (id, service_order_id, service_offering_id, service_name, quantity, status)
-                VALUES (:id, :so_id, :off_id, 'Coleta', 1.0, 'COMPLETED')
+                INSERT INTO logistics_service_order_items (id, service_order_id, service_offering_id, service_name, quantity)
+                VALUES (:id, :so_id, :off_id, 'Coleta', '1.0')
             """), {"id": str(uuid7()), "so_id": so_id, "off_id": offering_id})
             
         await session.commit()
@@ -282,7 +301,6 @@ async def seed(session: AsyncSession):
     print("="*55)
 
 
-# ---------------------------------------------------------------------------
 async def main():
     engine = create_async_engine(DATABASE_URL, echo=False)
     session_factory = async_sessionmaker(engine, expire_on_commit=False)
