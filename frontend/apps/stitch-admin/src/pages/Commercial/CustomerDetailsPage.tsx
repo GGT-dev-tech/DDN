@@ -1,10 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useListLeadsApiV1CommercialLeadsGet } from '../../shared/api/generated/commercial/commercial';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../shared/ui/components/Card';
 import { Badge } from '../../shared/ui/components/Badge';
 import { Button } from '../../shared/ui/components/Button';
-import { ArrowLeft, Building2, Mail, Phone, MapPin, User, FileText } from 'lucide-react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../shared/ui/components/Table';
+import { ArrowLeft, Building2, Mail, Phone, MapPin, User, FileText, ClipboardList, Plus } from 'lucide-react';
 import { EmptyState } from '../../shared/ui/components/EmptyState';
 import { useListQuotationsApiV1QuotationsGet } from '../../shared/api/generated/quotations/quotations';
 
@@ -18,22 +16,20 @@ export function CustomerDetailsPage() {
   const customer = customerResult as any;
 
   // Fetch quotations for this customer
-  // Since the generated hook might not have a company_id filter yet, we fetch all and filter in frontend for now.
-  // In a real scenario, we'd pass { company_id: id } to the query if the API supports it.
   const { data: allQuotations } = useListQuotationsApiV1QuotationsGet();
   const customerQuotations = allQuotations?.filter(q => q.company_id === id) || [];
 
   if (isLoading) {
-    return <div className="p-8 text-center text-zinc-500">Carregando detalhes do cliente...</div>;
+    return <div className="p-16 flex items-center justify-center text-text-secondary">Carregando detalhes do cliente...</div>;
   }
 
   if (isError || !customer) {
     return (
-      <div className="space-y-6">
-        <Button variant="ghost" onClick={() => navigate('/admin/customers')} className="pl-0">
-          <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para Clientes
+      <div className="flex-1 bg-background p-8">
+        <Button variant="ghost" onClick={() => navigate('/admin/customers')} className="pl-0 gap-2 mb-6">
+          <ArrowLeft size={16} /> Voltar para Clientes
         </Button>
-        <div className="p-8 text-center text-red-500 bg-red-500/10 rounded-lg">
+        <div className="p-8 text-center text-red-500 bg-red-500/10 rounded-xl max-w-lg mx-auto border border-red-500/20">
           Erro ao carregar detalhes do cliente. Verifique se o ID está correto.
         </div>
       </div>
@@ -41,124 +37,159 @@ export function CustomerDetailsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" onClick={() => navigate('/admin/customers')} className="p-2">
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{customer.company_name}</h1>
-          <div className="flex items-center gap-2 mt-1">
-            <Badge variant="outline" className="text-xs uppercase">
-              {customer.status === 'new' ? 'Novo' : customer.status}
-            </Badge>
-            <span className="text-muted-foreground text-sm">Cadastrado em {new Date(customer.created_at).toLocaleDateString()}</span>
+    <div className="flex-1 overflow-y-auto bg-background">
+      <div className="p-8 max-w-7xl mx-auto space-y-8">
+        
+        {/* Header */}
+        <div className="flex items-start gap-4">
+          <Button variant="ghost" onClick={() => navigate('/admin/customers')} className="p-2 h-10 w-10 shrink-0 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 mt-1">
+            <ArrowLeft size={20} />
+          </Button>
+          <div className="flex-1">
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl font-bold tracking-tight text-text-primary">{customer.company_name}</h1>
+              <Badge variant={customer.status === 'new' ? 'default' : 'outline'} className={customer.status === 'new' ? 'bg-brand-500/20 text-brand-500' : 'variant-glass'}>
+                {customer.status === 'new' ? 'Novo Lead' : customer.status}
+              </Badge>
+            </div>
+            <p className="text-sm text-text-secondary mt-1">
+              Cadastrado em {new Date(customer.created_at).toLocaleDateString()}
+            </p>
           </div>
+          <Button onClick={() => navigate('/admin/quotations', { state: { customerId: customer.id } })} className="gap-2 shrink-0">
+            <Plus size={16} /> Nova Cotação
+          </Button>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Customer Info Card */}
-        <Card className="md:col-span-1 h-fit">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Building2 className="h-5 w-5 text-brand-500" /> Informações
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {customer.legal_name && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          {/* Customer Info Card */}
+          <div className="glass-panel p-6 rounded-xl border border-border h-fit space-y-6">
+            <div className="flex items-center gap-2 text-text-primary font-semibold border-b border-border/50 pb-4">
+              <Building2 size={18} className="text-brand-500" />
+              Informações do Cliente
+            </div>
+            
+            <div className="space-y-4">
+              {customer.legal_name && (
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
+                    <FileText size={16} className="text-text-secondary" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1">Razão Social</p>
+                    <p className="text-sm text-text-primary font-medium">{customer.legal_name}</p>
+                  </div>
+                </div>
+              )}
+              
               <div className="flex items-start gap-3">
-                <FileText className="h-4 w-4 text-muted-foreground mt-0.5" />
+                <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
+                  <User size={16} className="text-text-secondary" />
+                </div>
                 <div>
-                  <p className="text-sm font-medium">Razão Social</p>
-                  <p className="text-sm text-muted-foreground">{customer.legal_name}</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1">Contato Principal</p>
+                  <p className="text-sm text-text-primary font-medium">{customer.contact_name}</p>
                 </div>
               </div>
-            )}
-            <div className="flex items-start gap-3">
-              <User className="h-4 w-4 text-muted-foreground mt-0.5" />
-              <div>
-                <p className="text-sm font-medium">Contato Principal</p>
-                <p className="text-sm text-muted-foreground">{customer.contact_name}</p>
+              
+              {customer.email && (
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
+                    <Mail size={16} className="text-text-secondary" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1">Email</p>
+                    <a href={`mailto:${customer.email}`} className="text-sm text-brand-500 hover:text-brand-400 font-medium transition-colors">{customer.email}</a>
+                  </div>
+                </div>
+              )}
+              
+              {customer.phone && (
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
+                    <Phone size={16} className="text-text-secondary" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1">Telefone</p>
+                    <a href={`tel:${customer.phone}`} className="text-sm text-brand-500 hover:text-brand-400 font-medium transition-colors">{customer.phone}</a>
+                  </div>
+                </div>
+              )}
+              
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
+                  <MapPin size={16} className="text-text-secondary" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1">Segmento / Endereço</p>
+                  <p className="text-sm text-text-primary capitalize mb-1">{customer.industry || 'Segmento não especificado'}</p>
+                  <p className="text-xs text-text-secondary">{customer.address || 'Endereço não cadastrado'}</p>
+                </div>
               </div>
             </div>
-            {customer.email && (
-              <div className="flex items-start gap-3">
-                <Mail className="h-4 w-4 text-muted-foreground mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium">Email</p>
-                  <a href={`mailto:${customer.email}`} className="text-sm text-brand-500 hover:underline">{customer.email}</a>
-                </div>
-              </div>
-            )}
-            {customer.phone && (
-              <div className="flex items-start gap-3">
-                <Phone className="h-4 w-4 text-muted-foreground mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium">Telefone</p>
-                  <a href={`tel:${customer.phone}`} className="text-sm text-brand-500 hover:underline">{customer.phone}</a>
-                </div>
-              </div>
-            )}
-            <div className="flex items-start gap-3">
-              <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
-              <div>
-                <p className="text-sm font-medium">Segmento</p>
-                <p className="text-sm text-muted-foreground capitalize">{customer.industry || 'Não especificado'}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Quotations Card */}
-        <Card className="md:col-span-2">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle>Cotações e Propostas</CardTitle>
-              <CardDescription>Histórico de propostas comerciais enviadas para este cliente.</CardDescription>
+          {/* Quotations List */}
+          <div className="lg:col-span-2 glass-panel rounded-xl border border-border overflow-hidden">
+            <div className="p-5 border-b border-border bg-black/5 dark:bg-white/5 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-text-primary font-semibold">
+                <ClipboardList size={18} className="text-brand-500" />
+                Histórico de Cotações
+              </div>
             </div>
-            <Button onClick={() => navigate('/admin/quotations', { state: { customerId: customer.id } })}>
-              Nova Cotação
-            </Button>
-          </CardHeader>
-          <CardContent>
-            {customerQuotations.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>ID da Cotação</TableHead>
-                    <TableHead>Data</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {customerQuotations.map((quotation) => (
-                    <TableRow key={quotation.id}>
-                      <TableCell className="font-medium text-xs font-mono">{quotation.id.split('-')[0]}</TableCell>
-                      <TableCell>{new Date(quotation.created_at).toLocaleDateString()}</TableCell>
-                      <TableCell>
-                        <Badge variant={quotation.status === 'APPROVED' ? 'default' : 'outline'}>
-                          {quotation.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="ghost" onClick={() => navigate(`/admin/quotations/${quotation.id}`)}>
-                          Ver Detalhes
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            ) : (
-              <EmptyState 
-                title="Nenhuma cotação" 
-                description="Este cliente ainda não possui nenhuma cotação ou proposta comercial vinculada."
-              />
-            )}
-          </CardContent>
-        </Card>
+            
+            <div className="p-0 overflow-x-auto">
+              {customerQuotations.length > 0 ? (
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-border bg-black/5 dark:bg-white/5">
+                      <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">ID da Cotação</th>
+                      <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Data</th>
+                      <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Status</th>
+                      <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider text-right">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {customerQuotations.map((quotation) => (
+                      <tr key={quotation.id} className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                        <td className="p-4 font-mono text-xs font-semibold text-text-primary">
+                          {quotation.id.split('-')[0]}
+                        </td>
+                        <td className="p-4 text-sm text-text-secondary">
+                          {new Date(quotation.created_at).toLocaleDateString()}
+                        </td>
+                        <td className="p-4">
+                          <Badge variant={quotation.status === 'APPROVED' ? 'success' : 'outline'} className="variant-glass text-xs">
+                            {quotation.status}
+                          </Badge>
+                        </td>
+                        <td className="p-4 text-right">
+                          <Button variant="ghost" onClick={() => navigate(`/admin/quotations/${quotation.id}`)} className="text-xs h-8">
+                            Ver Detalhes
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="p-8">
+                  <EmptyState 
+                    title="Nenhuma cotação vinculada" 
+                    description="Este cliente ainda não possui nenhuma proposta comercial. Crie a primeira cotação para enviar ao cliente."
+                    action={
+                      <Button onClick={() => navigate('/admin/quotations', { state: { customerId: customer.id } })} className="mt-4 gap-2">
+                        <Plus size={16} /> Nova Cotação
+                      </Button>
+                    }
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+          
+        </div>
       </div>
     </div>
   );

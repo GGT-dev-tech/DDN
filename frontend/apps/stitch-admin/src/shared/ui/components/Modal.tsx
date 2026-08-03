@@ -34,7 +34,22 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
 
   // Prevent click inside dialog from closing it, while clicking backdrop closes it
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
-    if (e.target === dialogRef.current) {
+    // A native dialog's backdrop is considered part of the dialog element.
+    // If we click exactly on the dialog (the backdrop area), close it.
+    // However, since we added padding/content inside the dialog, clicking inside will target those children.
+    // BUT to be absolutely safe, we check if the click coordinates are outside the dialog box.
+    const dialog = dialogRef.current
+    if (!dialog) return
+    
+    const rect = dialog.getBoundingClientRect()
+    const isInDialog = (
+      rect.top <= e.clientY &&
+      e.clientY <= rect.top + rect.height &&
+      rect.left <= e.clientX &&
+      e.clientX <= rect.left + rect.width
+    )
+    
+    if (!isInDialog) {
       onClose()
     }
   }
@@ -45,14 +60,13 @@ export function Modal({ isOpen, onClose, title, children, className }: ModalProp
       onClick={handleBackdropClick}
       onClose={onClose}
       className={cn(
-        'backdrop:bg-black/50 backdrop:backdrop-blur-sm',
-        'fixed inset-0 m-auto w-full max-w-lg rounded-2xl bg-white dark:bg-zinc-900 p-0 shadow-xl border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100',
-        'transition-all duration-300 ease-out',
+        'backdrop:bg-black/60 backdrop:backdrop-blur-md',
+        'm-auto w-full max-w-lg rounded-2xl bg-white dark:bg-zinc-900 p-0 shadow-2xl border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100',
         'open:animate-in open:fade-in-0 open:zoom-in-95',
         className
       )}
     >
-      <div className="flex flex-col w-full h-full max-h-[80vh]">
+      <div className="flex flex-col w-full max-h-[85vh]">
         {title && (
           <div className="flex items-center justify-between border-b border-border px-6 py-4">
             <h2 className="text-lg font-semibold">{title}</h2>
