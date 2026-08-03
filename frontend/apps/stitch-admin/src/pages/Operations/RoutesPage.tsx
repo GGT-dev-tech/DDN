@@ -6,6 +6,8 @@ import { EmptyState } from '../../shared/ui/components/EmptyState'
 import { useListRoutesApiV1RoutingRoutesGet } from '../../shared/api/generated/routing/routing'
 import { AddRouteModal } from './Routes/components/AddRouteModal'
 import { DispatchWizard } from './Routes/components/DispatchWizard'
+import { RouteMapModal } from './Routes/components/RouteMapModal'
+import { Map as MapIcon } from 'lucide-react'
 
 function routeStatusBadge(status: string) {
   switch (status) {
@@ -36,6 +38,7 @@ export function RoutesPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [expandedRouteId, setExpandedRouteId] = useState<string | null>(null)
   const [dispatchRoute, setDispatchRoute] = useState<any | null>(null)
+  const [mapRoute, setMapRoute] = useState<any | null>(null)
   
   const { data: routes = [], isLoading, isError } = useListRoutesApiV1RoutingRoutesGet()
 
@@ -108,7 +111,7 @@ export function RoutesPage() {
                     <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Veículo / Motorista</th>
                     <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Paradas</th>
                     <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider text-right">Status</th>
-                    <th className="p-4 w-16"></th>
+                    <th className="p-4 w-24"></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
@@ -156,7 +159,15 @@ export function RoutesPage() {
                           <td className="p-4 text-right">
                             <Badge variant={st.variant} className="variant-glass">{st.label}</Badge>
                           </td>
-                          <td className="p-4 text-right">
+                          <td className="p-4 text-right flex items-center justify-end gap-1">
+                            <Button 
+                              variant="ghost" 
+                              onClick={(e) => { e.stopPropagation(); setMapRoute(route); }}
+                              className="text-brand-500 hover:text-brand-600 hover:bg-brand-500/10 p-2 h-auto"
+                              title="Ver Mapa"
+                            >
+                              <MapIcon size={18} />
+                            </Button>
                             <Button 
                               variant="ghost" 
                               onClick={(e) => { e.stopPropagation(); setDispatchRoute(route); }}
@@ -228,6 +239,14 @@ export function RoutesPage() {
           isOpen={!!dispatchRoute}
           onClose={() => setDispatchRoute(null)}
           route={dispatchRoute}
+        />
+      )}
+
+      {mapRoute && (
+        <RouteMapModal
+          isOpen={!!mapRoute}
+          onClose={() => setMapRoute(null)}
+          route={mapRoute}
         />
       )}
     </div>
