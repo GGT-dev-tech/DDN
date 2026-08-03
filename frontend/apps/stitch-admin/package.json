@@ -43,7 +43,7 @@
     "@vitest/coverage-v8": "^4.1.10",
     "autoprefixer": "^10.5.4",
     "msw": "^2.15.0",
-    "orval": "^8.22.0",
+    "orval": "^8.23.0",
     "oxlint": "^1.71.0",
     "playwright": "^1.62.0",
     "postcss": "^8.5.23",

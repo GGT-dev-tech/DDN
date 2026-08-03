@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@repo/tsconfig": "*",
-    "orval": "^7.5.0",
+    "orval": "^8.23.0",
     "typescript": "^5.0.0"
   }
 }
