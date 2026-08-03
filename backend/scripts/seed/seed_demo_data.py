@@ -286,15 +286,14 @@ async def seed(session: AsyncSession):
     if r.scalar() == 0:
         inv_id = str(uuid7())
         await session.execute(text("""
-            INSERT INTO billing_invoices (id, tenant_id, company_id, reference_month, status, issue_date, created_at, updated_at)
-            VALUES (:id, :tid, :cid, to_char(CURRENT_DATE, 'YYYY-MM'), 'DRAFT', CURRENT_DATE, NOW(), NOW())
+            INSERT INTO billing_invoices (id, tenant_id, company_id, reference_date, status, total_amount, due_date, created_at, updated_at)
+            VALUES (:id, :tid, :cid, CURRENT_DATE, 'DRAFT', 150.0, CURRENT_DATE + interval '10 days', NOW(), NOW())
         """), {"id": inv_id, "tid": TENANT_ID, "cid": COMPANY_1_ID})
         
-        offering_id = offering_ids.get("Coleta de RSU") or next(iter(offering_ids.values()))
         await session.execute(text("""
-            INSERT INTO billing_invoice_items (id, invoice_id, service_offering_id, service_name, quantity, unit_price, total_price)
-            VALUES (:id, :inv_id, :off_id, 'Coleta', 1.0, 150.0, 150.0)
-        """), {"id": str(uuid7()), "inv_id": inv_id, "off_id": offering_id})
+            INSERT INTO billing_invoice_items (id, invoice_id, service_order_id, description, quantity, unit_price, total_price)
+            VALUES (:id, :inv_id, :so_id, 'Coleta de RSU', 1.0, 150.0, 150.0)
+        """), {"id": str(uuid7()), "inv_id": inv_id, "so_id": so_id_1})
         
         await session.commit()
         print("  ✅ Faturas criadas")
