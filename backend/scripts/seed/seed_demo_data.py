@@ -182,8 +182,9 @@ async def seed(session: AsyncSession):
 
     # 9. Pricing Tables
     r = await session.execute(text("SELECT id FROM pricing_price_tables WHERE tenant_id = :tid"), {"tid": TENANT_ID})
+    row = r.fetchone()
     pricing_table_id = None
-    if not r.fetchone():
+    if not row:
         pricing_table_id = str(uuid7())
         await session.execute(text("""
             INSERT INTO pricing_price_tables (id, tenant_id, name, is_active, effective_date, end_date)
@@ -192,12 +193,13 @@ async def seed(session: AsyncSession):
         await session.commit()
         print("  ✅ Tabela de Preços criada")
     else:
-        pricing_table_id = str(r.fetchone()[0])
+        pricing_table_id = str(row[0])
 
     # 10. Contracts
     r = await session.execute(text("SELECT id FROM contracts_contracts WHERE tenant_id = :tid"), {"tid": TENANT_ID})
+    row = r.fetchone()
     contract_id = None
-    if not r.fetchone():
+    if not row:
         contract_id = str(uuid7())
         await session.execute(text("""
             INSERT INTO contracts_contracts (id, tenant_id, company_id, status, effective_date, expiration_date, created_at, updated_at)
@@ -230,12 +232,13 @@ async def seed(session: AsyncSession):
         await session.commit()
         print("  ✅ Contrato criado")
     else:
-        contract_id = str(r.fetchone()[0])
+        contract_id = str(row[0])
 
     # 11. Logistics Service Plans
     r = await session.execute(text("SELECT id FROM service_plan_plans WHERE tenant_id = :tid"), {"tid": TENANT_ID})
+    row = r.fetchone()
     service_plan_id = None
-    if not r.fetchone():
+    if not row:
         service_plan_id = str(uuid7())
         await session.execute(text("""
             INSERT INTO service_plan_plans (id, version, tenant_id, company_id, contract_id, status, effective_date, expiration_date, created_at, updated_at)
@@ -251,7 +254,7 @@ async def seed(session: AsyncSession):
         await session.commit()
         print("  ✅ Planos de Serviço criados")
     else:
-        service_plan_id = str(r.fetchone()[0])
+        service_plan_id = str(row[0])
         
     # 12. Logistics Service Orders
     r = await session.execute(text("SELECT COUNT(*) FROM logistics_service_orders WHERE tenant_id = :tid"), {"tid": TENANT_ID})
