@@ -63,9 +63,7 @@ export function Sidebar({ className, ...props }: SidebarProps) {
       {...props}
     >
       <div className="h-16 flex items-center px-6 border-b border-border">
-        <h1 className="text-xl font-bold tracking-tight text-text-primary">
-          DDN
-        </h1>
+        <img src="/ddn-logo.png" alt="DDN Logo" className="h-8" />
       </div>
 
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-6">

@@ -1,5 +1,5 @@
 import { Outlet, useNavigate, Link } from 'react-router-dom'
-import { Leaf } from 'lucide-react'
+
 import { Button } from '../../shared/ui/components/Button'
 
 export function PublicLayout() {
@@ -9,9 +9,8 @@ export function PublicLayout() {
     <div className="min-h-screen bg-surface-white text-on-surface flex flex-col font-sans selection:bg-brand-100 selection:text-brand-900">
       {/* Header */}
       <header className="fixed top-0 w-full z-50 px-8 py-4 flex items-center justify-between bg-surface-white/80 backdrop-blur-md shadow-sm border-b border-surface-variant transition-all">
-        <Link to="/" className="flex items-center gap-2 text-brand-500 font-bold text-2xl tracking-tighter hover:opacity-90 transition-opacity">
-          <Leaf className="w-8 h-8" />
-          DDN Resíduos
+        <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+          <img src="/ddn-logo.png" alt="DDN Logo" className="h-10" />
         </Link>
         <nav className="hidden md:flex items-center gap-8">
           <Link to="/sobre" className="text-sm font-medium text-on-surface-variant hover:text-brand-500 transition-colors">Sobre Nós</Link>
@@ -32,9 +31,8 @@ export function PublicLayout() {
       <footer className="bg-surface-bright py-12 px-8 border-t border-surface-variant mt-auto">
         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-8 mb-8">
           <div className="md:col-span-1">
-            <Link to="/" className="flex items-center gap-2 text-brand-500 font-bold text-xl mb-4">
-              <Leaf className="w-6 h-6" />
-              DDN Resíduos
+            <Link to="/" className="flex items-center gap-2 mb-4">
+              <img src="/ddn-logo.png" alt="DDN Logo" className="h-8 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" />
             </Link>
             <p className="text-sm text-on-surface-variant">
               Soluções inteligentes, seguras e sustentáveis para gestão de resíduos industriais e de saúde.

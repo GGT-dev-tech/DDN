@@ -5,7 +5,7 @@ import { useLoginApiV1AuthLoginPost } from '../../shared/api/generated/auth/auth
 import { Button } from '../../shared/ui/components/Button';
 import { Input } from '../../shared/ui/components/Input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../shared/ui/components/Card';
-import { Leaf, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 export function LoginPage() {
   const [email, setEmail] = useState('admin@stitch.com');
@@ -59,8 +59,8 @@ export function LoginPage() {
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-500 to-waste-green"></div>
 
           <CardHeader className="space-y-3 pt-8 pb-4 flex flex-col items-center">
-            <div className="w-16 h-16 bg-brand-50 rounded-2xl flex items-center justify-center text-brand-500 mb-2">
-              <Leaf className="w-8 h-8" />
+            <div className="flex items-center justify-center mb-2">
+              <img src="/ddn-logo.png" alt="DDN Logo" className="h-12" />
             </div>
             <CardTitle className="text-2xl font-bold text-center tracking-tight text-on-surface">Acesso Restrito</CardTitle>
             <CardDescription className="text-center text-on-surface-variant px-4">
