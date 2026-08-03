@@ -64,9 +64,28 @@ export function AboutPage() {
             Acreditamos que a inovação tecnológica (como a emissão automatizada de MTRs) atrelada à operação rigorosa é a chave para uma governança ESG (Environmental, Social, and Governance) verdadeira.
           </p>
         </div>
-        <div className="relative h-96 rounded-3xl overflow-hidden shadow-soft border border-surface-variant">
-          <div className="absolute inset-0 bg-surface-bright flex items-center justify-center">
-             <span className="text-surface-variant font-mono">Espaço para Imagem Institucional</span>
+        <div className="relative h-96 rounded-3xl overflow-hidden shadow-2xl border border-surface-variant group">
+          <img 
+            src="/ddn-warehouse.png" 
+            alt="Base Operacional DDN" 
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            onError={(e) => {
+              // Fallback se a imagem não for encontrada, mantendo o visual
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.parentElement?.classList.add('bg-surface-bright');
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+          
+          <div className="absolute inset-0 flex items-center justify-center -z-10 bg-surface-bright">
+             <span className="text-surface-variant font-mono">Espaço para Imagem Institucional (Salve como /ddn-warehouse.png na pasta public)</span>
+          </div>
+
+          <div className="absolute bottom-0 left-0 p-8 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+             <h3 className="text-2xl font-bold mb-2">Nossa Base Operacional</h3>
+             <p className="text-white/90 text-sm md:text-base max-w-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+               Infraestrutura completa no Tabuleiro, Camboriú, equipada para o processamento, armazenamento e destinação segura dos resíduos.
+             </p>
           </div>
         </div>
       </section>

@@ -59,9 +59,10 @@ export function PublicLayout() {
           <div>
             <h4 className="font-bold text-on-surface mb-4">Contato</h4>
             <ul className="space-y-2 text-sm text-on-surface-variant">
-              <li>contato@ddn.ind.br</li>
-              <li>(11) 99999-9999</li>
-              <li>São Paulo, SP</li>
+              <li>Rua Guaraparim, 490, Galpão 2</li>
+              <li>Tabuleiro - Camboriú</li>
+              <li className="pt-2"><strong>Informações:</strong> (47) 3264-8532</li>
+              <li><strong>WhatsApp:</strong> 47 9 9192 2438</li>
             </ul>
           </div>
         </div>
