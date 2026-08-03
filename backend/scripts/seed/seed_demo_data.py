@@ -257,8 +257,9 @@ async def seed(session: AsyncSession):
         service_plan_id = str(row[0])
         
     # 12. Logistics Service Orders
-    r = await session.execute(text("SELECT COUNT(*) FROM logistics_service_orders WHERE tenant_id = :tid"), {"tid": TENANT_ID})
-    if r.scalar() == 0:
+    r = await session.execute(text("SELECT id FROM logistics_service_orders WHERE tenant_id = :tid LIMIT 1"), {"tid": TENANT_ID})
+    so_row = r.fetchone()
+    if not so_row:
         so_id_1 = str(uuid7())
         so_id_2 = str(uuid7())
         
@@ -280,6 +281,8 @@ async def seed(session: AsyncSession):
             
         await session.commit()
         print("  ✅ Ordens de Serviço (COMPLETED e SCHEDULED) criadas")
+    else:
+        so_id_1 = str(so_row[0])
         
     # 13. Billing Invoices
     r = await session.execute(text("SELECT COUNT(*) FROM billing_invoices WHERE tenant_id = :tid"), {"tid": TENANT_ID})
