@@ -1,10 +1,10 @@
 from decimal import Decimal
-from typing import List, Optional
 from uuid import UUID
 
-from modules.pricing.domain.entities.price_table import PriceTable, PriceTableItem
+from modules.pricing.domain.entities.price_table import PriceTable
 from modules.pricing.domain.entities.pricing_rule import PricingRule
 from modules.pricing.domain.value_objects import Money, PriceCalculationResult
+
 
 class PriceCalculationEngine:
     """
@@ -16,10 +16,10 @@ class PriceCalculationEngine:
         service_offering_id: UUID,
         unit_of_measure_id: UUID,
         quantity: Decimal,
-        applicable_tables: List[PriceTable],
-        applicable_rules: List[PricingRule],
-        customer_id: Optional[UUID] = None,
-        region_id: Optional[UUID] = None
+        applicable_tables: list[PriceTable],
+        applicable_rules: list[PricingRule],
+        customer_id: UUID | None = None,
+        region_id: UUID | None = None
     ) -> PriceCalculationResult:
         if not applicable_tables:
             raise ValueError("No active price table found for this service and context.")
@@ -62,7 +62,7 @@ class PriceCalculationEngine:
         )
         
     def _select_best_table(
-        self, tables: List[PriceTable], customer_id: Optional[UUID], region_id: Optional[UUID]
+        self, tables: list[PriceTable], customer_id: UUID | None, region_id: UUID | None
     ) -> PriceTable:
         # Check Customer specific first
         if customer_id:

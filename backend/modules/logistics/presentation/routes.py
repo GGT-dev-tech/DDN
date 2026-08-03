@@ -1,12 +1,12 @@
 import uuid
 from datetime import date
-from typing import Annotated, Sequence
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from sqlalchemy.orm import selectinload
 from pydantic import BaseModel, ConfigDict
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from database.session import get_db_session
 from modules.identity.dependencies import require_tenant
@@ -80,7 +80,10 @@ async def update_service_order(
     tenant_id: Annotated[uuid.UUID, Depends(require_tenant)],
     session: Annotated[AsyncSession, Depends(get_db_session)]
 ):
-    from modules.logistics.domain.value_objects.status import ServiceOrderStatus, ServiceOrderWorkflowType
+    from modules.logistics.domain.value_objects.status import (
+        ServiceOrderStatus,
+        ServiceOrderWorkflowType,
+    )
     
     stmt = (
         select(ORMServiceOrder)

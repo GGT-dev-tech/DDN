@@ -1,11 +1,13 @@
 import asyncio
 from datetime import UTC, datetime
 
+from apps.api_gateway.src.worker import celery_app
 from database.session import async_session_maker
 from modules.logistics.application.generate_orders_service import GenerateDailyOrdersService
-from modules.logistics.infrastructure.repositories.sql_service_order_repository import SqlServiceOrderRepository
+from modules.logistics.infrastructure.repositories.sql_service_order_repository import (
+    SqlServiceOrderRepository,
+)
 
-from apps.api_gateway.src.worker import celery_app
 
 @celery_app.task(name="logistics.generate_daily_service_orders")
 def generate_daily_service_orders_task():

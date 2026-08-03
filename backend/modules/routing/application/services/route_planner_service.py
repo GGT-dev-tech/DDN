@@ -53,15 +53,15 @@ class RoutePlannerService:
         
         routes: list[Route] = []
         current_route = self._create_empty_route(tenant_id, execution_date)
-        current_capacity = Decimal("0")
-        MAX_CAPACITY = Decimal("1000") # arbitrary for example
+        current_capacity = Decimal(0)
+        MAX_CAPACITY = Decimal(1000) # arbitrary for example
         
         for req in valid_reqs:
             # Check capacity
             if current_capacity + req.quantity > MAX_CAPACITY and len(current_route.stops) > 0:
                 routes.append(current_route)
                 current_route = self._create_empty_route(tenant_id, execution_date)
-                current_capacity = Decimal("0")
+                current_capacity = Decimal(0)
                 
             # Add stop
             stop = Stop(
@@ -102,10 +102,7 @@ class RoutePlannerService:
             # If frequency is daily and weekday matches, it's valid
             # (interval applies to days)
             pass
-        elif rec.frequency == Frequency.WEEKLY:
-            # Should check interval vs start date
-            pass
-        elif rec.frequency == Frequency.MONTHLY:
+        elif rec.frequency == Frequency.WEEKLY or rec.frequency == Frequency.MONTHLY:
             # Should check interval vs start date
             pass
             

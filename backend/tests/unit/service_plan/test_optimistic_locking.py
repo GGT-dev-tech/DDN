@@ -10,24 +10,21 @@ These tests use a fake in-memory repository to verify that:
 """
 import uuid
 from datetime import date, time
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock
 
 import pytest
 
 from modules.service_plan.domain.entities.service_plan import ServicePlan
 from modules.service_plan.domain.exceptions import (
     OptimisticLockError,
-    ScheduleEditNotAllowedError,
 )
 from modules.service_plan.domain.value_objects import (
     CollectionPoint,
     ContractReference,
     Recurrence,
     RecurrenceFrequency,
-    ServicePlanStatus,
     Weekday,
 )
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -285,11 +282,13 @@ class TestAPIOptimisticLockMapping:
 
     @pytest.mark.asyncio
     async def test_publish_returns_409_on_lock_conflict(self):
-        from fastapi.testclient import TestClient
         from fastapi import FastAPI
+        from fastapi.testclient import TestClient
 
-        from apps.api_gateway.src.routes.service_plan import router, get_service_plan_service
-        from modules.service_plan.application.services.service_plan_service import ServicePlanService
+        from apps.api_gateway.src.routes.service_plan import get_service_plan_service, router
+        from modules.service_plan.application.services.service_plan_service import (
+            ServicePlanService,
+        )
 
         mock_service = AsyncMock(spec=ServicePlanService)
         mock_service.publish.side_effect = OptimisticLockError("concurrent edit")
@@ -307,11 +306,13 @@ class TestAPIOptimisticLockMapping:
 
     @pytest.mark.asyncio
     async def test_patch_returns_409_on_lock_conflict(self):
-        from fastapi.testclient import TestClient
         from fastapi import FastAPI
+        from fastapi.testclient import TestClient
 
-        from apps.api_gateway.src.routes.service_plan import router, get_service_plan_service
-        from modules.service_plan.application.services.service_plan_service import ServicePlanService
+        from apps.api_gateway.src.routes.service_plan import get_service_plan_service, router
+        from modules.service_plan.application.services.service_plan_service import (
+            ServicePlanService,
+        )
 
         mock_service = AsyncMock(spec=ServicePlanService)
         mock_service.update_schedules.side_effect = OptimisticLockError("concurrent edit")

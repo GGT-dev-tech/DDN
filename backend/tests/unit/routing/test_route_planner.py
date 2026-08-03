@@ -1,6 +1,7 @@
 import uuid
 from datetime import date, time
 from decimal import Decimal
+
 import pytest
 
 from modules.routing.application.services.route_planner_service import (

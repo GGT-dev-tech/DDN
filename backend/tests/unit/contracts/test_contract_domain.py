@@ -1,15 +1,18 @@
-import pytest
 import uuid
-from datetime import datetime, UTC, date
+from datetime import date
 from decimal import Decimal
 
+import pytest
+
 from modules.contracts.domain.entities.contract import Contract
-from modules.contracts.domain.entities.version import ContractItem
-from modules.contracts.domain.value_objects import (
-    ContractTerm, ContractItemSnapshot, ContractStatus, Money
-)
 from modules.contracts.domain.events import ContractCreated, ContractStatusChanged
-from modules.contracts.domain.integration_events import ContractActivatedIntegrationEvent
+from modules.contracts.domain.value_objects import (
+    ContractItemSnapshot,
+    ContractStatus,
+    ContractTerm,
+    Money,
+)
+
 
 def test_contract_creation_draft():
     company_id = uuid.uuid4()
@@ -96,20 +99,20 @@ def test_contract_add_item_to_version():
     snapshot = ContractItemSnapshot(
         service_name="Test Service",
         unit_name="UN",
-        base_unit_price=Money(Decimal("100"), "BRL"),
-        total_base_price=Money(Decimal("100"), "BRL"),
-        surcharges_total=Money(Decimal("0"), "BRL"),
-        discounts_total=Money(Decimal("0"), "BRL"),
-        final_price=Money(Decimal("100"), "BRL")
+        base_unit_price=Money(Decimal(100), "BRL"),
+        total_base_price=Money(Decimal(100), "BRL"),
+        surcharges_total=Money(Decimal(0), "BRL"),
+        discounts_total=Money(Decimal(0), "BRL"),
+        final_price=Money(Decimal(100), "BRL")
     )
     
     item = contract.current_version.add_item(
         service_offering_id=uuid.uuid4(),
         unit_of_measure_id=uuid.uuid4(),
-        quantity=Decimal("1"),
+        quantity=Decimal(1),
         snapshot=snapshot
     )
     
     assert len(contract.current_version.items) == 1
     assert contract.current_version.items[0].snapshot.service_name == "Test Service"
-    assert contract.current_version.items[0].quantity == Decimal("1")
+    assert contract.current_version.items[0].quantity == Decimal(1)

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 """
 Service Plan — Aggregate Root.
 
@@ -8,13 +9,12 @@ Invariants enforced:
   3. publish() validates all active schedules are ready.
   4. version is incremented on every state-mutating operation (D7).
 """
-from modules.core.domain.id_generator import IdGenerator
-
 import uuid
 from datetime import UTC, date, datetime, time
 from typing import Any
 
 from modules.core.domain.aggregate import AggregateRoot
+from modules.core.domain.id_generator import IdGenerator
 from modules.service_plan.domain.entities.schedule import ServiceSchedule
 from modules.service_plan.domain.events import (
     ServicePlanCreated,

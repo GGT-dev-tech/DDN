@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from modules.core.context import ContextAccessor
 from modules.fleet.application.dto import RegisterVehicleRequestDTO, VehicleResponseDTO
 from modules.fleet.application.repositories import FleetRepository

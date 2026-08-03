@@ -2,15 +2,17 @@ import asyncio
 import logging
 import uuid
 from datetime import date
+
 from celery import shared_task
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from database.session import async_session_maker
-from modules.routing.domain.entities.collection_requirement import CollectionRequirement
 from modules.fleet.infrastructure.orm_models import VehicleModel
+from modules.routing.domain.entities.collection_requirement import CollectionRequirement
 from modules.routing.domain.entities.route import Route
-from modules.routing.infrastructure.repositories.sqlalchemy_routing_repository import SQLAlchemyRoutingRepository
+from modules.routing.infrastructure.repositories.sqlalchemy_routing_repository import (
+    SQLAlchemyRoutingRepository,
+)
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,8 @@
-import pytest
-from uuid import uuid4
-from decimal import Decimal
 from datetime import date
+from decimal import Decimal
+from uuid import uuid4
+
+import pytest
 
 from modules.pricing.domain.entities.price_table import PriceTable
 from modules.pricing.domain.entities.pricing_rule import PricingRule

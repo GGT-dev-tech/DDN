@@ -1,6 +1,7 @@
 import pytest
 from httpx import AsyncClient
 
+
 @pytest.mark.asyncio
 async def test_create_contract(async_client: AsyncClient):
     # Depending on how the API is structured, let's just make sure it returns a 422 or 2xx.

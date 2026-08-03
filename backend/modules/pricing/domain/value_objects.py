@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from decimal import Decimal
 from enum import Enum
-from typing import Optional, List
 from uuid import UUID
+
 
 class PricingRuleScope(str, Enum):
     GLOBAL = "GLOBAL"
@@ -40,4 +40,4 @@ class PriceCalculationResult:
     base_unit_price: Money
     total_base_price: Money
     final_price: Money
-    applied_rules_ids: List[UUID] = field(default_factory=list)
+    applied_rules_ids: list[UUID] = field(default_factory=list)

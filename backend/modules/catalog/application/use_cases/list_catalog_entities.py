@@ -1,7 +1,9 @@
 import uuid
+
 from pydantic import BaseModel
 
 from modules.catalog.infrastructure.repositories.catalog_repository import CatalogRepository
+
 
 class UOMResponse(BaseModel):
     id: uuid.UUID

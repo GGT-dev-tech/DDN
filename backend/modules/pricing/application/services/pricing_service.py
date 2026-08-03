@@ -1,16 +1,20 @@
 from datetime import date
 from decimal import Decimal
-from typing import Optional, List
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from modules.pricing.domain.entities.price_table import PriceTable
 from modules.pricing.domain.entities.pricing_rule import PricingRule
-from modules.pricing.domain.value_objects import Money, PricingRuleScope, PricingRuleType, PriceCalculationResult
 from modules.pricing.domain.services.price_calculation_engine import PriceCalculationEngine
+from modules.pricing.domain.value_objects import (
+    Money,
+    PriceCalculationResult,
+    PricingRuleScope,
+    PricingRuleType,
+)
 from modules.pricing.infrastructure.repositories.pricing_repository import PricingRepository
-from database.core.unit_of_work import SQLAlchemyUnitOfWork
+
 
 class PricingService:
     def __init__(self, session: AsyncSession, repository: PricingRepository, calculation_engine: PriceCalculationEngine):
@@ -23,9 +27,9 @@ class PricingService:
         tenant_id: UUID,
         name: str,
         effective_date: date,
-        end_date: Optional[date] = None,
-        region_id: Optional[UUID] = None,
-        customer_id: Optional[UUID] = None,
+        end_date: date | None = None,
+        region_id: UUID | None = None,
+        customer_id: UUID | None = None,
         is_active: bool = False
     ) -> UUID:
         table = PriceTable(
@@ -46,7 +50,7 @@ class PricingService:
         await self.session.commit()
         return table.id
 
-    async def list_price_tables(self, tenant_id: UUID) -> List[PriceTable]:
+    async def list_price_tables(self, tenant_id: UUID) -> list[PriceTable]:
         return await self.repository.list_price_tables(tenant_id)
             
     async def add_price_table_item(
@@ -83,9 +87,9 @@ class PricingService:
         rule_type: PricingRuleType,
         value: Decimal,
         priority: int = 0,
-        customer_id: Optional[UUID] = None,
-        service_offering_id: Optional[UUID] = None,
-        region_id: Optional[UUID] = None
+        customer_id: UUID | None = None,
+        service_offering_id: UUID | None = None,
+        region_id: UUID | None = None
     ) -> UUID:
         rule = PricingRule(
             name=name,
@@ -113,8 +117,8 @@ class PricingService:
         unit_of_measure_id: UUID,
         quantity: Decimal,
         reference_date: date,
-        region_id: Optional[UUID] = None,
-        customer_id: Optional[UUID] = None
+        region_id: UUID | None = None,
+        customer_id: UUID | None = None
     ) -> PriceCalculationResult:
         """
         Calculates the final price based on the active tables and rules for a given context.

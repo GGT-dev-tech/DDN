@@ -3,7 +3,7 @@ from datetime import UTC, datetime
 from uuid import uuid4
 
 from shared_kernel.contracts.aggregate_root import AggregateRoot
-from shared_kernel.events.integration import IntegrationEvent, EventMetadata
+from shared_kernel.events.integration import EventMetadata, IntegrationEvent
 
 
 @dataclass(frozen=True)

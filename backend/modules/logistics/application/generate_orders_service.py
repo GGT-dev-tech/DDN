@@ -1,15 +1,13 @@
-import uuid
 from datetime import date
-from typing import Sequence
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from modules.logistics.domain.entities.service_order import ServiceOrder
 from modules.logistics.domain.repositories.service_order_repository import ServiceOrderRepository
+from modules.service_plan.domain.value_objects import ScheduleStatus, ServicePlanStatus
 from modules.service_plan.infrastructure.orm_models import ServicePlanModel
-from modules.service_plan.domain.value_objects import ServicePlanStatus, ScheduleStatus
 
 
 class GenerateDailyOrdersService:

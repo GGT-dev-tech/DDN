@@ -1,11 +1,11 @@
 import uuid
-from typing import Sequence
+from collections.abc import Sequence
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from modules.billing.domain.entities.invoice import Invoice, InvoiceItem, InvoiceStatus
+from modules.billing.domain.entities.invoice import Invoice, InvoiceItem
 from modules.billing.infrastructure.orm_models import ORMInvoice, ORMInvoiceItem
 
 

@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useRegisterLeadApiV1CommercialLeadsPost } from '../../shared/api/generated/commercial/commercial'
 import { Button } from '../../shared/ui/components/Button'
 import { Input } from '../../shared/ui/components/Input'
 import { toast } from 'sonner'
@@ -13,10 +12,9 @@ export function LandingPage() {
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
-  
-  const { mutate, isPending } = useRegisterLeadApiV1CommercialLeadsPost()
+  const [isPending, setIsPending] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
     if (!companyName || !contactName) {
@@ -24,25 +22,33 @@ export function LandingPage() {
       return
     }
 
-    mutate(
-      { 
-        data: { 
+    setIsPending(true)
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/v1/public/leads`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
           company_name: companyName,
           contact_name: contactName,
           email: email || undefined,
           phone: phone || undefined,
           source_id: 'website_landing'
-        } 
-      },
-      {
-        onSuccess: () => {
-          setIsSuccess(true)
-        },
-        onError: (err: any) => {
-          toast.error(err.response?.data?.detail || 'Ocorreu um erro ao enviar sua solicitação.')
-        }
+        })
+      })
+
+      if (!response.ok) {
+        const err = await response.json()
+        throw new Error(err.detail || 'Ocorreu um erro ao enviar sua solicitação.')
       }
-    )
+
+      setIsSuccess(true)
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setIsPending(false)
+    }
   }
 
   return (

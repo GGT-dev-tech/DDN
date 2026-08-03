@@ -2,7 +2,6 @@ import uuid
 from decimal import Decimal
 
 from sqlalchemy import select, update
-from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from modules.routing.domain.entities.collection_requirement import (

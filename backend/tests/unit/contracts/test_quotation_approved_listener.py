@@ -1,11 +1,13 @@
-import pytest
 import uuid
-import datetime
 from unittest.mock import AsyncMock
 
-from modules.contracts.application.event_handlers.quotation_approved_listener import QuotationApprovedListener
-from modules.quotations.domain.integration_events import QuotationApprovedIntegrationEvent
+import pytest
+
+from modules.contracts.application.event_handlers.quotation_approved_listener import (
+    QuotationApprovedListener,
+)
 from modules.contracts.application.services.contract_service import ContractService
+
 
 @pytest.mark.asyncio
 async def test_quotation_approved_listener():

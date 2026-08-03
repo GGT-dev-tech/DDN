@@ -1,11 +1,12 @@
-from uuid import UUID
 from datetime import date
-from typing import Optional
-from sqlalchemy import String, Date, Boolean, Numeric, Integer, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from uuid import UUID
+
+from sqlalchemy import Boolean, Date, ForeignKey, Integer, Numeric, String
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database.core.base import Base
+
 
 class PricingPriceTableModel(Base):
     __tablename__ = "pricing_price_tables"
@@ -15,9 +16,9 @@ class PricingPriceTableModel(Base):
     tenant_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), nullable=False, index=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     effective_date: Mapped[date] = mapped_column(Date, nullable=False)
-    end_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
-    region_id: Mapped[Optional[UUID]] = mapped_column(PGUUID(as_uuid=True), nullable=True)
-    customer_id: Mapped[Optional[UUID]] = mapped_column(PGUUID(as_uuid=True), nullable=True)
+    end_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+    region_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True), nullable=True)
+    customer_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     
     items: Mapped[list["PricingPriceTableItemModel"]] = relationship(
@@ -59,8 +60,8 @@ class PricingRuleModel(Base):
     priority: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     
     # Scope criteria
-    customer_id: Mapped[Optional[UUID]] = mapped_column(PGUUID(as_uuid=True), nullable=True)
-    service_offering_id: Mapped[Optional[UUID]] = mapped_column(PGUUID(as_uuid=True), nullable=True)
-    region_id: Mapped[Optional[UUID]] = mapped_column(PGUUID(as_uuid=True), nullable=True)
+    customer_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True), nullable=True)
+    service_offering_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True), nullable=True)
+    region_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True), nullable=True)
     
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)

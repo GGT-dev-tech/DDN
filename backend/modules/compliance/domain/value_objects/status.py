@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class MTRStatus(str, Enum):
     DRAFT = "DRAFT"
     ISSUED = "ISSUED"

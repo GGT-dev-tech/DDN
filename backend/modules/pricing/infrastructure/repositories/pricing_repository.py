@@ -1,14 +1,19 @@
-from typing import List, Optional
+from datetime import date
 from uuid import UUID
-from sqlalchemy import select, and_, or_
+
+from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-from datetime import date
 
 from modules.pricing.domain.entities.price_table import PriceTable, PriceTableItem
 from modules.pricing.domain.entities.pricing_rule import PricingRule
 from modules.pricing.domain.value_objects import Money, PricingRuleScope, PricingRuleType
-from modules.pricing.infrastructure.orm_models import PricingPriceTableModel, PricingPriceTableItemModel, PricingRuleModel
+from modules.pricing.infrastructure.orm_models import (
+    PricingPriceTableItemModel,
+    PricingPriceTableModel,
+    PricingRuleModel,
+)
+
 
 class PricingRepository:
     def __init__(self, session: AsyncSession):
@@ -117,7 +122,7 @@ class PricingRepository:
             model.region_id = rule.region_id
             model.is_active = rule.is_active
 
-    async def get_price_table_by_id(self, id: UUID) -> Optional[PriceTable]:
+    async def get_price_table_by_id(self, id: UUID) -> PriceTable | None:
         stmt = select(PricingPriceTableModel).options(selectinload(PricingPriceTableModel.items)).where(PricingPriceTableModel.id == id)
         result = await self.session.execute(stmt)
         model = result.scalar_one_or_none()
@@ -125,7 +130,7 @@ class PricingRepository:
             return None
         return self._map_to_domain_price_table(model)
 
-    async def list_price_tables(self, tenant_id: UUID) -> List[PriceTable]:
+    async def list_price_tables(self, tenant_id: UUID) -> list[PriceTable]:
         stmt = select(PricingPriceTableModel).options(selectinload(PricingPriceTableModel.items)).where(PricingPriceTableModel.tenant_id == tenant_id)
         result = await self.session.execute(stmt)
         models = result.scalars().all()
@@ -137,9 +142,9 @@ class PricingRepository:
         service_offering_id: UUID,
         unit_of_measure_id: UUID,
         reference_date: date,
-        region_id: Optional[UUID] = None,
-        customer_id: Optional[UUID] = None
-    ) -> List[PriceTable]:
+        region_id: UUID | None = None,
+        customer_id: UUID | None = None
+    ) -> list[PriceTable]:
         """Finds all active price tables covering the requested date, service, and context."""
         
         # We need tables that are active, and effective_date <= reference_date <= end_date (or end_date is null)
@@ -185,9 +190,9 @@ class PricingRepository:
     async def get_applicable_pricing_rules(
         self,
         service_offering_id: UUID,
-        region_id: Optional[UUID] = None,
-        customer_id: Optional[UUID] = None
-    ) -> List[PricingRule]:
+        region_id: UUID | None = None,
+        customer_id: UUID | None = None
+    ) -> list[PricingRule]:
         """Finds all active rules matching the scope."""
         
         conditions = [

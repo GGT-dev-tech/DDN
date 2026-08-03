@@ -1,10 +1,11 @@
-import pytest
 import uuid
+from datetime import UTC, datetime
 from decimal import Decimal
-from datetime import datetime, UTC
 
-from modules.quotations.domain.entities.quotation import Quotation, QuotationItem
-from modules.quotations.domain.value_objects import QuotationStatus, QuotationItemSnapshot, Money
+import pytest
+
+from modules.quotations.domain.entities.quotation import Quotation
+from modules.quotations.domain.value_objects import Money, QuotationItemSnapshot, QuotationStatus
 
 
 def test_quotation_starts_as_draft():
@@ -24,7 +25,7 @@ def test_quotation_cannot_add_items_if_not_draft():
     quotation = Quotation(company_id, tenant_id, status=QuotationStatus.SUBMITTED)
     
     with pytest.raises(ValueError):
-        quotation.add_item(uuid.uuid4(), uuid.uuid4(), Decimal("10"))
+        quotation.add_item(uuid.uuid4(), uuid.uuid4(), Decimal(10))
 
 
 def test_mark_as_priced_requires_snapshots():
@@ -32,7 +33,7 @@ def test_mark_as_priced_requires_snapshots():
     company_id = uuid.uuid4()
     quotation = Quotation.create_draft(company_id, tenant_id, datetime.now(UTC))
     
-    item = quotation.add_item(uuid.uuid4(), uuid.uuid4(), Decimal("10"))
+    item = quotation.add_item(uuid.uuid4(), uuid.uuid4(), Decimal(10))
     
     # Attempting to mark as priced without snapshot should fail
     with pytest.raises(ValueError):
@@ -42,11 +43,11 @@ def test_mark_as_priced_requires_snapshots():
     snapshot = QuotationItemSnapshot(
         service_name="Test",
         unit_name="UN",
-        base_unit_price=Money(Decimal("100")),
-        total_base_price=Money(Decimal("1000")),
-        surcharges_total=Money(Decimal("0")),
-        discounts_total=Money(Decimal("0")),
-        final_price=Money(Decimal("1000")),
+        base_unit_price=Money(Decimal(100)),
+        total_base_price=Money(Decimal(1000)),
+        surcharges_total=Money(Decimal(0)),
+        discounts_total=Money(Decimal(0)),
+        final_price=Money(Decimal(1000)),
         pricing_reference="None"
     )
     item.attach_snapshot(snapshot)
@@ -63,7 +64,7 @@ def test_submit_requires_priced_or_draft_with_snapshots():
     with pytest.raises(ValueError):
         quotation.submit()  # Empty quotation fails
         
-    item = quotation.add_item(uuid.uuid4(), uuid.uuid4(), Decimal("10"))
+    item = quotation.add_item(uuid.uuid4(), uuid.uuid4(), Decimal(10))
     
     with pytest.raises(ValueError):
         quotation.submit()  # No snapshot fails
@@ -71,11 +72,11 @@ def test_submit_requires_priced_or_draft_with_snapshots():
     snapshot = QuotationItemSnapshot(
         service_name="Test",
         unit_name="UN",
-        base_unit_price=Money(Decimal("100")),
-        total_base_price=Money(Decimal("1000")),
-        surcharges_total=Money(Decimal("0")),
-        discounts_total=Money(Decimal("0")),
-        final_price=Money(Decimal("1000")),
+        base_unit_price=Money(Decimal(100)),
+        total_base_price=Money(Decimal(1000)),
+        surcharges_total=Money(Decimal(0)),
+        discounts_total=Money(Decimal(0)),
+        final_price=Money(Decimal(1000)),
         pricing_reference="None"
     )
     item.attach_snapshot(snapshot)

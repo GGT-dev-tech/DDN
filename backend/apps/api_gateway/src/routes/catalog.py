@@ -24,12 +24,22 @@ def get_catalog_service(
 ) -> CatalogService:
     return CatalogService(session, tenant_id)
 
-from modules.catalog.infrastructure.repositories.catalog_repository import CatalogRepository
 from modules.catalog.application.use_cases.list_catalog_entities import (
-    ListUOMs, UOMResponse as ListUOMResponse,
-    ListServiceAttributes, ServiceAttributeResponse as ListServiceAttributeResponse,
-    ListServiceOfferings, ServiceOfferingResponse as ListServiceOfferingResponse
+    ListServiceAttributes,
+    ListServiceOfferings,
+    ListUOMs,
 )
+from modules.catalog.application.use_cases.list_catalog_entities import (
+    ServiceAttributeResponse as ListServiceAttributeResponse,
+)
+from modules.catalog.application.use_cases.list_catalog_entities import (
+    ServiceOfferingResponse as ListServiceOfferingResponse,
+)
+from modules.catalog.application.use_cases.list_catalog_entities import (
+    UOMResponse as ListUOMResponse,
+)
+from modules.catalog.infrastructure.repositories.catalog_repository import CatalogRepository
+
 
 @router.get("/uom", response_model=list[ListUOMResponse])
 async def list_uoms(

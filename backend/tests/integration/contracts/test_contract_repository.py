@@ -1,13 +1,17 @@
-import pytest
-import uuid
 import datetime
+import uuid
 from decimal import Decimal
 
-from database.session import get_db_session
-from modules.contracts.domain.entities.contract import Contract
-from modules.contracts.domain.value_objects import ContractTerm, ContractStatus, ContractItemSnapshot, Money
-from modules.contracts.infrastructure.repositories.contract_repository import ContractRepository
+import pytest
 
+from modules.contracts.domain.entities.contract import Contract
+from modules.contracts.domain.value_objects import (
+    ContractItemSnapshot,
+    ContractStatus,
+    ContractTerm,
+    Money,
+)
+from modules.contracts.infrastructure.repositories.contract_repository import ContractRepository
 
 # This test requires an async DB setup. Using pytest-asyncio and rolling back transactions
 # Typical for repository integration tests in this project
@@ -46,16 +50,16 @@ async def test_save_and_get_contract(db_session):
     snapshot = ContractItemSnapshot(
         service_name="Dumpster Rental",
         unit_name="UN",
-        base_unit_price=Money(Decimal("100"), "BRL"),
-        total_base_price=Money(Decimal("100"), "BRL"),
-        surcharges_total=Money(Decimal("0"), "BRL"),
-        discounts_total=Money(Decimal("0"), "BRL"),
-        final_price=Money(Decimal("100"), "BRL")
+        base_unit_price=Money(Decimal(100), "BRL"),
+        total_base_price=Money(Decimal(100), "BRL"),
+        surcharges_total=Money(Decimal(0), "BRL"),
+        discounts_total=Money(Decimal(0), "BRL"),
+        final_price=Money(Decimal(100), "BRL")
     )
     contract.current_version.add_item(
         service_offering_id=uuid.uuid4(),
         unit_of_measure_id=uuid.uuid4(),
-        quantity=Decimal("1"),
+        quantity=Decimal(1),
         snapshot=snapshot
     )
     
@@ -76,9 +80,9 @@ async def test_save_and_get_contract(db_session):
     
     items = saved_contract.versions[0].items
     assert len(items) == 1
-    assert items[0].quantity == Decimal("1")
+    assert items[0].quantity == Decimal(1)
     assert items[0].snapshot.service_name == "Dumpster Rental"
-    assert items[0].snapshot.final_price.amount == Decimal("100")
+    assert items[0].snapshot.final_price.amount == Decimal(100)
 
 @pytest.mark.asyncio
 async def test_rls_isolation(db_session):

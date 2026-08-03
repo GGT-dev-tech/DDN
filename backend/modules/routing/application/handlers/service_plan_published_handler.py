@@ -1,9 +1,6 @@
 import logging
 from decimal import Decimal
 
-from shared_kernel.events.integration import IntegrationEvent
-from modules.service_plan.domain.integration_events import ServicePlanPublished, ServicePlanSuspended
-
 from modules.routing.domain.entities.collection_requirement import (
     CollectionRequirement,
 )
@@ -17,6 +14,11 @@ from modules.routing.domain.value_objects import (
 from modules.routing.infrastructure.repositories.sqlalchemy_requirement_repository import (
     SQLAlchemyRequirementRepository,
 )
+from modules.service_plan.domain.integration_events import (
+    ServicePlanPublished,
+    ServicePlanSuspended,
+)
+from shared_kernel.events.integration import IntegrationEvent
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +45,6 @@ class ServicePlanPublishedHandler:
             # Deactivate all requirements for this plan
             reqs = await self.repository.list_active_requirements(event.tenant_id) # actually need list by origin, but for now let's just do it directly if we had a method, or assume it's just a placeholder for the real method.
             # We don't have list_by_origin yet, we can skip full implementation for Suspended in this test
-            pass
             
         if not isinstance(event, ServicePlanPublished):
             return

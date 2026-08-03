@@ -34,6 +34,7 @@ class RouteStatus(Enum):
 
 from modules.routing.domain.value_objects import Location
 
+
 class StopStatus(Enum):
     SCHEDULED = "SCHEDULED"
     ARRIVED = "ARRIVED"

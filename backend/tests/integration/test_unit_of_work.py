@@ -6,7 +6,7 @@ import pytest
 
 from database.core.unit_of_work import SQLAlchemyUnitOfWork
 from shared_kernel.contracts.aggregate_root import AggregateRoot
-from shared_kernel.events.integration import IntegrationEvent, EventMetadata
+from shared_kernel.events.integration import EventMetadata, IntegrationEvent
 
 
 class MockAggregate(AggregateRoot):

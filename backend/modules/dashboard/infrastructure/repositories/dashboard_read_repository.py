@@ -1,5 +1,5 @@
 import abc
-from datetime import date, timezone
+from datetime import date
 from uuid import UUID
 
 from sqlalchemy import func, select

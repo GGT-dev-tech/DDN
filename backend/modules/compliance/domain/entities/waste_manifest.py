@@ -2,9 +2,9 @@ import uuid
 from datetime import UTC, date, datetime
 from typing import Any
 
+from modules.compliance.domain.value_objects.status import MTRStatus
 from modules.core.domain.aggregate import AggregateRoot
 from modules.core.domain.id_generator import IdGenerator
-from modules.compliance.domain.value_objects.status import MTRStatus
 
 
 class WasteItem:

@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
 import uuid
+
+from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from database.session import get_db_session as get_db
 from modules.core.context import ContextAccessor
 from modules.core.context import accessor as context_accessor_instance
@@ -97,6 +99,7 @@ async def assign_route_resources(
 
 from modules.routing.application.use_cases.list_routes import ListRoutes
 
+
 @router.get("/routes", response_model=list[RouteResponseDTO])
 async def list_routes(
     tenant_id: uuid.UUID = Depends(require_tenant),
@@ -105,7 +108,11 @@ async def list_routes(
     use_case = ListRoutes(routing_repo)
     return await use_case.execute(tenant_id)
 
-from modules.routing.application.use_cases.list_requirements import ListRequirementsUseCase, RequirementDTO
+from modules.routing.application.use_cases.list_requirements import (
+    ListRequirementsUseCase,
+    RequirementDTO,
+)
+
 
 @router.get("/requirements", response_model=list[RequirementDTO])
 async def list_requirements(
@@ -120,6 +127,7 @@ class OptimizeRoutesRequest(BaseModel):
     target_date: str
 
 from modules.routing.infrastructure.tasks.routing_optimizer import optimize_routes_task
+
 
 @router.post("/optimize", status_code=status.HTTP_202_ACCEPTED)
 async def trigger_route_optimization(

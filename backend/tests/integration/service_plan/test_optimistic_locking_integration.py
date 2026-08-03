@@ -5,10 +5,8 @@ This test uses the real SQLAlchemy repository and SQLite in-memory database
 to prove that concurrent modifications raise OptimisticLockError due to
 a DB-level collision (rowcount == 0).
 """
-import asyncio
 import uuid
 from datetime import date
-from unittest.mock import MagicMock
 
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker

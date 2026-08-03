@@ -1,7 +1,7 @@
+import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, date, datetime
 from enum import Enum
-import uuid
 
 from modules.core.domain.aggregate import AggregateRoot
 from modules.core.domain.id_generator import IdGenerator

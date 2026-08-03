@@ -15,11 +15,11 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
-from modules.identity.dependencies import require_tenant
 
 from database.session import get_db_session
 from modules.core.application.integration_event_factory import IntegrationEventFactory
 from modules.core.context.accessor import ContextAccessor
+from modules.identity.dependencies import require_tenant
 from modules.service_plan.application.services.service_plan_service import (
     ServicePlanService,
 )

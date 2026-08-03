@@ -1,12 +1,12 @@
-import pytest
-from decimal import Decimal
 from datetime import date
+from decimal import Decimal
 from uuid import uuid4
 
-from modules.pricing.domain.services.price_calculation_engine import PriceCalculationEngine
 from modules.pricing.domain.entities.price_table import PriceTable
 from modules.pricing.domain.entities.pricing_rule import PricingRule
+from modules.pricing.domain.services.price_calculation_engine import PriceCalculationEngine
 from modules.pricing.domain.value_objects import Money, PricingRuleScope, PricingRuleType
+
 
 def test_engine_calculates_price_correctly():
     engine = PriceCalculationEngine()
@@ -39,7 +39,7 @@ def test_engine_calculates_price_correctly():
     result = engine.calculate(
         service_offering_id=service_offering_id,
         unit_of_measure_id=uom_id,
-        quantity=Decimal("2"), # 2 units * $100 = $200 total base
+        quantity=Decimal(2), # 2 units * $100 = $200 total base
         applicable_tables=[global_table],
         applicable_rules=[discount_rule, surcharge_rule], # Will sort by priority: Surcharge (2) then Discount (1)
         customer_id=customer_id
@@ -67,7 +67,7 @@ def test_engine_table_precedence():
     result = engine.calculate(
         service_offering_id=service_offering_id,
         unit_of_measure_id=uom_id,
-        quantity=Decimal("1"),
+        quantity=Decimal(1),
         applicable_tables=[global_table, customer_table],
         applicable_rules=[],
         customer_id=customer_id

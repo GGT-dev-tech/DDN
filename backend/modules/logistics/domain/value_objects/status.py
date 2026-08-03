@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class ServiceOrderStatus(str, Enum):
     PENDING = "PENDING"
     SCHEDULED = "SCHEDULED"

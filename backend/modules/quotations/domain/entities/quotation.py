@@ -1,8 +1,8 @@
-from modules.core.domain.id_generator import IdGenerator
 import uuid
 from datetime import UTC, datetime
 from decimal import Decimal
 
+from modules.core.domain.id_generator import IdGenerator
 from modules.quotations.domain.events import (
     QuotationApproved,
     QuotationDraftCreated,

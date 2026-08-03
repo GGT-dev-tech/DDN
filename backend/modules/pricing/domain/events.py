@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from uuid import UUID
+
 from modules.core.domain.events import DomainEvent
+
 
 @dataclass(frozen=True)
 class PriceTableCreated(DomainEvent):

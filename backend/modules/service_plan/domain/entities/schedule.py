@@ -35,7 +35,7 @@ class ServiceSchedule:
     id: uuid.UUID
     service_offering_id: uuid.UUID
     service_name: str                        # immutable snapshot (D1)
-    quantity_snapshot: Decimal = Decimal("0") # immutable snapshot — from ContractItem.quantity (D1)
+    quantity_snapshot: Decimal = Decimal(0) # immutable snapshot — from ContractItem.quantity (D1)
     status: ScheduleStatus = ScheduleStatus.ACTIVE
     collection_point: CollectionPoint | None = None   # None until operator fills in
     recurrence: Recurrence | None = None              # None until operator fills in

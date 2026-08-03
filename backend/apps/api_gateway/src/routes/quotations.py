@@ -1,21 +1,19 @@
 import uuid
 from datetime import date
 from decimal import Decimal
-from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from database.session import get_db_session
 from modules.identity.dependencies import require_tenant
-from modules.quotations.application.services.quotation_service import QuotationService
-from modules.quotations.infrastructure.adapters.pricing_gateway_impl import PricingGatewayImpl
-from modules.quotations.infrastructure.adapters.catalog_gateway_impl import CatalogGatewayImpl
-from modules.quotations.infrastructure.repositories.quotation_repository import QuotationRepository
 from modules.pricing.application.services.pricing_service import PricingService
-from modules.pricing.infrastructure.repositories.pricing_repository import PricingRepository
 from modules.pricing.domain.services.price_calculation_engine import PriceCalculationEngine
-
+from modules.pricing.infrastructure.repositories.pricing_repository import PricingRepository
+from modules.quotations.application.services.quotation_service import QuotationService
+from modules.quotations.infrastructure.adapters.catalog_gateway_impl import CatalogGatewayImpl
+from modules.quotations.infrastructure.adapters.pricing_gateway_impl import PricingGatewayImpl
+from modules.quotations.infrastructure.repositories.quotation_repository import QuotationRepository
 
 router = APIRouter(prefix="/quotations", tags=["Quotations"])
 
@@ -63,8 +61,12 @@ async def create_quotation(
     return {"quotation_id": quotation_id}
 
 
-from modules.quotations.application.use_cases.list_quotations import ListQuotations, QuotationResponse
 from modules.quotations.application.use_cases.get_quotation import GetQuotation
+from modules.quotations.application.use_cases.list_quotations import (
+    ListQuotations,
+    QuotationResponse,
+)
+
 
 @router.get("", response_model=list[QuotationResponse])
 async def list_quotations(

@@ -5,6 +5,7 @@ from modules.routing.infrastructure.repositories.sqlalchemy_requirement_reposito
     SQLAlchemyRequirementRepository,
 )
 
+
 @dataclass
 class RequirementDTO:
     id: str

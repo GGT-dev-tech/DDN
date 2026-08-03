@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
 import uuid
-from typing import Dict, Any, List
 from datetime import date
+from typing import Any
+
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.session import get_db_session
-from sqlalchemy.ext.asyncio import AsyncSession
 from modules.contracts.application.services.contract_service import ContractService
 from modules.contracts.infrastructure.repositories.contract_repository import ContractRepository
 from shared_kernel.outbox.repository import OutboxRepository
@@ -17,8 +18,9 @@ def get_contract_service(session: AsyncSession = Depends(get_db_session)) -> Con
     outbox = OutboxRepository(session)
     return ContractService(session, repo, outbox)
 
-from modules.contracts.application.use_cases.list_contracts import ListContracts, ContractResponse
+from modules.contracts.application.use_cases.list_contracts import ContractResponse, ListContracts
 from modules.identity.dependencies import require_tenant
+
 
 @router.get("", response_model=list[ContractResponse])
 async def list_contracts(
@@ -34,9 +36,9 @@ class ContractCreateRequest(BaseModel):
     company_id: uuid.UUID
     quotation_id: uuid.UUID
     effective_date: date
-    items: List[Dict[str, Any]]
+    items: list[dict[str, Any]]
 
-@router.post("", response_model=Dict[str, Any])
+@router.post("", response_model=dict[str, Any])
 async def create_contract(
     request: ContractCreateRequest,
     service: ContractService = Depends(get_contract_service)

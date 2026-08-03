@@ -1,15 +1,16 @@
 import uuid
 from datetime import date
-from decimal import Decimal
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from modules.billing.domain.entities.invoice import Invoice
-from modules.billing.infrastructure.repositories.sqlalchemy_invoice_repository import SQLAlchemyInvoiceRepository
-from modules.logistics.infrastructure.orm_models import ORMServiceOrder
+from modules.billing.infrastructure.repositories.sqlalchemy_invoice_repository import (
+    SQLAlchemyInvoiceRepository,
+)
 from modules.logistics.domain.value_objects.status import ServiceOrderStatus
+from modules.logistics.infrastructure.orm_models import ORMServiceOrder
 from modules.pricing.application.services.pricing_service import PricingService
 
 

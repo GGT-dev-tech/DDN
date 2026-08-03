@@ -1,7 +1,8 @@
 from datetime import UTC, datetime, timedelta
 
-import jwt
 import bcrypt
+import jwt
+
 
 class AuthService:
     def __init__(self, secret_key: str, algorithm: str = "HS256"):

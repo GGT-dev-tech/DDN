@@ -1,10 +1,11 @@
-from modules.core.domain.id_generator import IdGenerator
-from typing import List, Optional
-from uuid import UUID, uuid4
 from datetime import date
-from shared_kernel.contracts.aggregate_root import AggregateRoot
+from uuid import UUID
+
+from modules.core.domain.id_generator import IdGenerator
+from modules.pricing.domain.events import PriceTableActivated, PriceTableCreated
 from modules.pricing.domain.value_objects import Money
-from modules.pricing.domain.events import PriceTableCreated, PriceTableActivated
+from shared_kernel.contracts.aggregate_root import AggregateRoot
+
 
 class PriceTableItem:
     def __init__(
@@ -12,7 +13,7 @@ class PriceTableItem:
         service_offering_id: UUID,
         unit_of_measure_id: UUID,
         unit_price: Money,
-        id: Optional[UUID] = None
+        id: UUID | None = None
     ):
         self.id = id or IdGenerator.generate()
         self.service_offering_id = service_offering_id
@@ -24,10 +25,10 @@ class PriceTable(AggregateRoot):
         self,
         name: str,
         effective_date: date,
-        end_date: Optional[date] = None,
-        region_id: Optional[UUID] = None,
-        customer_id: Optional[UUID] = None,
-        id: Optional[UUID] = None,
+        end_date: date | None = None,
+        region_id: UUID | None = None,
+        customer_id: UUID | None = None,
+        id: UUID | None = None,
         is_active: bool = False
     ):
         super().__init__()
@@ -39,7 +40,7 @@ class PriceTable(AggregateRoot):
         self.region_id = region_id
         self.customer_id = customer_id
         self.is_active = is_active
-        self._items: List[PriceTableItem] = []
+        self._items: list[PriceTableItem] = []
         
         self.validate()
         if not id:
@@ -80,5 +81,5 @@ class PriceTable(AggregateRoot):
         return item
         
     @property
-    def items(self) -> List[PriceTableItem]:
+    def items(self) -> list[PriceTableItem]:
         return list(self._items)

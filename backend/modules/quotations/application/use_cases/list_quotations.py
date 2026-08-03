@@ -1,5 +1,4 @@
 import uuid
-from decimal import Decimal
 
 from pydantic import BaseModel
 

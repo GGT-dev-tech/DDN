@@ -1,7 +1,8 @@
+from uuid import UUID
+
 from modules.fleet.application.dto import DriverResponseDTO
 from modules.fleet.application.repositories import FleetRepository
 
-from uuid import UUID
 
 class ListDrivers:
     def __init__(self, repository: FleetRepository):

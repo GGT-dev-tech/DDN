@@ -1,9 +1,9 @@
-import pytest
-from uuid import uuid4
 from decimal import Decimal
-from datetime import datetime, UTC, timedelta
+from uuid import uuid4
 
-from modules.quotations.domain.value_objects import QuotationItemSnapshot, Money
+import pytest
+
+from modules.quotations.domain.value_objects import Money, QuotationItemSnapshot
 from modules.quotations.infrastructure.adapters.pricing_gateway_impl import PricingContext
 
 pytestmark = pytest.mark.asyncio
@@ -29,10 +29,10 @@ class MockCatalogGateway:
 
 @pytest.fixture
 def override_gateways(app):
-    from apps.api_gateway.src.routes.quotations import get_quotation_service
     from modules.quotations.application.services.quotation_service import QuotationService
-    from database.session import get_db_session
-    from modules.quotations.infrastructure.repositories.quotation_repository import QuotationRepository
+    from modules.quotations.infrastructure.repositories.quotation_repository import (
+        QuotationRepository,
+    )
     
     # We override the dependency to use the mocks
     async def custom_get_quotation_service(session=None):
@@ -44,7 +44,6 @@ def override_gateways(app):
 
     # Note: Fast API app dependency override isn't trivial to setup perfectly inline if it depends on async yields
     # For this test, we will monkeypatch the service method directly to return a snapshot
-    pass
 
 
 async def test_quotation_api_golden_path(async_client, monkeypatch):
@@ -69,8 +68,8 @@ async def test_quotation_api_golden_path(async_client, monkeypatch):
     async def mock_get_service_offering_name(self, id): return "Mocked Service"
     async def mock_get_unit_of_measure_name(self, id): return "Mocked Unit"
     
-    from modules.quotations.infrastructure.adapters.pricing_gateway_impl import PricingGatewayImpl
     from modules.quotations.infrastructure.adapters.catalog_gateway_impl import CatalogGatewayImpl
+    from modules.quotations.infrastructure.adapters.pricing_gateway_impl import PricingGatewayImpl
     
     monkeypatch.setattr(PricingGatewayImpl, "get_price_snapshot", mock_get_price_snapshot)
     monkeypatch.setattr(CatalogGatewayImpl, "get_service_offering_name", mock_get_service_offering_name)

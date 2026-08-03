@@ -10,7 +10,7 @@ Design decisions:
 import uuid
 from typing import Any
 
-from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, String, Text, Numeric
+from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, Numeric, String, Text
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import relationship

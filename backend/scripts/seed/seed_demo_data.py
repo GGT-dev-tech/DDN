@@ -11,17 +11,16 @@ Como usar:
     DATABASE_URL="postgresql+asyncpg://..." python scripts/seed/seed_demo_data.py
 """
 import asyncio
-import sys
 import os
-from uuid import UUID
+import sys
 
 # Adiciona o backend ao path para imports funcionarem
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 import bcrypt
-from uuid6 import uuid7
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from uuid6 import uuid7
 
 # ---------------------------------------------------------------------------
 # Configuração do banco
@@ -254,8 +253,8 @@ async def seed(session: AsyncSession):
     print("✅  Seed concluído com sucesso!")
     print("="*55)
     print("\n📋 Credenciais de acesso:")
-    print(f"   Email:     admin@stitch.com")
-    print(f"   Senha:     stitchadmin")
+    print("   Email:     admin@stitch.com")
+    print("   Senha:     stitchadmin")
     print(f"\n   Tenant ID: {TENANT_ID}")
     print(f"   User ID:   {USER_ID}")
 

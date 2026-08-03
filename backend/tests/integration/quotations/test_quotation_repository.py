@@ -1,12 +1,13 @@
-import pytest
-from uuid import uuid4
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
-from datetime import datetime, UTC, timedelta
+from uuid import uuid4
+
+import pytest
+from sqlalchemy import text
 
 from modules.quotations.domain.entities.quotation import Quotation, QuotationStatus
-from modules.quotations.domain.value_objects import QuotationItemSnapshot, Money
+from modules.quotations.domain.value_objects import Money, QuotationItemSnapshot
 from modules.quotations.infrastructure.repositories.quotation_repository import QuotationRepository
-from sqlalchemy import text
 
 pytestmark = pytest.mark.asyncio
 

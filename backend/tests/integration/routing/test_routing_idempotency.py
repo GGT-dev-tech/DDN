@@ -1,4 +1,6 @@
 import uuid
+from datetime import datetime
+
 import pytest
 from sqlalchemy import select
 
@@ -9,9 +11,8 @@ from modules.routing.infrastructure.orm_models import CollectionRequirementModel
 from modules.routing.infrastructure.repositories.sqlalchemy_requirement_repository import (
     SQLAlchemyRequirementRepository,
 )
-from shared_kernel.events.integration import EventMetadata
 from modules.service_plan.domain.integration_events import ServicePlanPublished
-from datetime import datetime
+from shared_kernel.events.integration import EventMetadata
 
 
 @pytest.fixture

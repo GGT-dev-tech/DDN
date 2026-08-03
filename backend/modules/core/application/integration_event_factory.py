@@ -12,7 +12,6 @@ Uso:
     metadata = factory.build_metadata(causation_id=str(domain_event_id))
     event = MyIntegrationEvent(metadata=metadata, ...)
 """
-import uuid
 from datetime import UTC, datetime
 from uuid import UUID
 

@@ -5,7 +5,7 @@ from decimal import Decimal
 from enum import Enum
 from uuid import UUID, uuid4
 
-from shared_kernel.events.integration import IntegrationEvent, EventMetadata
+from shared_kernel.events.integration import EventMetadata, IntegrationEvent
 from shared_kernel.outbox.serialization.serializer import JsonEventSerializer
 from shared_kernel.value_objects.finance.money import Money
 from shared_kernel.value_objects.geo.location import Coordinates, GeoPoint

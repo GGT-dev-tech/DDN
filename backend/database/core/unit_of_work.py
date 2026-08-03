@@ -4,7 +4,6 @@ from contextlib import contextmanager
 from sqlalchemy.orm import Session
 
 from shared_kernel.contracts.aggregate_root import AggregateRoot
-from shared_kernel.events.integration import IntegrationEvent
 from shared_kernel.outbox.repository import OutboxRepository
 
 

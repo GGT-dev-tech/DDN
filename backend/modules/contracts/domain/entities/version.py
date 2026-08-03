@@ -1,9 +1,9 @@
-from modules.core.domain.id_generator import IdGenerator
 import uuid
 from datetime import UTC, datetime
 from decimal import Decimal
 
 from modules.contracts.domain.value_objects import ContractItemSnapshot
+from modules.core.domain.id_generator import IdGenerator
 
 
 class ContractItem:

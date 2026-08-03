@@ -1,11 +1,14 @@
 import uuid
 from datetime import date, datetime
 
-from sqlalchemy import Date, DateTime, Enum, ForeignKey, Numeric, String, Text, Uuid, cast
+from sqlalchemy import Date, DateTime, Enum, ForeignKey, String, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database.core.base import Base
-from modules.logistics.domain.value_objects.status import ServiceOrderStatus, ServiceOrderWorkflowType
+from modules.logistics.domain.value_objects.status import (
+    ServiceOrderStatus,
+    ServiceOrderWorkflowType,
+)
 
 
 class ORMServiceOrder(Base):

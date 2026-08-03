@@ -1,5 +1,5 @@
 import uuid
-from decimal import Decimal
+
 from pydantic import BaseModel
 
 from modules.contracts.infrastructure.repositories.contract_repository import ContractRepository

@@ -2,23 +2,23 @@ import os
 
 import redis
 from asgi_correlation_id import CorrelationIdMiddleware
-from fastapi import FastAPI, Response, status, APIRouter
+from fastapi import APIRouter, FastAPI, Response, status
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import OperationalError
 
 from apps.api_gateway.src.routes import auth, dashboard, fleet, routing, tenant
 from apps.api_gateway.src.routes.catalog import router as catalog_router
 from apps.api_gateway.src.routes.commercial import router as commercial_router
-from apps.api_gateway.src.routes.pricing import router as pricing_router
-from apps.api_gateway.src.routes.quotations import router as quotations_router
 from apps.api_gateway.src.routes.contracts import router as contracts_router
+from apps.api_gateway.src.routes.pricing import router as pricing_router
+from apps.api_gateway.src.routes.public import router as public_router
+from apps.api_gateway.src.routes.quotations import router as quotations_router
 from apps.api_gateway.src.routes.service_plan import router as service_plan_router
-from modules.logistics.presentation.routes import router as logistics_router
-from modules.compliance.presentation.routes import router as compliance_router
 from modules.billing.presentation.routes import router as billing_router
-
+from modules.compliance.presentation.routes import router as compliance_router
 from modules.core.logging.logger import setup_logging
 from modules.core.observability.middleware import CorrelationMiddleware
+from modules.logistics.presentation.routes import router as logistics_router
 
 # Setup structlog
 setup_logging()
@@ -53,6 +53,7 @@ api_v1.include_router(service_plan_router)
 api_v1.include_router(logistics_router)
 api_v1.include_router(compliance_router)
 api_v1.include_router(billing_router)
+api_v1.include_router(public_router)
 
 app.include_router(api_v1)
 

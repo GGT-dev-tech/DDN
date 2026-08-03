@@ -1,4 +1,5 @@
 import json
+
 from apps.api_gateway.src.main import app
 
 with open("openapi.json", "w") as f:

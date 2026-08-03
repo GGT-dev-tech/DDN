@@ -10,6 +10,7 @@ from database.core.base import Base
 from modules.routing.domain.entities.route import RouteStatus, StopStatus
 from modules.routing.domain.value_objects import RequirementStatus
 
+
 class CollectionRequirementModel(Base):
     __tablename__ = "routing_collection_requirements"
 

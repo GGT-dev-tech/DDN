@@ -1,10 +1,10 @@
-from modules.core.domain.id_generator import IdGenerator
 import uuid
 from datetime import UTC, datetime
 
 from modules.contracts.domain.entities.version import ContractVersion
 from modules.contracts.domain.events import ContractCreated, ContractStatusChanged
 from modules.contracts.domain.value_objects import ContractStatus, ContractTerm
+from modules.core.domain.id_generator import IdGenerator
 from shared_kernel.contracts.aggregate_root import AggregateRoot
 
 

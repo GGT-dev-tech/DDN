@@ -4,7 +4,10 @@ from typing import Any
 
 from modules.core.domain.aggregate import AggregateRoot
 from modules.core.domain.id_generator import IdGenerator
-from modules.logistics.domain.value_objects.status import ServiceOrderStatus, ServiceOrderWorkflowType
+from modules.logistics.domain.value_objects.status import (
+    ServiceOrderStatus,
+    ServiceOrderWorkflowType,
+)
 
 
 class ServiceOrderItem:

@@ -4,7 +4,7 @@ from uuid import uuid4
 
 from modules.core.infrastructure.outbox import OutboxEvent
 from modules.core.infrastructure.outbox_repository import SQLAlchemyOutboxRepository
-from shared_kernel.events.integration import IntegrationEvent, EventMetadata
+from shared_kernel.events.integration import EventMetadata, IntegrationEvent
 
 
 def test_outbox_repository_save():

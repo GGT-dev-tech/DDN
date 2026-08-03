@@ -1,10 +1,11 @@
-from modules.core.domain.id_generator import IdGenerator
-from typing import Optional
-from uuid import UUID, uuid4
 from decimal import Decimal
-from shared_kernel.contracts.aggregate_root import AggregateRoot
-from modules.pricing.domain.value_objects import PricingRuleScope, PricingRuleType, Money
+from uuid import UUID
+
+from modules.core.domain.id_generator import IdGenerator
 from modules.pricing.domain.events import PricingRuleCreated
+from modules.pricing.domain.value_objects import Money, PricingRuleScope, PricingRuleType
+from shared_kernel.contracts.aggregate_root import AggregateRoot
+
 
 class PricingRule(AggregateRoot):
     def __init__(
@@ -14,10 +15,10 @@ class PricingRule(AggregateRoot):
         rule_type: PricingRuleType,
         value: Decimal,
         priority: int = 0,
-        customer_id: Optional[UUID] = None,
-        service_offering_id: Optional[UUID] = None,
-        region_id: Optional[UUID] = None,
-        id: Optional[UUID] = None,
+        customer_id: UUID | None = None,
+        service_offering_id: UUID | None = None,
+        region_id: UUID | None = None,
+        id: UUID | None = None,
         is_active: bool = True
     ):
         super().__init__()
@@ -61,15 +62,15 @@ class PricingRule(AggregateRoot):
         """Applies the rule directly to a given Money value"""
         if self.rule_type == PricingRuleType.PERCENTAGE_DISCOUNT:
             # value is e.g. 10 for 10%
-            discount_amount = base_price.amount * (self.value / Decimal("100"))
+            discount_amount = base_price.amount * (self.value / Decimal(100))
             return Money(amount=base_price.amount - discount_amount, currency=base_price.currency)
             
         elif self.rule_type == PricingRuleType.ABSOLUTE_DISCOUNT:
             new_amount = base_price.amount - self.value
-            return Money(amount=max(Decimal("0"), new_amount), currency=base_price.currency)
+            return Money(amount=max(Decimal(0), new_amount), currency=base_price.currency)
             
         elif self.rule_type == PricingRuleType.PERCENTAGE_SURCHARGE:
-            surcharge_amount = base_price.amount * (self.value / Decimal("100"))
+            surcharge_amount = base_price.amount * (self.value / Decimal(100))
             return Money(amount=base_price.amount + surcharge_amount, currency=base_price.currency)
             
         elif self.rule_type == PricingRuleType.ABSOLUTE_SURCHARGE:

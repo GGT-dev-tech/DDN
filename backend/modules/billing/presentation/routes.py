@@ -2,15 +2,16 @@ import uuid
 from datetime import date
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Query, status
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, Depends, status
 from pydantic import BaseModel, ConfigDict
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.session import get_db_session
-from modules.identity.dependencies import require_tenant
-from modules.billing.infrastructure.repositories.sqlalchemy_invoice_repository import SQLAlchemyInvoiceRepository
 from modules.billing.application.services.billing_job import DailyBillingJob
-from modules.billing.domain.entities.invoice import InvoiceStatus
+from modules.billing.infrastructure.repositories.sqlalchemy_invoice_repository import (
+    SQLAlchemyInvoiceRepository,
+)
+from modules.identity.dependencies import require_tenant
 
 router = APIRouter(prefix="/billing", tags=["Billing"])
 
