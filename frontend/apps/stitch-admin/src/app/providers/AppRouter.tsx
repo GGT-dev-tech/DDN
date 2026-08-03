@@ -11,6 +11,7 @@ import { ContractsPage } from '../../pages/Contracts/ContractsPage'
 import { ContractDetailsPage } from '../../pages/Contracts/ContractDetailsPage'
 import { CustomersPage } from '../../pages/Commercial/CustomersPage'
 import { CustomerDetailsPage } from '../../pages/Commercial/CustomerDetailsPage'
+import { AtendimentoWizardPage } from '../../pages/Commercial/AtendimentoWizardPage'
 import { PricingPage } from '../../pages/Pricing/PricingPage'
 import { CatalogPage } from '../../pages/Catalog/CatalogPage'
 import { ServicePlansPage } from '../../pages/Operations/ServicePlansPage'
@@ -144,6 +145,10 @@ const router = createBrowserRouter([
           {
             path: 'customers/:id',
             element: <CustomerDetailsPage />,
+          },
+          {
+            path: 'atendimento/novo',
+            element: <AtendimentoWizardPage />,
           },
           {
             path: 'pricing',

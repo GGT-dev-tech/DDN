@@ -20,15 +20,36 @@ export function ServicePlansPage() {
     }
   }
 
-  const formatFrequency = (freq: string) => {
+  const formatFrequency = (freq: string, rules?: any) => {
+    const daysMap = {
+      1: 'Dom', 2: 'Seg', 3: 'Ter', 4: 'Qua', 5: 'Qui', 6: 'Sex', 7: 'Sáb'
+    };
+    
+    let label = freq;
     switch (freq) {
-      case 'DAILY': return 'Diário'
-      case 'WEEKLY': return 'Semanal'
-      case 'BIWEEKLY': return 'Quinzenal'
-      case 'MONTHLY': return 'Mensal'
-      case 'ON_DEMAND': return 'Sob Demanda'
-      default: return freq
+      case 'DAILY': label = 'Diário'; break;
+      case 'WEEKLY': label = 'Semanal'; break;
+      case 'BIWEEKLY': label = 'Quinzenal'; break;
+      case 'MONTHLY': label = 'Mensal'; break;
+      case 'ON_DEMAND': label = 'Sob Demanda'; break;
     }
+    
+    if (freq === 'WEEKLY' && rules?.weekdays) {
+      return (
+        <div className="flex flex-col gap-1">
+          <span className="text-sm font-medium">{label}</span>
+          <div className="flex gap-1">
+            {rules.weekdays.map((d: number) => (
+              <span key={d} className="px-1.5 py-0.5 rounded bg-brand-500/10 text-brand-600 text-[10px] font-bold">
+                {daysMap[d as keyof typeof daysMap] || d}
+              </span>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    return <span className="text-sm">{label}</span>;
   }
 
   return (
@@ -109,9 +130,9 @@ export function ServicePlansPage() {
                       </div>
                     </td>
                     <td className="p-4">
-                      <span className="text-sm text-text-primary">
-                        {formatFrequency(plan.frequency)}
-                      </span>
+                      <div className="text-text-primary">
+                        {formatFrequency(plan.frequency, plan.schedule_rules)}
+                      </div>
                     </td>
                     <td className="p-4">
                       <span className="text-sm text-text-primary">

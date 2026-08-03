@@ -31,9 +31,14 @@ export function CustomersPage() {
               </p>
             </div>
           </div>
-          <Button variant="liquid" onClick={() => setIsAddModalOpen(true)} className="gap-2">
-            <Plus size={18} /> Novo Cliente
-          </Button>
+          <div className="flex gap-3">
+            <Button variant="ghost" onClick={() => navigate('/admin/atendimento/novo')} className="gap-2 border-brand-500/50 text-brand-500 hover:bg-brand-500/10">
+              <Users size={18} /> Atendimento Rápido
+            </Button>
+            <Button variant="liquid" onClick={() => setIsAddModalOpen(true)} className="gap-2">
+              <Plus size={18} /> Novo Cliente
+            </Button>
+          </div>
         </div>
 
         {/* Lista de Clientes */}

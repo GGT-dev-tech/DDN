@@ -66,6 +66,8 @@ export function QuotationsPage() {
                   <tr className="border-b border-border bg-black/5 dark:bg-white/5">
                     <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Cotação & Cliente</th>
                     <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Status</th>
+                    <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Itens</th>
+                    <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Valor Total</th>
                     <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Validade</th>
                     <th className="p-4 text-xs font-semibold text-text-secondary uppercase tracking-wider text-right">Ações</th>
                   </tr>
@@ -83,6 +85,18 @@ export function QuotationsPage() {
                         <Badge variant={q.status === 'APPROVED' ? 'success' : 'outline'} className="variant-glass">
                           {q.status === 'DRAFT' ? 'Rascunho' : q.status === 'APPROVED' ? 'Aprovada' : q.status}
                         </Badge>
+                      </td>
+                      <td className="p-4">
+                        <span className="text-sm text-text-secondary">
+                          {q.items?.length || 0} item(s)
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <span className="text-sm font-medium text-brand-600">
+                          {q.items?.reduce((sum: number, item: any) => sum + (parseFloat(item.final_price) || 0), 0) > 0 
+                            ? `R$ ${q.items.reduce((sum: number, item: any) => sum + (parseFloat(item.final_price) || 0), 0).toFixed(2)}` 
+                            : '-'}
+                        </span>
                       </td>
                       <td className="p-4">
                         <div className="flex items-center gap-1.5 text-sm text-text-secondary">
