@@ -6,7 +6,12 @@ export function PublicLayout() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-surface-white text-on-surface flex flex-col font-sans selection:bg-brand-100 selection:text-brand-900">
+    <div className="min-h-screen bg-surface-white text-on-surface flex flex-col font-sans selection:bg-brand-100 selection:text-brand-900 relative overflow-hidden">
+      {/* Decorative Background like LoginPage */}
+      <div className="absolute inset-0 bg-[radial-gradient(#e2e2e2_1px,transparent_1px)] [background-size:24px_24px] opacity-50 z-0 pointer-events-none"></div>
+      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-brand-500 rounded-full blur-[120px] opacity-10 animate-pulse z-0 pointer-events-none"></div>
+      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-data-blue rounded-full blur-[120px] opacity-10 animate-pulse z-0 pointer-events-none"></div>
+
       {/* Header */}
       <header className="fixed top-0 w-full z-50 px-8 py-4 flex items-center justify-between bg-surface-white/80 backdrop-blur-md shadow-sm border-b border-surface-variant transition-all">
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
@@ -23,12 +28,12 @@ export function PublicLayout() {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 pt-20 flex flex-col">
+      <main className="flex-1 pt-20 flex flex-col relative z-10">
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer className="bg-surface-bright py-12 px-8 border-t border-surface-variant mt-auto">
+      <footer className="bg-surface-bright/80 backdrop-blur-md py-12 px-8 border-t border-surface-variant mt-auto relative z-10">
         <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-8 mb-8">
           <div className="md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
