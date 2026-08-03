@@ -181,13 +181,13 @@ async def seed(session: AsyncSession):
         print("  ✅ Serviços do catálogo criados")
 
     # 9. Pricing Tables
-    r = await session.execute(text("SELECT id FROM pricing_tables WHERE tenant_id = :tid"), {"tid": TENANT_ID})
+    r = await session.execute(text("SELECT id FROM pricing_price_tables WHERE tenant_id = :tid"), {"tid": TENANT_ID})
     pricing_table_id = None
     if not r.fetchone():
         pricing_table_id = str(uuid7())
         await session.execute(text("""
-            INSERT INTO pricing_tables (id, tenant_id, name, status, valid_from, valid_to, created_at, updated_at)
-            VALUES (:id, :tid, 'Tabela Base 2026', 'ACTIVE', CURRENT_DATE, CURRENT_DATE + interval '1 year', NOW(), NOW())
+            INSERT INTO pricing_price_tables (id, tenant_id, name, is_active, effective_date, end_date)
+            VALUES (:id, :tid, 'Tabela Base 2026', True, CURRENT_DATE, CURRENT_DATE + interval '1 year')
         """), {"id": pricing_table_id, "tid": TENANT_ID})
         await session.commit()
         print("  ✅ Tabela de Preços criada")
