@@ -4,6 +4,7 @@ import { Button } from '../../../shared/ui/components/Button'
 import { Input } from '../../../shared/ui/components/Input'
 import { toast } from 'sonner'
 import { Search, RefreshCw, CheckCircle2 } from 'lucide-react'
+import { AddressAutocomplete } from '../../../shared/ui/components/AddressAutocomplete'
 
 interface CustomerFormProps {
   onSuccess?: () => void
@@ -84,7 +85,7 @@ export function CustomerForm({ onSuccess, onCancel }: CustomerFormProps) {
     if (!addrToSearch) return
     setIsGeocoding(true)
     try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addrToSearch)}`)
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addrToSearch)}&countrycodes=br`)
       const data = await res.json()
       if (data && data.length > 0) {
         setLatitude(data[0].lat)
@@ -97,12 +98,6 @@ export function CustomerForm({ onSuccess, onCancel }: CustomerFormProps) {
       toast.error('Erro ao buscar coordenadas.')
     } finally {
       setIsGeocoding(false)
-    }
-  }
-
-  const handleAddressBlur = () => {
-    if (address && !latitude && !longitude) {
-      geocodeAddress(address)
     }
   }
 
@@ -231,11 +226,16 @@ export function CustomerForm({ onSuccess, onCancel }: CustomerFormProps) {
           <label className="text-sm font-medium">Endereço Completo</label>
           {isGeocoding && <span className="text-xs text-brand-500 flex items-center gap-1"><RefreshCw size={12} className="animate-spin" /> Buscando coordenadas...</span>}
         </div>
-        <Input 
+        <AddressAutocomplete 
           placeholder="Rua Exemplo, 123, Bairro, Cidade - Estado" 
           value={address}
-          onChange={(e: any) => setAddress(e.target.value)}
-          onBlur={handleAddressBlur}
+          onChange={setAddress}
+          onSelect={(selectedAddress, lat, lon) => {
+            setAddress(selectedAddress);
+            setLatitude(lat);
+            setLongitude(lon);
+            toast.success('Coordenadas geradas automaticamente!');
+          }}
           disabled={isPending}
         />
       </div>
