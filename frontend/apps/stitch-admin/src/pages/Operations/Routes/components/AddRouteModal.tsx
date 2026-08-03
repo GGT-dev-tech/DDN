@@ -4,7 +4,7 @@ import { Modal } from '../../../../shared/ui/components/Modal';
 import { Input } from '../../../../shared/ui/components/Input';
 import { Button } from '../../../../shared/ui/components/Button';
 import { Select } from '../../../../shared/ui/components/Select';
-import { useCreateRouteApiV1RoutingRoutesPost, getListRoutesApiV1RoutingRoutesGetQueryKey } from '../../../../shared/api/generated/routing/routing';
+import { useCreateRouteApiV1RoutingRoutesPost, getListRoutesApiV1RoutingRoutesGetQueryKey, useAssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost } from '../../../../shared/api/generated/routing/routing';
 import { useListVehiclesApiV1FleetVehiclesGet, useListDriversApiV1FleetDriversGet } from '../../../../shared/api/generated/fleet/fleet';
 import { toast } from 'sonner';
 
@@ -15,7 +15,9 @@ interface AddRouteModalProps {
 
 export function AddRouteModal({ isOpen, onClose }: AddRouteModalProps) {
   const queryClient = useQueryClient();
-  const { mutateAsync: createRoute, isPending } = useCreateRouteApiV1RoutingRoutesPost();
+  const { mutateAsync: createRoute, isPending: isCreating } = useCreateRouteApiV1RoutingRoutesPost();
+  const { mutateAsync: assignResources, isPending: isAssigning } = useAssignRouteResourcesApiV1RoutingRoutesRouteIdAssignPost();
+  const isPending = isCreating || isAssigning;
   const { data: vehicles = [] } = useListVehiclesApiV1FleetVehiclesGet();
   const { data: drivers  = [] } = useListDriversApiV1FleetDriversGet();
 
@@ -34,13 +36,27 @@ export function AddRouteModal({ isOpen, onClose }: AddRouteModalProps) {
     if (!executionDate) return;
 
     try {
-      await createRoute({
+      const routeResponse = await createRoute({
         data: {
           execution_date: executionDate,
-          ...(vehicleId ? { vehicle_id: vehicleId } : {}),
-          ...(driverId  ? { driver_id: driverId   } : {}),
-        } as any
+        }
       });
+      
+      const newRouteId = routeResponse.id;
+
+      if (newRouteId && vehicleId && driverId) {
+        await assignResources({
+          routeId: newRouteId,
+          data: {
+            route_id: newRouteId,
+            vehicle_id: vehicleId,
+            driver_id: driverId
+          } as any
+        });
+      } else if (vehicleId || driverId) {
+         toast.warning('Atenção: Rota criada, mas para atribuir recursos é necessário selecionar tanto veículo quanto motorista.', { duration: 5000 });
+      }
+
       queryClient.invalidateQueries({ queryKey: getListRoutesApiV1RoutingRoutesGetQueryKey() });
       toast.success('Rota criada com sucesso!');
       onClose();
