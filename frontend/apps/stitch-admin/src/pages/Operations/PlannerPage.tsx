@@ -4,6 +4,7 @@ import { Button } from '../../shared/ui/components/Button'
 import { Badge } from '../../shared/ui/components/Badge'
 import { EmptyState } from '../../shared/ui/components/EmptyState'
 import { AddRouteModal } from './Routes/components/AddRouteModal'
+import { RouteDetailsModal } from './components/RouteDetailsModal'
 import { toast } from 'sonner'
 import { useQueryClient } from '@tanstack/react-query'
 import { 
@@ -37,6 +38,7 @@ function formatDate(dateStr: string) {
 
 export function PlannerPage() {
   const [isAddRouteOpen, setIsAddRouteOpen] = useState(false)
+  const [selectedRoute, setSelectedRoute] = useState<any>(null)
   const queryClient = useQueryClient()
 
   const { data: routes = [], isLoading: loadingRoutes } = useListRoutesApiV1RoutingRoutesGet()
@@ -211,7 +213,11 @@ export function PlannerPage() {
                   </thead>
                   <tbody className="divide-y divide-border">
                     {todayRoutes.map((route: any) => (
-                      <tr key={route.id} className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                      <tr 
+                        key={route.id} 
+                        onClick={() => setSelectedRoute(route)}
+                        className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      >
                         <td className="p-3 text-sm font-medium text-text-primary">
                           ROTA-{route.id?.substring(0, 8).toUpperCase()}
                         </td>
@@ -249,6 +255,12 @@ export function PlannerPage() {
       <AddRouteModal
         isOpen={isAddRouteOpen}
         onClose={() => setIsAddRouteOpen(false)}
+      />
+
+      <RouteDetailsModal
+        isOpen={!!selectedRoute}
+        onClose={() => setSelectedRoute(null)}
+        route={selectedRoute}
       />
     </div>
   )
