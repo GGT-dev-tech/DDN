@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Badge } from '../../shared/ui/components/Badge'
 import { Button } from '../../shared/ui/components/Button'
 import { EmptyState } from '../../shared/ui/components/EmptyState'
-import { useListInvoicesApiV1BillingInvoicesGet, useGenerateDailyBillingApiV1BillingGenerateDailyPost } from '../../shared/api/generated/billing/billing'
+import { useListInvoicesApiV1BillingInvoicesGet } from '../../shared/api/generated/billing/billing'
 import { FileText, Play, CheckCircle2, ChevronDown, ChevronRight, Calculator } from 'lucide-react'
 import { toast } from 'sonner'
 import { format } from 'date-fns'
@@ -23,24 +23,34 @@ function formatCurrency(val: number) {
 
 export function BillingPage() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [isGenerating, setIsGenerating] = useState(false)
   
   const { data: invoices = [], isLoading, refetch } = useListInvoicesApiV1BillingInvoicesGet()
-  const { mutate: generateBilling, isPending: isGenerating } = useGenerateDailyBillingApiV1BillingGenerateDailyPost()
 
-  const handleGenerateDaily = () => {
-    generateBilling({
-      data: {
-        reference_date: format(new Date(), 'yyyy-MM-dd')
-      }
-    }, {
-      onSuccess: (res: any) => {
-        toast.success(`Faturamento diário executado! ${res.invoice_ids.length} faturas geradas.`)
+  const handleGenerateDaily = async () => {
+    try {
+      setIsGenerating(true)
+      const currentMonth = format(new Date(), 'yyyy-MM')
+      
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/v1/billing/invoices/generate?reference_month=${currentMonth}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('ddn_auth_token')}`
+        }
+      })
+      
+      if (res.ok) {
+        const data = await res.json()
+        toast.success(`Sucesso! ${data.count} faturas geradas.`)
         refetch()
-      },
-      onError: () => {
-        toast.error('Erro ao gerar faturamento diário.')
+      } else {
+        toast.error('Erro ao gerar faturas.')
       }
-    })
+    } catch (error) {
+      toast.error('Erro de conexão ao gerar faturas.')
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   const totalAmount = (invoices as any[]).reduce((acc, inv) => acc + (inv.total_amount || 0), 0)
@@ -132,7 +142,7 @@ export function BillingPage() {
                               <Badge variant={st.variant} className="variant-glass text-xs">
                                 {st.label}
                               </Badge>
-                              <span className="text-xs text-text-secondary">Ref: {invoice.reference_date}</span>
+                              <span className="text-xs text-text-secondary">Ref: {invoice.reference_month}</span>
                             </div>
                           </div>
                         </div>

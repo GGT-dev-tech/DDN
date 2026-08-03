@@ -1,87 +1,96 @@
 import uuid
-from dataclasses import dataclass, field
-from datetime import UTC, date, datetime
-from enum import Enum
+from datetime import UTC, datetime
+from decimal import Decimal
 
-from modules.core.domain.aggregate import AggregateRoot
 from modules.core.domain.id_generator import IdGenerator
+from shared_kernel.contracts.aggregate_root import AggregateRoot
 
 
-class InvoiceStatus(str, Enum):
-    DRAFT = "DRAFT"
-    ISSUED = "ISSUED"
-    PAID = "PAID"
-    CANCELLED = "CANCELLED"
-
-
-@dataclass
 class InvoiceItem:
-    id: uuid.UUID
-    service_order_id: uuid.UUID
-    description: str
-    quantity: float
-    unit_price: float
-    total_price: float
+    def __init__(
+        self,
+        service_offering_id: uuid.UUID,
+        service_name: str,
+        quantity: Decimal,
+        unit_price: Decimal,
+        total_price: Decimal,
+        service_order_id: uuid.UUID | None = None,
+        id: uuid.UUID | None = None
+    ):
+        self.id = id or IdGenerator.generate()
+        self.service_offering_id = service_offering_id
+        self.service_name = service_name
+        self.quantity = quantity
+        self.unit_price = unit_price
+        self.total_price = total_price
+        self.service_order_id = service_order_id
 
 
-@dataclass
 class Invoice(AggregateRoot):
-    id: uuid.UUID
-    tenant_id: uuid.UUID
-    company_id: uuid.UUID
-    reference_date: date
-    status: InvoiceStatus
-    total_amount: float
-    due_date: date | None = None
-    items: list[InvoiceItem] = field(default_factory=list)
-    created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
-    updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
+    def __init__(
+        self,
+        company_id: uuid.UUID,
+        tenant_id: uuid.UUID,
+        reference_month: str,  # Format: "YYYY-MM"
+        id: uuid.UUID | None = None,
+        status: str = "DRAFT",
+        issue_date: datetime | None = None,
+        due_date: datetime | None = None,
+        created_at: datetime | None = None,
+        updated_at: datetime | None = None
+    ):
+        super().__init__()
+        self._id = id or IdGenerator.generate()
+        self.tenant_id = tenant_id
+        self.company_id = company_id
+        self.reference_month = reference_month
+        self.status = status
+        self.issue_date = issue_date or datetime.now(UTC)
+        self.due_date = due_date
+        self.created_at = created_at or datetime.now(UTC)
+        self.updated_at = updated_at or datetime.now(UTC)
+        self.items: list[InvoiceItem] = []
 
-    @classmethod
-    def create(cls, tenant_id: uuid.UUID, company_id: uuid.UUID, reference_date: date) -> "Invoice":
-        return cls(
-            id=IdGenerator.generate(),
-            tenant_id=tenant_id,
-            company_id=company_id,
-            reference_date=reference_date,
-            status=InvoiceStatus.DRAFT,
-            total_amount=0.0
-        )
+    @property
+    def id(self) -> uuid.UUID:
+        return self._id
 
-    def add_item(self, service_order_id: uuid.UUID, description: str, quantity: float, unit_price: float) -> InvoiceItem:
-        if self.status != InvoiceStatus.DRAFT:
-            raise ValueError("Cannot add items to a non-draft invoice")
+    @property
+    def total_amount(self) -> Decimal:
+        return sum(item.total_price for item in self.items)
+        
+    def add_item(
+        self,
+        service_offering_id: uuid.UUID,
+        service_name: str,
+        quantity: Decimal,
+        unit_price: Decimal,
+        total_price: Decimal,
+        service_order_id: uuid.UUID | None = None
+    ) -> InvoiceItem:
+        if self.status != "DRAFT":
+            raise ValueError(f"Cannot add items to an invoice in {self.status} status")
             
-        total_price = quantity * unit_price
         item = InvoiceItem(
-            id=IdGenerator.generate(),
-            service_order_id=service_order_id,
-            description=description,
+            service_offering_id=service_offering_id,
+            service_name=service_name,
             quantity=quantity,
             unit_price=unit_price,
-            total_price=total_price
+            total_price=total_price,
+            service_order_id=service_order_id
         )
         self.items.append(item)
-        self._recalculate_total()
-        return item
-
-    def _recalculate_total(self) -> None:
-        self.total_amount = sum(item.total_price for item in self.items)
         self.updated_at = datetime.now(UTC)
-
-    def issue(self, due_date: date) -> None:
-        if self.status != InvoiceStatus.DRAFT:
-            raise ValueError("Only draft invoices can be issued")
-        if not self.items:
-            raise ValueError("Cannot issue an empty invoice")
-            
-        self.status = InvoiceStatus.ISSUED
-        self.due_date = due_date
+        return item
+        
+    def approve(self) -> None:
+        if self.status != "DRAFT":
+            raise ValueError(f"Cannot approve invoice in {self.status} status")
+        self.status = "APPROVED"
         self.updated_at = datetime.now(UTC)
 
     def mark_as_paid(self) -> None:
-        if self.status != InvoiceStatus.ISSUED:
-            raise ValueError("Only issued invoices can be marked as paid")
-            
-        self.status = InvoiceStatus.PAID
+        if self.status != "APPROVED":
+            raise ValueError(f"Cannot mark invoice as paid in {self.status} status")
+        self.status = "PAID"
         self.updated_at = datetime.now(UTC)

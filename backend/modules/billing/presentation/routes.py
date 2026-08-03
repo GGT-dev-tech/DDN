@@ -1,72 +1,85 @@
 import uuid
-from datetime import date
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.session import get_db_session
-from modules.billing.application.services.billing_job import DailyBillingJob
-from modules.billing.infrastructure.repositories.sqlalchemy_invoice_repository import (
-    SQLAlchemyInvoiceRepository,
-)
+from modules.billing.application.services.billing_engine_service import BillingEngineService
+from modules.billing.infrastructure.repositories.sql_invoice_repository import SQLInvoiceRepository
 from modules.identity.dependencies import require_tenant
 
 router = APIRouter(prefix="/billing", tags=["Billing"])
 
 
-def get_invoice_repository(session: AsyncSession = Depends(get_db_session)):
-    return SQLAlchemyInvoiceRepository(session)
-
-
 class InvoiceItemSchema(BaseModel):
     id: uuid.UUID
-    service_order_id: uuid.UUID
-    description: str
+    service_offering_id: uuid.UUID
+    service_name: str
     quantity: float
     unit_price: float
     total_price: float
+    service_order_id: uuid.UUID | None = None
     model_config = ConfigDict(from_attributes=True)
 
 
 class InvoiceSchema(BaseModel):
     id: uuid.UUID
-    tenant_id: uuid.UUID
     company_id: uuid.UUID
-    reference_date: date
+    reference_month: str
     status: str
     total_amount: float
-    due_date: date | None = None
     items: list[InvoiceItemSchema]
     model_config = ConfigDict(from_attributes=True)
+
+
+def get_billing_service(session: AsyncSession = Depends(get_db_session)) -> BillingEngineService:
+    repo = SQLInvoiceRepository(session)
+    return BillingEngineService(session, repo)
 
 
 @router.get("/invoices", response_model=list[InvoiceSchema])
 async def list_invoices(
     tenant_id: Annotated[uuid.UUID, Depends(require_tenant)],
-    repo: Annotated[SQLAlchemyInvoiceRepository, Depends(get_invoice_repository)]
+    session: Annotated[AsyncSession, Depends(get_db_session)]
+):
+    repo = SQLInvoiceRepository(session)
+    domain_invoices = await repo.get_by_tenant(tenant_id)
+    
+    result = []
+    for inv in domain_invoices:
+        # Convert domain model to schema dictionary manually since we don't have an ORM object anymore directly
+        result.append({
+            "id": inv.id,
+            "company_id": inv.company_id,
+            "reference_month": inv.reference_month,
+            "status": inv.status,
+            "total_amount": float(inv.total_amount),
+            "items": [
+                {
+                    "id": item.id,
+                    "service_offering_id": item.service_offering_id,
+                    "service_name": item.service_name,
+                    "quantity": float(item.quantity),
+                    "unit_price": float(item.unit_price),
+                    "total_price": float(item.total_price),
+                    "service_order_id": item.service_order_id
+                }
+                for item in inv.items
+            ]
+        })
+    return result
+
+
+@router.post("/invoices/generate")
+async def generate_invoices(
+    reference_month: str = Query(..., description="Format: YYYY-MM"),
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    service: BillingEngineService = Depends(get_billing_service)
 ):
     """
-    List all invoices for the tenant.
+    Triggers the generation of invoices for all COMPLETED service orders in the reference month.
     """
-    return await repo.list_by_tenant(tenant_id)
-
-
-class GenerateBillingRequest(BaseModel):
-    reference_date: date
-
-
-@router.post("/generate-daily", status_code=status.HTTP_201_CREATED)
-async def generate_daily_billing(
-    request: GenerateBillingRequest,
-    tenant_id: Annotated[uuid.UUID, Depends(require_tenant)],
-    session: Annotated[AsyncSession, Depends(get_db_session)],
-    repo: Annotated[SQLAlchemyInvoiceRepository, Depends(get_invoice_repository)]
-):
-    """
-    Triggers the generation of daily invoices for completed ServiceOrders.
-    """
-    job = DailyBillingJob(session, repo, None)  # type: ignore (PricingService not fully integrated yet)
-    invoice_ids = await job.execute(tenant_id, request.reference_date)
-    return {"message": f"Generated {len(invoice_ids)} invoices.", "invoice_ids": invoice_ids}
+    generated = await service.generate_monthly_invoices(tenant_id, reference_month)
+    return {"message": "Invoices generated successfully", "count": generated}

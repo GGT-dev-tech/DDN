@@ -1,49 +1,38 @@
 import uuid
-from datetime import date, datetime
+from decimal import Decimal
 
-from sqlalchemy import Date, DateTime, Enum, ForeignKey, Numeric, String, Uuid
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Column, String, Float, DateTime, ForeignKey
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 
 from database.core.base import Base
-from modules.billing.domain.entities.invoice import InvoiceStatus
-
 
 class ORMInvoice(Base):
     __tablename__ = "billing_invoices"
 
-    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True)
-    tenant_id: Mapped[uuid.UUID] = mapped_column(Uuid, index=True)
-    company_id: Mapped[uuid.UUID] = mapped_column(Uuid, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True)
+    tenant_id = Column(UUID(as_uuid=True), nullable=False, index=True)
+    company_id = Column(UUID(as_uuid=True), nullable=False, index=True)
+    reference_month = Column(String(7), nullable=False)
+    status = Column(String(20), nullable=False, default="DRAFT")
+    issue_date = Column(DateTime(timezone=True), nullable=False)
+    due_date = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False)
+    updated_at = Column(DateTime(timezone=True), nullable=False)
     
-    reference_date: Mapped[date] = mapped_column(Date, index=True)
-    status: Mapped[InvoiceStatus] = mapped_column(Enum(InvoiceStatus, name="invoicestatus"))
-    total_amount: Mapped[float] = mapped_column(Numeric(10, 2))
-    due_date: Mapped[date | None] = mapped_column(Date, nullable=True)
-    
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-    
-    items: Mapped[list["ORMInvoiceItem"]] = relationship(
-        "ORMInvoiceItem",
-        back_populates="invoice",
-        cascade="all, delete-orphan",
-        lazy="selectin"
-    )
+    items = relationship("ORMInvoiceItem", back_populates="invoice", cascade="all, delete-orphan")
 
 
 class ORMInvoiceItem(Base):
     __tablename__ = "billing_invoice_items"
 
-    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True)
-    invoice_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("billing_invoices.id", ondelete="CASCADE"), index=True)
-    service_order_id: Mapped[uuid.UUID] = mapped_column(Uuid, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True)
+    invoice_id = Column(UUID(as_uuid=True), ForeignKey("billing_invoices.id"), nullable=False)
+    service_offering_id = Column(UUID(as_uuid=True), nullable=False)
+    service_name = Column(String(255), nullable=False)
+    quantity = Column(Float, nullable=False)
+    unit_price = Column(Float, nullable=False)
+    total_price = Column(Float, nullable=False)
+    service_order_id = Column(UUID(as_uuid=True), nullable=True)
     
-    description: Mapped[str] = mapped_column(String(255))
-    quantity: Mapped[float] = mapped_column(Numeric(10, 2))
-    unit_price: Mapped[float] = mapped_column(Numeric(10, 2))
-    total_price: Mapped[float] = mapped_column(Numeric(10, 2))
-    
-    invoice: Mapped["ORMInvoice"] = relationship(
-        "ORMInvoice",
-        back_populates="items"
-    )
+    invoice = relationship("ORMInvoice", back_populates="items")
