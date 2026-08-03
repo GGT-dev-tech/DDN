@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from modules.tenant.infrastructure.orm_models import ORMTenant
+from modules.tenant.domain.entities.tenant import Tenant
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -24,7 +24,7 @@ async def register_public_lead(
     Automatically assigns the lead to the first available tenant (default tenant).
     """
     # Find the default tenant
-    stmt = select(ORMTenant).limit(1)
+    stmt = select(Tenant).limit(1)
     result = await session.execute(stmt)
     tenant = result.scalar_one_or_none()
     
