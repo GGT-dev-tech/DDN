@@ -4,11 +4,14 @@ import { Bell, Search } from 'lucide-react'
 import { Button } from '../../shared/ui/components/Button'
 import { CommandPalette } from './CommandPalette'
 import { cn } from '../../shared/ui/components/Button'
+import { useTour } from '../../app/providers/TourProvider'
+import { HelpCircle } from 'lucide-react'
 
 interface HeaderProps extends HTMLAttributes<HTMLElement> {}
 
 export function Header({ className, ...props }: HeaderProps) {
   const [isCommandOpen, setCommandOpen] = useState(false)
+  const { startTour } = useTour()
 
   return (
     <>
@@ -32,6 +35,10 @@ export function Header({ className, ...props }: HeaderProps) {
             <kbd className="ml-auto text-xs opacity-50">⌘K</kbd>
           </Button>
 
+          <Button variant="ghost" className="p-2 h-auto rounded-full" onClick={startTour} title="Iniciar Tour Guiado">
+            <HelpCircle size={20} className="text-text-secondary" />
+          </Button>
+          
           <Button variant="ghost" className="p-2 h-auto rounded-full">
             <Bell size={20} />
           </Button>
