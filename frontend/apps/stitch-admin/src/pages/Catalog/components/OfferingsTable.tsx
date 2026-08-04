@@ -6,9 +6,11 @@ import { Button } from "../../../shared/ui/components/Button";
 import { Modal } from "../../../shared/ui/components/Modal";
 import { EmptyState } from "../../../shared/ui/components/EmptyState";
 import { OfferingForm } from "./OfferingForm";
+import { EditOfferingModal } from "./EditOfferingModal";
 
 export function OfferingsTable() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingOffering, setEditingOffering] = useState<any | null>(null);
   const { data: offerings, isLoading, error, refetch } = useListOfferingsApiV1CatalogOfferingsGet();
 
   return (
@@ -47,7 +49,7 @@ export function OfferingsTable() {
             </thead>
             <tbody className="divide-y divide-border">
               {offerings.map((offering: any) => (
-                <tr key={offering.id} className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                <tr key={offering.id} className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer" onClick={() => setEditingOffering(offering)}>
                   <td className="p-4">
                     <div className="font-medium text-text-primary">{offering.name}</div>
                     {offering.description && (
@@ -96,6 +98,20 @@ export function OfferingsTable() {
           onSuccess={() => { setIsModalOpen(false); refetch(); }} 
           onCancel={() => setIsModalOpen(false)} 
         />
+      </Modal>
+
+      <Modal 
+        isOpen={!!editingOffering} 
+        onClose={() => setEditingOffering(null)}
+        title={`Personalizar: ${editingOffering?.name}`}
+      >
+        {editingOffering && (
+          <EditOfferingModal 
+            offering={editingOffering}
+            onSuccess={() => { refetch(); }} 
+            onCancel={() => setEditingOffering(null)} 
+          />
+        )}
       </Modal>
     </div>
   );

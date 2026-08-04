@@ -2,16 +2,22 @@ from datetime import date
 from decimal import Decimal
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 from modules.pricing.domain.value_objects import PricingRuleScope, PricingRuleType
 
 
-class PriceTableItemCreateRequest(BaseModel):
+class MoneyResponse(BaseModel):
+    amount: Decimal
+    currency: str
+    model_config = ConfigDict(from_attributes=True)
+
+class PriceTableItemResponse(BaseModel):
+    id: UUID
     service_offering_id: UUID
     unit_of_measure_id: UUID
-    amount: Decimal = Field(..., gt=0)
-    currency: str = "BRL"
+    unit_price: MoneyResponse
+    model_config = ConfigDict(from_attributes=True)
 
 class PriceTableCreateRequest(BaseModel):
     name: str = Field(..., max_length=255)
@@ -21,6 +27,12 @@ class PriceTableCreateRequest(BaseModel):
     customer_id: UUID | None = None
     is_active: bool = False
 
+class PriceTableItemCreateRequest(BaseModel):
+    service_offering_id: UUID
+    unit_of_measure_id: UUID
+    amount: Decimal = Field(..., gt=0)
+    currency: str = "BRL"
+
 class PriceTableResponse(BaseModel):
     id: UUID
     name: str
@@ -29,6 +41,8 @@ class PriceTableResponse(BaseModel):
     region_id: UUID | None = None
     customer_id: UUID | None = None
     is_active: bool
+    items: list[PriceTableItemResponse] = []
+    model_config = ConfigDict(from_attributes=True)
 
 
 class PricingRuleCreateRequest(BaseModel):
@@ -49,10 +63,6 @@ class PriceCalculationRequest(BaseModel):
     region_id: UUID | None = None
     customer_id: UUID | None = None
 
-class MoneyResponse(BaseModel):
-    amount: Decimal
-    currency: str
-
 class PriceCalculationResponse(BaseModel):
     service_offering_id: UUID
     unit_of_measure_id: UUID
@@ -61,3 +71,5 @@ class PriceCalculationResponse(BaseModel):
     total_base_price: MoneyResponse
     final_price: MoneyResponse
     applied_rules_ids: list[UUID]
+    model_config = ConfigDict(from_attributes=True)
+

@@ -4,13 +4,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Badge } from '../../../shared/ui/components/Badge'
 import { Button } from '../../../shared/ui/components/Button'
 import { EmptyState } from '../../../shared/ui/components/EmptyState'
-import { ClipboardList, RefreshCw, FileText, CheckCircle2, Play, CircleDot } from 'lucide-react'
+import { ClipboardList, RefreshCw, FileText, CheckCircle2, Play, CircleDot, Eye } from 'lucide-react'
 import { toast } from 'sonner'
+import { ServiceOrderDetailsModal } from './ServiceOrderDetailsModal'
 
 export function ServiceOrdersPage() {
   const [orders, setOrders] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [generatingMtr, setGeneratingMtr] = useState<string | null>(null)
+  const [selectedOrder, setSelectedOrder] = useState<any | null>(null)
 
   const fetchOrders = async () => {
     setIsLoading(true)
@@ -129,23 +131,14 @@ export function ServiceOrdersPage() {
                         )}
                       </TableCell>
                       <TableCell className="text-right">
-                        {order.status === 'COMPLETED' ? (
-                          <Button 
-                            variant="liquid" 
-                            className="gap-2 text-xs h-8 px-3 py-1"
-                            onClick={() => handleGenerateMtr(order.id)}
-                            disabled={generatingMtr === order.id}
-                          >
-                            {generatingMtr === order.id ? (
-                              <RefreshCw size={14} className="animate-spin" />
-                            ) : (
-                              <FileText size={14} />
-                            )}
-                            Gerar MTR
-                          </Button>
-                        ) : (
-                          <span className="text-xs text-text-secondary italic">Aguardando Coleta</span>
-                        )}
+                        <Button 
+                          variant="ghost" 
+                          className="gap-2 text-xs h-8 px-3 py-1"
+                          onClick={() => setSelectedOrder(order)}
+                        >
+                          <Eye size={14} />
+                          Ver Detalhes MTR
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -165,6 +158,17 @@ export function ServiceOrdersPage() {
           )}
         </div>
       </div>
+
+      <ServiceOrderDetailsModal 
+        isOpen={!!selectedOrder}
+        onClose={() => setSelectedOrder(null)}
+        order={selectedOrder}
+        onGenerateMtr={(id) => {
+          handleGenerateMtr(id)
+          setSelectedOrder(null)
+        }}
+        isGenerating={generatingMtr === selectedOrder?.id}
+      />
     </div>
   )
 }

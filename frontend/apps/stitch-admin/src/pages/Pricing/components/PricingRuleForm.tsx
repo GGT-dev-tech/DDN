@@ -11,10 +11,10 @@ interface PricingRuleFormProps {
 
 export function PricingRuleForm({ onSuccess, onCancel }: PricingRuleFormProps) {
   const [formData, setFormData] = useState<any>({
-    description: '',
+    name: '',
     scope: 'GLOBAL',
     rule_type: 'PERCENTAGE',
-    unit_price: 0,
+    value: 0,
     priority: 1,
   })
   
@@ -39,8 +39,8 @@ export function PricingRuleForm({ onSuccess, onCancel }: PricingRuleFormProps) {
         <label className="text-sm font-medium">Nome da Regra</label>
         <Input 
           required 
-          value={formData.description} 
-          onChange={(e: any) => setFormData((prev: any) => ({ ...prev, description: e.target.value }))} 
+          value={formData.name} 
+          onChange={(e: any) => setFormData((prev: any) => ({ ...prev, name: e.target.value }))} 
           placeholder="ex: Desconto de Volume"
         />
       </div>
@@ -50,8 +50,8 @@ export function PricingRuleForm({ onSuccess, onCancel }: PricingRuleFormProps) {
           type="number"
           step="0.01"
           required 
-          value={formData.unit_price} 
-          onChange={(e: any) => setFormData((prev: any) => ({ ...prev, unit_price: parseFloat(e.target.value) }))} 
+          value={formData.value} 
+          onChange={(e: any) => setFormData((prev: any) => ({ ...prev, value: parseFloat(e.target.value) }))} 
           placeholder="ex: -10 para desconto, 15 para acréscimo"
         />
       </div>
