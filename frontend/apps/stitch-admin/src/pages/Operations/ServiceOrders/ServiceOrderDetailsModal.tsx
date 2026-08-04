@@ -1,9 +1,7 @@
-import { useState } from 'react'
 import { Modal } from '../../../shared/ui/components/Modal'
 import { Button } from '../../../shared/ui/components/Button'
 import { Badge } from '../../../shared/ui/components/Badge'
-import { CheckCircle2, Play, CircleDot, Truck, User, MapPin, Weight, FileText, Check } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
+import { Truck, MapPin, CircleDot, User, FileText, Check, Weight } from 'lucide-react'
 
 interface ServiceOrderDetailsModalProps {
   order: any
@@ -21,7 +19,7 @@ export function ServiceOrderDetailsModal({ order, isOpen, onClose, onGenerateMtr
   // but a typical flow would use `useListCompaniesApiV1CommercialCompaniesGet` etc.
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={`Detalhes da Ordem - MTR`} size="xl">
+    <Modal isOpen={isOpen} onClose={onClose} title="Detalhes da Ordem de Serviço (MTR)">
       <div className="space-y-6">
         {/* Header Info */}
         <div className="flex items-center justify-between border-b border-border/50 pb-4">
@@ -129,7 +127,7 @@ export function ServiceOrderDetailsModal({ order, isOpen, onClose, onGenerateMtr
 
         {/* Actions */}
         <div className="flex justify-end gap-3 pt-4 border-t border-border/50">
-          <Button variant="glass" onClick={onClose}>Fechar</Button>
+          <Button variant="ghost" onClick={onClose}>Cancelar</Button>
           {order.status === 'COMPLETED' ? (
             <Button 
               variant="liquid"
@@ -141,7 +139,7 @@ export function ServiceOrderDetailsModal({ order, isOpen, onClose, onGenerateMtr
               {isGenerating ? 'Gerando...' : 'Gerar MTR Oficial'}
             </Button>
           ) : (
-             <Button variant="outline" disabled className="gap-2">
+             <Button variant="ghost" disabled className="gap-2">
               <Check size={16} /> Complete a OS para gerar MTR
             </Button>
           )}

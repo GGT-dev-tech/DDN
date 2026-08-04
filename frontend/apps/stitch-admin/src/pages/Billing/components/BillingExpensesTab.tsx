@@ -1,5 +1,5 @@
 import { Truck, MapPin, Receipt, Plus } from 'lucide-react'
-import { Button } from '../../../../shared/ui/components/Button'
+import { Button } from '../../../shared/ui/components/Button'
 
 function formatCurrency(val: number) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val)

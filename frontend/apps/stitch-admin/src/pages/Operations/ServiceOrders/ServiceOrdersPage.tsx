@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Badge } from '../../../shared/ui/components/Badge'
 import { Button } from '../../../shared/ui/components/Button'
 import { EmptyState } from '../../../shared/ui/components/EmptyState'
-import { ClipboardList, RefreshCw, FileText, CheckCircle2, Play, CircleDot, Eye } from 'lucide-react'
+import { ClipboardList, RefreshCw, CheckCircle2, Play, CircleDot, Eye } from 'lucide-react'
 import { toast } from 'sonner'
 import { ServiceOrderDetailsModal } from './ServiceOrderDetailsModal'
 
