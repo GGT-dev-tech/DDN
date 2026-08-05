@@ -9,7 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.5.7",
+    "@hookform/resolvers": "^5.7.1",
     "@repo/api": "^0.0.0",
     "@repo/ui": "^0.0.0",
     "@tanstack/react-query": "^5.101.4",
