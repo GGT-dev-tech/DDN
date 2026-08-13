@@ -1215,6 +1215,68 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": [
+          "Commercial"
+        ],
+        "summary": "Create Company",
+        "operationId": "create_company_api_v1_commercial_companies_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/v1/commercial/companies/{company_id}": {
@@ -4584,6 +4646,29 @@
           "in_route"
         ],
         "title": "CollectionsToday"
+      },
+      "CompanyCreateRequest": {
+        "properties": {
+          "trade_name": {
+            "type": "string",
+            "title": "Trade Name"
+          },
+          "corporate_name": {
+            "type": "string",
+            "title": "Corporate Name"
+          },
+          "document_number": {
+            "type": "string",
+            "title": "Document Number"
+          }
+        },
+        "type": "object",
+        "required": [
+          "trade_name",
+          "corporate_name",
+          "document_number"
+        ],
+        "title": "CompanyCreateRequest"
       },
       "CompanyResponse": {
         "properties": {

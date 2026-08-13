@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge } from '../../shared/ui/components/Badge'
 import { Button } from '../../shared/ui/components/Button'
@@ -5,9 +6,11 @@ import { EmptyState } from '../../shared/ui/components/EmptyState'
 import { Building2, Plus, ArrowRight } from 'lucide-react'
 
 import { useListCompaniesApiV1CommercialCompaniesGet } from '../../shared/api/generated/commercial/commercial'
+import { AddCompanyModal } from './components/AddCompanyModal'
 
 export function CustomersPage() {
   const navigate = useNavigate()
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   
   const { data: companies = [], isLoading } = useListCompaniesApiV1CommercialCompaniesGet()
 
@@ -29,11 +32,19 @@ export function CustomersPage() {
             </div>
           </div>
           <div className="flex gap-3">
-            <Button variant="liquid" onClick={() => navigate('/admin/leads')} className="gap-2">
-              <Plus size={18} /> Novo Cliente via Lead
+            <Button variant="liquid" onClick={() => setIsAddModalOpen(true)} className="gap-2">
+              <Plus size={18} /> Novo Cliente
+            </Button>
+            <Button variant="ghost" onClick={() => navigate('/admin/leads')} className="gap-2">
+              Ver Leads
             </Button>
           </div>
         </div>
+
+        <AddCompanyModal 
+          isOpen={isAddModalOpen} 
+          onClose={() => setIsAddModalOpen(false)} 
+        />
 
         {/* Lista de Clientes */}
         <div className="glass-panel rounded-xl border border-border overflow-hidden">

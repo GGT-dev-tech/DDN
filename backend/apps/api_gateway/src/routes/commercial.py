@@ -78,6 +78,11 @@ class CompanyResponse(BaseModel):
     document_number: str
     status: str
 
+class CompanyCreateRequest(BaseModel):
+    trade_name: str
+    corporate_name: str
+    document_number: str
+
 class AddContactRequest(BaseModel):
     name: str
     email: str
@@ -194,6 +199,23 @@ async def list_companies(
 ):
     companies = await company_service.list_companies(tenant_id, skip=skip, limit=limit)
     return companies
+
+@router.post("/companies", response_model=CompanyResponse)
+async def create_company(
+    req: CompanyCreateRequest,
+    tenant_id: UUID = Depends(require_tenant),
+    company_service: CompanyService = Depends(get_company_service)
+):
+    try:
+        company = await company_service.create_company(
+            tenant_id=tenant_id,
+            trade_name=req.trade_name,
+            corporate_name=req.corporate_name,
+            document_number=req.document_number
+        )
+        return company
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/companies/{company_id}", response_model=CompanyResponse)
 async def get_company(

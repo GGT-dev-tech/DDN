@@ -24,7 +24,7 @@ export function LeadsPage() {
         data: {
           trade_name: companyName,
           corporate_name: companyName,
-          document_number: "00000000000" // Requires proper UI form in reality, but this is a stub
+          document_number: Date.now().toString() // Generates a unique stub for now
         }
       })
       toast.success('Lead convertido em Cliente e Oportunidade gerada!')

@@ -18,6 +18,7 @@ export * from './calculateQuotationApiV1QuotationsQuotationIdCalculatePost200';
 export * from './calculateQuotationRequest';
 export * from './collectionPointRequest';
 export * from './collectionsToday';
+export * from './companyCreateRequest';
 export * from './companyResponse';
 export * from './contactResponse';
 export * from './contractCreateRequest';

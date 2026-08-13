@@ -25,6 +25,7 @@ import type {
 
 import type {
   AddContactRequest,
+  CompanyCreateRequest,
   CompanyResponse,
   ContactResponse,
   HTTPValidationError,
@@ -437,6 +438,70 @@ export function useListCompaniesApiV1CommercialCompaniesGet<TData = Awaited<Retu
 
 
 /**
+ * @summary Create Company
+ */
+export const createCompanyApiV1CommercialCompaniesPost = (
+    companyCreateRequest: CompanyCreateRequest,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<CompanyResponse>(
+      {url: `/api/v1/commercial/companies`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: companyCreateRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getCreateCompanyApiV1CommercialCompaniesPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCompanyApiV1CommercialCompaniesPost>>, TError,{data: CompanyCreateRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createCompanyApiV1CommercialCompaniesPost>>, TError,{data: CompanyCreateRequest}, TContext> => {
+
+const mutationKey = ['createCompanyApiV1CommercialCompaniesPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCompanyApiV1CommercialCompaniesPost>>, {data: CompanyCreateRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createCompanyApiV1CommercialCompaniesPost(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateCompanyApiV1CommercialCompaniesPostMutationResult = NonNullable<Awaited<ReturnType<typeof createCompanyApiV1CommercialCompaniesPost>>>
+    export type CreateCompanyApiV1CommercialCompaniesPostMutationBody = CompanyCreateRequest
+    export type CreateCompanyApiV1CommercialCompaniesPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Create Company
+ */
+export const useCreateCompanyApiV1CommercialCompaniesPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCompanyApiV1CommercialCompaniesPost>>, TError,{data: CompanyCreateRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createCompanyApiV1CommercialCompaniesPost>>,
+        TError,
+        {data: CompanyCreateRequest},
+        TContext
+      > => {
+      return useMutation(getCreateCompanyApiV1CommercialCompaniesPostMutationOptions(options), queryClient);
+    }
+    /**
  * @summary Get Company
  */
 export const getCompanyApiV1CommercialCompaniesCompanyIdGet = (
