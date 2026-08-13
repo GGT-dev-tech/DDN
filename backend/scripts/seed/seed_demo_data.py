@@ -120,8 +120,8 @@ async def seed(session: AsyncSession):
     r = await session.execute(text("SELECT COUNT(*) FROM commercial_companies WHERE tenant_id = :tid"), {"tid": TENANT_ID})
     if r.scalar() == 0:
         companies = [
-            (COMPANY_1_ID, "Supermercados Bom Preço", "Ana Paula", "ana@bomprecao.com.br", "ACTIVE"),
-            (COMPANY_2_ID, "Hospital São Lucas", "Dr. Paulo", "paulo@saolucas.com.br", "ACTIVE"),
+            (COMPANY_1_ID, "Supermercados Bom Preço", "Ana Paula", "ana@bomprecao.com.br", "CUSTOMER"),
+            (COMPANY_2_ID, "Hospital São Lucas", "Dr. Paulo", "paulo@saolucas.com.br", "CUSTOMER"),
         ]
         for cid, company, contact, email, status in companies:
             await session.execute(text("""
