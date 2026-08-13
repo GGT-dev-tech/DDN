@@ -65,7 +65,7 @@ export function RouteMapModal({ isOpen, onClose, route }: RouteMapModalProps) {
   const [nearbyClients, setNearbyClients] = useState<LeadResponse[]>([]);
   
   // Fetch leads to find nearby clients
-  const { data: leads } = useListLeadsApiV1CommercialLeadsGet({
+  const { data: leads } = useListLeadsApiV1CommercialLeadsGet(undefined, {
     query: { enabled: isOpen && !!route }
   });
 

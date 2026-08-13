@@ -14,7 +14,7 @@ interface AddQuotationModalProps {
 
 export function AddQuotationModal({ isOpen, onClose }: AddQuotationModalProps) {
   const queryClient = useQueryClient();
-  const { data: leads = [], isLoading: isLeadsLoading } = useListLeadsApiV1CommercialLeadsGet({ query: { enabled: isOpen } });
+  const { data: leads = [], isLoading: isLeadsLoading } = useListLeadsApiV1CommercialLeadsGet(undefined, { query: { enabled: isOpen } });
   const { mutateAsync: createQuotation, isPending } = useCreateQuotationApiV1QuotationsPost();
   
   const [companyId, setCompanyId] = useState('');

@@ -25,8 +25,9 @@ export function ContractDetailsPage() {
   const navigate = useNavigate();
   const [isActioning, setIsActioning] = useState(false);
 
-  const { data: contracts, isLoading, isError, refetch } = useListContractsApiV1ContractsGet();
-  const contract = contracts?.find((c: any) => c.id === id);
+  const { data: contractsData, isLoading, isError, refetch } = useListContractsApiV1ContractsGet();
+  const contracts: any[] = Array.isArray(contractsData) ? contractsData : [];
+  const contract = contracts.find((c: any) => c.id === id);
 
   const handleSendForSignature = async () => {
     if (!id) return;

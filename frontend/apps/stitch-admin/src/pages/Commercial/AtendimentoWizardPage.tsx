@@ -125,7 +125,6 @@ export function AtendimentoWizardPage() {
       // 2. Create Contract (which generates Service Plan)
       await createContract({
         data: {
-          tenant_id: 'default',
           company_id: selectedLeadId,
           quotation_id: quotationId,
           effective_date: new Date().toISOString(),

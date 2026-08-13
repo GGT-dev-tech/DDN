@@ -18,17 +18,20 @@ const STATUS_MAP: Record<string, { label: string; variant: BadgeVariant }> = {
 
 export function ContractsPage() {
   const navigate = useNavigate();
-  const { data: contracts, isLoading, isError } = useListContractsApiV1ContractsGet();
-  const { data: leads } = useListLeadsApiV1CommercialLeadsGet();
+  const { data: contractsData, isLoading, isError } = useListContractsApiV1ContractsGet();
+  const { data: leadsData } = useListLeadsApiV1CommercialLeadsGet();
+
+  const contracts: any[] = Array.isArray(contractsData) ? contractsData : [];
+  const leads: any[] = Array.isArray(leadsData) ? leadsData : [];
 
   const getCompanyName = (id: string) => {
-    const lead = leads?.find((l: any) => l.id === id);
+    const lead = leads.find((l: any) => l.id === id);
     return lead ? lead.company_name : `${id.split('-')[0]}...`;
   };
 
-  const draftCount = contracts?.filter((c: any) => c.status === 'DRAFT').length ?? 0;
-  const waitingCount = contracts?.filter((c: any) => c.status === 'WAITING_SIGNATURE').length ?? 0;
-  const activeCount = contracts?.filter((c: any) => c.status === 'ACTIVE').length ?? 0;
+  const draftCount = contracts.filter((c: any) => c.status === 'DRAFT').length;
+  const waitingCount = contracts.filter((c: any) => c.status === 'WAITING_SIGNATURE').length;
+  const activeCount = contracts.filter((c: any) => c.status === 'ACTIVE').length;
 
   return (
     <div className="flex-1 overflow-y-auto bg-background">
