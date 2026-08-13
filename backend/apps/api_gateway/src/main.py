@@ -26,15 +26,9 @@ from modules.logistics.presentation.routes import router as logistics_router
 # Setup structlog
 setup_logging()
 
-# Database & Cache settings from ENV
-DB_USER = os.getenv("DATABASE_USER", "stitch_admin")
-DB_PASS = os.getenv("DATABASE_PASSWORD", "secret_postgres")
-DB_HOST = os.getenv("DATABASE_HOST", "localhost")
-DB_PORT = os.getenv("DATABASE_PORT", "5432")
-DB_NAME = os.getenv("DATABASE_NAME", "stitch_db")
-REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
-REDIS_PORT = os.getenv("REDIS_PORT", "6379")
-DATABASE_URL = f"postgresql+psycopg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+from modules.core.config.settings import settings
+
+DATABASE_URL = settings.db.url.replace("+asyncpg", "+psycopg") if "+asyncpg" in settings.db.url else settings.db.url
 
 from apps.api_gateway.src.limiter import limiter
 app = FastAPI(title="Stitch API Gateway", version="1.0.0")
@@ -105,7 +99,7 @@ def health_ready(response: Response):
 
     # Test Redis Connection
     try:
-        r = redis.Redis(host=REDIS_HOST, port=int(REDIS_PORT), socket_timeout=2)
+        r = redis.from_url(settings.db.redis_url, socket_timeout=2)
         if r.ping():
             health_status["redis"] = "up"
         else:
