@@ -1,5 +1,6 @@
 from uuid import UUID
 
+from modules.core.infrastructure.uow import UnitOfWork
 from modules.commercial.application.services.company_service import CompanyService
 from modules.commercial.application.services.opportunity_service import OpportunityService
 from modules.commercial.domain.entities.lead import Lead
