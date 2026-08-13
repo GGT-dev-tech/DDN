@@ -12,8 +12,8 @@ class GetQuotation:
         self.repository = repository
 
     async def execute(self, tenant_id: uuid.UUID, quotation_id: uuid.UUID) -> QuotationResponse | None:
-        quotation = await self.repository.get_by_id(tenant_id, quotation_id)
-        if not quotation:
+        quotation = await self.repository.get_quotation_by_id(quotation_id)
+        if not quotation or quotation.tenant_id != tenant_id:
             return None
         
         items_response = []
