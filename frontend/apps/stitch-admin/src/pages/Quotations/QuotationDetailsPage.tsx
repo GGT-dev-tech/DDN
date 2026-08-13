@@ -1,9 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useGetQuotationApiV1QuotationsQuotationIdGet, useApproveQuotationApiV1QuotationsQuotationIdApprovePost, getGetQuotationApiV1QuotationsQuotationIdGetQueryKey, useCalculateQuotationApiV1QuotationsQuotationIdCalculatePost } from '../../shared/api/generated/quotations/quotations';
+import { useGetQuotationApiV1QuotationsQuotationIdGet, useApproveQuotationApiV1QuotationsQuotationIdApprovePost, getGetQuotationApiV1QuotationsQuotationIdGetQueryKey, useCalculateQuotationApiV1QuotationsQuotationIdCalculatePost, useSubmitQuotationApiV1QuotationsQuotationIdSubmitPost, useRejectQuotationApiV1QuotationsQuotationIdRejectPost } from '../../shared/api/generated/quotations/quotations';
 import { useQueryClient } from '@tanstack/react-query';
 import { Badge } from '../../shared/ui/components/Badge';
 import { Button } from '../../shared/ui/components/Button';
-import { ArrowLeft, CheckCircle, FileText, Plus, Calculator } from 'lucide-react';
+import { ArrowLeft, CheckCircle, FileText, Plus, Calculator, Send, XCircle } from 'lucide-react';
 import { EmptyState } from '../../shared/ui/components/EmptyState';
 import { useState } from 'react';
 import { AddQuotationItemModal } from './components/AddQuotationItemModal';
@@ -22,6 +22,8 @@ export function QuotationDetailsPage() {
 
   const { mutateAsync: approveQuotation, isPending: isApproving } = useApproveQuotationApiV1QuotationsQuotationIdApprovePost();
   const { mutateAsync: calculateQuotation, isPending: isCalculating } = useCalculateQuotationApiV1QuotationsQuotationIdCalculatePost();
+  const { mutateAsync: submitQuotation, isPending: isSubmitting } = useSubmitQuotationApiV1QuotationsQuotationIdSubmitPost();
+  const { mutateAsync: rejectQuotation, isPending: isRejecting } = useRejectQuotationApiV1QuotationsQuotationIdRejectPost();
 
   const handleApprove = async () => {
     if (!id) return;
@@ -30,6 +32,26 @@ export function QuotationDetailsPage() {
       queryClient.invalidateQueries({ queryKey: getGetQuotationApiV1QuotationsQuotationIdGetQueryKey(id) });
     } catch (error) {
       console.error('Failed to approve quotation:', error);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!id) return;
+    try {
+      await submitQuotation({ quotationId: id });
+      queryClient.invalidateQueries({ queryKey: getGetQuotationApiV1QuotationsQuotationIdGetQueryKey(id) });
+    } catch (error) {
+      console.error('Failed to submit quotation:', error);
+    }
+  };
+
+  const handleReject = async () => {
+    if (!id) return;
+    try {
+      await rejectQuotation({ quotationId: id });
+      queryClient.invalidateQueries({ queryKey: getGetQuotationApiV1QuotationsQuotationIdGetQueryKey(id) });
+    } catch (error) {
+      console.error('Failed to reject quotation:', error);
     }
   };
 
@@ -62,8 +84,8 @@ export function QuotationDetailsPage() {
           <div className="flex-1">
             <div className="flex items-center gap-3">
               <h1 className="text-3xl font-bold tracking-tight text-text-primary">Cotação {quotation.id.split('-')[0]}</h1>
-              <Badge variant={quotation.status === 'APPROVED' ? 'success' : 'outline'} className="variant-glass">
-                {quotation.status === 'DRAFT' ? 'Rascunho' : quotation.status === 'APPROVED' ? 'Aprovada' : quotation.status}
+              <Badge variant={quotation.status === 'APPROVED' ? 'success' : quotation.status === 'REJECTED' ? 'destructive' : quotation.status === 'SUBMITTED' ? 'warning' : 'outline'} className="variant-glass">
+                {quotation.status === 'DRAFT' ? 'Rascunho' : quotation.status === 'PRICED' ? 'Precificada' : quotation.status === 'SUBMITTED' ? 'Enviada' : quotation.status === 'APPROVED' ? 'Aprovada' : quotation.status === 'REJECTED' ? 'Rejeitada' : quotation.status}
               </Badge>
             </div>
             <p className="text-sm text-text-secondary mt-1">
@@ -72,6 +94,13 @@ export function QuotationDetailsPage() {
           </div>
           
           <div className="flex items-center gap-2">
+            {['DRAFT', 'PRICED', 'SUBMITTED'].includes(quotation.status) && (
+              <Button onClick={handleReject} disabled={isRejecting} variant="ghost" className="gap-2 text-red-500 hover:text-red-600 hover:bg-red-500/10">
+                <XCircle size={16} />
+                {isRejecting ? 'Rejeitando...' : 'Rejeitar'}
+              </Button>
+            )}
+
             {quotation.status === 'DRAFT' && quotation.items.length > 0 && (
               <Button onClick={async () => {
                 try {
@@ -85,9 +114,16 @@ export function QuotationDetailsPage() {
                 {isCalculating ? 'Calculando...' : 'Calcular Preços'}
               </Button>
             )}
+
+            {quotation.status === 'PRICED' && quotation.items.length > 0 && (
+              <Button onClick={handleSubmit} disabled={isSubmitting} variant="liquid" className="gap-2">
+                <Send size={16} />
+                {isSubmitting ? 'Enviando...' : 'Enviar ao Cliente'}
+              </Button>
+            )}
             
-            {quotation.status !== 'APPROVED' && (
-              <Button onClick={handleApprove} disabled={isApproving || quotation.items.length === 0 || quotation.status === 'DRAFT'} className="gap-2">
+            {quotation.status === 'SUBMITTED' && (
+              <Button onClick={handleApprove} disabled={isApproving} className="gap-2 bg-green-500 hover:bg-green-600 text-white">
                 <CheckCircle size={16} />
                 {isApproving ? 'Aprovando...' : 'Aprovar Cotação'}
               </Button>
@@ -103,7 +139,7 @@ export function QuotationDetailsPage() {
                 <FileText size={18} className="text-brand-500" />
                 Itens da Cotação
               </div>
-              {quotation.status !== 'APPROVED' && (
+              {quotation.status === 'DRAFT' && (
                 <Button variant="liquid" onClick={() => setIsAddItemModalOpen(true)} className="gap-2 h-8 text-xs">
                   <Plus size={14} /> Adicionar Serviço
                 </Button>
@@ -142,7 +178,7 @@ export function QuotationDetailsPage() {
                     title="Nenhum item adicionado" 
                     description="Adicione serviços para calcular o valor desta cotação."
                     action={
-                      quotation.status !== 'APPROVED' ? (
+                      quotation.status === 'DRAFT' ? (
                         <Button onClick={() => setIsAddItemModalOpen(true)} className="gap-2 mt-4">
                           <Plus size={16} /> Adicionar Serviço
                         </Button>

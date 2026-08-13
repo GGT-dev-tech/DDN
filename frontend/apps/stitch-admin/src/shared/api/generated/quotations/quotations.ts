@@ -33,6 +33,7 @@ import type {
   CreateQuotationRequest,
   HTTPValidationError,
   QuotationResponse,
+  RejectQuotationApiV1QuotationsQuotationIdRejectPost200,
   SubmitQuotationApiV1QuotationsQuotationIdSubmitPost200
 } from '../model';
 
@@ -559,4 +560,66 @@ export const useApproveQuotationApiV1QuotationsQuotationIdApprovePost = <TError 
         TContext
       > => {
       return useMutation(getApproveQuotationApiV1QuotationsQuotationIdApprovePostMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary Reject Quotation
+ */
+export const rejectQuotationApiV1QuotationsQuotationIdRejectPost = (
+    quotationId: string,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<RejectQuotationApiV1QuotationsQuotationIdRejectPost200>(
+      {url: `/api/v1/quotations/${quotationId}/reject`, method: 'POST', signal
+    },
+      options);
+    }
+
+
+
+
+export const getRejectQuotationApiV1QuotationsQuotationIdRejectPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof rejectQuotationApiV1QuotationsQuotationIdRejectPost>>, TError,{quotationId: string}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof rejectQuotationApiV1QuotationsQuotationIdRejectPost>>, TError,{quotationId: string}, TContext> => {
+
+const mutationKey = ['rejectQuotationApiV1QuotationsQuotationIdRejectPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof rejectQuotationApiV1QuotationsQuotationIdRejectPost>>, {quotationId: string}> = (props) => {
+          const {quotationId} = props ?? {};
+
+          return  rejectQuotationApiV1QuotationsQuotationIdRejectPost(quotationId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RejectQuotationApiV1QuotationsQuotationIdRejectPostMutationResult = NonNullable<Awaited<ReturnType<typeof rejectQuotationApiV1QuotationsQuotationIdRejectPost>>>
+
+    export type RejectQuotationApiV1QuotationsQuotationIdRejectPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Reject Quotation
+ */
+export const useRejectQuotationApiV1QuotationsQuotationIdRejectPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof rejectQuotationApiV1QuotationsQuotationIdRejectPost>>, TError,{quotationId: string}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof rejectQuotationApiV1QuotationsQuotationIdRejectPost>>,
+        TError,
+        {quotationId: string},
+        TContext
+      > => {
+      return useMutation(getRejectQuotationApiV1QuotationsQuotationIdRejectPostMutationOptions(options), queryClient);
     }

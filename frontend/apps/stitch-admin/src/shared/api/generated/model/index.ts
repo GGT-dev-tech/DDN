@@ -75,6 +75,7 @@ export * from './recurrenceRequest';
 export * from './registerDriverRequestDTO';
 export * from './registerUOMRequest';
 export * from './registerVehicleRequestDTO';
+export * from './rejectQuotationApiV1QuotationsQuotationIdRejectPost200';
 export * from './requirementDTO';
 export * from './routeResponseDTO';
 export * from './scheduleUpdateRequest';

@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from database.session import get_db_session
+from modules.core.infrastructure.uow import SQLAlchemyUnitOfWork
 from modules.identity.dependencies import require_tenant
 from modules.pricing.application.services.pricing_service import PricingService
 from modules.pricing.domain.services.price_calculation_engine import PriceCalculationEngine
@@ -34,17 +35,22 @@ class CalculateQuotationRequest(BaseModel):
 
 
 def get_quotation_service(session=Depends(get_db_session)) -> QuotationService:
+    uow = SQLAlchemyUnitOfWork(session)
     repo = QuotationRepository(session)
     
     # Instantiate pricing pieces for the gateway
     pricing_repo = PricingRepository(session)
     calculation_engine = PriceCalculationEngine()
-    pricing_service = PricingService(session, pricing_repo, calculation_engine)
+    
+    # Note: PricingService also uses UOW now, but since we are just passing it to the gateway, 
+    # we provide the same UOW to PricingService. Wait, let's look at PricingService constructor.
+    # We refactored PricingService to take UOW, so we pass it.
+    pricing_service = PricingService(uow=uow, repo=pricing_repo, calculation_engine=calculation_engine)
     
     pricing_gateway = PricingGatewayImpl(pricing_service)
     catalog_gateway = CatalogGatewayImpl(session)
     
-    return QuotationService(session, repo, pricing_gateway, catalog_gateway)
+    return QuotationService(uow, repo, pricing_gateway, catalog_gateway)
 
 
 @router.post("")
@@ -150,5 +156,18 @@ async def approve_quotation(
     try:
         await service.approve(quotation_id=quotation_id)
         return {"message": "Quotation approved successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.post("/{quotation_id}/reject")
+async def reject_quotation(
+    quotation_id: uuid.UUID,
+    tenant_id: uuid.UUID = Depends(require_tenant),
+    service: QuotationService = Depends(get_quotation_service)
+) -> dict:
+    try:
+        await service.reject(quotation_id=quotation_id)
+        return {"message": "Quotation rejected successfully"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
