@@ -15,27 +15,12 @@ const queryClient = new QueryClient({
   },
 })
 
-// MSW Setup for Dev
-async function enableMocking() {
-  if (import.meta.env.VITE_API_MODE !== 'mock') {
-    return
-  }
-  const { worker } = await import('./shared/api/mock/browser')
-  // `worker.start()` returns a Promise that resolves
-  // once the Service Worker is up and ready to intercept requests.
-  return worker.start({
-    onUnhandledRequest: 'bypass',
-  })
-}
-
-enableMocking().then(() => {
-  createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <AppRouterProvider />
-        <Toaster />
-        <CookieConsentBanner />
-      </QueryClientProvider>
-    </StrictMode>,
-  )
-})
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <AppRouterProvider />
+      <Toaster />
+      <CookieConsentBanner />
+    </QueryClientProvider>
+  </StrictMode>,
+)
