@@ -9,4 +9,8 @@ export interface CompanyCreateRequest {
   trade_name: string;
   corporate_name: string;
   document_number: string;
+  contact_name?: string | null;
+  contact_email?: string | null;
+  contact_phone?: string | null;
+  contact_role?: string | null;
 }

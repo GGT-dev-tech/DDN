@@ -82,6 +82,10 @@ class CompanyCreateRequest(BaseModel):
     trade_name: str
     corporate_name: str
     document_number: str
+    contact_name: str | None = None
+    contact_email: str | None = None
+    contact_phone: str | None = None
+    contact_role: str | None = None
 
 class AddContactRequest(BaseModel):
     name: str
@@ -213,6 +217,18 @@ async def create_company(
             corporate_name=req.corporate_name,
             document_number=req.document_number
         )
+        
+        if req.contact_name and req.contact_email:
+            await company_service.add_contact_to_company(
+                tenant_id=tenant_id,
+                company_id=company.id,
+                name=req.contact_name,
+                email=req.contact_email,
+                phone=req.contact_phone or "",
+                role=req.contact_role or "Contato Principal",
+                is_primary=True
+            )
+            
         return company
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
