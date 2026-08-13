@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { Modal } from '../../../shared/ui/components/Modal';
 import { Input } from '../../../shared/ui/components/Input';
 import { Button } from '../../../shared/ui/components/Button';
 import { Select } from '../../../shared/ui/components/Select';
 import { useCreateQuotationApiV1QuotationsPost, getListQuotationsApiV1QuotationsGetQueryKey } from '../../../shared/api/generated/quotations/quotations';
-import { useListLeadsApiV1CommercialLeadsGet } from '../../../shared/api/generated/commercial/commercial';
+import { useListCompaniesApiV1CommercialCompaniesGet } from '../../../shared/api/generated/commercial/commercial';
 
 interface AddQuotationModalProps {
   isOpen: boolean;
@@ -14,7 +15,8 @@ interface AddQuotationModalProps {
 
 export function AddQuotationModal({ isOpen, onClose }: AddQuotationModalProps) {
   const queryClient = useQueryClient();
-  const { data: leads = [], isLoading: isLeadsLoading } = useListLeadsApiV1CommercialLeadsGet(undefined, { query: { enabled: isOpen } });
+  const navigate = useNavigate();
+  const { data: companies = [], isLoading: isCompaniesLoading } = useListCompaniesApiV1CommercialCompaniesGet(undefined, { query: { enabled: isOpen } });
   const { mutateAsync: createQuotation, isPending } = useCreateQuotationApiV1QuotationsPost();
   
   const [companyId, setCompanyId] = useState('');
@@ -25,7 +27,7 @@ export function AddQuotationModal({ isOpen, onClose }: AddQuotationModalProps) {
     if (!companyId || !validityDays) return;
 
     try {
-      await createQuotation({
+      const result = await createQuotation({
         data: {
           company_id: companyId,
           validity_days: parseInt(validityDays, 10),
@@ -36,13 +38,20 @@ export function AddQuotationModal({ isOpen, onClose }: AddQuotationModalProps) {
       
       // Close modal
       onClose();
+      
+      // Redirect to the new quotation details using string index or standard type check
+      // As CreateQuotationApiV1QuotationsPost200 is an unknown type, we need to assert it or safely access quotation_id
+      const responseData = result as any;
+      if (responseData && responseData.quotation_id) {
+         navigate(`/admin/quotations/${responseData.quotation_id}`);
+      }
     } catch (error) {
       console.error('Failed to create quotation:', error);
     }
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Create New Quotation">
+    <Modal isOpen={isOpen} onClose={onClose} title="Criar Nova Cotação">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="space-y-2">
           <label htmlFor="companyId" className="text-sm font-medium">Cliente</label>
@@ -50,12 +59,12 @@ export function AddQuotationModal({ isOpen, onClose }: AddQuotationModalProps) {
             id="companyId"
             value={companyId}
             onChange={(e) => setCompanyId(e.target.value)}
-            disabled={isLeadsLoading}
+            disabled={isCompaniesLoading}
             options={[
               { label: 'Selecione um cliente...', value: '' },
-              ...leads.map((lead: any) => ({
-                label: lead.company_name,
-                value: lead.id
+              ...companies.map((company: any) => ({
+                label: company.trade_name,
+                value: company.id
               }))
             ]}
             required

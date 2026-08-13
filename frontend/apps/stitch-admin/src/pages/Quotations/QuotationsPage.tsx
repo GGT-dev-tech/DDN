@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Badge } from '../../shared/ui/components/Badge';
 import { Button } from '../../shared/ui/components/Button';
 import { useListQuotationsApiV1QuotationsGet } from '../../shared/api/generated/quotations/quotations';
-import { useListLeadsApiV1CommercialLeadsGet } from '../../shared/api/generated/commercial/commercial';
+import { useListCompaniesApiV1CommercialCompaniesGet } from '../../shared/api/generated/commercial/commercial';
 import { AddQuotationModal } from './components/AddQuotationModal';
 import { useNavigate } from 'react-router-dom';
 import { Plus, FileText, Calendar } from 'lucide-react';
@@ -12,11 +12,11 @@ export function QuotationsPage() {
   const navigate = useNavigate();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { data: quotations, isLoading, isError } = useListQuotationsApiV1QuotationsGet();
-  const { data: leads } = useListLeadsApiV1CommercialLeadsGet();
+  const { data: companies } = useListCompaniesApiV1CommercialCompaniesGet();
 
   const getCompanyName = (id: string) => {
-    const lead = leads?.find((l: any) => l.id === id);
-    return lead ? lead.company_name : id;
+    const company = companies?.find((c: any) => c.id === id);
+    return company ? company.trade_name : id;
   };
 
   return (
