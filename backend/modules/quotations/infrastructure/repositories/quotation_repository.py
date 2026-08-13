@@ -38,6 +38,7 @@ class QuotationRepository:
             company_id=model.company_id,
             tenant_id=model.tenant_id,
             id=model.id,
+            price_table_id=model.price_table_id,
             status=model.status,
             expires_at=model.expires_at,
             created_at=model.created_at,
@@ -77,6 +78,7 @@ class QuotationRepository:
                 id=quotation.id,
                 tenant_id=quotation.tenant_id,
                 company_id=quotation.company_id,
+                price_table_id=quotation.price_table_id,
                 status=quotation.status,
                 expires_at=quotation.expires_at,
                 created_at=quotation.created_at,
@@ -84,6 +86,7 @@ class QuotationRepository:
             )
             self.session.add(model)
         else:
+            model.price_table_id = quotation.price_table_id
             model.status = quotation.status
             model.expires_at = quotation.expires_at
             model.updated_at = quotation.updated_at
@@ -156,6 +159,7 @@ class QuotationRepository:
                 company_id=model.company_id,
                 tenant_id=model.tenant_id,
                 id=model.id,
+                price_table_id=model.price_table_id,
                 status=model.status,
                 expires_at=model.expires_at,
                 created_at=model.created_at,

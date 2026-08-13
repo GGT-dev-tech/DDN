@@ -87,7 +87,7 @@ export function PriceTablesTable() {
                       <Button variant="ghost" className="h-8 text-xs px-2" onClick={() => setEditingTable(table)}>
                         <Pencil size={14} />
                       </Button>
-                      <Button variant="ghost" className="h-8 text-xs" onClick={() => navigate(`/catalog/price-tables/${table.id}`)}>
+                      <Button variant="ghost" className="h-8 text-xs" onClick={() => navigate(`/admin/catalog/price-tables/${table.id}`)}>
                         <Calculator size={14} className="mr-1.5" />
                         Preços
                       </Button>
