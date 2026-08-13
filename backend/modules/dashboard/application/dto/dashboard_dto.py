@@ -1,5 +1,10 @@
 from pydantic import BaseModel
+from typing import Dict
 
+class CollectionsToday(BaseModel):
+    total: int
+    completed: int
+    in_route: int
 
 class DashboardStatsResponse(BaseModel):
     # Fleet & Routing
@@ -12,3 +17,8 @@ class DashboardStatsResponse(BaseModel):
     active_contracts: int = 0
     # Financial
     invoices_today: int = 0
+    # Advanced KPIs
+    total_monthly_tons: float = 0.0
+    recycling_rate: float = 0.0
+    collections_today: CollectionsToday
+    active_billing: float = 0.0

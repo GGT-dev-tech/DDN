@@ -30,17 +30,7 @@ class LeadRepository:
         self.session.add(db_lead)
         # Note: in a real DDD setup, domain events should be dispatched here or via a UnitOfWork
 
-    async def get_by_id(self, tenant_id: UUID, lead_id: UUID) -> Lead | None:
-        stmt = select(CommercialLead).where(
-            CommercialLead.tenant_id == tenant_id,
-            CommercialLead.id == lead_id
-        )
-        result = await self.session.execute(stmt)
-        db_lead = result.scalar_one_or_none()
-        
-        if not db_lead:
-            return None
-            
+    def _to_domain(self, db_lead: CommercialLead) -> Lead:
         return Lead(
             id=db_lead.id,
             tenant_id=db_lead.tenant_id,
@@ -56,6 +46,19 @@ class LeadRepository:
             created_at=db_lead.created_at,
             updated_at=db_lead.updated_at
         )
+
+    async def get_by_id(self, tenant_id: UUID, lead_id: UUID) -> Lead | None:
+        stmt = select(CommercialLead).where(
+            CommercialLead.tenant_id == tenant_id,
+            CommercialLead.id == lead_id
+        )
+        result = await self.session.execute(stmt)
+        db_lead = result.scalar_one_or_none()
+        
+        if not db_lead:
+            return None
+            
+        return self._to_domain(db_lead)
 
     async def update(self, lead: Lead) -> None:
         stmt = select(CommercialLead).where(
@@ -76,25 +79,14 @@ class LeadRepository:
             db_lead.longitude = lead.longitude
             db_lead.updated_at = lead.updated_at
 
-    async def list_leads(self, tenant_id: UUID) -> list[Lead]:
-        stmt = select(CommercialLead).where(CommercialLead.tenant_id == tenant_id)
+    async def list_leads(self, tenant_id: UUID, skip: int = 0, limit: int = 100) -> list[Lead]:
+        stmt = (
+            select(CommercialLead)
+            .where(CommercialLead.tenant_id == tenant_id)
+            .offset(skip)
+            .limit(limit)
+        )
         result = await self.session.execute(stmt)
         models = result.scalars().all()
         
-        return [
-            Lead(
-                id=db_lead.id,
-                tenant_id=db_lead.tenant_id,
-                company_name=db_lead.company_name,
-                contact_name=db_lead.contact_name,
-                status=db_lead.status,
-                email=db_lead.email,
-                phone=db_lead.phone,
-                source_id=db_lead.source_id,
-                address=db_lead.address,
-                latitude=db_lead.latitude,
-                longitude=db_lead.longitude,
-                created_at=db_lead.created_at,
-                updated_at=db_lead.updated_at
-            ) for db_lead in models
-        ]
+        return [self._to_domain(db_lead) for db_lead in models]

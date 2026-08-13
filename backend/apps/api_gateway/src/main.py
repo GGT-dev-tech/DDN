@@ -2,7 +2,11 @@ import os
 
 import redis
 from asgi_correlation_id import CorrelationIdMiddleware
-from fastapi import APIRouter, FastAPI, Response, status
+from fastapi import APIRouter, FastAPI, Request, Response, status
+from fastapi.middleware.cors import CORSMiddleware
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import OperationalError
 
@@ -23,13 +27,28 @@ from modules.logistics.presentation.routes import router as logistics_router
 # Setup structlog
 setup_logging()
 
-from fastapi.middleware.cors import CORSMiddleware
+# Database & Cache settings from ENV
+DB_USER = os.getenv("DATABASE_USER", "stitch_admin")
+DB_PASS = os.getenv("DATABASE_PASSWORD", "secret_postgres")
+DB_HOST = os.getenv("DATABASE_HOST", "localhost")
+DB_PORT = os.getenv("DATABASE_PORT", "5432")
+DB_NAME = os.getenv("DATABASE_NAME", "stitch_db")
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = os.getenv("REDIS_PORT", "6379")
+DATABASE_URL = f"postgresql+psycopg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
+# Rate limiter — backed by Redis so limits are shared across all Uvicorn workers
+_redis_url = f"redis://{REDIS_HOST}:{REDIS_PORT}"
+limiter = Limiter(key_func=get_remote_address, storage_uri=_redis_url, default_limits=[])
 
 app = FastAPI(title="Stitch API Gateway", version="1.0.0")
 
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, this should be restricted to the frontend URL
+    allow_origins=["*"],  # In production, restrict to the frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -57,17 +76,9 @@ api_v1.include_router(public_router)
 
 app.include_router(api_v1)
 
-# Database & Cache settings loaded directly from ENV for the Health Check
-# In a real scenario, this would be imported from modules.core.config
-DB_USER = os.getenv("DATABASE_USER", "stitch_admin")
-DB_PASS = os.getenv("DATABASE_PASSWORD", "secret_postgres")
-DB_HOST = os.getenv("DATABASE_HOST", "localhost")
-DB_PORT = os.getenv("DATABASE_PORT", "5432")
-DB_NAME = os.getenv("DATABASE_NAME", "stitch_db")
+# Remove duplicate env var declarations (moved to top)
 
-REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
-REDIS_PORT = os.getenv("REDIS_PORT", "6379")
-DATABASE_URL = f"postgresql+psycopg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
 @app.get("/health/live", tags=["Health"])
 def health_live():
     """

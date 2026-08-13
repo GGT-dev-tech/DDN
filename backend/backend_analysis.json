@@ -1,0 +1,575 @@
+{
+  "tenant": {
+    "domain": {
+      "entities": [
+        "TenantStatus",
+        "TenantPlan",
+        "Tenant",
+        "Role",
+        "Permission",
+        "RolePermission",
+        "TenantRole",
+        "TenantUser"
+      ],
+      "value_objects": []
+    },
+    "application": {
+      "services": [],
+      "use_cases": [],
+      "dtos": []
+    },
+    "infrastructure": {
+      "repositories": [],
+      "orm_models": []
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "core": {
+    "domain": {
+      "entities": [],
+      "value_objects": []
+    },
+    "application": {
+      "services": [],
+      "use_cases": [],
+      "dtos": []
+    },
+    "infrastructure": {
+      "repositories": [],
+      "orm_models": []
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "identity": {
+    "domain": {
+      "entities": [
+        "UserStatus",
+        "User",
+        "RefreshToken"
+      ],
+      "value_objects": []
+    },
+    "application": {
+      "services": [],
+      "use_cases": [],
+      "dtos": []
+    },
+    "infrastructure": {
+      "repositories": [],
+      "orm_models": []
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "contracts": {
+    "domain": {
+      "entities": [
+        "ContractItem",
+        "ContractVersion",
+        "Contract"
+      ],
+      "value_objects": [
+        "ContractStatus",
+        "Money",
+        "ContractTerm",
+        "ContractItemSnapshot"
+      ]
+    },
+    "application": {
+      "services": [
+        "ContractService"
+      ],
+      "use_cases": [
+        "ContractItemResponse",
+        "ContractResponse",
+        "ListContracts"
+      ],
+      "dtos": []
+    },
+    "infrastructure": {
+      "repositories": [
+        "ContractRepository"
+      ],
+      "orm_models": [
+        "ContractModel",
+        "ContractVersionModel",
+        "ContractItemModel",
+        "ContractItemSnapshotModel"
+      ]
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "catalog": {
+    "domain": {
+      "entities": [
+        "UOMBaseType",
+        "UnitOfMeasure",
+        "ServiceStatus",
+        "ServiceOfferingAttribute",
+        "ServiceOffering",
+        "AttributeType",
+        "ServiceAttribute"
+      ],
+      "value_objects": []
+    },
+    "application": {
+      "services": [
+        "CatalogService"
+      ],
+      "use_cases": [
+        "UOMResponse",
+        "ListUOMs",
+        "ServiceAttributeResponse",
+        "ListServiceAttributes",
+        "ServiceOfferingAttributeResponse",
+        "ServiceOfferingResponse",
+        "ListServiceOfferings"
+      ],
+      "dtos": [
+        "RegisterUOMRequest",
+        "UOMResponse",
+        "DefineServiceAttributeRequest",
+        "ServiceAttributeResponse",
+        "DraftServiceOfferingRequest",
+        "AttachAttributeRequest",
+        "ServiceOfferingResponse"
+      ]
+    },
+    "infrastructure": {
+      "repositories": [
+        "CatalogRepository"
+      ],
+      "orm_models": [
+        "CatalogUnitOfMeasure",
+        "CatalogServiceAttribute",
+        "CatalogServiceOffering",
+        "CatalogServiceOfferingAttribute"
+      ]
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "compliance": {
+    "domain": {
+      "entities": [
+        "WasteItem",
+        "WasteManifest"
+      ],
+      "value_objects": [
+        "MTRStatus"
+      ]
+    },
+    "application": {
+      "services": [],
+      "use_cases": [],
+      "dtos": []
+    },
+    "infrastructure": {
+      "repositories": [],
+      "orm_models": [
+        "ORMWasteManifest",
+        "ORMWasteItem"
+      ]
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "commercial": {
+    "domain": {
+      "entities": [
+        "CompanyStatus",
+        "Company",
+        "LeadStatus",
+        "Lead",
+        "ServiceLocation",
+        "OpportunityStage",
+        "Opportunity",
+        "Contact"
+      ],
+      "value_objects": []
+    },
+    "application": {
+      "services": [
+        "OpportunityService",
+        "LeadService",
+        "CompanyService"
+      ],
+      "use_cases": [],
+      "dtos": []
+    },
+    "infrastructure": {
+      "repositories": [
+        "CompanyRepository",
+        "OpportunityRepository",
+        "LeadRepository"
+      ],
+      "orm_models": [
+        "CommercialLead",
+        "CommercialCompany",
+        "CommercialContact",
+        "CommercialServiceLocation",
+        "CommercialOpportunity"
+      ]
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "cross_cutting": {
+    "domain": {
+      "entities": [],
+      "value_objects": []
+    },
+    "application": {
+      "services": [],
+      "use_cases": [],
+      "dtos": []
+    },
+    "infrastructure": {
+      "repositories": [],
+      "orm_models": [
+        "CrossCuttingTag",
+        "CrossCuttingTagging",
+        "CrossCuttingActivity",
+        "CrossCuttingActivityRelation"
+      ]
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "dashboard": {
+    "domain": {
+      "entities": [],
+      "value_objects": []
+    },
+    "application": {
+      "services": [
+        "DashboardService"
+      ],
+      "use_cases": [],
+      "dtos": [
+        "CollectionsToday",
+        "DashboardStatsResponse"
+      ]
+    },
+    "infrastructure": {
+      "repositories": [
+        "IDashboardReadRepository",
+        "DashboardReadRepository"
+      ],
+      "orm_models": []
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "audit": {
+    "domain": {
+      "entities": [
+        "AuditLog"
+      ],
+      "value_objects": []
+    },
+    "application": {
+      "services": [],
+      "use_cases": [],
+      "dtos": []
+    },
+    "infrastructure": {
+      "repositories": [],
+      "orm_models": []
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "quotations": {
+    "domain": {
+      "entities": [
+        "QuotationItem",
+        "Quotation"
+      ],
+      "value_objects": [
+        "QuotationStatus",
+        "Money",
+        "QuotationItemSnapshot"
+      ]
+    },
+    "application": {
+      "services": [
+        "QuotationService"
+      ],
+      "use_cases": [
+        "QuotationItemResponse",
+        "QuotationResponse",
+        "ListQuotations",
+        "GetQuotation"
+      ],
+      "dtos": []
+    },
+    "infrastructure": {
+      "repositories": [
+        "QuotationRepository"
+      ],
+      "orm_models": [
+        "QuotationModel",
+        "QuotationItemModel",
+        "QuotationItemSnapshotModel"
+      ]
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "routing": {
+    "domain": {
+      "entities": [
+        "RouteStatus",
+        "StopStatus",
+        "Stop",
+        "Route",
+        "CollectionRequirement"
+      ],
+      "value_objects": [
+        "RequirementStatus",
+        "Frequency",
+        "Weekday",
+        "Recurrence",
+        "Location"
+      ]
+    },
+    "application": {
+      "services": [
+        "RouteRepository",
+        "RequirementRepository",
+        "RoutePlannerService"
+      ],
+      "use_cases": [
+        "AddStopUseCase",
+        "CreateRouteUseCase",
+        "ListRoutes",
+        "RequirementDTO",
+        "ListRequirementsUseCase",
+        "AssignRouteResourcesUseCase"
+      ],
+      "dtos": [
+        "CreateRouteRequestDTO",
+        "LocationDTO",
+        "AddStopRequestDTO",
+        "AssignRouteResourcesRequestDTO",
+        "StopResponseDTO",
+        "RouteResponseDTO"
+      ]
+    },
+    "infrastructure": {
+      "repositories": [
+        "OptimisticLockError",
+        "SQLAlchemyRequirementRepository",
+        "SQLAlchemyRoutingRepository"
+      ],
+      "orm_models": [
+        "CollectionRequirementModel",
+        "RouteModel",
+        "StopModel"
+      ]
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "fleet": {
+    "domain": {
+      "entities": [
+        "VehicleType",
+        "VehicleStatus",
+        "InvalidVehicleCapacityException",
+        "InvalidVehicleStatusTransitionException",
+        "VehicleNotAvailableException",
+        "Vehicle",
+        "DriverStatus",
+        "InvalidDriverStatusTransitionException",
+        "DriverNotAvailableException",
+        "Driver"
+      ],
+      "value_objects": []
+    },
+    "application": {
+      "services": [],
+      "use_cases": [
+        "ListDrivers",
+        "RegisterVehicleUseCase",
+        "RegisterDriverUseCase",
+        "ListVehicles"
+      ],
+      "dtos": [
+        "RegisterVehicleRequestDTO",
+        "VehicleResponseDTO",
+        "RegisterDriverRequestDTO",
+        "DriverResponseDTO"
+      ]
+    },
+    "infrastructure": {
+      "repositories": [
+        "SQLAlchemyFleetRepository"
+      ],
+      "orm_models": [
+        "VehicleModel",
+        "DriverModel"
+      ]
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "pricing": {
+    "domain": {
+      "entities": [
+        "PricingRule",
+        "PriceTableItem",
+        "PriceTable"
+      ],
+      "value_objects": [
+        "PricingRuleScope",
+        "PricingRuleType",
+        "Money",
+        "PriceCalculationResult"
+      ]
+    },
+    "application": {
+      "services": [
+        "PricingService"
+      ],
+      "use_cases": [],
+      "dtos": [
+        "MoneyResponse",
+        "PriceTableItemResponse",
+        "PriceTableCreateRequest",
+        "PriceTableItemCreateRequest",
+        "PriceTableResponse",
+        "PricingRuleCreateRequest",
+        "PriceCalculationRequest",
+        "PriceCalculationResponse"
+      ]
+    },
+    "infrastructure": {
+      "repositories": [
+        "PricingRepository"
+      ],
+      "orm_models": [
+        "PricingPriceTableModel",
+        "PricingPriceTableItemModel",
+        "PricingRuleModel"
+      ]
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "logistics": {
+    "domain": {
+      "entities": [
+        "ServiceOrderItem",
+        "ServiceOrder"
+      ],
+      "value_objects": [
+        "ServiceOrderStatus",
+        "ServiceOrderWorkflowType"
+      ]
+    },
+    "application": {
+      "services": [],
+      "use_cases": [],
+      "dtos": []
+    },
+    "infrastructure": {
+      "repositories": [
+        "SqlServiceOrderRepository"
+      ],
+      "orm_models": [
+        "ORMServiceOrder",
+        "ORMServiceOrderItem"
+      ]
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "service_plan": {
+    "domain": {
+      "entities": [
+        "ServicePlan",
+        "ServiceSchedule"
+      ],
+      "value_objects": [
+        "ServicePlanStatus",
+        "ScheduleStatus",
+        "RecurrenceFrequency",
+        "Weekday",
+        "ContractReference",
+        "CollectionPoint",
+        "Recurrence"
+      ]
+    },
+    "application": {
+      "services": [
+        "ServicePlanService"
+      ],
+      "use_cases": [],
+      "dtos": []
+    },
+    "infrastructure": {
+      "repositories": [
+        "SQLAlchemyServicePlanRepository"
+      ],
+      "orm_models": [
+        "ServicePlanModel",
+        "ServiceScheduleModel"
+      ]
+    },
+    "presentation": {
+      "routes": []
+    }
+  },
+  "billing": {
+    "domain": {
+      "entities": [
+        "InvoiceItem",
+        "Invoice"
+      ],
+      "value_objects": []
+    },
+    "application": {
+      "services": [
+        "DailyBillingJob",
+        "BillingEngineService"
+      ],
+      "use_cases": [],
+      "dtos": []
+    },
+    "infrastructure": {
+      "repositories": [
+        "SQLAlchemyInvoiceRepository",
+        "SQLInvoiceRepository"
+      ],
+      "orm_models": [
+        "ORMInvoice",
+        "ORMInvoiceItem"
+      ]
+    },
+    "presentation": {
+      "routes": [
+        "get_billing_service"
+      ]
+    }
+  }
+}

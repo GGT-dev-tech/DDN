@@ -2,7 +2,7 @@ from datetime import UTC, datetime
 from uuid import UUID
 
 from sqlalchemy import delete, select, update
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from modules.core.infrastructure.outbox import OutboxEvent
 from shared_kernel.events.integration import IntegrationEvent
@@ -11,11 +11,11 @@ from shared_kernel.outbox.serialization.serializer import Serializer
 
 
 class SQLAlchemyOutboxRepository(OutboxRepository):
-    def __init__(self, session: Session, serializer: Serializer):
+    def __init__(self, session: AsyncSession, serializer: Serializer):
         self.session = session
         self.serializer = serializer
 
-    def save(self, events: list[IntegrationEvent]) -> None:
+    async def save(self, events: list[IntegrationEvent]) -> None:
         for event in events:
             serialized = self.serializer.serialize(event)
             metadata = serialized["metadata"]
@@ -44,7 +44,7 @@ class SQLAlchemyOutboxRepository(OutboxRepository):
             )
             self.session.add(outbox_event)
 
-    def lock_batch(self, batch_size: int, worker_id: str) -> list[UUID]:
+    async def lock_batch(self, batch_size: int, worker_id: str) -> list[UUID]:
         # Using SELECT FOR UPDATE SKIP LOCKED
         now = datetime.now(UTC)
         
@@ -58,7 +58,8 @@ class SQLAlchemyOutboxRepository(OutboxRepository):
             .with_for_update(skip_locked=True)
         )
         
-        locked_ids = self.session.scalars(stmt).all()
+        result = await self.session.scalars(stmt)
+        locked_ids = result.all()
         
         if locked_ids:
             update_stmt = (
@@ -71,12 +72,12 @@ class SQLAlchemyOutboxRepository(OutboxRepository):
                     attempts=OutboxEvent.attempts + 1
                 )
             )
-            self.session.execute(update_stmt)
-            self.session.commit() # Usually lock_batch runs in its own fast transaction
+            await self.session.execute(update_stmt)
+            await self.session.commit() # Usually lock_batch runs in its own fast transaction
             
         return list(locked_ids)
 
-    def release_lock(self, event_id: UUID) -> None:
+    async def release_lock(self, event_id: UUID) -> None:
         stmt = (
             update(OutboxEvent)
             .where(OutboxEvent.id == event_id)
@@ -86,9 +87,9 @@ class SQLAlchemyOutboxRepository(OutboxRepository):
                 worker_id=None
             )
         )
-        self.session.execute(stmt)
+        await self.session.execute(stmt)
 
-    def mark_processed(self, event_id: UUID) -> None:
+    async def mark_processed(self, event_id: UUID) -> None:
         stmt = (
             update(OutboxEvent)
             .where(OutboxEvent.id == event_id)
@@ -99,12 +100,12 @@ class SQLAlchemyOutboxRepository(OutboxRepository):
                 worker_id=None
             )
         )
-        self.session.execute(stmt)
+        await self.session.execute(stmt)
 
-    def mark_failed(self, event_id: UUID, error: str) -> None:
+    async def mark_failed(self, event_id: UUID, error: str) -> None:
         # Complex state machine can be handled in the caller or here.
         # Fetch current attempts to decide if RETRYING or DEAD_LETTER
-        event = self.session.get(OutboxEvent, event_id)
+        event = await self.session.get(OutboxEvent, event_id)
         if not event:
             return
             
@@ -119,7 +120,7 @@ class SQLAlchemyOutboxRepository(OutboxRepository):
         event.worker_id = None
         self.session.add(event)
 
-    def retry(self, event_id: UUID) -> None:
+    async def retry(self, event_id: UUID) -> None:
         stmt = (
             update(OutboxEvent)
             .where(OutboxEvent.id == event_id)
@@ -130,18 +131,18 @@ class SQLAlchemyOutboxRepository(OutboxRepository):
                 error_message=None
             )
         )
-        self.session.execute(stmt)
+        await self.session.execute(stmt)
 
-    def heartbeat(self, worker_id: str) -> None:
+    async def heartbeat(self, worker_id: str) -> None:
         stmt = (
             update(OutboxEvent)
             .where(OutboxEvent.worker_id == worker_id)
             .where(OutboxEvent.status == "PROCESSING")
             .values(locked_at=datetime.now(UTC))
         )
-        self.session.execute(stmt)
+        await self.session.execute(stmt)
 
-    def cleanup(self, older_than_days: int) -> int:
+    async def cleanup(self, older_than_days: int) -> int:
         cutoff = datetime.now(UTC).date() # simplified
         # Real logic requires subtracting days
         stmt = (
@@ -149,15 +150,16 @@ class SQLAlchemyOutboxRepository(OutboxRepository):
             .where(OutboxEvent.status.in_(["PROCESSED", "EXPIRED"]))
             # .where(OutboxEvent.created_at < cutoff) 
         )
-        result = self.session.execute(stmt)
+        result = await self.session.execute(stmt)
         return result.rowcount
 
-    def exists(self, event_id: UUID) -> bool:
+    async def exists(self, event_id: UUID) -> bool:
         stmt = select(OutboxEvent.id).where(OutboxEvent.id == event_id)
-        return self.session.scalar(stmt) is not None
+        result = await self.session.scalar(stmt)
+        return result is not None
 
-    def find_by_event_id(self, event_id: UUID) -> dict | None:
-        event = self.session.get(OutboxEvent, event_id)
+    async def find_by_event_id(self, event_id: UUID) -> dict | None:
+        event = await self.session.get(OutboxEvent, event_id)
         if not event:
             return None
         return {

@@ -18,20 +18,36 @@ from modules.audit.services.audit_listener import setup_audit_listeners
 
 @event.listens_for(engine.sync_engine, "begin")
 def do_begin(conn):
-    # This event runs synchronously but within the async engine's thread pool.
+    """
+    Injects per-request context into PostgreSQL session variables for RLS.
+    Uses set_config() with parameterized values to prevent SQL Injection.
+    The third argument `true` means the setting is local to the transaction (SET LOCAL).
+    """
     tenant_ctx = accessor.tenant()
     if tenant_ctx and tenant_ctx.tenant_id:
-        conn.execute(text(f"SET LOCAL app.current_tenant_id = '{tenant_ctx.tenant_id}'"))
-    
+        conn.execute(
+            text("SELECT set_config('app.current_tenant_id', :val, true)"),
+            {"val": str(tenant_ctx.tenant_id)},
+        )
+
     auth_ctx = accessor.auth()
     if auth_ctx and auth_ctx.user_id:
-        conn.execute(text(f"SET LOCAL app.current_user_id = '{auth_ctx.user_id}'"))
+        conn.execute(
+            text("SELECT set_config('app.current_user_id', :val, true)"),
+            {"val": str(auth_ctx.user_id)},
+        )
         if auth_ctx.session_id:
-            conn.execute(text(f"SET LOCAL app.current_session_id = '{auth_ctx.session_id}'"))
-            
+            conn.execute(
+                text("SELECT set_config('app.current_session_id', :val, true)"),
+                {"val": str(auth_ctx.session_id)},
+            )
+
     req_ctx = accessor.request()
     if req_ctx and req_ctx.trace_id:
-        conn.execute(text(f"SET LOCAL app.current_trace_id = '{req_ctx.trace_id}'"))
+        conn.execute(
+            text("SELECT set_config('app.current_trace_id', :val, true)"),
+            {"val": str(req_ctx.trace_id)},
+        )
 
 # Setup audit listeners
 setup_audit_listeners(engine)

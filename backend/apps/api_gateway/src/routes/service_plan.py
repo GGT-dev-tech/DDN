@@ -51,19 +51,21 @@ def get_service_plan_service(
 # ---------------------------------------------------------------------------
 
 
+from pydantic import BaseModel, Field
+
 class CollectionPointRequest(BaseModel):
     address: str
-    latitude: float | None = None
-    longitude: float | None = None
+    latitude: float | None = Field(None, ge=-90, le=90)
+    longitude: float | None = Field(None, ge=-180, le=180)
     reference: str | None = None
 
 
 class RecurrenceRequest(BaseModel):
     frequency: str                  # RecurrenceFrequency value
-    interval: int = 1
-    weekdays: list[int] = []        # Weekday int values (0=Mon..6=Sun)
-    start_time: str                 # "HH:MM"
-    end_time: str                   # "HH:MM"
+    interval: int = Field(1, ge=1)
+    weekdays: list[int] = Field(default_factory=list)        # Weekday int values (0=Mon..6=Sun)
+    start_time: str = Field(..., pattern=r"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$") # "HH:MM"
+    end_time: str = Field(..., pattern=r"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")   # "HH:MM"
     timezone: str = "America/Sao_Paulo"
 
 
@@ -121,10 +123,14 @@ def _plan_response(plan: Any) -> dict:
 @router.get("/{plan_id}", response_model=dict)
 async def get_plan(
     plan_id: uuid.UUID,
+    tenant_id: uuid.UUID = Depends(require_tenant),
     service: ServicePlanService = Depends(get_service_plan_service),
 ) -> dict:
     try:
         plan = await service.get_plan_by_id(plan_id)
+        # Enforce tenant isolation — prevent IDOR
+        if not plan or plan.tenant_id != tenant_id:
+            raise HTTPException(status_code=404, detail="Plan not found")
         return _plan_response(plan)
     except ServicePlanNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))
@@ -141,7 +147,7 @@ async def list_all_plans(
 @router.get("/contract/{contract_id}", response_model=list)
 async def list_plans_by_contract(
     contract_id: uuid.UUID,
-    tenant_id: uuid.UUID,
+    tenant_id: uuid.UUID = Depends(require_tenant),
     service: ServicePlanService = Depends(get_service_plan_service),
 ) -> list:
     plans = await service.list_plans_by_contract(contract_id, tenant_id)
@@ -152,6 +158,7 @@ async def list_plans_by_contract(
 async def update_schedules(
     plan_id: uuid.UUID,
     body: UpdateSchedulesRequest,
+    tenant_id: uuid.UUID = Depends(require_tenant),
     service: ServicePlanService = Depends(get_service_plan_service),
 ) -> dict:
     """
@@ -175,6 +182,7 @@ async def update_schedules(
 @router.post("/{plan_id}/publish", response_model=dict)
 async def publish_plan(
     plan_id: uuid.UUID,
+    tenant_id: uuid.UUID = Depends(require_tenant),
     service: ServicePlanService = Depends(get_service_plan_service),
 ) -> dict:
     try:
@@ -192,6 +200,7 @@ async def publish_plan(
 @router.post("/{plan_id}/suspend", response_model=dict)
 async def suspend_plan(
     plan_id: uuid.UUID,
+    tenant_id: uuid.UUID = Depends(require_tenant),
     service: ServicePlanService = Depends(get_service_plan_service),
 ) -> dict:
     try:
@@ -207,6 +216,7 @@ async def suspend_plan(
 @router.post("/{plan_id}/reactivate", response_model=dict)
 async def reactivate_plan(
     plan_id: uuid.UUID,
+    tenant_id: uuid.UUID = Depends(require_tenant),
     service: ServicePlanService = Depends(get_service_plan_service),
 ) -> dict:
     try:

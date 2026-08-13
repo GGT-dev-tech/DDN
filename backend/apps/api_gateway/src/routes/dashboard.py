@@ -26,3 +26,27 @@ async def get_dashboard_stats(
     Retrieves the main operational metrics for the current tenant's dashboard.
     """
     return await service.get_dashboard_stats(tenant_id)
+
+from pydantic import BaseModel
+
+class DestinationEvolutionChartData(BaseModel):
+    name: str
+    reciclavel: float
+    organico: float
+    rejeito: float
+
+@router.get("/chart/destination-evolution", response_model=list[DestinationEvolutionChartData])
+async def get_destination_evolution_chart(
+    tenant_id: UUID = Depends(require_tenant),
+):
+    """
+    Mock endpoint for destination evolution chart data.
+    """
+    return [
+        { "name": "JAN", "reciclavel": 120, "organico": 80, "rejeito": 30 },
+        { "name": "FEV", "reciclavel": 135, "organico": 75, "rejeito": 35 },
+        { "name": "MAR", "reciclavel": 150, "organico": 105, "rejeito": 25 },
+        { "name": "ABR", "reciclavel": 180, "organico": 90, "rejeito": 45 },
+        { "name": "MAI", "reciclavel": 165, "organico": 120, "rejeito": 30 },
+        { "name": "JUN", "reciclavel": 210, "organico": 60, "rejeito": 15 }
+    ]

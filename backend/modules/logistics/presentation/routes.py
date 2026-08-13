@@ -115,3 +115,42 @@ async def update_service_order(
     await session.commit()
     await session.refresh(order)
     return order
+
+class LiveStatusSchema(BaseModel):
+    id: int
+    type: str
+    title: str
+    subtitle: str
+    time: str
+
+@router.get("/live-status", response_model=list[LiveStatusSchema])
+async def get_live_status(
+    tenant_id: Annotated[uuid.UUID, Depends(require_tenant)],
+    session: Annotated[AsyncSession, Depends(get_db_session)]
+):
+    """
+    Mock endpoint for real-time logistics operations tracking.
+    """
+    return [
+        {
+            "id": 1,
+            "type": "COMPLETED",
+            "title": "Coleta Concluída: Indústria Apex",
+            "subtitle": "Zona Sul • 4.2 Ton • Reciclável",
+            "time": "Há 10m"
+        },
+        {
+            "id": 2,
+            "type": "IN_ROUTE",
+            "title": "Em Rota: Hospital Central",
+            "subtitle": "Centro • Resíduo Hospitalar",
+            "time": "Agora"
+        },
+        {
+            "id": 3,
+            "type": "PENDING",
+            "title": "Aguardando: Shopping Metro",
+            "subtitle": "Zona Leste • Previsão: 14:30",
+            "time": "Próximo"
+        }
+    ]

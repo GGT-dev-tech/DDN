@@ -31,19 +31,30 @@ def get_lead_service(
     company_service: CompanyService = Depends(get_company_service),
     opportunity_service: OpportunityService = Depends(get_opportunity_service)
 ) -> LeadService:
+    from modules.core.infrastructure.uow import SQLAlchemyUnitOfWork
+    
+    uow = SQLAlchemyUnitOfWork(session)
     repo = LeadRepository(session)
-    return LeadService(repo, company_service, opportunity_service)
+    return LeadService(uow, repo, company_service, opportunity_service)
+
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator
 
 # Schemas
 class LeadRegisterRequest(BaseModel):
     company_name: str
     contact_name: str
-    email: str | None = None
+    email: EmailStr | None = None
     phone: str | None = None
     source_id: str | None = None
     address: str | None = None
-    latitude: float | None = None
-    longitude: float | None = None
+    latitude: float | None = Field(None, ge=-90, le=90)
+    longitude: float | None = Field(None, ge=-180, le=180)
+
+    @model_validator(mode="after")
+    def validate_contact_info(self) -> "LeadRegisterRequest":
+        if not self.email and not self.phone:
+            raise ValueError("Pelo menos email ou telefone deve ser fornecido")
+        return self
 
 class LeadResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -63,13 +74,21 @@ class MatchLeadRequest(BaseModel):
     corporate_name: str | None = None
     document_number: str | None = None
 
+    @model_validator(mode="after")
+    def validate_match_data(self) -> "MatchLeadRequest":
+        if not self.company_id and not all([self.trade_name, self.corporate_name, self.document_number]):
+            raise ValueError("Deve fornecer company_id ou (trade_name, corporate_name, document_number)")
+        return self
+
 # Routes
 @router.get("/leads", response_model=list[LeadResponse])
 async def list_leads(
     tenant_id: UUID = Depends(require_tenant),
+    skip: int = 0,
+    limit: int = 100,
     lead_service: LeadService = Depends(get_lead_service)
 ):
-    leads = await lead_service.list_leads(tenant_id)
+    leads = await lead_service.list_leads(tenant_id, skip=skip, limit=limit)
     return leads
 
 @router.post("/leads", response_model=LeadResponse)
