@@ -57,3 +57,10 @@ class Opportunity(AggregateRoot):
             
         self.stage = OpportunityStage.CLOSED_LOST
         self.updated_at = datetime.utcnow()
+
+    def change_stage(self, stage: OpportunityStage):
+        if self.stage in [OpportunityStage.CLOSED_WON, OpportunityStage.CLOSED_LOST]:
+            raise OpportunityException(f"Cannot change stage of a {self.stage.value} opportunity.")
+            
+        self.stage = stage
+        self.updated_at = datetime.utcnow()

@@ -13,4 +13,6 @@ export interface OpportunityResponse {
   stage: string;
   source_id?: string | null;
   expected_close_date?: string | null;
+  created_at: string;
+  updated_at: string;
 }

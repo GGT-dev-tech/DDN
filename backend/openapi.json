@@ -1495,6 +1495,80 @@
         }
       }
     },
+    "/api/v1/commercial/opportunities/{opportunity_id}/stage": {
+      "patch": {
+        "tags": [
+          "Commercial"
+        ],
+        "summary": "Update Opportunity Stage",
+        "operationId": "update_opportunity_stage_api_v1_commercial_opportunities__opportunity_id__stage_patch",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "opportunity_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Opportunity Id"
+            }
+          },
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOpportunityStageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpportunityResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/catalog/uom": {
       "get": {
         "tags": [
@@ -5554,13 +5628,24 @@
           "expected_close_date": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "format": "date"
               },
               {
                 "type": "null"
               }
             ],
             "title": "Expected Close Date"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
           }
         },
         "type": "object",
@@ -5568,7 +5653,9 @@
           "id",
           "company_id",
           "title",
-          "stage"
+          "stage",
+          "created_at",
+          "updated_at"
         ],
         "title": "OpportunityResponse"
       },
@@ -6709,6 +6796,19 @@
           "TIME"
         ],
         "title": "UOMBaseType"
+      },
+      "UpdateOpportunityStageRequest": {
+        "properties": {
+          "stage": {
+            "type": "string",
+            "title": "Stage"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stage"
+        ],
+        "title": "UpdateOpportunityStageRequest"
       },
       "UpdateSchedulesRequest": {
         "properties": {

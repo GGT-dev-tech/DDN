@@ -35,7 +35,8 @@ import type {
   ListLeadsApiV1CommercialLeadsGetParams,
   ListOpportunitiesApiV1CommercialOpportunitiesGetParams,
   MatchLeadRequest,
-  OpportunityResponse
+  OpportunityResponse,
+  UpdateOpportunityStageRequest
 } from '../model';
 
 import { customAxiosInstance } from '../../axios';
@@ -751,3 +752,68 @@ export function useListOpportunitiesApiV1CommercialOpportunitiesGet<TData = Awai
 
 
 
+/**
+ * @summary Update Opportunity Stage
+ */
+export const updateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatch = (
+    opportunityId: string,
+    updateOpportunityStageRequest: UpdateOpportunityStageRequest,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<OpportunityResponse>(
+      {url: `/api/v1/commercial/opportunities/${opportunityId}/stage`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateOpportunityStageRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getUpdateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatchMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatch>>, TError,{opportunityId: string;data: UpdateOpportunityStageRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatch>>, TError,{opportunityId: string;data: UpdateOpportunityStageRequest}, TContext> => {
+
+const mutationKey = ['updateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatch'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatch>>, {opportunityId: string;data: UpdateOpportunityStageRequest}> = (props) => {
+          const {opportunityId,data} = props ?? {};
+
+          return  updateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatch(opportunityId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatchMutationResult = NonNullable<Awaited<ReturnType<typeof updateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatch>>>
+    export type UpdateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatchMutationBody = UpdateOpportunityStageRequest
+    export type UpdateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatchMutationError = HTTPValidationError
+
+    /**
+ * @summary Update Opportunity Stage
+ */
+export const useUpdateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatch = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatch>>, TError,{opportunityId: string;data: UpdateOpportunityStageRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatch>>,
+        TError,
+        {opportunityId: string;data: UpdateOpportunityStageRequest},
+        TContext
+      > => {
+      return useMutation(getUpdateOpportunityStageApiV1CommercialOpportunitiesOpportunityIdStagePatchMutationOptions(options), queryClient);
+    }

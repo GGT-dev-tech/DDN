@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -6,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.session import get_db_session
 from modules.commercial.application.services.company_service import CompanyService
+from modules.commercial.domain.exceptions import OpportunityException
 from modules.commercial.application.services.lead_service import LeadService
 from modules.commercial.application.services.opportunity_service import OpportunityService
 from modules.commercial.infrastructure.repositories.company_repository import CompanyRepository
@@ -25,8 +27,10 @@ def get_company_service(session: AsyncSession = Depends(get_db_session)) -> Comp
     return CompanyService(uow, repo)
 
 def get_opportunity_service(session: AsyncSession = Depends(get_db_session)) -> OpportunityService:
+    from modules.core.infrastructure.uow import SQLAlchemyUnitOfWork
+    uow = SQLAlchemyUnitOfWork(session)
     repo = OpportunityRepository(session)
-    return OpportunityService(repo)
+    return OpportunityService(uow, repo)
 
 def get_lead_service(
     session: AsyncSession = Depends(get_db_session),
@@ -112,7 +116,12 @@ class OpportunityResponse(BaseModel):
     estimated_value: float | None = None
     stage: str
     source_id: str | None = None
-    expected_close_date: str | None = None
+    expected_close_date: date | None = None
+    created_at: datetime
+    updated_at: datetime
+
+class UpdateOpportunityStageRequest(BaseModel):
+    stage: str
 
 class MatchLeadRequest(BaseModel):
     company_id: UUID | None = None
@@ -267,10 +276,29 @@ async def add_contact(
 
 @router.get("/opportunities", response_model=list[OpportunityResponse])
 async def list_opportunities(
-    tenant_id: UUID = Depends(require_tenant),
     skip: int = 0,
     limit: int = 100,
+    tenant_id: UUID = Depends(require_tenant),
     opportunity_service: OpportunityService = Depends(get_opportunity_service)
 ):
     opportunities = await opportunity_service.list_opportunities(tenant_id, skip=skip, limit=limit)
     return opportunities
+
+@router.patch("/opportunities/{opportunity_id}/stage", response_model=OpportunityResponse)
+async def update_opportunity_stage(
+    opportunity_id: UUID,
+    req: UpdateOpportunityStageRequest,
+    tenant_id: UUID = Depends(require_tenant),
+    opportunity_service: OpportunityService = Depends(get_opportunity_service)
+):
+    try:
+        opportunity = await opportunity_service.update_opportunity_stage(
+            tenant_id=tenant_id, 
+            opportunity_id=opportunity_id, 
+            stage=req.stage
+        )
+        return opportunity
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except OpportunityException as e:
+        raise HTTPException(status_code=400, detail=str(e))

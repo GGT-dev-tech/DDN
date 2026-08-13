@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { useRegisterLeadApiV1CommercialLeadsPost } from '../../../shared/api/generated/commercial/commercial'
 import { Button } from '../../../shared/ui/components/Button'
 import { Input } from '../../../shared/ui/components/Input'
@@ -12,6 +13,7 @@ interface CustomerFormProps {
 }
 
 export function CustomerForm({ onSuccess, onCancel }: CustomerFormProps) {
+  const queryClient = useQueryClient()
   const [cnpj, setCnpj] = useState('')
   const [companyName, setCompanyName] = useState('')
   const [contactName, setContactName] = useState('')
@@ -124,6 +126,7 @@ export function CustomerForm({ onSuccess, onCancel }: CustomerFormProps) {
       {
         onSuccess: () => {
           toast.success('Cliente (Lead) cadastrado com sucesso!')
+          queryClient.invalidateQueries({ queryKey: ['listLeadsApiV1CommercialLeadsGet'] })
           onSuccess?.()
         },
         onError: (err: any) => {
