@@ -273,3 +273,68 @@ export function useGetMeApiV1AuthMeGet<TData = Awaited<ReturnType<typeof getMeAp
 
 
 
+/**
+ * Revokes all active refresh tokens for the current user.
+ * The access token will expire naturally (15 min TTL).
+ * For immediate invalidation, implement a token denylist in Redis.
+ * @summary Logout
+ */
+export const logoutApiV1AuthLogoutPost = (
+
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<void>(
+      {url: `/api/v1/auth/logout`, method: 'POST', signal
+    },
+      options);
+    }
+
+
+
+
+export const getLogoutApiV1AuthLogoutPostMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logoutApiV1AuthLogoutPost>>, TError,void, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof logoutApiV1AuthLogoutPost>>, TError,void, TContext> => {
+
+const mutationKey = ['logoutApiV1AuthLogoutPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof logoutApiV1AuthLogoutPost>>, void> = () => {
+
+
+          return  logoutApiV1AuthLogoutPost(requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type LogoutApiV1AuthLogoutPostMutationResult = NonNullable<Awaited<ReturnType<typeof logoutApiV1AuthLogoutPost>>>
+
+    export type LogoutApiV1AuthLogoutPostMutationError = unknown
+
+    /**
+ * @summary Logout
+ */
+export const useLogoutApiV1AuthLogoutPost = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logoutApiV1AuthLogoutPost>>, TError,void, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof logoutApiV1AuthLogoutPost>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getLogoutApiV1AuthLogoutPostMutationOptions(options), queryClient);
+    }

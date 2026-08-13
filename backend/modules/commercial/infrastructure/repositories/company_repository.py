@@ -81,3 +81,35 @@ class CompanyRepository:
             db_company.corporate_name = company.corporate_name
             db_company.document_number = company.document_number
             db_company.status = company.status
+
+    async def list_companies(self, tenant_id: UUID, skip: int = 0, limit: int = 100) -> list[Company]:
+        stmt = select(CommercialCompany).where(
+            CommercialCompany.tenant_id == tenant_id
+        ).offset(skip).limit(limit)
+        result = await self.session.execute(stmt)
+        db_companies = result.scalars().all()
+        return [
+            Company(
+                id=db.id,
+                tenant_id=db.tenant_id,
+                trade_name=db.trade_name,
+                corporate_name=db.corporate_name,
+                document_number=db.document_number,
+                status=db.status,
+                created_at=db.created_at
+            ) for db in db_companies
+        ]
+
+    async def add_contact(self, tenant_id: UUID, contact: "Contact") -> None:
+        from modules.commercial.infrastructure.models import CommercialContact
+        db_contact = CommercialContact(
+            id=contact.id,
+            tenant_id=tenant_id,
+            company_id=contact.company_id,
+            name=contact.name,
+            email=contact.email,
+            phone=contact.phone,
+            role=contact.role,
+            is_primary=contact.is_primary
+        )
+        self.session.add(db_contact)

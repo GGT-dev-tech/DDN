@@ -14,6 +14,9 @@ class RegisterUOMRequest(BaseModel):
     name: str = Field(..., max_length=255)
     base_type: UOMBaseType
 
+class UpdateUOMRequest(BaseModel):
+    name: str = Field(..., max_length=255)
+
 class UOMResponse(BaseModel):
     id: uuid.UUID
 
@@ -36,6 +39,13 @@ class DraftServiceOfferingRequest(BaseModel):
     category: str = Field(..., max_length=100)
     default_uom_id: uuid.UUID
     effective_date: date
+    end_date: date | None = None
+
+class UpdateServiceOfferingRequest(BaseModel):
+    name: str | None = Field(None, max_length=255)
+    description: str | None = Field(None, max_length=1000)
+    category: str | None = Field(None, max_length=100)
+    effective_date: date | None = None
     end_date: date | None = None
 
 class AttachAttributeRequest(BaseModel):

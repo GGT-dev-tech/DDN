@@ -4,6 +4,7 @@ from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from modules.core.infrastructure.uow import UnitOfWork
 from modules.pricing.domain.entities.price_table import PriceTable
 from modules.pricing.domain.entities.pricing_rule import PricingRule
 from modules.pricing.domain.services.price_calculation_engine import PriceCalculationEngine
@@ -17,8 +18,8 @@ from modules.pricing.infrastructure.repositories.pricing_repository import Prici
 
 
 class PricingService:
-    def __init__(self, session: AsyncSession, repository: PricingRepository, calculation_engine: PriceCalculationEngine):
-        self.session = session
+    def __init__(self, uow: UnitOfWork, repository: PricingRepository, calculation_engine: PriceCalculationEngine):
+        self.uow = uow
         self.repository = repository
         self.calculation_engine = calculation_engine
         
@@ -40,15 +41,17 @@ class PricingService:
             customer_id=customer_id,
             is_active=is_active
         )
-        await self.repository.save_price_table(table, tenant_id)
         
-        events = table.collect_events()
-        # if events:
-        #     self.outbox_repository.save(events)
-        table.clear_events()
+        async with self.uow as uow:
+            await self.repository.save_price_table(table, tenant_id)
             
-        await self.session.commit()
-        return table.id
+            events = table.collect_events()
+            # if events:
+            #     self.outbox_repository.save(events)
+            table.clear_events()
+                
+            await uow.commit()
+            return table.id
 
     async def list_price_tables(self, tenant_id: UUID) -> list[PriceTable]:
         return await self.repository.list_price_tables(tenant_id)
@@ -62,22 +65,23 @@ class PricingService:
         amount: Decimal,
         currency: str = "BRL"
     ) -> UUID:
-        table = await self.repository.get_price_table_by_id(price_table_id)
-        if not table:
-            raise ValueError("Price table not found")
+        async with self.uow as uow:
+            table = await self.repository.get_price_table_by_id(price_table_id)
+            if not table:
+                raise ValueError("Price table not found")
+                
+            unit_price = Money(amount=amount, currency=currency)
+            item = table.add_item(service_offering_id, unit_of_measure_id, unit_price)
             
-        unit_price = Money(amount=amount, currency=currency)
-        item = table.add_item(service_offering_id, unit_of_measure_id, unit_price)
-        
-        await self.repository.save_price_table(table, tenant_id)
-        
-        events = table.collect_events()
-        # if events:
-        #     self.outbox_repository.save(events)
-        table.clear_events()
-        
-        await self.session.commit()
-        return item.id
+            await self.repository.save_price_table(table, tenant_id)
+            
+            events = table.collect_events()
+            # if events:
+            #     self.outbox_repository.save(events)
+            table.clear_events()
+            
+            await uow.commit()
+            return item.id
             
     async def create_pricing_rule(
         self,
@@ -101,15 +105,17 @@ class PricingService:
             service_offering_id=service_offering_id,
             region_id=region_id
         )
-        await self.repository.save_pricing_rule(rule, tenant_id)
         
-        events = rule.collect_events()
-        # if events:
-        #     self.outbox_repository.save(events)
-        rule.clear_events()
-        
-        await self.session.commit()
-        return rule.id
+        async with self.uow as uow:
+            await self.repository.save_pricing_rule(rule, tenant_id)
+            
+            events = rule.collect_events()
+            # if events:
+            #     self.outbox_repository.save(events)
+            rule.clear_events()
+            
+            await uow.commit()
+            return rule.id
 
     async def calculate_price(
         self,

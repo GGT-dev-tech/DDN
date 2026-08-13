@@ -7,7 +7,6 @@
 import type { ContractCreateRequestItemsItem } from './contractCreateRequestItemsItem';
 
 export interface ContractCreateRequest {
-  tenant_id: string;
   company_id: string;
   quotation_id: string;
   effective_date: string;

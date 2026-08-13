@@ -32,3 +32,6 @@ class OpportunityService:
         
         await self.opportunity_repo.add(opportunity)
         return opportunity
+
+    async def list_opportunities(self, tenant_id: UUID, skip: int = 0, limit: int = 100) -> list[Opportunity]:
+        return await self.opportunity_repo.list_opportunities(tenant_id, skip=skip, limit=limit)

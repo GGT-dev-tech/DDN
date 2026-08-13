@@ -25,9 +25,9 @@ import type {
 
 import type {
   ContractCreateRequest,
-  ContractResponse,
   CreateContractApiV1ContractsPost200,
-  HTTPValidationError
+  HTTPValidationError,
+  ListContractsApiV1ContractsGetParams
 } from '../model';
 
 import { customAxiosInstance } from '../../axios';
@@ -56,13 +56,14 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
  * @summary List Contracts
  */
 export const listContractsApiV1ContractsGet = (
-
+    params?: ListContractsApiV1ContractsGetParams,
  options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
 ) => {
 
 
-      return customAxiosInstance<ContractResponse[]>(
-      {url: `/api/v1/contracts`, method: 'GET', signal
+      return customAxiosInstance<unknown>(
+      {url: `/api/v1/contracts`, method: 'GET',
+        params, signal
     },
       options);
     }
@@ -70,23 +71,23 @@ export const listContractsApiV1ContractsGet = (
 
 
 
-export const getListContractsApiV1ContractsGetQueryKey = () => {
+export const getListContractsApiV1ContractsGetQueryKey = (params?: ListContractsApiV1ContractsGetParams,) => {
     return [
-    `/api/v1/contracts`
+    `/api/v1/contracts`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getListContractsApiV1ContractsGetQueryOptions = <TData = Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export const getListContractsApiV1ContractsGetQueryOptions = <TData = Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError = HTTPValidationError>(params?: ListContractsApiV1ContractsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getListContractsApiV1ContractsGetQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getListContractsApiV1ContractsGetQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>> = ({ signal }) => listContractsApiV1ContractsGet(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>> = ({ signal }) => listContractsApiV1ContractsGet(params, requestOptions, signal);
 
 
 
@@ -100,7 +101,7 @@ export type ListContractsApiV1ContractsGetQueryError = HTTPValidationError
 
 
 export function useListContractsApiV1ContractsGet<TData = Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError = HTTPValidationError>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError, TData>> & Pick<
+ params: undefined |  ListContractsApiV1ContractsGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>,
           TError,
@@ -110,7 +111,7 @@ export function useListContractsApiV1ContractsGet<TData = Awaited<ReturnType<typ
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useListContractsApiV1ContractsGet<TData = Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError, TData>> & Pick<
+ params?: ListContractsApiV1ContractsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>,
           TError,
@@ -120,7 +121,7 @@ export function useListContractsApiV1ContractsGet<TData = Awaited<ReturnType<typ
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useListContractsApiV1ContractsGet<TData = Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ params?: ListContractsApiV1ContractsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -128,11 +129,11 @@ export function useListContractsApiV1ContractsGet<TData = Awaited<ReturnType<typ
  */
 
 export function useListContractsApiV1ContractsGet<TData = Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ params?: ListContractsApiV1ContractsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listContractsApiV1ContractsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getListContractsApiV1ContractsGetQueryOptions(options)
+  const queryOptions = getListContractsApiV1ContractsGetQueryOptions(params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

@@ -8,7 +8,9 @@ from modules.catalog.application.dto.requests import (
     AttachAttributeRequest,
     DefineServiceAttributeRequest,
     DraftServiceOfferingRequest,
+    UpdateServiceOfferingRequest,
     RegisterUOMRequest,
+    UpdateUOMRequest,
     ServiceAttributeResponse,
     ServiceOfferingResponse,
     UOMResponse,
@@ -18,11 +20,15 @@ from modules.identity.dependencies import require_tenant
 
 router = APIRouter(prefix="/catalog", tags=["Catalog"])
 
+from modules.core.infrastructure.uow import SQLAlchemyUnitOfWork
+
 def get_catalog_service(
     session: AsyncSession = Depends(get_db_session),
     tenant_id: uuid.UUID = Depends(require_tenant)
 ) -> CatalogService:
-    return CatalogService(session, tenant_id)
+    uow = SQLAlchemyUnitOfWork(session)
+    repo = CatalogRepository(session)
+    return CatalogService(uow, tenant_id, repo)
 
 from modules.catalog.application.use_cases.list_catalog_entities import (
     ListServiceAttributes,
@@ -78,6 +84,18 @@ async def register_uom(
             base_type=request.base_type
         )
         return UOMResponse(id=uom_id)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.put("/uom/{uom_id}", status_code=status.HTTP_200_OK)
+async def update_uom(
+    uom_id: uuid.UUID,
+    request: UpdateUOMRequest,
+    service: CatalogService = Depends(get_catalog_service)
+):
+    try:
+        await service.update_uom(uom_id=uom_id, name=request.name)
+        return {"status": "success"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -154,6 +172,25 @@ async def archive_offering(
 ):
     try:
         await service.archive_service_offering(offering_id)
+        return {"status": "success"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.put("/offerings/{offering_id}", status_code=status.HTTP_200_OK)
+async def update_offering(
+    offering_id: uuid.UUID,
+    request: UpdateServiceOfferingRequest,
+    service: CatalogService = Depends(get_catalog_service)
+):
+    try:
+        await service.update_service_offering(
+            offering_id=offering_id,
+            name=request.name,
+            description=request.description,
+            category=request.category,
+            effective_date=request.effective_date,
+            end_date=request.end_date
+        )
         return {"status": "success"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

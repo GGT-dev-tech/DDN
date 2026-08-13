@@ -64,3 +64,24 @@ class OpportunityRepository:
             db_opportunity.source_id = opportunity.source_id
             db_opportunity.expected_close_date = opportunity.expected_close_date
             db_opportunity.updated_at = opportunity.updated_at
+
+    async def list_opportunities(self, tenant_id: UUID, skip: int = 0, limit: int = 100) -> list[Opportunity]:
+        stmt = select(CommercialOpportunity).where(
+            CommercialOpportunity.tenant_id == tenant_id
+        ).offset(skip).limit(limit)
+        result = await self.session.execute(stmt)
+        db_opportunities = result.scalars().all()
+        return [
+            Opportunity(
+                id=db.id,
+                tenant_id=db.tenant_id,
+                company_id=db.company_id,
+                title=db.title,
+                estimated_value=db.estimated_value,
+                stage=db.stage,
+                source_id=db.source_id,
+                expected_close_date=db.expected_close_date,
+                created_at=db.created_at,
+                updated_at=db.updated_at
+            ) for db in db_opportunities
+        ]

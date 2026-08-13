@@ -92,6 +92,35 @@ class ServiceOffering(AggregateRoot):
         self.updated_at = datetime.utcnow()
         self._version += 1
         
+    def update(
+        self,
+        name: str | None = None,
+        description: str | None = None,
+        category: str | None = None,
+        effective_date: date | None = None,
+        end_date: date | None = None
+    ) -> None:
+        if self.status == ServiceStatus.ARCHIVED:
+            raise ValueError("Cannot update an archived service offering")
+            
+        if name is not None:
+            if not name.strip():
+                raise ValueError("ServiceOffering name cannot be empty")
+            self.name = name.strip()
+        if description is not None:
+            self.description = description.strip()
+        if category is not None:
+            if not category.strip():
+                raise ValueError("ServiceOffering category cannot be empty")
+            self.category = category.strip()
+        if effective_date is not None:
+            self.effective_date = effective_date
+        if end_date is not None:
+            self.end_date = end_date
+            
+        self.updated_at = datetime.utcnow()
+        self._version += 1
+        
     def add_attribute(self, attribute_id: UUID, allowed_values: list[Any]) -> None:
         """
         Bind a ServiceAttribute to this offering, specifying the subset of allowed_values.

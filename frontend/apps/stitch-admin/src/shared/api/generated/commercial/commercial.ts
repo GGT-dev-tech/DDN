@@ -24,10 +24,17 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AddContactRequest,
+  CompanyResponse,
+  ContactResponse,
   HTTPValidationError,
   LeadRegisterRequest,
   LeadResponse,
-  MatchLeadRequest
+  ListCompaniesApiV1CommercialCompaniesGetParams,
+  ListLeadsApiV1CommercialLeadsGetParams,
+  ListOpportunitiesApiV1CommercialOpportunitiesGetParams,
+  MatchLeadRequest,
+  OpportunityResponse
 } from '../model';
 
 import { customAxiosInstance } from '../../axios';
@@ -56,13 +63,14 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
  * @summary List Leads
  */
 export const listLeadsApiV1CommercialLeadsGet = (
-
+    params?: ListLeadsApiV1CommercialLeadsGetParams,
  options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
 ) => {
 
 
       return customAxiosInstance<LeadResponse[]>(
-      {url: `/api/v1/commercial/leads`, method: 'GET', signal
+      {url: `/api/v1/commercial/leads`, method: 'GET',
+        params, signal
     },
       options);
     }
@@ -70,23 +78,23 @@ export const listLeadsApiV1CommercialLeadsGet = (
 
 
 
-export const getListLeadsApiV1CommercialLeadsGetQueryKey = () => {
+export const getListLeadsApiV1CommercialLeadsGetQueryKey = (params?: ListLeadsApiV1CommercialLeadsGetParams,) => {
     return [
-    `/api/v1/commercial/leads`
+    `/api/v1/commercial/leads`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getListLeadsApiV1CommercialLeadsGetQueryOptions = <TData = Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export const getListLeadsApiV1CommercialLeadsGetQueryOptions = <TData = Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError = HTTPValidationError>(params?: ListLeadsApiV1CommercialLeadsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getListLeadsApiV1CommercialLeadsGetQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getListLeadsApiV1CommercialLeadsGetQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>> = ({ signal }) => listLeadsApiV1CommercialLeadsGet(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>> = ({ signal }) => listLeadsApiV1CommercialLeadsGet(params, requestOptions, signal);
 
 
 
@@ -100,7 +108,7 @@ export type ListLeadsApiV1CommercialLeadsGetQueryError = HTTPValidationError
 
 
 export function useListLeadsApiV1CommercialLeadsGet<TData = Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError = HTTPValidationError>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>> & Pick<
+ params: undefined |  ListLeadsApiV1CommercialLeadsGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>,
           TError,
@@ -110,7 +118,7 @@ export function useListLeadsApiV1CommercialLeadsGet<TData = Awaited<ReturnType<t
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useListLeadsApiV1CommercialLeadsGet<TData = Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>> & Pick<
+ params?: ListLeadsApiV1CommercialLeadsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>,
           TError,
@@ -120,7 +128,7 @@ export function useListLeadsApiV1CommercialLeadsGet<TData = Awaited<ReturnType<t
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useListLeadsApiV1CommercialLeadsGet<TData = Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ params?: ListLeadsApiV1CommercialLeadsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -128,11 +136,11 @@ export function useListLeadsApiV1CommercialLeadsGet<TData = Awaited<ReturnType<t
  */
 
 export function useListLeadsApiV1CommercialLeadsGet<TData = Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ params?: ListLeadsApiV1CommercialLeadsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLeadsApiV1CommercialLeadsGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getListLeadsApiV1CommercialLeadsGetQueryOptions(options)
+  const queryOptions = getListLeadsApiV1CommercialLeadsGetQueryOptions(params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -335,3 +343,346 @@ export const useMatchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPost = <TError 
       > => {
       return useMutation(getMatchLeadToCompanyApiV1CommercialLeadsLeadIdMatchPostMutationOptions(options), queryClient);
     }
+    /**
+ * @summary List Companies
+ */
+export const listCompaniesApiV1CommercialCompaniesGet = (
+    params?: ListCompaniesApiV1CommercialCompaniesGetParams,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<CompanyResponse[]>(
+      {url: `/api/v1/commercial/companies`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getListCompaniesApiV1CommercialCompaniesGetQueryKey = (params?: ListCompaniesApiV1CommercialCompaniesGetParams,) => {
+    return [
+    `/api/v1/commercial/companies`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getListCompaniesApiV1CommercialCompaniesGetQueryOptions = <TData = Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError = HTTPValidationError>(params?: ListCompaniesApiV1CommercialCompaniesGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListCompaniesApiV1CommercialCompaniesGetQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>> = ({ signal }) => listCompaniesApiV1CommercialCompaniesGet(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListCompaniesApiV1CommercialCompaniesGetQueryResult = NonNullable<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>>
+export type ListCompaniesApiV1CommercialCompaniesGetQueryError = HTTPValidationError
+
+
+export function useListCompaniesApiV1CommercialCompaniesGet<TData = Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError = HTTPValidationError>(
+ params: undefined |  ListCompaniesApiV1CommercialCompaniesGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>,
+          TError,
+          Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListCompaniesApiV1CommercialCompaniesGet<TData = Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError = HTTPValidationError>(
+ params?: ListCompaniesApiV1CommercialCompaniesGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>,
+          TError,
+          Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListCompaniesApiV1CommercialCompaniesGet<TData = Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError = HTTPValidationError>(
+ params?: ListCompaniesApiV1CommercialCompaniesGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary List Companies
+ */
+
+export function useListCompaniesApiV1CommercialCompaniesGet<TData = Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError = HTTPValidationError>(
+ params?: ListCompaniesApiV1CommercialCompaniesGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCompaniesApiV1CommercialCompaniesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getListCompaniesApiV1CommercialCompaniesGetQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
+ * @summary Get Company
+ */
+export const getCompanyApiV1CommercialCompaniesCompanyIdGet = (
+    companyId: string,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<CompanyResponse>(
+      {url: `/api/v1/commercial/companies/${companyId}`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetCompanyApiV1CommercialCompaniesCompanyIdGetQueryKey = (companyId: string,) => {
+    return [
+    `/api/v1/commercial/companies/${companyId}`
+    ] as const;
+    }
+
+
+export const getGetCompanyApiV1CommercialCompaniesCompanyIdGetQueryOptions = <TData = Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>, TError = HTTPValidationError>(companyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetCompanyApiV1CommercialCompaniesCompanyIdGetQueryKey(companyId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>> = ({ signal }) => getCompanyApiV1CommercialCompaniesCompanyIdGet(companyId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: companyId !== null && companyId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetCompanyApiV1CommercialCompaniesCompanyIdGetQueryResult = NonNullable<Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>>
+export type GetCompanyApiV1CommercialCompaniesCompanyIdGetQueryError = HTTPValidationError
+
+
+export function useGetCompanyApiV1CommercialCompaniesCompanyIdGet<TData = Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>, TError = HTTPValidationError>(
+ companyId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>,
+          TError,
+          Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCompanyApiV1CommercialCompaniesCompanyIdGet<TData = Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>, TError = HTTPValidationError>(
+ companyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>,
+          TError,
+          Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetCompanyApiV1CommercialCompaniesCompanyIdGet<TData = Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>, TError = HTTPValidationError>(
+ companyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Company
+ */
+
+export function useGetCompanyApiV1CommercialCompaniesCompanyIdGet<TData = Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>, TError = HTTPValidationError>(
+ companyId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCompanyApiV1CommercialCompaniesCompanyIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetCompanyApiV1CommercialCompaniesCompanyIdGetQueryOptions(companyId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
+ * @summary Add Contact
+ */
+export const addContactApiV1CommercialCompaniesCompanyIdContactsPost = (
+    companyId: string,
+    addContactRequest: AddContactRequest,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<ContactResponse>(
+      {url: `/api/v1/commercial/companies/${companyId}/contacts`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: addContactRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getAddContactApiV1CommercialCompaniesCompanyIdContactsPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addContactApiV1CommercialCompaniesCompanyIdContactsPost>>, TError,{companyId: string;data: AddContactRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof addContactApiV1CommercialCompaniesCompanyIdContactsPost>>, TError,{companyId: string;data: AddContactRequest}, TContext> => {
+
+const mutationKey = ['addContactApiV1CommercialCompaniesCompanyIdContactsPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof addContactApiV1CommercialCompaniesCompanyIdContactsPost>>, {companyId: string;data: AddContactRequest}> = (props) => {
+          const {companyId,data} = props ?? {};
+
+          return  addContactApiV1CommercialCompaniesCompanyIdContactsPost(companyId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AddContactApiV1CommercialCompaniesCompanyIdContactsPostMutationResult = NonNullable<Awaited<ReturnType<typeof addContactApiV1CommercialCompaniesCompanyIdContactsPost>>>
+    export type AddContactApiV1CommercialCompaniesCompanyIdContactsPostMutationBody = AddContactRequest
+    export type AddContactApiV1CommercialCompaniesCompanyIdContactsPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Add Contact
+ */
+export const useAddContactApiV1CommercialCompaniesCompanyIdContactsPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addContactApiV1CommercialCompaniesCompanyIdContactsPost>>, TError,{companyId: string;data: AddContactRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof addContactApiV1CommercialCompaniesCompanyIdContactsPost>>,
+        TError,
+        {companyId: string;data: AddContactRequest},
+        TContext
+      > => {
+      return useMutation(getAddContactApiV1CommercialCompaniesCompanyIdContactsPostMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary List Opportunities
+ */
+export const listOpportunitiesApiV1CommercialOpportunitiesGet = (
+    params?: ListOpportunitiesApiV1CommercialOpportunitiesGetParams,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<OpportunityResponse[]>(
+      {url: `/api/v1/commercial/opportunities`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getListOpportunitiesApiV1CommercialOpportunitiesGetQueryKey = (params?: ListOpportunitiesApiV1CommercialOpportunitiesGetParams,) => {
+    return [
+    `/api/v1/commercial/opportunities`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getListOpportunitiesApiV1CommercialOpportunitiesGetQueryOptions = <TData = Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>, TError = HTTPValidationError>(params?: ListOpportunitiesApiV1CommercialOpportunitiesGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListOpportunitiesApiV1CommercialOpportunitiesGetQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>> = ({ signal }) => listOpportunitiesApiV1CommercialOpportunitiesGet(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ListOpportunitiesApiV1CommercialOpportunitiesGetQueryResult = NonNullable<Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>>
+export type ListOpportunitiesApiV1CommercialOpportunitiesGetQueryError = HTTPValidationError
+
+
+export function useListOpportunitiesApiV1CommercialOpportunitiesGet<TData = Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>, TError = HTTPValidationError>(
+ params: undefined |  ListOpportunitiesApiV1CommercialOpportunitiesGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>,
+          TError,
+          Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListOpportunitiesApiV1CommercialOpportunitiesGet<TData = Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>, TError = HTTPValidationError>(
+ params?: ListOpportunitiesApiV1CommercialOpportunitiesGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>,
+          TError,
+          Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useListOpportunitiesApiV1CommercialOpportunitiesGet<TData = Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>, TError = HTTPValidationError>(
+ params?: ListOpportunitiesApiV1CommercialOpportunitiesGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary List Opportunities
+ */
+
+export function useListOpportunitiesApiV1CommercialOpportunitiesGet<TData = Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>, TError = HTTPValidationError>(
+ params?: ListOpportunitiesApiV1CommercialOpportunitiesGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listOpportunitiesApiV1CommercialOpportunitiesGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getListOpportunitiesApiV1CommercialOpportunitiesGetQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+

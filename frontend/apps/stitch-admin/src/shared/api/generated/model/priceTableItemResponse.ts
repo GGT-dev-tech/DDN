@@ -4,13 +4,11 @@
  * Stitch API Gateway
  * OpenAPI spec version: 1.0.0
  */
+import type { MoneyResponse } from './moneyResponse';
 
-export interface InvoiceItemSchema {
+export interface PriceTableItemResponse {
   id: string;
   service_offering_id: string;
-  service_name: string;
-  quantity: number;
-  unit_price: number;
-  total_price: number;
-  service_order_id?: string | null;
+  unit_of_measure_id: string;
+  unit_price: MoneyResponse;
 }

@@ -21,10 +21,13 @@ from modules.pricing.infrastructure.repositories.pricing_repository import Prici
 
 router = APIRouter(prefix="/pricing", tags=["Pricing"])
 
+from modules.core.infrastructure.uow import SQLAlchemyUnitOfWork
+
 def get_pricing_service(session: AsyncSession = Depends(get_db_session)) -> PricingService:
+    uow = SQLAlchemyUnitOfWork(session)
     repository = PricingRepository(session)
     engine = PriceCalculationEngine()
-    return PricingService(session, repository, engine)
+    return PricingService(uow, repository, engine)
 
 @router.get("/tables", response_model=list[PriceTableResponse], status_code=status.HTTP_200_OK)
 async def list_price_tables(

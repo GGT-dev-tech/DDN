@@ -8,11 +8,9 @@ import type { InvoiceItemSchema } from './invoiceItemSchema';
 
 export interface InvoiceSchema {
   id: string;
-  tenant_id: string;
   company_id: string;
-  reference_date: string;
+  reference_month: string;
   status: string;
   total_amount: number;
-  due_date?: string | null;
   items: InvoiceItemSchema[];
 }

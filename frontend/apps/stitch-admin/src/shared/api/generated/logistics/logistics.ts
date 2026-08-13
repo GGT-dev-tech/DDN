@@ -26,6 +26,7 @@ import type {
 import type {
   HTTPValidationError,
   ListServiceOrdersApiV1LogisticsOrdersGetParams,
+  LiveStatusSchema,
   ServiceOrderSchema,
   UpdateServiceOrderSchema
 } from '../model';
@@ -274,3 +275,96 @@ export const useUpdateServiceOrderApiV1LogisticsOrdersOrderIdPatch = <TError = H
       > => {
       return useMutation(getUpdateServiceOrderApiV1LogisticsOrdersOrderIdPatchMutationOptions(options), queryClient);
     }
+    /**
+ * Mock endpoint for real-time logistics operations tracking.
+ * @summary Get Live Status
+ */
+export const getLiveStatusApiV1LogisticsLiveStatusGet = (
+
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<LiveStatusSchema[]>(
+      {url: `/api/v1/logistics/live-status`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetLiveStatusApiV1LogisticsLiveStatusGetQueryKey = () => {
+    return [
+    `/api/v1/logistics/live-status`
+    ] as const;
+    }
+
+
+export const getGetLiveStatusApiV1LogisticsLiveStatusGetQueryOptions = <TData = Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetLiveStatusApiV1LogisticsLiveStatusGetQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>> = ({ signal }) => getLiveStatusApiV1LogisticsLiveStatusGet(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetLiveStatusApiV1LogisticsLiveStatusGetQueryResult = NonNullable<Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>>
+export type GetLiveStatusApiV1LogisticsLiveStatusGetQueryError = HTTPValidationError
+
+
+export function useGetLiveStatusApiV1LogisticsLiveStatusGet<TData = Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>,
+          TError,
+          Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetLiveStatusApiV1LogisticsLiveStatusGet<TData = Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>,
+          TError,
+          Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetLiveStatusApiV1LogisticsLiveStatusGet<TData = Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Live Status
+ */
+
+export function useGetLiveStatusApiV1LogisticsLiveStatusGet<TData = Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLiveStatusApiV1LogisticsLiveStatusGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetLiveStatusApiV1LogisticsLiveStatusGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+

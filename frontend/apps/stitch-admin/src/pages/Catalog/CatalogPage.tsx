@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../shared/ui/compon
 import { UOMTable } from "./components/UOMTable";
 import { AttributesTable } from "./components/AttributesTable";
 import { OfferingsTable } from "./components/OfferingsTable";
+import { PriceTablesTable } from "./components/PriceTablesTable";
 import { LayoutList } from "lucide-react";
 
 export function CatalogPage() {
@@ -29,6 +30,7 @@ export function CatalogPage() {
             <TabsTrigger value="offerings" className="rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-800 data-[state=active]:shadow-sm">Ofertas de Serviço</TabsTrigger>
             <TabsTrigger value="attributes" className="rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-800 data-[state=active]:shadow-sm">Atributos</TabsTrigger>
             <TabsTrigger value="uoms" className="rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-800 data-[state=active]:shadow-sm">Unidades de Medida</TabsTrigger>
+            <TabsTrigger value="price_tables" className="rounded-lg data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-800 data-[state=active]:shadow-sm">Tabelas de Preços</TabsTrigger>
           </TabsList>
           
           <TabsContent value="offerings" className="focus-visible:outline-none focus-visible:ring-0">
@@ -41,6 +43,10 @@ export function CatalogPage() {
           
           <TabsContent value="uoms" className="focus-visible:outline-none focus-visible:ring-0">
             <UOMTable />
+          </TabsContent>
+
+          <TabsContent value="price_tables" className="focus-visible:outline-none focus-visible:ring-0">
+            <PriceTablesTable />
           </TabsContent>
         </Tabs>
       </div>

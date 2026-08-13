@@ -7,9 +7,12 @@
 
 export interface RecurrenceRequest {
   frequency: string;
+  /** @minimum 1 */
   interval?: number;
   weekdays?: number[];
+  /** @pattern ^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$ */
   start_time: string;
+  /** @pattern ^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$ */
   end_time: string;
   timezone?: string;
 }

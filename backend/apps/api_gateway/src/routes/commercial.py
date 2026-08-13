@@ -19,8 +19,10 @@ router = APIRouter(prefix="/commercial", tags=["Commercial"])
 
 # Dependency Providers
 def get_company_service(session: AsyncSession = Depends(get_db_session)) -> CompanyService:
+    from modules.core.infrastructure.uow import SQLAlchemyUnitOfWork
+    uow = SQLAlchemyUnitOfWork(session)
     repo = CompanyRepository(session)
-    return CompanyService(repo)
+    return CompanyService(uow, repo)
 
 def get_opportunity_service(session: AsyncSession = Depends(get_db_session)) -> OpportunityService:
     repo = OpportunityRepository(session)
@@ -67,6 +69,41 @@ class LeadResponse(BaseModel):
     address: str | None = None
     latitude: float | None = None
     longitude: float | None = None
+
+class CompanyResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: UUID
+    trade_name: str
+    corporate_name: str
+    document_number: str
+    status: str
+
+class AddContactRequest(BaseModel):
+    name: str
+    email: str
+    phone: str
+    role: str
+    is_primary: bool = False
+
+class ContactResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: UUID
+    company_id: UUID
+    name: str
+    email: str
+    phone: str
+    role: str
+    is_primary: bool
+
+class OpportunityResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: UUID
+    company_id: UUID
+    title: str
+    estimated_value: float | None = None
+    stage: str
+    source_id: str | None = None
+    expected_close_date: str | None = None
 
 class MatchLeadRequest(BaseModel):
     company_id: UUID | None = None
@@ -147,3 +184,55 @@ async def match_lead_to_company(
         }
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/companies", response_model=list[CompanyResponse])
+async def list_companies(
+    tenant_id: UUID = Depends(require_tenant),
+    skip: int = 0,
+    limit: int = 100,
+    company_service: CompanyService = Depends(get_company_service)
+):
+    companies = await company_service.list_companies(tenant_id, skip=skip, limit=limit)
+    return companies
+
+@router.get("/companies/{company_id}", response_model=CompanyResponse)
+async def get_company(
+    company_id: UUID,
+    tenant_id: UUID = Depends(require_tenant),
+    company_service: CompanyService = Depends(get_company_service)
+):
+    company = await company_service.get_company(tenant_id, company_id)
+    if not company:
+        raise HTTPException(status_code=404, detail="Company not found")
+    return company
+
+@router.post("/companies/{company_id}/contacts", response_model=ContactResponse)
+async def add_contact(
+    company_id: UUID,
+    req: AddContactRequest,
+    tenant_id: UUID = Depends(require_tenant),
+    company_service: CompanyService = Depends(get_company_service)
+):
+    try:
+        contact = await company_service.add_contact_to_company(
+            tenant_id=tenant_id,
+            company_id=company_id,
+            name=req.name,
+            email=req.email,
+            phone=req.phone,
+            role=req.role,
+            is_primary=req.is_primary
+        )
+        return contact
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+@router.get("/opportunities", response_model=list[OpportunityResponse])
+async def list_opportunities(
+    tenant_id: UUID = Depends(require_tenant),
+    skip: int = 0,
+    limit: int = 100,
+    opportunity_service: OpportunityService = Depends(get_opportunity_service)
+):
+    opportunities = await opportunity_service.list_opportunities(tenant_id, skip=skip, limit=limit)
+    return opportunities

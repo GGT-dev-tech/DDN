@@ -34,7 +34,9 @@ import type {
   ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceAttributeResponse,
   ModulesCatalogApplicationUseCasesListCatalogEntitiesServiceOfferingResponse,
   ModulesCatalogApplicationUseCasesListCatalogEntitiesUOMResponse,
-  RegisterUOMRequest
+  RegisterUOMRequest,
+  UpdateServiceOfferingRequest,
+  UpdateUOMRequest
 } from '../model';
 
 import { customAxiosInstance } from '../../axios';
@@ -528,6 +530,71 @@ export const useDraftOfferingApiV1CatalogOfferingsPost = <TError = HTTPValidatio
       return useMutation(getDraftOfferingApiV1CatalogOfferingsPostMutationOptions(options), queryClient);
     }
     /**
+ * @summary Update Uom
+ */
+export const updateUomApiV1CatalogUomUomIdPut = (
+    uomId: string,
+    updateUOMRequest: UpdateUOMRequest,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<unknown>(
+      {url: `/api/v1/catalog/uom/${uomId}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateUOMRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getUpdateUomApiV1CatalogUomUomIdPutMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUomApiV1CatalogUomUomIdPut>>, TError,{uomId: string;data: UpdateUOMRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateUomApiV1CatalogUomUomIdPut>>, TError,{uomId: string;data: UpdateUOMRequest}, TContext> => {
+
+const mutationKey = ['updateUomApiV1CatalogUomUomIdPut'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateUomApiV1CatalogUomUomIdPut>>, {uomId: string;data: UpdateUOMRequest}> = (props) => {
+          const {uomId,data} = props ?? {};
+
+          return  updateUomApiV1CatalogUomUomIdPut(uomId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateUomApiV1CatalogUomUomIdPutMutationResult = NonNullable<Awaited<ReturnType<typeof updateUomApiV1CatalogUomUomIdPut>>>
+    export type UpdateUomApiV1CatalogUomUomIdPutMutationBody = UpdateUOMRequest
+    export type UpdateUomApiV1CatalogUomUomIdPutMutationError = HTTPValidationError
+
+    /**
+ * @summary Update Uom
+ */
+export const useUpdateUomApiV1CatalogUomUomIdPut = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUomApiV1CatalogUomUomIdPut>>, TError,{uomId: string;data: UpdateUOMRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateUomApiV1CatalogUomUomIdPut>>,
+        TError,
+        {uomId: string;data: UpdateUOMRequest},
+        TContext
+      > => {
+      return useMutation(getUpdateUomApiV1CatalogUomUomIdPutMutationOptions(options), queryClient);
+    }
+    /**
  * @summary Attach Attribute
  */
 export const attachAttributeApiV1CatalogOfferingsOfferingIdAttributesPost = (
@@ -715,4 +782,69 @@ export const useArchiveOfferingApiV1CatalogOfferingsOfferingIdArchivePost = <TEr
         TContext
       > => {
       return useMutation(getArchiveOfferingApiV1CatalogOfferingsOfferingIdArchivePostMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary Update Offering
+ */
+export const updateOfferingApiV1CatalogOfferingsOfferingIdPut = (
+    offeringId: string,
+    updateServiceOfferingRequest: UpdateServiceOfferingRequest,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<unknown>(
+      {url: `/api/v1/catalog/offerings/${offeringId}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateServiceOfferingRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getUpdateOfferingApiV1CatalogOfferingsOfferingIdPutMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOfferingApiV1CatalogOfferingsOfferingIdPut>>, TError,{offeringId: string;data: UpdateServiceOfferingRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateOfferingApiV1CatalogOfferingsOfferingIdPut>>, TError,{offeringId: string;data: UpdateServiceOfferingRequest}, TContext> => {
+
+const mutationKey = ['updateOfferingApiV1CatalogOfferingsOfferingIdPut'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateOfferingApiV1CatalogOfferingsOfferingIdPut>>, {offeringId: string;data: UpdateServiceOfferingRequest}> = (props) => {
+          const {offeringId,data} = props ?? {};
+
+          return  updateOfferingApiV1CatalogOfferingsOfferingIdPut(offeringId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateOfferingApiV1CatalogOfferingsOfferingIdPutMutationResult = NonNullable<Awaited<ReturnType<typeof updateOfferingApiV1CatalogOfferingsOfferingIdPut>>>
+    export type UpdateOfferingApiV1CatalogOfferingsOfferingIdPutMutationBody = UpdateServiceOfferingRequest
+    export type UpdateOfferingApiV1CatalogOfferingsOfferingIdPutMutationError = HTTPValidationError
+
+    /**
+ * @summary Update Offering
+ */
+export const useUpdateOfferingApiV1CatalogOfferingsOfferingIdPut = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOfferingApiV1CatalogOfferingsOfferingIdPut>>, TError,{offeringId: string;data: UpdateServiceOfferingRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateOfferingApiV1CatalogOfferingsOfferingIdPut>>,
+        TError,
+        {offeringId: string;data: UpdateServiceOfferingRequest},
+        TContext
+      > => {
+      return useMutation(getUpdateOfferingApiV1CatalogOfferingsOfferingIdPutMutationOptions(options), queryClient);
     }

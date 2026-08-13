@@ -4,6 +4,7 @@
  * Stitch API Gateway
  * OpenAPI spec version: 1.0.0
  */
+import type { CollectionsToday } from './collectionsToday';
 
 export interface DashboardStatsResponse {
   active_routes: number;
@@ -13,4 +14,8 @@ export interface DashboardStatsResponse {
   pending_quotations?: number;
   active_contracts?: number;
   invoices_today?: number;
+  total_monthly_tons?: number;
+  recycling_rate?: number;
+  collections_today: CollectionsToday;
+  active_billing?: number;
 }

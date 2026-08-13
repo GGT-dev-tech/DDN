@@ -4,6 +4,7 @@
  * Stitch API Gateway
  * OpenAPI spec version: 1.0.0
  */
+import type { PriceTableItemResponse } from './priceTableItemResponse';
 
 export interface PriceTableResponse {
   id: string;
@@ -13,4 +14,5 @@ export interface PriceTableResponse {
   region_id?: string | null;
   customer_id?: string | null;
   is_active: boolean;
+  items?: PriceTableItemResponse[];
 }

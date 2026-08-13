@@ -24,7 +24,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  GenerateBillingRequest,
+  GenerateInvoicesApiV1BillingInvoicesGeneratePostParams,
   HTTPValidationError,
   InvoiceSchema
 } from '../model';
@@ -52,7 +52,6 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * List all invoices for the tenant.
  * @summary List Invoices
  */
 export const listInvoicesApiV1BillingInvoicesGet = (
@@ -145,19 +144,18 @@ export function useListInvoicesApiV1BillingInvoicesGet<TData = Awaited<ReturnTyp
 
 
 /**
- * Triggers the generation of daily invoices for completed ServiceOrders.
- * @summary Generate Daily Billing
+ * Triggers the generation of invoices for all COMPLETED service orders in the reference month.
+ * @summary Generate Invoices
  */
-export const generateDailyBillingApiV1BillingGenerateDailyPost = (
-    generateBillingRequest: GenerateBillingRequest,
+export const generateInvoicesApiV1BillingInvoicesGeneratePost = (
+    params: GenerateInvoicesApiV1BillingInvoicesGeneratePostParams,
  options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
 ) => {
 
 
       return customAxiosInstance<unknown>(
-      {url: `/api/v1/billing/generate-daily`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: generateBillingRequest, signal
+      {url: `/api/v1/billing/invoices/generate`, method: 'POST',
+        params, signal
     },
       options);
     }
@@ -165,11 +163,11 @@ export const generateDailyBillingApiV1BillingGenerateDailyPost = (
 
 
 
-export const getGenerateDailyBillingApiV1BillingGenerateDailyPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generateDailyBillingApiV1BillingGenerateDailyPost>>, TError,{data: GenerateBillingRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof generateDailyBillingApiV1BillingGenerateDailyPost>>, TError,{data: GenerateBillingRequest}, TContext> => {
+export const getGenerateInvoicesApiV1BillingInvoicesGeneratePostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generateInvoicesApiV1BillingInvoicesGeneratePost>>, TError,{params: GenerateInvoicesApiV1BillingInvoicesGeneratePostParams}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof generateInvoicesApiV1BillingInvoicesGeneratePost>>, TError,{params: GenerateInvoicesApiV1BillingInvoicesGeneratePostParams}, TContext> => {
 
-const mutationKey = ['generateDailyBillingApiV1BillingGenerateDailyPost'];
+const mutationKey = ['generateInvoicesApiV1BillingInvoicesGeneratePost'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -179,10 +177,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof generateDailyBillingApiV1BillingGenerateDailyPost>>, {data: GenerateBillingRequest}> = (props) => {
-          const {data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof generateInvoicesApiV1BillingInvoicesGeneratePost>>, {params: GenerateInvoicesApiV1BillingInvoicesGeneratePostParams}> = (props) => {
+          const {params} = props ?? {};
 
-          return  generateDailyBillingApiV1BillingGenerateDailyPost(data,requestOptions)
+          return  generateInvoicesApiV1BillingInvoicesGeneratePost(params,requestOptions)
         }
 
 
@@ -192,20 +190,20 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type GenerateDailyBillingApiV1BillingGenerateDailyPostMutationResult = NonNullable<Awaited<ReturnType<typeof generateDailyBillingApiV1BillingGenerateDailyPost>>>
-    export type GenerateDailyBillingApiV1BillingGenerateDailyPostMutationBody = GenerateBillingRequest
-    export type GenerateDailyBillingApiV1BillingGenerateDailyPostMutationError = HTTPValidationError
+    export type GenerateInvoicesApiV1BillingInvoicesGeneratePostMutationResult = NonNullable<Awaited<ReturnType<typeof generateInvoicesApiV1BillingInvoicesGeneratePost>>>
+
+    export type GenerateInvoicesApiV1BillingInvoicesGeneratePostMutationError = HTTPValidationError
 
     /**
- * @summary Generate Daily Billing
+ * @summary Generate Invoices
  */
-export const useGenerateDailyBillingApiV1BillingGenerateDailyPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generateDailyBillingApiV1BillingGenerateDailyPost>>, TError,{data: GenerateBillingRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+export const useGenerateInvoicesApiV1BillingInvoicesGeneratePost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generateInvoicesApiV1BillingInvoicesGeneratePost>>, TError,{params: GenerateInvoicesApiV1BillingInvoicesGeneratePostParams}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof generateDailyBillingApiV1BillingGenerateDailyPost>>,
+        Awaited<ReturnType<typeof generateInvoicesApiV1BillingInvoicesGeneratePost>>,
         TError,
-        {data: GenerateBillingRequest},
+        {params: GenerateInvoicesApiV1BillingInvoicesGeneratePostParams},
         TContext
       > => {
-      return useMutation(getGenerateDailyBillingApiV1BillingGenerateDailyPostMutationOptions(options), queryClient);
+      return useMutation(getGenerateInvoicesApiV1BillingInvoicesGeneratePostMutationOptions(options), queryClient);
     }

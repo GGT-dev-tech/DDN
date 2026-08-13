@@ -21,6 +21,7 @@ import type {
 
 import type {
   DashboardStatsResponse,
+  DestinationEvolutionChartData,
   HTTPValidationError
 } from '../model';
 
@@ -128,6 +129,99 @@ export function useGetDashboardStatsApiV1DashboardStatsGet<TData = Awaited<Retur
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetDashboardStatsApiV1DashboardStatsGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
+ * Mock endpoint for destination evolution chart data.
+ * @summary Get Destination Evolution Chart
+ */
+export const getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet = (
+
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<DestinationEvolutionChartData[]>(
+      {url: `/api/v1/dashboard/chart/destination-evolution`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGetQueryKey = () => {
+    return [
+    `/api/v1/dashboard/chart/destination-evolution`
+    ] as const;
+    }
+
+
+export const getGetDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGetQueryOptions = <TData = Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGetQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>> = ({ signal }) => getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGetQueryResult = NonNullable<Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>>
+export type GetDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGetQueryError = HTTPValidationError
+
+
+export function useGetDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet<TData = Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>,
+          TError,
+          Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet<TData = Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>,
+          TError,
+          Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet<TData = Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Destination Evolution Chart
+ */
+
+export function useGetDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet<TData = Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetDestinationEvolutionChartApiV1DashboardChartDestinationEvolutionGetQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

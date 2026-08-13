@@ -26,7 +26,6 @@ import type {
 import type {
   GetPlanApiV1ServicePlansPlanIdGet200,
   HTTPValidationError,
-  ListPlansByContractApiV1ServicePlansContractContractIdGetParams,
   PublishPlanApiV1ServicePlansPlanIdPublishPost200,
   ReactivatePlanApiV1ServicePlansPlanIdReactivatePost200,
   SuspendPlanApiV1ServicePlansPlanIdSuspendPost200,
@@ -313,14 +312,12 @@ export function useListAllPlansApiV1ServicePlansGet<TData = Awaited<ReturnType<t
  */
 export const listPlansByContractApiV1ServicePlansContractContractIdGet = (
     contractId: string,
-    params: ListPlansByContractApiV1ServicePlansContractContractIdGetParams,
  options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
 ) => {
 
 
       return customAxiosInstance<unknown[]>(
-      {url: `/api/v1/service-plans/contract/${contractId}`, method: 'GET',
-        params, signal
+      {url: `/api/v1/service-plans/contract/${contractId}`, method: 'GET', signal
     },
       options);
     }
@@ -328,25 +325,23 @@ export const listPlansByContractApiV1ServicePlansContractContractIdGet = (
 
 
 
-export const getListPlansByContractApiV1ServicePlansContractContractIdGetQueryKey = (contractId: string,
-    params?: ListPlansByContractApiV1ServicePlansContractContractIdGetParams,) => {
+export const getListPlansByContractApiV1ServicePlansContractContractIdGetQueryKey = (contractId: string,) => {
     return [
-    `/api/v1/service-plans/contract/${contractId}`, ...(params ? [params] : [])
+    `/api/v1/service-plans/contract/${contractId}`
     ] as const;
     }
 
 
-export const getListPlansByContractApiV1ServicePlansContractContractIdGetQueryOptions = <TData = Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError = HTTPValidationError>(contractId: string,
-    params: ListPlansByContractApiV1ServicePlansContractContractIdGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+export const getListPlansByContractApiV1ServicePlansContractContractIdGetQueryOptions = <TData = Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError = HTTPValidationError>(contractId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getListPlansByContractApiV1ServicePlansContractContractIdGetQueryKey(contractId,params);
+  const queryKey =  queryOptions?.queryKey ?? getListPlansByContractApiV1ServicePlansContractContractIdGetQueryKey(contractId);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>> = ({ signal }) => listPlansByContractApiV1ServicePlansContractContractIdGet(contractId,params, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>> = ({ signal }) => listPlansByContractApiV1ServicePlansContractContractIdGet(contractId, requestOptions, signal);
 
 
 
@@ -360,8 +355,7 @@ export type ListPlansByContractApiV1ServicePlansContractContractIdGetQueryError 
 
 
 export function useListPlansByContractApiV1ServicePlansContractContractIdGet<TData = Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError = HTTPValidationError>(
- contractId: string,
-    params: ListPlansByContractApiV1ServicePlansContractContractIdGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>> & Pick<
+ contractId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>,
           TError,
@@ -371,8 +365,7 @@ export function useListPlansByContractApiV1ServicePlansContractContractIdGet<TDa
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useListPlansByContractApiV1ServicePlansContractContractIdGet<TData = Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError = HTTPValidationError>(
- contractId: string,
-    params: ListPlansByContractApiV1ServicePlansContractContractIdGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>> & Pick<
+ contractId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>,
           TError,
@@ -382,8 +375,7 @@ export function useListPlansByContractApiV1ServicePlansContractContractIdGet<TDa
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useListPlansByContractApiV1ServicePlansContractContractIdGet<TData = Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError = HTTPValidationError>(
- contractId: string,
-    params: ListPlansByContractApiV1ServicePlansContractContractIdGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ contractId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -391,12 +383,11 @@ export function useListPlansByContractApiV1ServicePlansContractContractIdGet<TDa
  */
 
 export function useListPlansByContractApiV1ServicePlansContractContractIdGet<TData = Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError = HTTPValidationError>(
- contractId: string,
-    params: ListPlansByContractApiV1ServicePlansContractContractIdGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ contractId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listPlansByContractApiV1ServicePlansContractContractIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getListPlansByContractApiV1ServicePlansContractContractIdGetQueryOptions(contractId,params,options)
+  const queryOptions = getListPlansByContractApiV1ServicePlansContractContractIdGetQueryOptions(contractId,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

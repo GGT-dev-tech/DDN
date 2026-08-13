@@ -11,10 +11,13 @@ import { QuotationDetailsPage } from '../../pages/Quotations/QuotationDetailsPag
 import { ContractsPage } from '../../pages/Contracts/ContractsPage'
 import { ContractDetailsPage } from '../../pages/Contracts/ContractDetailsPage'
 import { CustomersPage } from '../../pages/Commercial/CustomersPage'
+import { LeadsPage } from '../../pages/Commercial/LeadsPage'
+import { PipelinePage } from '../../pages/Commercial/PipelinePage'
 import { CustomerDetailsPage } from '../../pages/Commercial/CustomerDetailsPage'
 import { AtendimentoWizardPage } from '../../pages/Commercial/AtendimentoWizardPage'
 import { PricingPage } from '../../pages/Pricing/PricingPage'
 import { CatalogPage } from '../../pages/Catalog/CatalogPage'
+import { PriceTableDetailsPage } from '../../pages/Catalog/PriceTableDetailsPage'
 import { ServicePlansPage } from '../../pages/Operations/ServicePlansPage'
 import { ServicePlanDetailsPage } from '../../pages/Operations/ServicePlanDetailsPage'
 import { RequirementsPage } from '../../pages/Operations/Requirements/RequirementsPage'
@@ -140,6 +143,14 @@ const router = createBrowserRouter([
             element: <DriversPage />,
           },
           {
+            path: 'leads',
+            element: <LeadsPage />,
+          },
+          {
+            path: 'pipeline',
+            element: <PipelinePage />,
+          },
+          {
             path: 'customers',
             element: <CustomersPage />,
           },
@@ -174,6 +185,10 @@ const router = createBrowserRouter([
           {
             path: 'catalog',
             element: <CatalogPage />,
+          },
+          {
+            path: 'catalog/price-tables/:tableId',
+            element: <PriceTableDetailsPage />,
           },
           {
             path: 'settings',
