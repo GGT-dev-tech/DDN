@@ -52,9 +52,12 @@ class CatalogRepository:
             updated_at=orm.updated_at,
         )
 
-    async def get_uom_by_symbol(self, symbol: str) -> UnitOfMeasure | None:
+    async def get_uom_by_symbol(self, tenant_id: uuid.UUID, symbol: str) -> UnitOfMeasure | None:
         result = await self._session.execute(
-            select(CatalogUnitOfMeasure).where(CatalogUnitOfMeasure.symbol == symbol)
+            select(CatalogUnitOfMeasure).where(
+                CatalogUnitOfMeasure.tenant_id == tenant_id,
+                CatalogUnitOfMeasure.symbol == symbol
+            )
         )
         orm = result.scalars().first()
         if not orm:

@@ -28,6 +28,8 @@ const DESTINATION_TYPES = [
 
 export function DestinationModal({ isOpen, onClose, onSuccess, destination }: DestinationModalProps) {
   const [name, setName] = useState('')
+  const [cnpj, setCnpj] = useState('')
+  const [isFetchingCnpj, setIsFetchingCnpj] = useState(false)
   const [type, setType] = useState<DestinationType>(DestinationType.LANDFILL)
   const [contactName, setContactName] = useState('')
   const [contactPhone, setContactPhone] = useState('')
@@ -61,6 +63,7 @@ export function DestinationModal({ isOpen, onClose, onSuccess, destination }: De
       setErrors({})
     } else if (!destination && isOpen) {
       setName('')
+      setCnpj('')
       setType(DestinationType.LANDFILL)
       setContactName('')
       setContactPhone('')
@@ -86,6 +89,41 @@ export function DestinationModal({ isOpen, onClose, onSuccess, destination }: De
     if (!zipCode || zipCode.length < 8) newErrors.zipCode = 'CEP inválido'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
+  }
+
+  const handleFetchCnpj = async () => {
+    const cleanCnpj = cnpj.replace(/\D/g, '')
+    if (cleanCnpj.length !== 14) {
+      toast.error('CNPJ deve conter 14 números')
+      return
+    }
+
+    setIsFetchingCnpj(true)
+    try {
+      const res = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cleanCnpj}`)
+      if (!res.ok) throw new Error('CNPJ não encontrado')
+      
+      const data = await res.json()
+      
+      setName(data.nome_fantasia || data.razao_social || '')
+      setStreet(data.logradouro || '')
+      setNumber(data.numero || '')
+      setComplement(data.complemento || '')
+      setNeighborhood(data.bairro || '')
+      setCity(data.municipio || '')
+      setState(data.uf || '')
+      setZipCode(data.cep ? data.cep.replace(/\D/g, '') : '')
+      
+      if (data.ddd_telefone_1) {
+        setContactPhone(data.ddd_telefone_1)
+      }
+      
+      toast.success('Dados preenchidos com sucesso!')
+    } catch (err) {
+      toast.error('Não foi possível buscar os dados do CNPJ.')
+    } finally {
+      setIsFetchingCnpj(false)
+    }
   }
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -140,6 +178,30 @@ export function DestinationModal({ isOpen, onClose, onSuccess, destination }: De
         </p>
 
         <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto px-2">
+          {!destination && (
+            <div className="grid grid-cols-2 gap-4 bg-muted/30 p-4 rounded-lg border border-border">
+              <div className="space-y-2 col-span-2">
+                <label htmlFor="cnpj" className="text-sm font-medium">Preenchimento Inteligente (CNPJ)</label>
+                <div className="flex gap-2">
+                  <Input
+                    id="cnpj"
+                    placeholder="Digite o CNPJ..."
+                    value={cnpj}
+                    onChange={(e) => setCnpj(e.target.value)}
+                  />
+                  <Button 
+                    type="button" 
+                    onClick={handleFetchCnpj} 
+                    disabled={isFetchingCnpj || !cnpj}
+                  >
+                    {isFetchingCnpj ? 'Buscando...' : 'Buscar'}
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">Preenche automaticamente os dados do local com base no CNPJ.</p>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2 col-span-2">
               <label htmlFor="name" className="text-sm font-medium">Nome do Local</label>

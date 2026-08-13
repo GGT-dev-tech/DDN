@@ -30,7 +30,7 @@ class CatalogService:
 
     async def register_uom(self, symbol: str, name: str, base_type: UOMBaseType) -> uuid.UUID:
         async with self._uow as uow:
-            existing = await self._repo.get_uom_by_symbol(symbol)
+            existing = await self._repo.get_uom_by_symbol(self._tenant_id, symbol)
             if existing:
                 raise ValueError(f"UOM with symbol {symbol} already exists")
     
