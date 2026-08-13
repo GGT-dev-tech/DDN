@@ -4,9 +4,8 @@ import redis
 from asgi_correlation_id import CorrelationIdMiddleware
 from fastapi import APIRouter, FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
-from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
-from slowapi.util import get_remote_address
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import OperationalError
 
@@ -37,10 +36,7 @@ REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = os.getenv("REDIS_PORT", "6379")
 DATABASE_URL = f"postgresql+psycopg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
-# Rate limiter — backed by Redis so limits are shared across all Uvicorn workers
-_redis_url = f"redis://{REDIS_HOST}:{REDIS_PORT}"
-limiter = Limiter(key_func=get_remote_address, storage_uri=_redis_url, default_limits=[])
-
+from apps.api_gateway.src.limiter import limiter
 app = FastAPI(title="Stitch API Gateway", version="1.0.0")
 
 app.state.limiter = limiter

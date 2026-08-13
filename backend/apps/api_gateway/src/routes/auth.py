@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from apps.api_gateway.src.main import limiter
+from apps.api_gateway.src.limiter import limiter
 from database.session import get_db_session
 from modules.identity.dependencies import auth_service, get_current_user_id
 from modules.identity.domain.dto import (
