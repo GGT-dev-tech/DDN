@@ -274,6 +274,15 @@ async def add_contact(
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
+@router.get("/companies/{company_id}/contacts", response_model=list[ContactResponse])
+async def list_contacts(
+    company_id: UUID,
+    tenant_id: UUID = Depends(require_tenant),
+    company_service: CompanyService = Depends(get_company_service)
+):
+    contacts = await company_service.list_contacts(tenant_id, company_id)
+    return contacts
+
 @router.get("/opportunities", response_model=list[OpportunityResponse])
 async def list_opportunities(
     skip: int = 0,

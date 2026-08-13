@@ -1,8 +1,11 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useListLeadsApiV1CommercialLeadsGet } from '../../shared/api/generated/commercial/commercial';
+import { 
+  useGetCompanyApiV1CommercialCompaniesCompanyIdGet,
+  useListContactsApiV1CommercialCompaniesCompanyIdContactsGet
+} from '../../shared/api/generated/commercial/commercial';
 import { Badge } from '../../shared/ui/components/Badge';
 import { Button } from '../../shared/ui/components/Button';
-import { ArrowLeft, Building2, Mail, Phone, MapPin, User, FileText, ClipboardList, Plus } from 'lucide-react';
+import { ArrowLeft, Building2, Mail, Phone, User, FileText, ClipboardList, Plus } from 'lucide-react';
 import { EmptyState } from '../../shared/ui/components/EmptyState';
 import { useListQuotationsApiV1QuotationsGet } from '../../shared/api/generated/quotations/quotations';
 
@@ -10,20 +13,22 @@ export function CustomerDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  // Fetch customer details from the list
-  const { data: leads, isLoading, isError } = useListLeadsApiV1CommercialLeadsGet();
-  const customerResult = leads?.find(l => l.id === id);
-  const customer = customerResult as any;
+  // Fetch company details
+  const { data: customer, isLoading: isLoadingCompany, isError: isErrorCompany } = useGetCompanyApiV1CommercialCompaniesCompanyIdGet(id as string, { query: { enabled: !!id } });
+  
+  // Fetch company contacts
+  const { data: contacts = [] } = useListContactsApiV1CommercialCompaniesCompanyIdContactsGet(id as string, { query: { enabled: !!id } });
+  const primaryContact = contacts.find(c => c.is_primary) || contacts[0];
 
   // Fetch quotations for this customer
   const { data: allQuotations } = useListQuotationsApiV1QuotationsGet();
   const customerQuotations = allQuotations?.filter(q => q.company_id === id) || [];
 
-  if (isLoading) {
+  if (isLoadingCompany) {
     return <div className="p-16 flex items-center justify-center text-text-secondary">Carregando detalhes do cliente...</div>;
   }
 
-  if (isError || !customer) {
+  if (isErrorCompany || !customer) {
     return (
       <div className="flex-1 bg-background p-8">
         <Button variant="ghost" onClick={() => navigate('/admin/customers')} className="pl-0 gap-2 mb-6">
@@ -47,13 +52,13 @@ export function CustomerDetailsPage() {
           </Button>
           <div className="flex-1">
             <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-bold tracking-tight text-text-primary">{customer.company_name}</h1>
-              <Badge variant={customer.status === 'new' ? 'default' : 'outline'} className={customer.status === 'new' ? 'bg-brand-500/20 text-brand-500' : 'variant-glass'}>
-                {customer.status === 'new' ? 'Novo Lead' : customer.status}
+              <h1 className="text-3xl font-bold tracking-tight text-text-primary">{customer.trade_name || customer.corporate_name}</h1>
+              <Badge variant={customer.status === 'PROSPECT' ? 'default' : 'outline'} className={customer.status === 'PROSPECT' ? 'bg-brand-500/20 text-brand-500' : 'variant-glass'}>
+                {customer.status === 'PROSPECT' ? 'Prospect' : customer.status}
               </Badge>
             </div>
             <p className="text-sm text-text-secondary mt-1">
-              Cadastrado em {new Date(customer.created_at).toLocaleDateString()}
+              Documento (CNPJ/CPF): {customer.document_number}
             </p>
           </div>
           <Button onClick={() => navigate('/admin/quotations', { state: { customerId: customer.id } })} className="gap-2 shrink-0">
@@ -71,62 +76,56 @@ export function CustomerDetailsPage() {
             </div>
             
             <div className="space-y-4">
-              {customer.legal_name && (
+              {customer.corporate_name && (
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
                     <FileText size={16} className="text-text-secondary" />
                   </div>
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1">Razão Social</p>
-                    <p className="text-sm text-text-primary font-medium">{customer.legal_name}</p>
+                    <p className="text-sm text-text-primary font-medium">{customer.corporate_name}</p>
                   </div>
                 </div>
               )}
               
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
-                  <User size={16} className="text-text-secondary" />
-                </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1">Contato Principal</p>
-                  <p className="text-sm text-text-primary font-medium">{customer.contact_name}</p>
-                </div>
-              </div>
-              
-              {customer.email && (
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
-                    <Mail size={16} className="text-text-secondary" />
+              {primaryContact && (
+                <>
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
+                      <User size={16} className="text-text-secondary" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1">Contato Principal</p>
+                      <p className="text-sm text-text-primary font-medium">{primaryContact.name}</p>
+                      {primaryContact.role && <p className="text-xs text-text-secondary">{primaryContact.role}</p>}
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1">Email</p>
-                    <a href={`mailto:${customer.email}`} className="text-sm text-brand-500 hover:text-brand-400 font-medium transition-colors">{customer.email}</a>
-                  </div>
-                </div>
+                  
+                  {primaryContact.email && (
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
+                        <Mail size={16} className="text-text-secondary" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1">Email</p>
+                        <a href={`mailto:${primaryContact.email}`} className="text-sm text-brand-500 hover:text-brand-400 font-medium transition-colors">{primaryContact.email}</a>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {primaryContact.phone && (
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
+                        <Phone size={16} className="text-text-secondary" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1">Telefone</p>
+                        <a href={`tel:${primaryContact.phone}`} className="text-sm text-brand-500 hover:text-brand-400 font-medium transition-colors">{primaryContact.phone}</a>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
-              
-              {customer.phone && (
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
-                    <Phone size={16} className="text-text-secondary" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1">Telefone</p>
-                    <a href={`tel:${customer.phone}`} className="text-sm text-brand-500 hover:text-brand-400 font-medium transition-colors">{customer.phone}</a>
-                  </div>
-                </div>
-              )}
-              
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0">
-                  <MapPin size={16} className="text-text-secondary" />
-                </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1">Segmento / Endereço</p>
-                  <p className="text-sm text-text-primary capitalize mb-1">{customer.industry || 'Segmento não especificado'}</p>
-                  <p className="text-xs text-text-secondary">{customer.address || 'Endereço não cadastrado'}</p>
-                </div>
-              </div>
             </div>
           </div>
 

@@ -113,3 +113,24 @@ class CompanyRepository:
             is_primary=contact.is_primary
         )
         self.session.add(db_contact)
+
+    async def list_contacts(self, tenant_id: UUID, company_id: UUID) -> list["Contact"]:
+        from modules.commercial.infrastructure.models import CommercialContact
+        from modules.commercial.domain.entities.contact import Contact
+        stmt = select(CommercialContact).where(
+            CommercialContact.tenant_id == tenant_id,
+            CommercialContact.company_id == company_id
+        )
+        result = await self.session.execute(stmt)
+        db_contacts = result.scalars().all()
+        return [
+            Contact(
+                id=db.id,
+                company_id=db.company_id,
+                name=db.name,
+                email=db.email,
+                phone=db.phone,
+                role=db.role,
+                is_primary=db.is_primary
+            ) for db in db_contacts
+        ]

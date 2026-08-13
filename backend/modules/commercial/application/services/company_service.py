@@ -33,6 +33,7 @@ class CompanyService:
                 corporate_name=corporate_name,
                 document_number=document_number
             )
+            company.activate_as_customer() # Create directly as CUSTOMER since it's from the admin Customers panel
             await self.company_repo.add(company)
             await uow.commit()
             return company
@@ -70,3 +71,6 @@ class CompanyService:
             await self.company_repo.add_contact(tenant_id, contact)
             await uow.commit()
             return contact
+
+    async def list_contacts(self, tenant_id: UUID, company_id: UUID) -> list[Contact]:
+        return await self.company_repo.list_contacts(tenant_id, company_id)
