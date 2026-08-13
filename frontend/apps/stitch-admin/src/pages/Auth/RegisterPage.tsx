@@ -18,7 +18,7 @@ export function RegisterPage() {
   const { mutate: registerMutation, isPending } = useRegisterApiV1AuthRegisterPost({
     mutation: {
       onSuccess: (data) => {
-        login(data.access_token, data.refresh_token);
+        login(data.access_token, data.refresh_token, data.tenant_id ?? undefined);
         navigate('/admin');
       },
       onError: (error: any) => {

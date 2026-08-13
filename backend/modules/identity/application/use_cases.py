@@ -76,7 +76,11 @@ class RegisterUserUseCase:
                 await uow.rollback()
                 raise HTTPException(status_code=400, detail="Email already registered")
                 
-            return TokenResponse(access_token=access_token, refresh_token=refresh_token_str)
+            return TokenResponse(
+                access_token=access_token,
+                refresh_token=refresh_token_str,
+                tenant_id=str(tenant.id)
+            )
 
 
 class LoginUseCase:
@@ -123,4 +127,15 @@ class LoginUseCase:
             session.add(refresh_token)
             await uow.commit()
 
-            return TokenResponse(access_token=access_token, refresh_token=refresh_token_str)
+            # Return tenant_id so the frontend can set the X-Tenant-ID header
+            stmt_tenant = select(TenantUser).where(
+                TenantUser.user_id == user.id
+            ).limit(1)
+            tenant_user = (await session.execute(stmt_tenant)).scalar_one_or_none()
+            active_tenant_id = str(tenant_user.tenant_id) if tenant_user else None
+
+            return TokenResponse(
+                access_token=access_token,
+                refresh_token=refresh_token_str,
+                tenant_id=active_tenant_id
+            )

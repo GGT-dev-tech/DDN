@@ -17,6 +17,7 @@ class TokenResponse(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
+    tenant_id: str | None = None  # Active tenant for this session
 
 class UserResponse(BaseModel):
     id: UUID

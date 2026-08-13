@@ -19,11 +19,15 @@ export const axiosInstance = axios.create({
   baseURL: apiBaseUrl,
 })
 
-// Add token to requests
+// Add token and tenant headers to all requests
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('stitch_access_token')
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`
+  }
+  const tenantId = localStorage.getItem('stitch_tenant_id')
+  if (tenantId && config.headers) {
+    config.headers['X-Tenant-ID'] = tenantId
   }
   return config
 })

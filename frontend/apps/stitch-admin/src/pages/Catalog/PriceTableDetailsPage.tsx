@@ -63,7 +63,7 @@ export function PriceTableDetailsPage() {
       <div className="p-8 max-w-5xl mx-auto space-y-8">
         
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => navigate('/catalog')} className="p-2 h-auto">
+          <Button variant="ghost" onClick={() => navigate('/admin/catalog')} className="p-2 h-auto">
             <ArrowLeft size={20} />
           </Button>
           <div>

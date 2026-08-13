@@ -28,7 +28,7 @@ export function LoginPage() {
   const { mutate: loginMutation, isPending } = useLoginApiV1AuthLoginPost({
     mutation: {
       onSuccess: (data) => {
-        login(data.access_token, data.refresh_token);
+        login(data.access_token, data.refresh_token, data.tenant_id ?? undefined);
         navigate('/admin');
       },
       onError: (error: any) => {
