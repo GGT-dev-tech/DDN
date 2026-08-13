@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { useListPriceTablesApiV1PricingTablesGet } from "../../../shared/api/generated/pricing/pricing";
+import { 
+  useListPriceTablesApiV1PricingTablesGet,
+  useTogglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost
+} from "../../../shared/api/generated/pricing/pricing";
 import { Badge } from "../../../shared/ui/components/Badge";
-import { Table, Plus, RefreshCw, Calculator } from "lucide-react";
+import { Table, Plus, RefreshCw, Calculator, Pencil, Power, PowerOff } from "lucide-react";
 import { Button } from "../../../shared/ui/components/Button";
 import { Modal } from "../../../shared/ui/components/Modal";
 import { EmptyState } from "../../../shared/ui/components/EmptyState";
@@ -9,9 +12,21 @@ import { PriceTableForm } from "./PriceTableForm";
 import { useNavigate } from "react-router-dom";
 
 export function PriceTablesTable() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [editingTable, setEditingTable] = useState<any | null>(null);
+  
   const navigate = useNavigate();
   const { data: tables, isLoading, error, refetch } = useListPriceTablesApiV1PricingTablesGet();
+  const { mutateAsync: toggleStatus, isPending: isToggling } = useTogglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost();
+
+  const handleToggleStatus = async (id: string) => {
+    try {
+      await toggleStatus({ tableId: id });
+      refetch();
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="glass-panel rounded-xl border border-border overflow-hidden">
@@ -26,7 +41,7 @@ export function PriceTablesTable() {
               <RefreshCw size={14} /> Atualizar
             </Button>
           )}
-          <Button variant="liquid" onClick={() => setIsModalOpen(true)} className="gap-2 h-8 text-xs">
+          <Button variant="liquid" onClick={() => setIsCreateModalOpen(true)} className="gap-2 h-8 text-xs">
             <Plus size={14} /> Nova Tabela
           </Button>
         </div>
@@ -66,9 +81,15 @@ export function PriceTablesTable() {
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex items-center justify-end gap-2">
+                      <Button variant="ghost" className="h-8 text-xs px-2" onClick={() => handleToggleStatus(table.id)} disabled={isToggling} title={table.is_active ? "Inativar" : "Ativar"}>
+                        {table.is_active ? <PowerOff size={14} className="text-red-500" /> : <Power size={14} className="text-green-500" />}
+                      </Button>
+                      <Button variant="ghost" className="h-8 text-xs px-2" onClick={() => setEditingTable(table)}>
+                        <Pencil size={14} />
+                      </Button>
                       <Button variant="ghost" className="h-8 text-xs" onClick={() => navigate(`/catalog/price-tables/${table.id}`)}>
                         <Calculator size={14} className="mr-1.5" />
-                        Gerenciar Preços
+                        Preços
                       </Button>
                     </div>
                   </td>
@@ -82,7 +103,7 @@ export function PriceTablesTable() {
               title="Nenhuma tabela de preço encontrada"
               description="Cadastre tabelas de preços para definir os valores que serão utilizados nas suas propostas comerciais."
               action={
-                <Button onClick={() => setIsModalOpen(true)} className="gap-2 mt-4">
+                <Button onClick={() => setIsCreateModalOpen(true)} className="gap-2 mt-4">
                   <Plus size={16} /> Nova Tabela
                 </Button>
               }
@@ -92,14 +113,28 @@ export function PriceTablesTable() {
       </div>
 
       <Modal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isCreateModalOpen} 
+        onClose={() => setIsCreateModalOpen(false)}
         title="Nova Tabela de Preços"
       >
         <PriceTableForm 
-          onSuccess={() => { setIsModalOpen(false); refetch(); }} 
-          onCancel={() => setIsModalOpen(false)} 
+          onSuccess={() => { setIsCreateModalOpen(false); refetch(); }} 
+          onCancel={() => setIsCreateModalOpen(false)} 
         />
+      </Modal>
+
+      <Modal 
+        isOpen={!!editingTable} 
+        onClose={() => setEditingTable(null)}
+        title="Editar Tabela de Preços"
+      >
+        {editingTable && (
+          <PriceTableForm 
+            initialData={editingTable}
+            onSuccess={() => { setEditingTable(null); refetch(); }} 
+            onCancel={() => setEditingTable(null)} 
+          />
+        )}
       </Modal>
     </div>
   );

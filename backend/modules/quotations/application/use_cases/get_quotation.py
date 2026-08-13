@@ -32,6 +32,7 @@ class GetQuotation:
         return QuotationResponse(
             id=quotation.id,
             company_id=quotation.company_id,
+            price_table_id=quotation.price_table_id,
             status=quotation.status.value,
             expires_at=quotation.expires_at.isoformat() if quotation.expires_at else "",
             created_at=quotation.created_at.isoformat() if quotation.created_at else "",

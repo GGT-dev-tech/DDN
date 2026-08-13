@@ -1,34 +1,52 @@
 import { useState } from "react";
-import { useCreatePriceTableApiV1PricingTablesPost } from "../../../shared/api/generated/pricing/pricing";
+import { 
+  useCreatePriceTableApiV1PricingTablesPost,
+  useUpdatePriceTableApiV1PricingTablesTableIdPut
+} from "../../../shared/api/generated/pricing/pricing";
 import { Button } from "../../../shared/ui/components/Button";
 import { Save, AlertCircle } from "lucide-react";
 
 interface PriceTableFormProps {
   onSuccess: () => void;
   onCancel: () => void;
+  initialData?: any;
 }
 
-export function PriceTableForm({ onSuccess, onCancel }: PriceTableFormProps) {
-  const [name, setName] = useState("");
-  const [effectiveDate, setEffectiveDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [isActive, setIsActive] = useState(true);
+export function PriceTableForm({ onSuccess, onCancel, initialData }: PriceTableFormProps) {
+  const isEditing = !!initialData;
+  const [name, setName] = useState(initialData?.name || "");
+  const [effectiveDate, setEffectiveDate] = useState(initialData?.effective_date || "");
+  const [endDate, setEndDate] = useState(initialData?.end_date || "");
+  const [isActive, setIsActive] = useState(initialData?.is_active ?? true);
 
-  const { mutateAsync: createTable, isPending, error } = useCreatePriceTableApiV1PricingTablesPost();
+  const { mutateAsync: createTable, isPending: isCreating, error: createError } = useCreatePriceTableApiV1PricingTablesPost();
+  const { mutateAsync: updateTable, isPending: isUpdating, error: updateError } = useUpdatePriceTableApiV1PricingTablesTableIdPut();
+
+  const isPending = isCreating || isUpdating;
+  const error = createError || updateError;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !effectiveDate) return;
 
     try {
-      await createTable({
-        data: {
-          name,
-          effective_date: effectiveDate,
-          end_date: endDate || undefined,
-          is_active: isActive,
-        },
-      });
+      const data = {
+        name,
+        effective_date: effectiveDate,
+        end_date: endDate || undefined,
+        is_active: isActive,
+      };
+
+      if (isEditing) {
+        await updateTable({
+          tableId: initialData.id,
+          data
+        });
+      } else {
+        await createTable({
+          data
+        });
+      }
       onSuccess();
     } catch (err) {
       console.error(err);
@@ -40,7 +58,7 @@ export function PriceTableForm({ onSuccess, onCancel }: PriceTableFormProps) {
       {error && (
         <div className="p-3 bg-red-500/10 text-red-500 rounded-lg text-sm flex items-center gap-2">
           <AlertCircle size={16} />
-          {(error as any)?.response?.data?.detail || "Erro ao criar tabela de preços."}
+          {(error as any)?.response?.data?.detail || "Erro ao salvar tabela de preços."}
         </div>
       )}
 
@@ -98,7 +116,7 @@ export function PriceTableForm({ onSuccess, onCancel }: PriceTableFormProps) {
         <Button variant="liquid" type="submit" disabled={isPending || !name || !effectiveDate} className="gap-2">
           {isPending ? "Salvando..." : (
             <>
-              <Save size={16} /> Salvar Tabela
+              <Save size={16} /> {isEditing ? "Salvar Alterações" : "Salvar Tabela"}
             </>
           )}
         </Button>

@@ -5,9 +5,11 @@ import {
   useAddPriceTableItemApiV1PricingTablesTableIdItemsPost 
 } from "../../shared/api/generated/pricing/pricing";
 import { useListOfferingsApiV1CatalogOfferingsGet, useListUomsApiV1CatalogUomGet } from "../../shared/api/generated/catalog/catalog";
-import { ArrowLeft, Calculator, Plus, Save, AlertCircle } from "lucide-react";
+import { ArrowLeft, Calculator, Plus, Save, AlertCircle, Pencil } from "lucide-react";
 import { Button } from "../../shared/ui/components/Button";
 import { Badge } from "../../shared/ui/components/Badge";
+import { Modal } from "../../shared/ui/components/Modal";
+import { PriceTableForm } from "./components/PriceTableForm";
 
 export function PriceTableDetailsPage() {
   const { tableId } = useParams();
@@ -24,6 +26,7 @@ export function PriceTableDetailsPage() {
   const [selectedUom, setSelectedUom] = useState("");
   const [amount, setAmount] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleAddItem = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,6 +72,9 @@ export function PriceTableDetailsPage() {
               <Badge variant={table.is_active ? 'success' : 'outline'} className="variant-glass">
                 {table.is_active ? 'Ativo' : 'Inativo'}
               </Badge>
+              <Button variant="ghost" className="h-8 w-8 p-0 ml-2" onClick={() => setIsEditModalOpen(true)}>
+                <Pencil size={16} />
+              </Button>
             </div>
             <p className="text-sm text-text-secondary mt-1">
               Vigência: {table.effective_date} {table.end_date ? `até ${table.end_date}` : '(sem fim)'}
@@ -192,6 +198,18 @@ export function PriceTableDetailsPage() {
           </div>
         </div>
       </div>
+      
+      <Modal 
+        isOpen={isEditModalOpen} 
+        onClose={() => setIsEditModalOpen(false)}
+        title="Editar Tabela de Preços"
+      >
+        <PriceTableForm 
+          initialData={table}
+          onSuccess={() => { setIsEditModalOpen(false); refetch(); }} 
+          onCancel={() => setIsEditModalOpen(false)} 
+        />
+      </Modal>
     </div>
   );
 }

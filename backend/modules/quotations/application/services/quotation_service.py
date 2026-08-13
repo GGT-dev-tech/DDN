@@ -27,6 +27,7 @@ class QuotationService:
         self,
         tenant_id: UUID,
         company_id: UUID,
+        price_table_id: UUID | None = None,
         validity_days: int = 30
     ) -> UUID:
         expires_at = datetime.now(UTC) + timedelta(days=validity_days)
@@ -35,7 +36,8 @@ class QuotationService:
             quotation = Quotation.create_draft(
                 company_id=company_id,
                 tenant_id=tenant_id,
-                expires_at=expires_at
+                expires_at=expires_at,
+                price_table_id=price_table_id
             )
             
             await self.repository.save_quotation(quotation)
@@ -92,6 +94,7 @@ class QuotationService:
                     quantity=item.quantity,
                     reference_date=reference_date,
                     customer_id=quotation.company_id,
+                    price_table_id=quotation.price_table_id,
                     service_name=service_name,
                     unit_name=unit_name
                 )

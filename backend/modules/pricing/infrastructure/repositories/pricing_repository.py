@@ -143,7 +143,8 @@ class PricingRepository:
         unit_of_measure_id: UUID,
         reference_date: date,
         region_id: UUID | None = None,
-        customer_id: UUID | None = None
+        customer_id: UUID | None = None,
+        price_table_id: UUID | None = None
     ) -> list[PriceTable]:
         """Finds all active price tables covering the requested date, service, and context."""
         
@@ -160,14 +161,17 @@ class PricingRepository:
         # Additionally, match scope (Customer-specific > Region-specific > Global)
         # We'll fetch all that match any of these scopes, engine will prioritize later.
         scope_conditions = []
-        if customer_id:
-            scope_conditions.append(PricingPriceTableModel.customer_id == customer_id)
-        if region_id:
-            scope_conditions.append(PricingPriceTableModel.region_id == region_id)
-        # Global tables (no region, no customer)
-        scope_conditions.append(
-            and_(PricingPriceTableModel.customer_id == None, PricingPriceTableModel.region_id == None)
-        )
+        if price_table_id:
+            scope_conditions.append(PricingPriceTableModel.id == price_table_id)
+        else:
+            if customer_id:
+                scope_conditions.append(PricingPriceTableModel.customer_id == customer_id)
+            if region_id:
+                scope_conditions.append(PricingPriceTableModel.region_id == region_id)
+            # Global tables (no region, no customer)
+            scope_conditions.append(
+                and_(PricingPriceTableModel.customer_id == None, PricingPriceTableModel.region_id == None)
+            )
         
         stmt = (
             select(PricingPriceTableModel)

@@ -39,5 +39,8 @@ class PriceCalculationResult:
     quantity: Decimal
     base_unit_price: Money
     total_base_price: Money
+    surcharges_total: Money
+    discounts_total: Money
     final_price: Money
+    applied_table_id: UUID
     applied_rules_ids: list[UUID] = field(default_factory=list)

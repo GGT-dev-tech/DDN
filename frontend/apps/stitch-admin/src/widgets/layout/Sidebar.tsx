@@ -23,7 +23,6 @@ const GROUPED_NAVIGATION = [
     category: 'Comercial',
     items: [
       { name: 'Catálogo', icon: Library, href: '/admin/catalog' },
-      { name: 'Tabelas de Preço', icon: CircleDollarSign, href: '/admin/pricing' },
       { name: 'Cotações', icon: FileText, href: '/admin/quotations' },
       { name: 'Contratos', icon: BriefcaseBusiness, href: '/admin/contracts' },
     ]

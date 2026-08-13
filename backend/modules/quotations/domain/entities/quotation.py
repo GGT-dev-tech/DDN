@@ -42,6 +42,7 @@ class Quotation(AggregateRoot):
         company_id: uuid.UUID,
         tenant_id: uuid.UUID,
         id: uuid.UUID | None = None,
+        price_table_id: uuid.UUID | None = None,
         status: QuotationStatus = QuotationStatus.DRAFT,
         expires_at: datetime | None = None,
         created_at: datetime | None = None,
@@ -51,6 +52,7 @@ class Quotation(AggregateRoot):
         self._id = id or IdGenerator.generate()
         self.tenant_id = tenant_id
         self.company_id = company_id
+        self.price_table_id = price_table_id
         self.status = status
         self.expires_at = expires_at
         self.created_at = created_at or datetime.now(UTC)
@@ -66,8 +68,8 @@ class Quotation(AggregateRoot):
         return 1
 
     @classmethod
-    def create_draft(cls, company_id: uuid.UUID, tenant_id: uuid.UUID, expires_at: datetime) -> "Quotation":
-        quotation = cls(company_id=company_id, tenant_id=tenant_id, expires_at=expires_at)
+    def create_draft(cls, company_id: uuid.UUID, tenant_id: uuid.UUID, expires_at: datetime, price_table_id: uuid.UUID | None = None) -> "Quotation":
+        quotation = cls(company_id=company_id, tenant_id=tenant_id, expires_at=expires_at, price_table_id=price_table_id)
         quotation.add_event(QuotationDraftCreated(
             quotation_id=quotation.id,
             company_id=company_id,

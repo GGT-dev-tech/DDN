@@ -9,6 +9,7 @@ import { useListLeadsApiV1CommercialLeadsGet, useRegisterLeadApiV1CommercialLead
 import { useCreateQuotationApiV1QuotationsPost, useAddQuotationItemApiV1QuotationsQuotationIdItemsPost, useCalculateQuotationApiV1QuotationsQuotationIdCalculatePost, useApproveQuotationApiV1QuotationsQuotationIdApprovePost } from '../../shared/api/generated/quotations/quotations';
 import { useCreateContractApiV1ContractsPost } from '../../shared/api/generated/contracts/contracts';
 import { useListOfferingsApiV1CatalogOfferingsGet } from '../../shared/api/generated/catalog/catalog';
+import { useListPriceTablesApiV1PricingTablesGet } from '../../shared/api/generated/pricing/pricing';
 
 type WizardStep = 'CLIENT' | 'SERVICES' | 'SCHEDULE' | 'SUMMARY';
 
@@ -19,6 +20,7 @@ export function AtendimentoWizardPage() {
   // APIs (GET)
   const { data: leads = [], isLoading: isLoadingLeads } = useListLeadsApiV1CommercialLeadsGet();
   const { data: offerings = [], isLoading: isLoadingOfferings } = useListOfferingsApiV1CatalogOfferingsGet();
+  const { data: priceTables = [], isLoading: isLoadingTables } = useListPriceTablesApiV1PricingTablesGet();
 
   // APIs (POST)
   const { mutateAsync: createLead } = useRegisterLeadApiV1CommercialLeadsPost();
@@ -33,6 +35,7 @@ export function AtendimentoWizardPage() {
   const [selectedLeadId, setSelectedLeadId] = useState('');
   const [newClientData, setNewClientData] = useState({ company_name: '', contact_name: '', address: '' });
   
+  const [selectedPriceTableId, setSelectedPriceTableId] = useState('');
   const [selectedOffering, setSelectedOffering] = useState('');
   const [quantity, setQuantity] = useState('1');
   
@@ -63,7 +66,7 @@ export function AtendimentoWizardPage() {
       
       // Criar cotação
       const quote = await createQuotation({
-        data: { company_id: leadId, validity_days: 15 }
+        data: { company_id: leadId, price_table_id: selectedPriceTableId, validity_days: 15 }
       });
       setQuotationId((quote as any).id);
       setCurrentStep('SERVICES');
@@ -229,8 +232,21 @@ export function AtendimentoWizardPage() {
                 </div>
               )}
 
+              <div className="space-y-2 mt-4">
+                <label className="text-sm font-medium">Tabela de Preços</label>
+                <Select 
+                  value={selectedPriceTableId}
+                  onChange={(e) => setSelectedPriceTableId(e.target.value)}
+                  disabled={isLoadingTables}
+                  options={[
+                    { label: 'Selecione...', value: '' },
+                    ...priceTables.map((t: any) => ({ label: t.name, value: t.id }))
+                  ]}
+                />
+              </div>
+
               <div className="flex justify-end pt-4">
-                <Button onClick={handleNextClient} disabled={isProcessing || (!isNewClient && !selectedLeadId) || (isNewClient && !newClientData.company_name)}>
+                <Button onClick={handleNextClient} disabled={isProcessing || (!isNewClient && !selectedLeadId) || (isNewClient && !newClientData.company_name) || !selectedPriceTableId}>
                   {isProcessing ? 'Aguarde...' : 'Avançar para Serviços'} <ChevronRight size={16} className="ml-2" />
                 </Button>
               </div>

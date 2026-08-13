@@ -17,6 +17,7 @@ class QuotationItemResponse(BaseModel):
 class QuotationResponse(BaseModel):
     id: uuid.UUID
     company_id: uuid.UUID
+    price_table_id: uuid.UUID | None = None
     status: str
     expires_at: str
     created_at: str
@@ -49,6 +50,7 @@ class ListQuotations:
                 QuotationResponse(
                     id=q.id,
                     company_id=q.company_id,
+                    price_table_id=q.price_table_id,
                     status=q.status.value,
                     expires_at=q.expires_at.isoformat() if q.expires_at else "",
                     created_at=q.created_at.isoformat() if q.created_at else "",

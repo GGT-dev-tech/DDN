@@ -5,8 +5,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface CreateQuotationRequest {
-  company_id: string;
-  price_table_id: string;
-  validity_days?: number;
-}
+export type TogglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost200 = { [key: string]: unknown };

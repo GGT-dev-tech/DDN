@@ -15,6 +15,7 @@ class PricingContext:
     reference_date: date
     customer_id: UUID | None = None
     region_id: UUID | None = None
+    price_table_id: UUID | None = None
     
     # Metadata for snapshot enrichment
     service_name: str = ""

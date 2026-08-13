@@ -27,6 +27,14 @@ class PriceTableCreateRequest(BaseModel):
     customer_id: UUID | None = None
     is_active: bool = False
 
+class PriceTableUpdateRequest(BaseModel):
+    name: str = Field(..., max_length=255)
+    effective_date: date
+    end_date: date | None = None
+    region_id: UUID | None = None
+    customer_id: UUID | None = None
+    is_active: bool = False
+
 class PriceTableItemCreateRequest(BaseModel):
     service_offering_id: UUID
     unit_of_measure_id: UUID

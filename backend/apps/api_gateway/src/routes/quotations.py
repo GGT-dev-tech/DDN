@@ -21,6 +21,7 @@ router = APIRouter(prefix="/quotations", tags=["Quotations"])
 
 class CreateQuotationRequest(BaseModel):
     company_id: uuid.UUID
+    price_table_id: uuid.UUID
     validity_days: int = 30
 
 
@@ -62,6 +63,7 @@ async def create_quotation(
     quotation_id = await service.create_quotation(
         tenant_id=tenant_id,
         company_id=request.company_id,
+        price_table_id=request.price_table_id,
         validity_days=request.validity_days
     )
     return {"quotation_id": quotation_id}

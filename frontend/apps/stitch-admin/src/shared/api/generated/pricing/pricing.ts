@@ -33,7 +33,10 @@ import type {
   PriceTableCreateRequest,
   PriceTableItemCreateRequest,
   PriceTableResponse,
-  PricingRuleCreateRequest
+  PriceTableUpdateRequest,
+  PricingRuleCreateRequest,
+  TogglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost200,
+  UpdatePriceTableApiV1PricingTablesTableIdPut200
 } from '../model';
 
 import { customAxiosInstance } from '../../axios';
@@ -307,6 +310,133 @@ export function useGetPriceTableApiV1PricingTablesTableIdGet<TData = Awaited<Ret
 
 
 /**
+ * @summary Update Price Table
+ */
+export const updatePriceTableApiV1PricingTablesTableIdPut = (
+    tableId: string,
+    priceTableUpdateRequest: PriceTableUpdateRequest,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<UpdatePriceTableApiV1PricingTablesTableIdPut200>(
+      {url: `/api/v1/pricing/tables/${tableId}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: priceTableUpdateRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getUpdatePriceTableApiV1PricingTablesTableIdPutMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePriceTableApiV1PricingTablesTableIdPut>>, TError,{tableId: string;data: PriceTableUpdateRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updatePriceTableApiV1PricingTablesTableIdPut>>, TError,{tableId: string;data: PriceTableUpdateRequest}, TContext> => {
+
+const mutationKey = ['updatePriceTableApiV1PricingTablesTableIdPut'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updatePriceTableApiV1PricingTablesTableIdPut>>, {tableId: string;data: PriceTableUpdateRequest}> = (props) => {
+          const {tableId,data} = props ?? {};
+
+          return  updatePriceTableApiV1PricingTablesTableIdPut(tableId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdatePriceTableApiV1PricingTablesTableIdPutMutationResult = NonNullable<Awaited<ReturnType<typeof updatePriceTableApiV1PricingTablesTableIdPut>>>
+    export type UpdatePriceTableApiV1PricingTablesTableIdPutMutationBody = PriceTableUpdateRequest
+    export type UpdatePriceTableApiV1PricingTablesTableIdPutMutationError = HTTPValidationError
+
+    /**
+ * @summary Update Price Table
+ */
+export const useUpdatePriceTableApiV1PricingTablesTableIdPut = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePriceTableApiV1PricingTablesTableIdPut>>, TError,{tableId: string;data: PriceTableUpdateRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updatePriceTableApiV1PricingTablesTableIdPut>>,
+        TError,
+        {tableId: string;data: PriceTableUpdateRequest},
+        TContext
+      > => {
+      return useMutation(getUpdatePriceTableApiV1PricingTablesTableIdPutMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary Toggle Price Table Status
+ */
+export const togglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost = (
+    tableId: string,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<TogglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost200>(
+      {url: `/api/v1/pricing/tables/${tableId}/toggle-status`, method: 'POST', signal
+    },
+      options);
+    }
+
+
+
+
+export const getTogglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof togglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost>>, TError,{tableId: string}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof togglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost>>, TError,{tableId: string}, TContext> => {
+
+const mutationKey = ['togglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof togglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost>>, {tableId: string}> = (props) => {
+          const {tableId} = props ?? {};
+
+          return  togglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost(tableId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TogglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPostMutationResult = NonNullable<Awaited<ReturnType<typeof togglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost>>>
+
+    export type TogglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Toggle Price Table Status
+ */
+export const useTogglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof togglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost>>, TError,{tableId: string}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof togglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPost>>,
+        TError,
+        {tableId: string},
+        TContext
+      > => {
+      return useMutation(getTogglePriceTableStatusApiV1PricingTablesTableIdToggleStatusPostMutationOptions(options), queryClient);
+    }
+    /**
  * @summary Add Price Table Item
  */
 export const addPriceTableItemApiV1PricingTablesTableIdItemsPost = (

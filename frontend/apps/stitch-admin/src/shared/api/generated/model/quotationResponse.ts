@@ -9,6 +9,7 @@ import type { QuotationItemResponse } from './quotationItemResponse';
 export interface QuotationResponse {
   id: string;
   company_id: string;
+  price_table_id?: string | null;
   status: string;
   expires_at: string;
   created_at: string;

@@ -2591,6 +2591,146 @@
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "Pricing"
+        ],
+        "summary": "Update Price Table",
+        "operationId": "update_price_table_api_v1_pricing_tables__table_id__put",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "table_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Table Id"
+            }
+          },
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PriceTableUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Update Price Table Api V1 Pricing Tables  Table Id  Put"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pricing/tables/{table_id}/toggle-status": {
+      "post": {
+        "tags": [
+          "Pricing"
+        ],
+        "summary": "Toggle Price Table Status",
+        "operationId": "toggle_price_table_status_api_v1_pricing_tables__table_id__toggle_status_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "table_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Table Id"
+            }
+          },
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Toggle Price Table Status Api V1 Pricing Tables  Table Id  Toggle Status Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/v1/pricing/tables/{table_id}/items": {
@@ -5111,6 +5251,11 @@
             "format": "uuid",
             "title": "Company Id"
           },
+          "price_table_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Price Table Id"
+          },
           "validity_days": {
             "type": "integer",
             "title": "Validity Days",
@@ -5119,7 +5264,8 @@
         },
         "type": "object",
         "required": [
-          "company_id"
+          "company_id",
+          "price_table_id"
         ],
         "title": "CreateQuotationRequest"
       },
@@ -6189,6 +6335,67 @@
         ],
         "title": "PriceTableResponse"
       },
+      "PriceTableUpdateRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "title": "Name"
+          },
+          "effective_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Effective Date"
+          },
+          "end_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Date"
+          },
+          "region_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Id"
+          },
+          "customer_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Id"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "effective_date"
+        ],
+        "title": "PriceTableUpdateRequest"
+      },
       "PricingRuleCreateRequest": {
         "properties": {
           "name": {
@@ -6351,6 +6558,18 @@
             "type": "string",
             "format": "uuid",
             "title": "Company Id"
+          },
+          "price_table_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Table Id"
           },
           "status": {
             "type": "string",

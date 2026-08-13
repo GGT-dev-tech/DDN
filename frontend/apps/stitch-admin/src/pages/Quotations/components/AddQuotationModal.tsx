@@ -7,6 +7,7 @@ import { Button } from '../../../shared/ui/components/Button';
 import { Select } from '../../../shared/ui/components/Select';
 import { useCreateQuotationApiV1QuotationsPost, getListQuotationsApiV1QuotationsGetQueryKey } from '../../../shared/api/generated/quotations/quotations';
 import { useListCompaniesApiV1CommercialCompaniesGet } from '../../../shared/api/generated/commercial/commercial';
+import { useListPriceTablesApiV1PricingTablesGet } from '../../../shared/api/generated/pricing/pricing';
 
 interface AddQuotationModalProps {
   isOpen: boolean;
@@ -18,9 +19,11 @@ export function AddQuotationModal({ isOpen, onClose, defaultCompanyId }: AddQuot
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { data: companies = [], isLoading: isCompaniesLoading } = useListCompaniesApiV1CommercialCompaniesGet(undefined, { query: { enabled: isOpen } });
+  const { data: priceTables = [], isLoading: isPriceTablesLoading } = useListPriceTablesApiV1PricingTablesGet({ query: { enabled: isOpen } });
   const { mutateAsync: createQuotation, isPending } = useCreateQuotationApiV1QuotationsPost();
   
   const [companyId, setCompanyId] = useState(defaultCompanyId || '');
+  const [priceTableId, setPriceTableId] = useState('');
   const [validityDays, setValidityDays] = useState('30');
 
   // Sync defaultCompanyId when modal opens
@@ -32,12 +35,13 @@ export function AddQuotationModal({ isOpen, onClose, defaultCompanyId }: AddQuot
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!companyId || !validityDays) return;
+    if (!companyId || !validityDays || !priceTableId) return;
 
     try {
       const result = await createQuotation({
         data: {
           company_id: companyId,
+          price_table_id: priceTableId,
           validity_days: parseInt(validityDays, 10),
         }
       });
@@ -78,6 +82,24 @@ export function AddQuotationModal({ isOpen, onClose, defaultCompanyId }: AddQuot
             required
           />
         </div>
+
+        <div className="space-y-2">
+          <label htmlFor="priceTableId" className="text-sm font-medium">Tabela de Preços</label>
+          <Select 
+            id="priceTableId"
+            value={priceTableId}
+            onChange={(e) => setPriceTableId(e.target.value)}
+            disabled={isPriceTablesLoading}
+            options={[
+              { label: 'Selecione uma tabela...', value: '' },
+              ...priceTables.map((table: any) => ({
+                label: table.name,
+                value: table.id
+              }))
+            ]}
+            required
+          />
+        </div>
         
         <div className="space-y-2">
           <label htmlFor="validityDays" className="text-sm font-medium">Validade (Dias)</label>
@@ -95,7 +117,7 @@ export function AddQuotationModal({ isOpen, onClose, defaultCompanyId }: AddQuot
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancelar
           </Button>
-          <Button type="submit" disabled={isPending || !companyId || !validityDays}>
+          <Button type="submit" disabled={isPending || !companyId || !validityDays || !priceTableId}>
             {isPending ? 'Criando...' : 'Criar Cotação'}
           </Button>
         </div>

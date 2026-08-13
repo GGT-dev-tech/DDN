@@ -20,7 +20,8 @@ class PricingGatewayImpl(PricingGateway):
             quantity=context.quantity,
             reference_date=context.reference_date,
             region_id=context.region_id,
-            customer_id=context.customer_id
+            customer_id=context.customer_id,
+            price_table_id=context.price_table_id
         )
         
         # Translate the Pricing domain result into Quotation's snapshot VO

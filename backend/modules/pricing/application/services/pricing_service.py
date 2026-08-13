@@ -60,6 +60,47 @@ class PricingService:
         # In a real scenario we'd enforce tenant isolation if the domain object held the tenant_id, 
         # or do it at the repository level.
         return await self.repository.get_price_table_by_id(price_table_id)
+
+    async def update_price_table(
+        self,
+        tenant_id: UUID,
+        price_table_id: UUID,
+        name: str,
+        effective_date: date,
+        end_date: date | None = None,
+        region_id: UUID | None = None,
+        customer_id: UUID | None = None,
+        is_active: bool = False
+    ) -> UUID:
+        async with self.uow as uow:
+            table = await self.repository.get_price_table_by_id(price_table_id)
+            if not table:
+                raise ValueError("Price table not found")
+                
+            table.name = name
+            table.effective_date = effective_date
+            table.end_date = end_date
+            table.region_id = region_id
+            table.customer_id = customer_id
+            table.is_active = is_active
+            
+            await self.repository.save_price_table(table, tenant_id)
+            table.clear_events()
+            await uow.commit()
+            return table.id
+
+    async def toggle_price_table_status(self, tenant_id: UUID, price_table_id: UUID) -> UUID:
+        async with self.uow as uow:
+            table = await self.repository.get_price_table_by_id(price_table_id)
+            if not table:
+                raise ValueError("Price table not found")
+                
+            table.is_active = not table.is_active
+            
+            await self.repository.save_price_table(table, tenant_id)
+            table.clear_events()
+            await uow.commit()
+            return table.id
             
     async def add_price_table_item(
         self,
@@ -129,7 +170,8 @@ class PricingService:
         quantity: Decimal,
         reference_date: date,
         region_id: UUID | None = None,
-        customer_id: UUID | None = None
+        customer_id: UUID | None = None,
+        price_table_id: UUID | None = None
     ) -> PriceCalculationResult:
         """
         Calculates the final price based on the active tables and rules for a given context.
@@ -139,7 +181,8 @@ class PricingService:
             unit_of_measure_id=unit_of_measure_id,
             reference_date=reference_date,
             region_id=region_id,
-            customer_id=customer_id
+            customer_id=customer_id,
+            price_table_id=price_table_id
         )
         
         applicable_rules = await self.repository.get_applicable_pricing_rules(
@@ -155,7 +198,8 @@ class PricingService:
             applicable_tables=applicable_tables,
             applicable_rules=applicable_rules,
             customer_id=customer_id,
-            region_id=region_id
+            region_id=region_id,
+            price_table_id=price_table_id
         )
         
         # We emit an analytical event here if desired, but we do NOT save the snapshot

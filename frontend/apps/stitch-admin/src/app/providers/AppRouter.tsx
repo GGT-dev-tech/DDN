@@ -15,7 +15,6 @@ import { LeadsPage } from '../../pages/Commercial/LeadsPage'
 import { PipelinePage } from '../../pages/Commercial/PipelinePage'
 import { CustomerDetailsPage } from '../../pages/Commercial/CustomerDetailsPage'
 import { AtendimentoWizardPage } from '../../pages/Commercial/AtendimentoWizardPage'
-import { PricingPage } from '../../pages/Pricing/PricingPage'
 import { CatalogPage } from '../../pages/Catalog/CatalogPage'
 import { PriceTableDetailsPage } from '../../pages/Catalog/PriceTableDetailsPage'
 import { ServicePlansPage } from '../../pages/Operations/ServicePlansPage'
@@ -161,10 +160,6 @@ const router = createBrowserRouter([
           {
             path: 'atendimento/novo',
             element: <AtendimentoWizardPage />,
-          },
-          {
-            path: 'pricing',
-            element: <PricingPage />,
           },
           {
             path: 'quotations',

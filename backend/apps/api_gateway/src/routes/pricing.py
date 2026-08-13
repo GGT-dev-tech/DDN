@@ -11,6 +11,7 @@ from modules.pricing.application.dto.requests import (
     PriceCalculationRequest,
     PriceCalculationResponse,
     PriceTableCreateRequest,
+    PriceTableUpdateRequest,
     PriceTableItemCreateRequest,
     PriceTableResponse,
     PricingRuleCreateRequest,
@@ -64,6 +65,43 @@ async def create_price_table(
         is_active=request.is_active
     )
     return {"id": table_id}
+
+@router.put("/tables/{table_id}", response_model=dict, status_code=status.HTTP_200_OK)
+async def update_price_table(
+    table_id: UUID,
+    request: PriceTableUpdateRequest,
+    tenant_id: UUID = Depends(require_tenant),
+    service: PricingService = Depends(get_pricing_service)
+) -> Any:
+    try:
+        updated_id = await service.update_price_table(
+            tenant_id=tenant_id,
+            price_table_id=table_id,
+            name=request.name,
+            effective_date=request.effective_date,
+            end_date=request.end_date,
+            region_id=request.region_id,
+            customer_id=request.customer_id,
+            is_active=request.is_active
+        )
+        return {"id": updated_id}
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+@router.post("/tables/{table_id}/toggle-status", response_model=dict, status_code=status.HTTP_200_OK)
+async def toggle_price_table_status(
+    table_id: UUID,
+    tenant_id: UUID = Depends(require_tenant),
+    service: PricingService = Depends(get_pricing_service)
+) -> Any:
+    try:
+        updated_id = await service.toggle_price_table_status(
+            tenant_id=tenant_id,
+            price_table_id=table_id
+        )
+        return {"id": updated_id}
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 @router.post("/tables/{table_id}/items", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def add_price_table_item(

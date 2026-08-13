@@ -14,6 +14,7 @@ class QuotationModel(Base):
     tenant_id = Column(UUID(as_uuid=True), index=True, nullable=False)
     company_id = Column(UUID(as_uuid=True), index=True, nullable=False)
     status: Column = Column(SQLEnum(QuotationStatus, name="quotationstatus", create_type=False), nullable=False)
+    price_table_id = Column(UUID(as_uuid=True), nullable=True)
     
     expires_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), nullable=False)
