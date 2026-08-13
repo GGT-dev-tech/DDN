@@ -1,17 +1,20 @@
 import { useParams, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { 
   useGetCompanyApiV1CommercialCompaniesCompanyIdGet,
   useListContactsApiV1CommercialCompaniesCompanyIdContactsGet
 } from '../../shared/api/generated/commercial/commercial';
 import { Badge } from '../../shared/ui/components/Badge';
 import { Button } from '../../shared/ui/components/Button';
-import { ArrowLeft, Building2, Mail, Phone, User, FileText, ClipboardList, Plus } from 'lucide-react';
+import { ArrowLeft, Building2, Mail, Phone, User, FileText, ClipboardList, Plus, Edit2 } from 'lucide-react';
 import { EmptyState } from '../../shared/ui/components/EmptyState';
 import { useListQuotationsApiV1QuotationsGet } from '../../shared/api/generated/quotations/quotations';
+import { EditCompanyModal } from './components/EditCompanyModal';
 
 export function CustomerDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // Fetch company details
   const { data: customer, isLoading: isLoadingCompany, isError: isErrorCompany } = useGetCompanyApiV1CommercialCompaniesCompanyIdGet(id as string, { query: { enabled: !!id } });
@@ -61,10 +64,21 @@ export function CustomerDetailsPage() {
               Documento (CNPJ/CPF): {customer.document_number}
             </p>
           </div>
-          <Button onClick={() => navigate('/admin/quotations', { state: { customerId: customer.id } })} className="gap-2 shrink-0">
-            <Plus size={16} /> Nova Cotação
-          </Button>
+          <div className="flex gap-2 shrink-0">
+            <Button variant="ghost" onClick={() => setIsEditModalOpen(true)} className="gap-2">
+              <Edit2 size={16} /> Editar Dados
+            </Button>
+            <Button onClick={() => navigate('/admin/quotations', { state: { customerId: customer.id } })} className="gap-2">
+              <Plus size={16} /> Nova Cotação
+            </Button>
+          </div>
         </div>
+
+        <EditCompanyModal 
+          isOpen={isEditModalOpen} 
+          onClose={() => setIsEditModalOpen(false)} 
+          company={customer} 
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           

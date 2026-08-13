@@ -91,6 +91,11 @@ class CompanyCreateRequest(BaseModel):
     contact_phone: str | None = None
     contact_role: str | None = None
 
+class UpdateCompanyRequest(BaseModel):
+    trade_name: str | None = None
+    corporate_name: str | None = None
+    document_number: str | None = None
+
 class AddContactRequest(BaseModel):
     name: str
     email: str
@@ -252,6 +257,25 @@ async def get_company(
     if not company:
         raise HTTPException(status_code=404, detail="Company not found")
     return company
+
+@router.patch("/companies/{company_id}", response_model=CompanyResponse)
+async def update_company(
+    company_id: UUID,
+    req: UpdateCompanyRequest,
+    tenant_id: UUID = Depends(require_tenant),
+    company_service: CompanyService = Depends(get_company_service)
+):
+    try:
+        company = await company_service.update_company(
+            tenant_id=tenant_id,
+            company_id=company_id,
+            trade_name=req.trade_name,
+            corporate_name=req.corporate_name,
+            document_number=req.document_number
+        )
+        return company
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 @router.post("/companies/{company_id}/contacts", response_model=ContactResponse)
 async def add_contact(

@@ -90,6 +90,7 @@ export * from './tenantContextResponse';
 export * from './tenantResponse';
 export * from './tokenResponse';
 export * from './uOMBaseType';
+export * from './updateCompanyRequest';
 export * from './updateOpportunityStageRequest';
 export * from './updateSchedulesApiV1ServicePlansPlanIdPatch200';
 export * from './updateSchedulesRequest';

@@ -45,7 +45,7 @@ def get_quotation_service(session=Depends(get_db_session)) -> QuotationService:
     # Note: PricingService also uses UOW now, but since we are just passing it to the gateway, 
     # we provide the same UOW to PricingService. Wait, let's look at PricingService constructor.
     # We refactored PricingService to take UOW, so we pass it.
-    pricing_service = PricingService(uow=uow, repo=pricing_repo, calculation_engine=calculation_engine)
+    pricing_service = PricingService(uow=uow, repository=pricing_repo, calculation_engine=calculation_engine)
     
     pricing_gateway = PricingGatewayImpl(pricing_service)
     catalog_gateway = CatalogGatewayImpl(session)

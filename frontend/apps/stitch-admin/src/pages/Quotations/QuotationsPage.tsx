@@ -4,15 +4,27 @@ import { Button } from '../../shared/ui/components/Button';
 import { useListQuotationsApiV1QuotationsGet } from '../../shared/api/generated/quotations/quotations';
 import { useListCompaniesApiV1CommercialCompaniesGet } from '../../shared/api/generated/commercial/commercial';
 import { AddQuotationModal } from './components/AddQuotationModal';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Plus, FileText, Calendar } from 'lucide-react';
 import { EmptyState } from '../../shared/ui/components/EmptyState';
+import { useEffect } from 'react';
 
 export function QuotationsPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [defaultCompanyId, setDefaultCompanyId] = useState('');
   const { data: quotations, isLoading, isError } = useListQuotationsApiV1QuotationsGet();
   const { data: companies } = useListCompaniesApiV1CommercialCompaniesGet();
+
+  useEffect(() => {
+    if (location.state?.customerId) {
+      setDefaultCompanyId(location.state.customerId);
+      setIsAddModalOpen(true);
+      // Clear state so it doesn't reopen on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const getCompanyName = (id: string) => {
     const company = companies?.find((c: any) => c.id === id);
@@ -44,6 +56,7 @@ export function QuotationsPage() {
         <AddQuotationModal 
           isOpen={isAddModalOpen} 
           onClose={() => setIsAddModalOpen(false)} 
+          defaultCompanyId={defaultCompanyId}
         />
         
         {/* Lista de Cotações */}

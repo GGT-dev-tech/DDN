@@ -36,6 +36,7 @@ import type {
   ListOpportunitiesApiV1CommercialOpportunitiesGetParams,
   MatchLeadRequest,
   OpportunityResponse,
+  UpdateCompanyRequest,
   UpdateOpportunityStageRequest
 } from '../model';
 
@@ -595,6 +596,71 @@ export function useGetCompanyApiV1CommercialCompaniesCompanyIdGet<TData = Awaite
 
 
 /**
+ * @summary Update Company
+ */
+export const updateCompanyApiV1CommercialCompaniesCompanyIdPatch = (
+    companyId: string,
+    updateCompanyRequest: UpdateCompanyRequest,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<CompanyResponse>(
+      {url: `/api/v1/commercial/companies/${companyId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateCompanyRequest, signal
+    },
+      options);
+    }
+
+
+
+
+export const getUpdateCompanyApiV1CommercialCompaniesCompanyIdPatchMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCompanyApiV1CommercialCompaniesCompanyIdPatch>>, TError,{companyId: string;data: UpdateCompanyRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateCompanyApiV1CommercialCompaniesCompanyIdPatch>>, TError,{companyId: string;data: UpdateCompanyRequest}, TContext> => {
+
+const mutationKey = ['updateCompanyApiV1CommercialCompaniesCompanyIdPatch'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCompanyApiV1CommercialCompaniesCompanyIdPatch>>, {companyId: string;data: UpdateCompanyRequest}> = (props) => {
+          const {companyId,data} = props ?? {};
+
+          return  updateCompanyApiV1CommercialCompaniesCompanyIdPatch(companyId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateCompanyApiV1CommercialCompaniesCompanyIdPatchMutationResult = NonNullable<Awaited<ReturnType<typeof updateCompanyApiV1CommercialCompaniesCompanyIdPatch>>>
+    export type UpdateCompanyApiV1CommercialCompaniesCompanyIdPatchMutationBody = UpdateCompanyRequest
+    export type UpdateCompanyApiV1CommercialCompaniesCompanyIdPatchMutationError = HTTPValidationError
+
+    /**
+ * @summary Update Company
+ */
+export const useUpdateCompanyApiV1CommercialCompaniesCompanyIdPatch = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCompanyApiV1CommercialCompaniesCompanyIdPatch>>, TError,{companyId: string;data: UpdateCompanyRequest}, TContext>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateCompanyApiV1CommercialCompaniesCompanyIdPatch>>,
+        TError,
+        {companyId: string;data: UpdateCompanyRequest},
+        TContext
+      > => {
+      return useMutation(getUpdateCompanyApiV1CommercialCompaniesCompanyIdPatchMutationOptions(options), queryClient);
+    }
+    /**
  * @summary Add Contact
  */
 export const addContactApiV1CommercialCompaniesCompanyIdContactsPost = (

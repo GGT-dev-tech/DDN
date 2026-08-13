@@ -41,6 +41,30 @@ class CompanyService:
     async def get_company(self, tenant_id: UUID, company_id: UUID) -> Company | None:
         return await self.company_repo.get_by_id(tenant_id, company_id)
 
+    async def update_company(
+        self,
+        tenant_id: UUID,
+        company_id: UUID,
+        trade_name: str | None = None,
+        corporate_name: str | None = None,
+        document_number: str | None = None
+    ) -> Company:
+        async with self.uow as uow:
+            company = await self.company_repo.get_by_id(tenant_id, company_id)
+            if not company:
+                raise ValueError("Company not found")
+                
+            if trade_name is not None:
+                company.trade_name = trade_name
+            if corporate_name is not None:
+                company.corporate_name = corporate_name
+            if document_number is not None:
+                company.document_number = document_number
+                
+            await self.company_repo.update(company)
+            await uow.commit()
+            return company
+
     async def list_companies(self, tenant_id: UUID, skip: int = 0, limit: int = 100) -> list[Company]:
         return await self.company_repo.list_companies(tenant_id, skip=skip, limit=limit)
 

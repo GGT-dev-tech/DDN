@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from '../../../shared/ui/components/Modal';
@@ -11,16 +11,24 @@ import { useListCompaniesApiV1CommercialCompaniesGet } from '../../../shared/api
 interface AddQuotationModalProps {
   isOpen: boolean;
   onClose: () => void;
+  defaultCompanyId?: string;
 }
 
-export function AddQuotationModal({ isOpen, onClose }: AddQuotationModalProps) {
+export function AddQuotationModal({ isOpen, onClose, defaultCompanyId }: AddQuotationModalProps) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { data: companies = [], isLoading: isCompaniesLoading } = useListCompaniesApiV1CommercialCompaniesGet(undefined, { query: { enabled: isOpen } });
   const { mutateAsync: createQuotation, isPending } = useCreateQuotationApiV1QuotationsPost();
   
-  const [companyId, setCompanyId] = useState('');
+  const [companyId, setCompanyId] = useState(defaultCompanyId || '');
   const [validityDays, setValidityDays] = useState('30');
+
+  // Sync defaultCompanyId when modal opens
+  useEffect(() => {
+    if (isOpen && defaultCompanyId) {
+      setCompanyId(defaultCompanyId);
+    }
+  }, [isOpen, defaultCompanyId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
