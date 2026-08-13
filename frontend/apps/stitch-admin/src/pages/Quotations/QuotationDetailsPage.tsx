@@ -171,6 +171,16 @@ export function QuotationDetailsPage() {
                       </tr>
                     ))}
                   </tbody>
+                  <tfoot className="border-t-2 border-border bg-black/5 dark:bg-white/5">
+                    <tr>
+                      <td colSpan={2} className="p-4 text-right font-bold text-text-primary">
+                        Total da Cotação:
+                      </td>
+                      <td className="p-4 text-right font-bold text-brand-500 text-lg tabular-nums">
+                        R$ {quotation.items.reduce((acc: number, item: any) => acc + (item.final_price ? parseFloat(item.final_price) : 0), 0).toFixed(2)}
+                      </td>
+                    </tr>
+                  </tfoot>
                 </table>
               ) : (
                 <div className="p-8">

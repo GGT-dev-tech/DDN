@@ -215,6 +215,98 @@ export const useCreatePriceTableApiV1PricingTablesPost = <TError = HTTPValidatio
       return useMutation(getCreatePriceTableApiV1PricingTablesPostMutationOptions(options), queryClient);
     }
     /**
+ * @summary Get Price Table
+ */
+export const getPriceTableApiV1PricingTablesTableIdGet = (
+    tableId: string,
+ options?: SecondParameter<typeof customAxiosInstance>,signal?: AbortSignal
+) => {
+
+
+      return customAxiosInstance<PriceTableResponse>(
+      {url: `/api/v1/pricing/tables/${tableId}`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetPriceTableApiV1PricingTablesTableIdGetQueryKey = (tableId: string,) => {
+    return [
+    `/api/v1/pricing/tables/${tableId}`
+    ] as const;
+    }
+
+
+export const getGetPriceTableApiV1PricingTablesTableIdGetQueryOptions = <TData = Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>, TError = HTTPValidationError>(tableId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPriceTableApiV1PricingTablesTableIdGetQueryKey(tableId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>> = ({ signal }) => getPriceTableApiV1PricingTablesTableIdGet(tableId, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: tableId !== null && tableId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetPriceTableApiV1PricingTablesTableIdGetQueryResult = NonNullable<Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>>
+export type GetPriceTableApiV1PricingTablesTableIdGetQueryError = HTTPValidationError
+
+
+export function useGetPriceTableApiV1PricingTablesTableIdGet<TData = Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>, TError = HTTPValidationError>(
+ tableId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>,
+          TError,
+          Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPriceTableApiV1PricingTablesTableIdGet<TData = Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>, TError = HTTPValidationError>(
+ tableId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>,
+          TError,
+          Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPriceTableApiV1PricingTablesTableIdGet<TData = Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>, TError = HTTPValidationError>(
+ tableId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Price Table
+ */
+
+export function useGetPriceTableApiV1PricingTablesTableIdGet<TData = Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>, TError = HTTPValidationError>(
+ tableId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPriceTableApiV1PricingTablesTableIdGet>>, TError, TData>>, request?: SecondParameter<typeof customAxiosInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetPriceTableApiV1PricingTablesTableIdGetQueryOptions(tableId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
  * @summary Add Price Table Item
  */
 export const addPriceTableItemApiV1PricingTablesTableIdItemsPost = (

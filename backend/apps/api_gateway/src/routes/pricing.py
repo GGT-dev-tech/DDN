@@ -37,6 +37,17 @@ async def list_price_tables(
     tables = await service.list_price_tables(tenant_id)
     return tables
 
+@router.get("/tables/{table_id}", response_model=PriceTableResponse, status_code=status.HTTP_200_OK)
+async def get_price_table(
+    table_id: UUID,
+    tenant_id: UUID = Depends(require_tenant),
+    service: PricingService = Depends(get_pricing_service)
+) -> Any:
+    table = await service.get_price_table(tenant_id, table_id)
+    if not table:
+        raise HTTPException(status_code=404, detail="Price table not found")
+    return table
+
 @router.post("/tables", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def create_price_table(
     request: PriceTableCreateRequest,

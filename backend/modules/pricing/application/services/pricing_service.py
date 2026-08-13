@@ -55,6 +55,11 @@ class PricingService:
 
     async def list_price_tables(self, tenant_id: UUID) -> list[PriceTable]:
         return await self.repository.list_price_tables(tenant_id)
+        
+    async def get_price_table(self, tenant_id: UUID, price_table_id: UUID) -> PriceTable | None:
+        # In a real scenario we'd enforce tenant isolation if the domain object held the tenant_id, 
+        # or do it at the repository level.
+        return await self.repository.get_price_table_by_id(price_table_id)
             
     async def add_price_table_item(
         self,

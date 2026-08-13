@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { 
-  useListPriceTablesApiV1PricingTablesGet,
+  useGetPriceTableApiV1PricingTablesTableIdGet,
   useAddPriceTableItemApiV1PricingTablesTableIdItemsPost 
 } from "../../shared/api/generated/pricing/pricing";
 import { useListOfferingsApiV1CatalogOfferingsGet, useListUomsApiV1CatalogUomGet } from "../../shared/api/generated/catalog/catalog";
@@ -13,8 +13,7 @@ export function PriceTableDetailsPage() {
   const { tableId } = useParams();
   const navigate = useNavigate();
   
-  const { data: tables, isLoading: isLoadingTables } = useListPriceTablesApiV1PricingTablesGet();
-  const table = tables?.find(t => t.id === tableId);
+  const { data: table, isLoading: isLoadingTables, refetch } = useGetPriceTableApiV1PricingTablesTableIdGet(tableId as string, { query: { enabled: !!tableId } });
   
   const { data: offerings } = useListOfferingsApiV1CatalogOfferingsGet();
   const { data: uoms } = useListUomsApiV1CatalogUomGet();
@@ -42,7 +41,7 @@ export function PriceTableDetailsPage() {
         }
       });
       // Force reload or mutate query cache to show new item
-      window.location.reload(); 
+      refetch();
     } catch (err: any) {
       setError(err?.response?.data?.detail || "Erro ao adicionar preço");
     }
