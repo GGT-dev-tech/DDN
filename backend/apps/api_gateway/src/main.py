@@ -13,6 +13,7 @@ from apps.api_gateway.src.routes import auth, dashboard, fleet, routing, tenant
 from apps.api_gateway.src.routes.catalog import router as catalog_router
 from apps.api_gateway.src.routes.commercial import router as commercial_router
 from apps.api_gateway.src.routes.contracts import router as contracts_router
+from apps.api_gateway.src.routes.destinations import router as destinations_router
 from apps.api_gateway.src.routes.pricing import router as pricing_router
 from apps.api_gateway.src.routes.public import router as public_router
 from apps.api_gateway.src.routes.quotations import router as quotations_router
@@ -59,6 +60,7 @@ api_v1.include_router(pricing_router)
 api_v1.include_router(quotations_router)
 api_v1.include_router(contracts_router)
 api_v1.include_router(service_plan_router)
+api_v1.include_router(destinations_router)
 api_v1.include_router(logistics_router)
 api_v1.include_router(compliance_router)
 api_v1.include_router(billing_router)

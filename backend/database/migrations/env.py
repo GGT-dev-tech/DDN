@@ -15,6 +15,7 @@ if config.config_file_name is not None:
 
 # Import all models to ensure they are registered with Base.metadata
 from database.core.base import Base
+from modules.facilities.infrastructure.orm_models import DestinationModel
 from modules.core.config.settings import settings
 
 target_metadata = Base.metadata

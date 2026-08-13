@@ -23,6 +23,7 @@ import { RequirementsPage } from '../../pages/Operations/Requirements/Requiremen
 import { PlannerPage } from '../../pages/Operations/PlannerPage'
 import { ServiceOrdersPage } from '../../pages/Operations/ServiceOrders/ServiceOrdersPage'
 import { MTRsPage } from '../../pages/Operations/MTRs/MTRsPage'
+import { DestinationsPage } from '../../pages/Operations/Destinations/DestinationsPage'
 import { LoginPage } from '../../pages/Auth/LoginPage'
 import { RegisterPage } from '../../pages/Auth/RegisterPage'
 import { LandingPage } from '../../pages/Public/LandingPage'
@@ -120,6 +121,10 @@ const router = createBrowserRouter([
           {
             path: 'mtrs',
             element: <MTRsPage />,
+          },
+          {
+            path: 'destinations',
+            element: <DestinationsPage />,
           },
           {
             path: 'requirements',
