@@ -22,7 +22,10 @@ class ListContractsQueryHandler:
                 ContractModel.status,
                 ContractModel.company_id,
                 ContractModel.effective_date,
-                ContractModel.expiration_date
+                ContractModel.expiration_date,
+                ContractModel.mtr_id,
+                ContractModel.destination_id,
+                ContractModel.auto_generate_service_orders
             )
             .where(ContractModel.tenant_id == tenant_id)
             .order_by(ContractModel.created_at.desc())
@@ -41,6 +44,9 @@ class ListContractsQueryHandler:
                 "company_id": str(row.company_id),
                 "effective_date": row.effective_date.isoformat() if row.effective_date else None,
                 "expiration_date": row.expiration_date.isoformat() if row.expiration_date else None,
+                "mtr_id": str(row.mtr_id) if row.mtr_id else None,
+                "destination_id": str(row.destination_id) if row.destination_id else None,
+                "auto_generate_service_orders": row.auto_generate_service_orders,
             }
             for row in rows
         ]

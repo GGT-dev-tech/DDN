@@ -43,6 +43,9 @@ class ContractCreateRequest(BaseModel):
     company_id: uuid.UUID
     quotation_id: uuid.UUID
     effective_date: date
+    mtr_id: uuid.UUID | None = None
+    destination_id: uuid.UUID | None = None
+    auto_generate_service_orders: bool = False
     items: list[dict[str, Any]]
 
 
@@ -58,8 +61,11 @@ async def create_contract(
             tenant_id=tenant_id,
             company_id=request.company_id,
             quotation_id=request.quotation_id,
+            effective_date=request.effective_date,
             items_payload=request.items,
-            effective_date=request.effective_date
+            mtr_id=request.mtr_id,
+            destination_id=request.destination_id,
+            auto_generate_service_orders=request.auto_generate_service_orders
         )
         return {"id": str(contract_id), "status": "DRAFT"}
     except Exception as e:

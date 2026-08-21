@@ -8,6 +8,8 @@ import { Select } from '../../../shared/ui/components/Select';
 import { useCreateQuotationApiV1QuotationsPost, getListQuotationsApiV1QuotationsGetQueryKey } from '../../../shared/api/generated/quotations/quotations';
 import { useListCompaniesApiV1CommercialCompaniesGet } from '../../../shared/api/generated/commercial/commercial';
 import { useListPriceTablesApiV1PricingTablesGet } from '../../../shared/api/generated/pricing/pricing';
+import { useListDestinationsApiV1FacilitiesDestinationsGet } from '../../../shared/api/generated/facilities/facilities';
+import { useListMtrsApiV1ComplianceMtrsGet } from '../../../shared/api/generated/compliance/compliance';
 
 interface AddQuotationModalProps {
   isOpen: boolean;
@@ -25,6 +27,13 @@ export function AddQuotationModal({ isOpen, onClose, defaultCompanyId }: AddQuot
   const [companyId, setCompanyId] = useState(defaultCompanyId || '');
   const [priceTableId, setPriceTableId] = useState('');
   const [validityDays, setValidityDays] = useState('30');
+  const [destinationId, setDestinationId] = useState('');
+  const [mtrId, setMtrId] = useState('');
+  const [freightDistance, setFreightDistance] = useState('');
+  const [freightCost, setFreightCost] = useState('');
+
+  const { data: destinations = [], isLoading: isDestinationsLoading } = useListDestinationsApiV1FacilitiesDestinationsGet(undefined, { query: { enabled: isOpen } });
+  const { data: mtrs = [], isLoading: isMtrsLoading } = useListMtrsApiV1ComplianceMtrsGet(undefined, { query: { enabled: isOpen && !!companyId } });
 
   // Sync defaultCompanyId when modal opens
   useEffect(() => {
@@ -43,6 +52,10 @@ export function AddQuotationModal({ isOpen, onClose, defaultCompanyId }: AddQuot
           company_id: companyId,
           price_table_id: priceTableId,
           validity_days: parseInt(validityDays, 10),
+          destination_id: destinationId || null,
+          mtr_id: mtrId || null,
+          freight_distance: freightDistance ? parseFloat(freightDistance) : null,
+          freight_cost: freightCost ? parseFloat(freightCost) : null,
         }
       });
       // Invalidate the query so the table refreshes
@@ -111,6 +124,63 @@ export function AddQuotationModal({ isOpen, onClose, defaultCompanyId }: AddQuot
             onChange={(e) => setValidityDays(e.target.value)}
             required
           />
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="destinationId" className="text-sm font-medium">Destino</label>
+          <Select 
+            id="destinationId"
+            value={destinationId}
+            onChange={(e) => setDestinationId(e.target.value)}
+            disabled={isDestinationsLoading}
+            options={[
+              { label: 'Selecione um destino (opcional)', value: '' },
+              ...destinations.map((dest: any) => ({
+                label: dest.name,
+                value: dest.id
+              }))
+            ]}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="mtrId" className="text-sm font-medium">MTR (Vinculado ao Cliente)</label>
+          <Select 
+            id="mtrId"
+            value={mtrId}
+            onChange={(e) => setMtrId(e.target.value)}
+            disabled={isMtrsLoading || !companyId}
+            options={[
+              { label: 'Selecione um MTR (opcional)', value: '' },
+              ...mtrs.map((mtr: any) => ({
+                label: mtr.id.substring(0, 8),
+                value: mtr.id
+              }))
+            ]}
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <label htmlFor="freightDistance" className="text-sm font-medium">Distância Frete (km)</label>
+            <Input 
+              id="freightDistance"
+              type="number"
+              step="0.01"
+              value={freightDistance}
+              onChange={(e) => setFreightDistance(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="freightCost" className="text-sm font-medium">Custo Frete (R$)</label>
+            <Input 
+              id="freightCost"
+              type="number"
+              step="0.01"
+              value={freightCost}
+              onChange={(e) => setFreightCost(e.target.value)}
+            />
+          </div>
         </div>
         
         <div className="flex justify-end gap-2 mt-4">

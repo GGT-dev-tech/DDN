@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, Numeric, String
+from sqlalchemy import Boolean, Column, Date, DateTime, ForeignKey, Integer, Numeric, String
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
@@ -20,6 +20,10 @@ class ContractModel(Base):
     expiration_date = Column(Date, nullable=True)
     renewal_rule = Column(String, nullable=True)
     adjustment_rule = Column(String, nullable=True)
+    
+    mtr_id = Column(UUID(as_uuid=True), nullable=True)
+    destination_id = Column(UUID(as_uuid=True), nullable=True)
+    auto_generate_service_orders = Column(Boolean, nullable=False, default=False)
     
     created_at = Column(DateTime(timezone=True), nullable=False)
     updated_at = Column(DateTime(timezone=True), nullable=False)

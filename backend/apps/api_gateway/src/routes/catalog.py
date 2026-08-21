@@ -49,11 +49,10 @@ from modules.catalog.infrastructure.repositories.catalog_repository import Catal
 
 @router.get("/uom", response_model=list[ListUOMResponse])
 async def list_uoms(
-    tenant_id: uuid.UUID = Depends(require_tenant),
     session: AsyncSession = Depends(get_db_session)
 ):
     repo = CatalogRepository(session)
-    return await ListUOMs(repo).execute(tenant_id)
+    return await ListUOMs(repo).execute()
 
 @router.get("/attributes", response_model=list[ListServiceAttributeResponse])
 async def list_attributes(

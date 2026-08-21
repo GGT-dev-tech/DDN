@@ -23,6 +23,10 @@ class CreateQuotationRequest(BaseModel):
     company_id: uuid.UUID
     price_table_id: uuid.UUID
     validity_days: int = 30
+    destination_id: uuid.UUID | None = None
+    mtr_id: uuid.UUID | None = None
+    freight_distance: Decimal | None = None
+    freight_cost: Decimal | None = None
 
 
 class AddQuotationItemRequest(BaseModel):
@@ -64,7 +68,11 @@ async def create_quotation(
         tenant_id=tenant_id,
         company_id=request.company_id,
         price_table_id=request.price_table_id,
-        validity_days=request.validity_days
+        validity_days=request.validity_days,
+        destination_id=request.destination_id,
+        mtr_id=request.mtr_id,
+        freight_distance=request.freight_distance,
+        freight_cost=request.freight_cost
     )
     return {"quotation_id": quotation_id}
 

@@ -2,7 +2,7 @@ import uuid
 from datetime import UTC, date, datetime
 from typing import Any
 
-from modules.compliance.domain.value_objects.status import MTRStatus
+from modules.compliance.domain.value_objects.status import MTRStatus, MTRUsageType
 from modules.core.domain.aggregate import AggregateRoot
 from modules.core.domain.id_generator import IdGenerator
 
@@ -32,12 +32,15 @@ class WasteManifest(AggregateRoot):
         tenant_id: uuid.UUID,
         generator_company_id: uuid.UUID,
         transporter_company_id: uuid.UUID,
-        service_order_id: uuid.UUID,
         issue_date: date,
         status: MTRStatus,
+        service_order_id: uuid.UUID | None = None,
         items: list[WasteItem] | None = None,
         driver_name: str = "",
         vehicle_plate: str = "",
+        expiration_date: date | None = None,
+        usage_type: MTRUsageType = MTRUsageType.SINGLE_USE,
+        current_usages: int = 0,
         created_at: datetime | None = None,
         updated_at: datetime | None = None,
     ):
@@ -52,6 +55,9 @@ class WasteManifest(AggregateRoot):
         self.items = items or []
         self.driver_name = driver_name
         self.vehicle_plate = vehicle_plate
+        self.expiration_date = expiration_date
+        self.usage_type = usage_type
+        self.current_usages = current_usages
         self.created_at = created_at or datetime.now(UTC)
         self.updated_at = updated_at or datetime.now(UTC)
 
@@ -65,10 +71,12 @@ class WasteManifest(AggregateRoot):
         tenant_id: uuid.UUID,
         generator_company_id: uuid.UUID,
         transporter_company_id: uuid.UUID,
-        service_order_id: uuid.UUID,
         items: list[dict[str, Any]],
+        service_order_id: uuid.UUID | None = None,
         driver_name: str = "",
-        vehicle_plate: str = ""
+        vehicle_plate: str = "",
+        expiration_date: date | None = None,
+        usage_type: MTRUsageType = MTRUsageType.SINGLE_USE,
     ) -> "WasteManifest":
         manifest_items = [
             WasteItem(
@@ -90,7 +98,10 @@ class WasteManifest(AggregateRoot):
             status=MTRStatus.ISSUED,
             items=manifest_items,
             driver_name=driver_name,
-            vehicle_plate=vehicle_plate
+            vehicle_plate=vehicle_plate,
+            expiration_date=expiration_date,
+            usage_type=usage_type,
+            current_usages=0
         )
 
     def mark_as_received(self) -> None:

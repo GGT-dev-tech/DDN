@@ -26,7 +26,6 @@ class CatalogRepository:
     async def add_uom(self, uom: UnitOfMeasure) -> None:
         orm_uom = CatalogUnitOfMeasure(
             id=uom.id,
-            tenant_id=uom.tenant_id,
             symbol=uom.symbol,
             name=uom.name,
             base_type=uom.base_type,
@@ -44,7 +43,6 @@ class CatalogRepository:
             return None
         return UnitOfMeasure(
             _id=orm.id,
-            tenant_id=orm.tenant_id,
             symbol=orm.symbol,
             name=orm.name,
             base_type=orm.base_type,
@@ -52,27 +50,32 @@ class CatalogRepository:
             updated_at=orm.updated_at,
         )
 
-    async def get_uom_by_symbol(self, tenant_id: uuid.UUID, symbol: str) -> UnitOfMeasure | None:
+    async def get_uom_by_symbol(self, symbol: str) -> UnitOfMeasure | None:
         result = await self._session.execute(
             select(CatalogUnitOfMeasure).where(
-                CatalogUnitOfMeasure.tenant_id == tenant_id,
                 CatalogUnitOfMeasure.symbol == symbol
             )
         )
         orm = result.scalars().first()
         if not orm:
             return None
-        return await self.get_uom_by_id(orm.id)
+        return UnitOfMeasure(
+            _id=orm.id,
+            symbol=orm.symbol,
+            name=orm.name,
+            base_type=orm.base_type,
+            created_at=orm.created_at,
+            updated_at=orm.updated_at,
+        )
 
-    async def list_uoms(self, tenant_id: uuid.UUID) -> list[UnitOfMeasure]:
+    async def list_uoms(self) -> list[UnitOfMeasure]:
         result = await self._session.execute(
-            select(CatalogUnitOfMeasure).where(CatalogUnitOfMeasure.tenant_id == tenant_id)
+            select(CatalogUnitOfMeasure)
         )
         orms = result.scalars().all()
         return [
             UnitOfMeasure(
                 _id=orm.id,
-                tenant_id=orm.tenant_id,
                 symbol=orm.symbol,
                 name=orm.name,
                 base_type=orm.base_type,

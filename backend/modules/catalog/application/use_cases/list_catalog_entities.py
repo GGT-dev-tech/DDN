@@ -15,8 +15,8 @@ class ListUOMs:
     def __init__(self, repository: CatalogRepository):
         self.repository = repository
 
-    async def execute(self, tenant_id: uuid.UUID) -> list[UOMResponse]:
-        uoms = await self.repository.list_uoms(tenant_id)
+    async def execute(self) -> list[UOMResponse]:
+        uoms = await self.repository.list_uoms()
         return [
             UOMResponse(
                 id=u.id,

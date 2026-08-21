@@ -15,6 +15,10 @@ class QuotationModel(Base):
     company_id = Column(UUID(as_uuid=True), index=True, nullable=False)
     status: Column = Column(SQLEnum(QuotationStatus, name="quotationstatus", create_type=False), nullable=False)
     price_table_id = Column(UUID(as_uuid=True), nullable=True)
+    destination_id = Column(UUID(as_uuid=True), nullable=True)
+    mtr_id = Column(UUID(as_uuid=True), nullable=True)
+    freight_distance = Column(Numeric(10, 2), nullable=True)
+    freight_cost = Column(Numeric(15, 4), nullable=True)
     
     expires_at = Column(DateTime(timezone=True), nullable=True)
     created_at = Column(DateTime(timezone=True), nullable=False)

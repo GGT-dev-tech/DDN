@@ -10,6 +10,11 @@ export interface QuotationResponse {
   id: string;
   company_id: string;
   price_table_id?: string | null;
+  destination_id?: string | null;
+  mtr_id?: string | null;
+  freight_distance?: string | null;
+  freight_cost?: string | null;
+  total?: string | null;
   status: string;
   expires_at: string;
   created_at: string;

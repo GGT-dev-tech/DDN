@@ -54,6 +54,9 @@ class ContractRepository:
                 tenant_id=model.tenant_id,
                 terms=terms,
                 quotation_id=model.quotation_id,
+                mtr_id=model.mtr_id,
+                destination_id=model.destination_id,
+                auto_generate_service_orders=model.auto_generate_service_orders,
                 id=model.id,
                 status=model.status,
                 created_at=model.created_at,
@@ -125,6 +128,9 @@ class ContractRepository:
             tenant_id=model.tenant_id,
             terms=terms,
             quotation_id=model.quotation_id,
+            mtr_id=model.mtr_id,
+            destination_id=model.destination_id,
+            auto_generate_service_orders=model.auto_generate_service_orders,
             id=model.id,
             status=model.status,
             created_at=model.created_at,
@@ -174,6 +180,9 @@ class ContractRepository:
                 tenant_id=contract.tenant_id,
                 company_id=contract.company_id,
                 quotation_id=contract.quotation_id,
+                mtr_id=contract.mtr_id,
+                destination_id=contract.destination_id,
+                auto_generate_service_orders=contract.auto_generate_service_orders,
                 status=contract.status,
                 effective_date=contract.terms.effective_date,
                 expiration_date=contract.terms.expiration_date,
@@ -189,6 +198,9 @@ class ContractRepository:
             model.expiration_date = contract.terms.expiration_date
             model.renewal_rule = contract.terms.renewal_rule
             model.adjustment_rule = contract.terms.adjustment_rule
+            model.mtr_id = contract.mtr_id
+            model.destination_id = contract.destination_id
+            model.auto_generate_service_orders = contract.auto_generate_service_orders
             model.updated_at = contract.updated_at
             
         # Handle Versions

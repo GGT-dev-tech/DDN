@@ -27,11 +27,14 @@ class WasteManifestSchema(BaseModel):
     tenant_id: uuid.UUID
     generator_company_id: uuid.UUID
     transporter_company_id: uuid.UUID
-    service_order_id: uuid.UUID
+    service_order_id: uuid.UUID | None = None
     issue_date: date
     status: str
     driver_name: str
     vehicle_plate: str
+    expiration_date: date | None = None
+    usage_type: str = "SINGLE_USE"
+    current_usages: int = 0
     items: list[WasteItemSchema]
     model_config = ConfigDict(from_attributes=True)
 
@@ -117,6 +120,9 @@ async def generate_mtr_for_order(
         status=manifest_entity.status,
         driver_name=manifest_entity.driver_name,
         vehicle_plate=manifest_entity.vehicle_plate,
+        expiration_date=manifest_entity.expiration_date,
+        usage_type=manifest_entity.usage_type,
+        current_usages=manifest_entity.current_usages,
         created_at=manifest_entity.created_at,
         updated_at=manifest_entity.updated_at,
         items=orm_items

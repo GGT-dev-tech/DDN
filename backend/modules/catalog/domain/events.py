@@ -9,7 +9,6 @@ from modules.core.domain.events import DomainEvent
 @dataclass(frozen=True)
 class UnitOfMeasureRegistered(DomainEvent):
     uom_id: UUID
-    tenant_id: UUID
     symbol: str
     base_type: str
     

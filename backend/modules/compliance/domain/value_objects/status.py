@@ -6,3 +6,7 @@ class MTRStatus(str, Enum):
     ISSUED = "ISSUED"
     RECEIVED = "RECEIVED"
     CANCELED = "CANCELED"
+
+class MTRUsageType(str, Enum):
+    SINGLE_USE = "SINGLE_USE"
+    MULTIPLE_USE = "MULTIPLE_USE"

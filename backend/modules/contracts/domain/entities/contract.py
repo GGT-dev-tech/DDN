@@ -23,6 +23,9 @@ class Contract(AggregateRoot):
         tenant_id: uuid.UUID,
         terms: ContractTerm,
         quotation_id: uuid.UUID | None = None,
+        mtr_id: uuid.UUID | None = None,
+        destination_id: uuid.UUID | None = None,
+        auto_generate_service_orders: bool = False,
         status: ContractStatus = ContractStatus.DRAFT,
         id: uuid.UUID | None = None,
         created_at: datetime | None = None,
@@ -33,6 +36,9 @@ class Contract(AggregateRoot):
         self.company_id = company_id
         self.tenant_id = tenant_id
         self.quotation_id = quotation_id  # Reference to origin if any
+        self.mtr_id = mtr_id
+        self.destination_id = destination_id
+        self.auto_generate_service_orders = auto_generate_service_orders
         self.terms = terms
         self.status = status
         self.created_at = created_at or datetime.now(UTC)
@@ -46,13 +52,19 @@ class Contract(AggregateRoot):
         company_id: uuid.UUID, 
         tenant_id: uuid.UUID, 
         terms: ContractTerm,
-        quotation_id: uuid.UUID | None = None
+        quotation_id: uuid.UUID | None = None,
+        mtr_id: uuid.UUID | None = None,
+        destination_id: uuid.UUID | None = None,
+        auto_generate_service_orders: bool = False
     ) -> 'Contract':
         contract = cls(
             company_id=company_id,
             tenant_id=tenant_id,
             terms=terms,
             quotation_id=quotation_id,
+            mtr_id=mtr_id,
+            destination_id=destination_id,
+            auto_generate_service_orders=auto_generate_service_orders,
             status=ContractStatus.DRAFT
         )
         

@@ -30,12 +30,11 @@ class CatalogService:
 
     async def register_uom(self, symbol: str, name: str, base_type: UOMBaseType) -> uuid.UUID:
         async with self._uow as uow:
-            existing = await self._repo.get_uom_by_symbol(self._tenant_id, symbol)
+            existing = await self._repo.get_uom_by_symbol(symbol)
             if existing:
                 raise ValueError(f"UOM with symbol {symbol} already exists")
     
             uom = UnitOfMeasure.create(
-                tenant_id=self._tenant_id,
                 symbol=symbol,
                 name=name,
                 base_type=base_type
@@ -43,7 +42,6 @@ class CatalogService:
             
             event = UnitOfMeasureRegistered(
                 uom_id=uom.id,
-                tenant_id=self._tenant_id,
                 symbol=uom.symbol,
                 base_type=uom.base_type
             )

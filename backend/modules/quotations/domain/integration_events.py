@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from uuid import UUID
+from typing import Any
 
 from shared_kernel.events.integration import IntegrationEvent
 
@@ -13,3 +14,6 @@ class QuotationApprovedIntegrationEvent(IntegrationEvent):
     quotation_id: UUID
     company_id: UUID
     tenant_id: UUID
+    items: list[dict[str, Any]]
+    mtr_id: UUID | None
+    destination_id: UUID | None

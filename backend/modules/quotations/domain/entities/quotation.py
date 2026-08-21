@@ -43,6 +43,10 @@ class Quotation(AggregateRoot):
         tenant_id: uuid.UUID,
         id: uuid.UUID | None = None,
         price_table_id: uuid.UUID | None = None,
+        destination_id: uuid.UUID | None = None,
+        mtr_id: uuid.UUID | None = None,
+        freight_distance: Decimal | None = None,
+        freight_cost: Decimal | None = None,
         status: QuotationStatus = QuotationStatus.DRAFT,
         expires_at: datetime | None = None,
         created_at: datetime | None = None,
@@ -53,6 +57,10 @@ class Quotation(AggregateRoot):
         self.tenant_id = tenant_id
         self.company_id = company_id
         self.price_table_id = price_table_id
+        self.destination_id = destination_id
+        self.mtr_id = mtr_id
+        self.freight_distance = freight_distance
+        self.freight_cost = freight_cost
         self.status = status
         self.expires_at = expires_at
         self.created_at = created_at or datetime.now(UTC)
@@ -64,12 +72,37 @@ class Quotation(AggregateRoot):
         return self._id
         
     @property
+    def calculate_total(self) -> Decimal:
+        items_total = sum(item.snapshot.total_price for item in self.items if item.snapshot)
+        freight = self.freight_cost or Decimal('0.00')
+        return items_total + freight
+        
+    @property
     def version(self) -> int:
         return 1
 
     @classmethod
-    def create_draft(cls, company_id: uuid.UUID, tenant_id: uuid.UUID, expires_at: datetime, price_table_id: uuid.UUID | None = None) -> "Quotation":
-        quotation = cls(company_id=company_id, tenant_id=tenant_id, expires_at=expires_at, price_table_id=price_table_id)
+    def create_draft(
+        cls, 
+        company_id: uuid.UUID, 
+        tenant_id: uuid.UUID, 
+        expires_at: datetime, 
+        price_table_id: uuid.UUID | None = None,
+        destination_id: uuid.UUID | None = None,
+        mtr_id: uuid.UUID | None = None,
+        freight_distance: Decimal | None = None,
+        freight_cost: Decimal | None = None,
+    ) -> "Quotation":
+        quotation = cls(
+            company_id=company_id, 
+            tenant_id=tenant_id, 
+            expires_at=expires_at, 
+            price_table_id=price_table_id,
+            destination_id=destination_id,
+            mtr_id=mtr_id,
+            freight_distance=freight_distance,
+            freight_cost=freight_cost
+        )
         quotation.add_event(QuotationDraftCreated(
             quotation_id=quotation.id,
             company_id=company_id,
@@ -134,10 +167,33 @@ class Quotation(AggregateRoot):
         self.status = QuotationStatus.APPROVED
         self.updated_at = datetime.now(UTC)
         
+        # Serialize items
+        serialized_items = []
+        for item in self.items:
+            serialized_items.append({
+                "id": str(item.id),
+                "service_offering_id": str(item.service_offering_id),
+                "unit_of_measure_id": str(item.unit_of_measure_id),
+                "quantity": float(item.quantity),
+                "snapshot": {
+                    "service_name": item.snapshot.service_name,
+                    "unit_name": item.snapshot.unit_name,
+                    "base_unit_price": {"amount": float(item.snapshot.base_unit_price.amount), "currency": item.snapshot.base_unit_price.currency},
+                    "total_base_price": {"amount": float(item.snapshot.total_base_price.amount), "currency": item.snapshot.total_base_price.currency},
+                    "surcharges_total": {"amount": float(item.snapshot.surcharges_total.amount), "currency": item.snapshot.surcharges_total.currency},
+                    "discounts_total": {"amount": float(item.snapshot.discounts_total.amount), "currency": item.snapshot.discounts_total.currency},
+                    "final_price": {"amount": float(item.snapshot.final_price.amount), "currency": item.snapshot.final_price.currency},
+                    "pricing_reference": item.snapshot.pricing_reference
+                } if item.snapshot else None
+            })
+
         self.add_event(QuotationApproved(
             quotation_id=self.id,
             company_id=self.company_id,
-            tenant_id=self.tenant_id
+            tenant_id=self.tenant_id,
+            items=serialized_items,
+            mtr_id=self.mtr_id,
+            destination_id=self.destination_id
         ))
 
     def reject(self) -> None:

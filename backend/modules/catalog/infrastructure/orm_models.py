@@ -7,17 +7,17 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
-from database.core.base import TenantScopedEntity
+from database.core.base import Base, TenantScopedEntity
 from modules.catalog.domain.entities.service_attribute import AttributeType
 from modules.catalog.domain.entities.service_offering import ServiceStatus
 from modules.catalog.domain.entities.unit_of_measure import UOMBaseType
 
 
-class CatalogUnitOfMeasure(TenantScopedEntity):
+class CatalogUnitOfMeasure(Base):
     __tablename__ = "catalog_units_of_measure"
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid6.uuid7)
-    symbol: Mapped[str] = mapped_column(String(50), nullable=False)
+    symbol: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     base_type: Mapped[UOMBaseType] = mapped_column(Enum(UOMBaseType, name="catalog_uom_base_type", native_enum=False), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

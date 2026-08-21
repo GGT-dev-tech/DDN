@@ -39,6 +39,10 @@ class QuotationRepository:
             tenant_id=model.tenant_id,
             id=model.id,
             price_table_id=model.price_table_id,
+            destination_id=model.destination_id,
+            mtr_id=model.mtr_id,
+            freight_distance=model.freight_distance,
+            freight_cost=model.freight_cost,
             status=model.status,
             expires_at=model.expires_at,
             created_at=model.created_at,
@@ -79,6 +83,10 @@ class QuotationRepository:
                 tenant_id=quotation.tenant_id,
                 company_id=quotation.company_id,
                 price_table_id=quotation.price_table_id,
+                destination_id=quotation.destination_id,
+                mtr_id=quotation.mtr_id,
+                freight_distance=quotation.freight_distance,
+                freight_cost=quotation.freight_cost,
                 status=quotation.status,
                 expires_at=quotation.expires_at,
                 created_at=quotation.created_at,
@@ -86,8 +94,12 @@ class QuotationRepository:
             )
             self.session.add(model)
         else:
-            model.price_table_id = quotation.price_table_id
             model.status = quotation.status
+            model.price_table_id = quotation.price_table_id
+            model.destination_id = quotation.destination_id
+            model.mtr_id = quotation.mtr_id
+            model.freight_distance = quotation.freight_distance
+            model.freight_cost = quotation.freight_cost
             model.expires_at = quotation.expires_at
             model.updated_at = quotation.updated_at
             

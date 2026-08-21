@@ -23,11 +23,15 @@ class QuotationApprovedListener:
         company_id_str = payload["company_id"]
         quotation_id_str = payload["quotation_id"]
         items = payload["items"]
+        mtr_id_str = payload.get("mtr_id")
+        destination_id_str = payload.get("destination_id")
         
         import uuid
         tenant_id = uuid.UUID(tenant_id_str)
         company_id = uuid.UUID(company_id_str)
         quotation_id = uuid.UUID(quotation_id_str)
+        mtr_id = uuid.UUID(mtr_id_str) if mtr_id_str else None
+        destination_id = uuid.UUID(destination_id_str) if destination_id_str else None
         
         # Transform the snapshot format. Money is expected as Money object in Contract Service creation.
         # But wait, ContractItemSnapshot Money needs to be mapped.
@@ -66,5 +70,7 @@ class QuotationApprovedListener:
             company_id=company_id,
             quotation_id=quotation_id,
             items_payload=mapped_items,
-            effective_date=datetime.now(UTC).date()
+            effective_date=datetime.now(UTC).date(),
+            mtr_id=mtr_id,
+            destination_id=destination_id
         )

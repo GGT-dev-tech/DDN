@@ -9,4 +9,8 @@ export interface CreateQuotationRequest {
   company_id: string;
   price_table_id: string;
   validity_days?: number;
+  destination_id?: string | null;
+  mtr_id?: string | null;
+  freight_distance?: number | null;
+  freight_cost?: number | null;
 }

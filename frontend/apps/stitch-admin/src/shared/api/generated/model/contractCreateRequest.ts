@@ -10,5 +10,8 @@ export interface ContractCreateRequest {
   company_id: string;
   quotation_id: string;
   effective_date: string;
+  mtr_id?: string | null;
+  destination_id?: string | null;
+  auto_generate_service_orders?: boolean;
   items: ContractCreateRequestItemsItem[];
 }

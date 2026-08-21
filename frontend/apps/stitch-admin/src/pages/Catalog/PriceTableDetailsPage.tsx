@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { 
   useGetPriceTableApiV1PricingTablesTableIdGet,
   useAddPriceTableItemApiV1PricingTablesTableIdItemsPost 
@@ -13,7 +13,6 @@ import { PriceTableForm } from "./components/PriceTableForm";
 
 export function PriceTableDetailsPage() {
   const { tableId } = useParams();
-  const navigate = useNavigate();
   
   const { data: table, isLoading: isLoadingTables, refetch } = useGetPriceTableApiV1PricingTablesTableIdGet(tableId as string, { query: { enabled: !!tableId } });
   
@@ -63,9 +62,9 @@ export function PriceTableDetailsPage() {
       <div className="p-8 max-w-5xl mx-auto space-y-8">
         
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => navigate('/admin/catalog')} className="p-2 h-auto">
+          <Link to="/admin/catalog" className="inline-flex items-center justify-center px-4 py-2 rounded-xl text-sm transition-all focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 hover:bg-black/5 dark:hover:bg-white/5 text-text-secondary hover:text-text-primary p-2 h-auto">
             <ArrowLeft size={20} />
-          </Button>
+          </Link>
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold tracking-tight text-text-primary">{table.name}</h1>

@@ -35,6 +35,9 @@ class QuotationApprovedHandler:
             quotation_id=event.quotation_id,
             company_id=event.company_id,
             tenant_id=event.tenant_id,
+            items=event.items,
+            mtr_id=event.mtr_id,
+            destination_id=event.destination_id
         )
 
         self.outbox_repository.save([integration_event])

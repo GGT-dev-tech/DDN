@@ -18,7 +18,6 @@ class UOMBaseType(str, Enum):
 @dataclass
 class UnitOfMeasure(AggregateRoot):
     _id: UUID
-    tenant_id: UUID
     symbol: str
     name: str
     base_type: UOMBaseType
@@ -37,7 +36,6 @@ class UnitOfMeasure(AggregateRoot):
     @classmethod
     def create(
         cls,
-        tenant_id: UUID,
         symbol: str,
         name: str,
         base_type: UOMBaseType,
@@ -53,7 +51,6 @@ class UnitOfMeasure(AggregateRoot):
 
         uom = cls(
             _id=uuid6.uuid7(),
-            tenant_id=tenant_id,
             symbol=symbol,
             name=name.strip(),
             base_type=base_type,

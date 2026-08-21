@@ -29,7 +29,10 @@ class ContractService:
         company_id: uuid.UUID, 
         quotation_id: uuid.UUID, 
         items_payload: list[dict[str, Any]],
-        effective_date: date
+        effective_date: date,
+        mtr_id: uuid.UUID | None = None,
+        destination_id: uuid.UUID | None = None,
+        auto_generate_service_orders: bool = False
     ) -> uuid.UUID:
         
         # Determine terms
@@ -40,7 +43,10 @@ class ContractService:
             company_id=company_id, 
             tenant_id=tenant_id, 
             terms=terms, 
-            quotation_id=quotation_id
+            quotation_id=quotation_id,
+            mtr_id=mtr_id,
+            destination_id=destination_id,
+            auto_generate_service_orders=auto_generate_service_orders
         )
         
         # Populate initial version items based on payload from QuotationApproved

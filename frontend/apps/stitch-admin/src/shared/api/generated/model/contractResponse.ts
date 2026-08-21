@@ -13,6 +13,9 @@ export interface ContractResponse {
   status: string;
   effective_date: string;
   expiration_date?: string | null;
+  mtr_id?: string | null;
+  destination_id?: string | null;
+  auto_generate_service_orders?: boolean;
   created_at: string;
   items: ContractItemResponse[];
 }

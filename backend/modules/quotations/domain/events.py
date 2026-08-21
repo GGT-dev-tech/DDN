@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from uuid import UUID
+from typing import Any
 
 from modules.core.domain.events import DomainEvent
 
@@ -41,6 +42,9 @@ class QuotationApproved(DomainEvent):
     quotation_id: UUID
     company_id: UUID
     tenant_id: UUID
+    items: list[dict[str, Any]]
+    mtr_id: UUID | None
+    destination_id: UUID | None
 
 
 @dataclass(frozen=True)

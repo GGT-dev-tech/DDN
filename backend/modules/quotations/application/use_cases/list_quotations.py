@@ -18,6 +18,11 @@ class QuotationResponse(BaseModel):
     id: uuid.UUID
     company_id: uuid.UUID
     price_table_id: uuid.UUID | None = None
+    destination_id: uuid.UUID | None = None
+    mtr_id: uuid.UUID | None = None
+    freight_distance: str | None = None
+    freight_cost: str | None = None
+    total: str | None = None
     status: str
     expires_at: str
     created_at: str
@@ -51,6 +56,11 @@ class ListQuotations:
                     id=q.id,
                     company_id=q.company_id,
                     price_table_id=q.price_table_id,
+                    destination_id=q.destination_id,
+                    mtr_id=q.mtr_id,
+                    freight_distance=str(q.freight_distance) if q.freight_distance is not None else None,
+                    freight_cost=str(q.freight_cost) if q.freight_cost is not None else None,
+                    total=str(q.calculate_total) if q.items and all(i.snapshot for i in q.items) else None,
                     status=q.status.value,
                     expires_at=q.expires_at.isoformat() if q.expires_at else "",
                     created_at=q.created_at.isoformat() if q.created_at else "",
