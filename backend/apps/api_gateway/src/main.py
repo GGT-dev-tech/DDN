@@ -2,6 +2,7 @@ import os
 
 import redis
 from asgi_correlation_id import CorrelationIdMiddleware
+from contextlib import asynccontextmanager
 from fastapi import APIRouter, FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
@@ -32,7 +33,17 @@ from modules.core.config.settings import settings
 DATABASE_URL = settings.db.url.replace("+asyncpg", "+psycopg") if "+asyncpg" in settings.db.url else settings.db.url
 
 from apps.api_gateway.src.limiter import limiter
-app = FastAPI(title="Stitch API Gateway", version="1.0.0")
+from modules.logistics.infrastructure.scheduler import start_scheduler, shutdown_scheduler
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    start_scheduler()
+    yield
+    # Shutdown
+    shutdown_scheduler()
+
+app = FastAPI(title="Stitch API Gateway", version="1.0.0", lifespan=lifespan)
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)

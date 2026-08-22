@@ -9,6 +9,7 @@ class AppSettings(BaseSettings):
     environment: str = Field(default="development", validation_alias="ENVIRONMENT")
     log_level: str = Field(default="INFO", validation_alias="LOG_LEVEL")
     api_port: int = Field(default=8000, validation_alias="API_PORT")
+    google_maps_api_key: str | None = Field(default=None, validation_alias="GOOGLE_MAPS_API_KEY")
 
     model_config = SettingsConfigDict(
         env_file=".env.local",

@@ -6,8 +6,8 @@ from sqlalchemy.orm import selectinload
 
 from modules.logistics.domain.entities.service_order import ServiceOrder
 from modules.logistics.domain.repositories.service_order_repository import ServiceOrderRepository
-from modules.service_plan.domain.value_objects import ScheduleStatus, ServicePlanStatus
-from modules.service_plan.infrastructure.orm_models import ServicePlanModel
+from modules.contracts.domain.value_objects import ContractStatus
+from modules.contracts.infrastructure.orm_models import ContractModel, ContractVersionModel, ContractItemModel, ContractItemSnapshotModel
 
 
 class GenerateDailyOrdersService:
@@ -17,58 +17,68 @@ class GenerateDailyOrdersService:
 
     async def execute(self, target_date: date) -> int:
         """
-        Generates Service Orders for all active Service Plans that have schedules
-        for the given target date (based on weekday).
+        Generates Service Orders for all active Contracts that have auto_generate_service_orders
+        and match the schedule for the given target date (based on weekday).
         Returns the number of generated orders.
         """
-        # Fetch active plans
+        # Fetch active contracts with auto_generate_service_orders
         stmt = (
-            select(ServicePlanModel)
-            .where(ServicePlanModel.status == ServicePlanStatus.PUBLISHED)
-            .options(selectinload(ServicePlanModel.schedules))
+            select(ContractModel)
+            .where(
+                ContractModel.status == ContractStatus.ACTIVE,
+                ContractModel.auto_generate_service_orders == True
+            )
+            .options(
+                selectinload(ContractModel.versions).selectinload(ContractVersionModel.items).selectinload(ContractItemModel.snapshot)
+            )
         )
         result = await self.session.execute(stmt)
-        active_plans = result.scalars().all()
+        active_contracts = result.scalars().all()
         
         target_weekday = target_date.strftime("%A").upper()  # MONDAY, TUESDAY, etc.
         
         generated_count = 0
-        for plan_orm in active_plans:
-            # Reconstruct domain logic or just check ORM here for simplicity
-            # since we just need to see if it matches the weekday
-            has_schedule_today = False
-            items_to_collect = []
+        for contract in active_contracts:
+            if not contract.service_schedule or target_weekday not in contract.service_schedule:
+                continue
             
-            for schedule_orm in plan_orm.schedules:
-                if schedule_orm.status == ScheduleStatus.ACTIVE:
-                    if schedule_orm.recurrence_weekdays:
-                        if target_weekday in schedule_orm.recurrence_weekdays:
-                            has_schedule_today = True
-                            items_to_collect.append({
-                                "service_offering_id": schedule_orm.service_offering_id,
-                                "service_name": schedule_orm.service_name,
-                                "quantity": schedule_orm.quantity_snapshot,
-                            })
-                            
-            if has_schedule_today and items_to_collect:
-                # Check if an order already exists for this plan on this date
+            # Find current version
+            if not contract.versions:
+                continue
+                
+            current_version = max(contract.versions, key=lambda v: v.version_number)
+            
+            items_to_collect = []
+            for item in current_version.items:
+                if item.snapshot:
+                    items_to_collect.append({
+                        "service_offering_id": item.service_offering_id,
+                        "service_name": item.snapshot.service_name,
+                        "quantity": str(item.quantity),
+                    })
+                    
+            if items_to_collect:
+                # Check if an order already exists for this contract on this date
                 existing_orders = await self.service_order_repo.get_by_tenant_and_date(
-                    tenant_id=plan_orm.tenant_id,
+                    tenant_id=contract.tenant_id,
                     scheduled_date=target_date
                 )
                 
-                already_generated = any(o.service_plan_id == plan_orm.id for o in existing_orders)
+                already_generated = any(
+                    # Using service_plan_id to store contract_id for now as it maps to the commercial agreement
+                    o.service_plan_id == contract.id for o in existing_orders
+                )
                 
                 if not already_generated:
-                    # Generate new order
-                    new_order = ServiceOrder.create(
-                        tenant_id=plan_orm.tenant_id,
-                        service_plan_id=plan_orm.id,
-                        company_id=plan_orm.company_id,
+                    order = ServiceOrder.create(
+                        tenant_id=contract.tenant_id,
+                        service_plan_id=contract.id, # Map service_plan_id to contract_id
+                        company_id=contract.company_id,
                         scheduled_date=target_date,
-                        items=items_to_collect
+                        items=items_to_collect,
+                        destination_id=contract.destination_id
                     )
-                    await self.service_order_repo.save(new_order)
+                    await self.service_order_repo.save(order)
                     generated_count += 1
                     
         return generated_count

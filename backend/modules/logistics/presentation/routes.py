@@ -12,6 +12,9 @@ from database.session import get_db_session
 from modules.identity.dependencies import require_tenant
 from modules.logistics.infrastructure.orm_models import ORMServiceOrder
 from modules.logistics.infrastructure.tasks import generate_daily_service_orders_task
+from modules.logistics.infrastructure.google_maps_service import GoogleMapsService, DistanceResult
+from modules.commercial.infrastructure.repositories.company_repository import CompanyRepository
+from modules.facilities.infrastructure.repositories.destination_repository import DestinationRepository
 
 router = APIRouter(prefix="/logistics", tags=["Logistics"])
 
@@ -36,6 +39,40 @@ class ServiceOrderSchema(BaseModel):
     destination_id: uuid.UUID | None = None
     items: list[ServiceOrderItemSchema]
     model_config = ConfigDict(from_attributes=True)
+
+@router.get("/distance", response_model=DistanceResult)
+async def get_route_distance(
+    tenant_id: Annotated[uuid.UUID, Depends(require_tenant)],
+    session: Annotated[AsyncSession, Depends(get_db_session)],
+    company_id: uuid.UUID = Query(..., description="Company ID"),
+    destination_id: uuid.UUID = Query(..., description="Destination ID")
+):
+    company_repo = CompanyRepository(session)
+    dest_repo = DestinationRepository(session)
+    
+    company = await company_repo.get_by_id(company_id, tenant_id)
+    destination = await dest_repo.get_by_id(destination_id, tenant_id)
+    
+    if not company or not company.address:
+        origin_address = "São Paulo, SP"
+    else:
+        origin_address = f"{company.address.street}, {company.address.number}, {company.address.neighborhood}, {company.address.city}, {company.address.state}"
+        
+    if not destination or not destination.address:
+        dest_address = "São Paulo, SP"
+    else:
+        dest_address = f"{destination.address.street}, {destination.address.number}, {destination.address.neighborhood}, {destination.address.city}, {destination.address.state}"
+        
+    service = GoogleMapsService()
+    result = await service.get_distance(origin_address, dest_address)
+    if not result:
+        return DistanceResult(
+            distance_km=0.0,
+            duration_mins=0.0,
+            origin_address=origin_address,
+            destination_address=dest_address
+        )
+    return result
 
 @router.get("/orders", response_model=list[ServiceOrderSchema])
 async def list_service_orders(

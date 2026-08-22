@@ -34,6 +34,40 @@ export function AddQuotationModal({ isOpen, onClose, defaultCompanyId }: AddQuot
 
   const { data: destinations = [], isLoading: isDestinationsLoading } = useListDestinationsApiV1FacilitiesDestinationsGet(undefined, { query: { enabled: isOpen } });
   const { data: mtrs = [], isLoading: isMtrsLoading } = useListMtrsApiV1ComplianceMtrsGet(undefined, { query: { enabled: isOpen && !!companyId } });
+  const [isCalculatingFreight, setIsCalculatingFreight] = useState(false);
+
+  useEffect(() => {
+    async function calculateDistance() {
+      if (!companyId || !destinationId) return;
+      
+      setIsCalculatingFreight(true);
+      try {
+        const response = await fetch(`/api/v1/logistics/distance?company_id=${companyId}&destination_id=${destinationId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setFreightDistance(data.distance_km.toFixed(2));
+          
+          // Optionally, if priceTableId is selected, we can try to guess freight_cost
+          if (priceTableId && priceTables.length > 0) {
+             const selectedTable = priceTables.find((pt: any) => pt.id === priceTableId);
+             // Basic dummy calculation or rely on backend for actual calculation
+             if (selectedTable) {
+                // If table has a specific freight rate, we would multiply here.
+                // For now, let's just suggest a base cost (e.g. 5 BRL per km)
+                const suggestedCost = (data.distance_km * 5).toFixed(2);
+                setFreightCost(suggestedCost);
+             }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to calculate distance', error);
+      } finally {
+        setIsCalculatingFreight(false);
+      }
+    }
+    
+    calculateDistance();
+  }, [companyId, destinationId, priceTableId, priceTables]);
 
   // Sync defaultCompanyId when modal opens
   useEffect(() => {
@@ -162,13 +196,18 @@ export function AddQuotationModal({ isOpen, onClose, defaultCompanyId }: AddQuot
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label htmlFor="freightDistance" className="text-sm font-medium">Distância Frete (km)</label>
+            <label htmlFor="freightDistance" className="text-sm font-medium">
+              Distância Frete (km)
+              {isCalculatingFreight && <span className="text-muted-foreground ml-2 text-xs">Calculando...</span>}
+            </label>
             <Input 
               id="freightDistance"
               type="number"
               step="0.01"
               value={freightDistance}
               onChange={(e) => setFreightDistance(e.target.value)}
+              placeholder="0.00"
+              disabled={isCalculatingFreight}
             />
           </div>
           <div className="space-y-2">
