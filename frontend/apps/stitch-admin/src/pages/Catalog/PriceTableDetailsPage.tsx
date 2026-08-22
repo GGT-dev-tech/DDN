@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { 
   useGetPriceTableApiV1PricingTablesTableIdGet,
   useAddPriceTableItemApiV1PricingTablesTableIdItemsPost 
