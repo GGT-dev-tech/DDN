@@ -59,10 +59,16 @@ export function RoutesPage() {
               </p>
             </div>
           </div>
-          <Button variant="liquid" onClick={() => setIsAddModalOpen(true)} className="gap-2">
-            <Plus size={18} />
-            Nova Rota Manual
-          </Button>
+          <div className="flex items-center gap-4">
+            <Button variant="liquid" onClick={() => setDispatchRoute(true)} className="gap-2 bg-purple-600 hover:bg-purple-700 text-white border-0 shadow-lg shadow-purple-500/30">
+              <Play size={18} />
+              Novo Despacho
+            </Button>
+            <Button variant="outline" onClick={() => setIsAddModalOpen(true)} className="gap-2">
+              <Plus size={18} />
+              Rota Manual
+            </Button>
+          </div>
         </div>
 
         {/* Estatísticas */}
@@ -168,14 +174,7 @@ export function RoutesPage() {
                             >
                               <MapIcon size={18} />
                             </Button>
-                            <Button 
-                              variant="ghost" 
-                              onClick={(e) => { e.stopPropagation(); setDispatchRoute(route); }}
-                              className="text-brand-500 hover:text-brand-600 hover:bg-brand-500/10 p-2 h-auto"
-                              title="Despachar Rota"
-                            >
-                              <Play size={18} />
-                            </Button>
+                            {/* Despachar Rota Button removed since we do Global Dispatch now */}
                           </td>
                         </tr>
 

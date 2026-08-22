@@ -191,3 +191,44 @@ async def get_live_status(
             "time": "Próximo"
         }
     ]
+
+from modules.logistics.application.use_cases.dispatch_orders import (
+    DispatchOrdersRequestDTO,
+    DispatchOrdersUseCase,
+)
+from modules.core.context import accessor as context_accessor_instance
+
+class DispatchRequestSchema(BaseModel):
+    service_order_ids: list[uuid.UUID]
+    execution_date: date
+    vehicle_id: uuid.UUID | None = None
+    driver_id: uuid.UUID | None = None
+
+class DispatchResponseSchema(BaseModel):
+    route_id: uuid.UUID
+    message: str
+
+@router.post("/dispatch", response_model=DispatchResponseSchema)
+async def dispatch_orders(
+    request: DispatchRequestSchema,
+    tenant_id: Annotated[uuid.UUID, Depends(require_tenant)],
+    session: Annotated[AsyncSession, Depends(get_db_session)]
+):
+    from fastapi import HTTPException
+    
+    use_case = DispatchOrdersUseCase(session, context_accessor_instance)
+    dto = DispatchOrdersRequestDTO(
+        service_order_ids=request.service_order_ids,
+        execution_date=request.execution_date,
+        vehicle_id=request.vehicle_id,
+        driver_id=request.driver_id,
+    )
+    
+    try:
+        route_id = await use_case.execute(dto)
+        return DispatchResponseSchema(
+            route_id=route_id,
+            message="Ordens de serviço roteirizadas com sucesso."
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
