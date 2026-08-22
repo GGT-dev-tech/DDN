@@ -136,7 +136,7 @@ async def seed(session: AsyncSession):
         print("  ✅ Clientes (Companies) criados")
 
     # 7. Catálogo — UOMs
-    r = await session.execute(text("SELECT symbol, id FROM catalog_units_of_measure WHERE tenant_id = :tid"), {"tid": TENANT_ID})
+    r = await session.execute(text("SELECT symbol, id FROM catalog_units_of_measure"))
     uom_records = r.fetchall()
     uom_ids = {row[0]: str(row[1]) for row in uom_records}
     if not uom_ids:
@@ -148,10 +148,10 @@ async def seed(session: AsyncSession):
             uid = str(uuid7())
             uom_ids[symbol] = uid
             await session.execute(text("""
-                INSERT INTO catalog_units_of_measure (id, tenant_id, symbol, name, base_type, created_at, updated_at)
-                VALUES (:id, :tid, :symbol, :name, :base_type, NOW(), NOW())
+                INSERT INTO catalog_units_of_measure (id, symbol, name, base_type, created_at, updated_at)
+                VALUES (:id, :symbol, :name, :base_type, NOW(), NOW())
             """), {
-                "id": uid, "tid": TENANT_ID, "symbol": symbol, "name": name, "base_type": base_type
+                "id": uid, "symbol": symbol, "name": name, "base_type": base_type
             })
         await session.commit()
         print("  ✅ UOMs criadas")
